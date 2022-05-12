@@ -1,0 +1,318 @@
+[
+  {
+    "type": "disruption/absent/deletion/cooccurrence",
+    "pivotNodes": [
+      {
+        "panBlock": "Node_A_0",
+        "startPosition": 0,
+        "strand": 1
+      },
+      {
+        "panBlock": "Node_A_1",
+        "startPosition": 111,
+        "strand": 1
+      }
+    ],
+    "pathNodes": []
+  },
+  {
+    "type": "present/match",
+    "pivotNodes": [
+      {
+        "panBlock": "Node_B",
+        "startPosition": 222,
+        "strand": 1
+      }
+    ],
+    "pathNodes": [
+      {
+        "panBlock": "Node_B",
+        "startPosition": 0,
+        "strand": 1
+      }
+    ]
+  },
+  {
+    "type": "disruption/absent/swap",
+    "pivotNodes": [
+      {
+        "panBlock": "Node_D",
+        "startPosition": 678,
+        "strand": 1
+      }
+    ],
+    "pathNodes": [
+      {
+        "panBlock": "Node_G",
+        "startPosition": 456,
+        "strand": -1
+      }
+    ]
+  },
+  {
+    "type": "disruption/translocation",
+    "pivotNodes": [
+      {
+        "panBlock": "Node_E",
+        "startPosition": 765,
+        "strand": 1
+      }
+    ],
+    "pathNodes": [
+      {
+        "panBlock": "Node_F",
+        "startPosition": 911,
+        "strand": -1
+      }
+    ]
+  },
+  {
+    "type": "disruption/absent/swap",
+    "pivotNodes": [
+      {
+        "panBlock": "Node_F",
+        "startPosition": 1020,
+        "strand": 1
+      },
+      {
+        "panBlock": "Node_G",
+        "startPosition": 1589,
+        "strand": 1
+      }
+    ],
+    "pathNodes": [
+      {
+        "panBlock": "Node_E",
+        "startPosition": 1480,
+        "strand": -1
+      }
+    ]
+  },
+  {
+    "type": "present/match/cooccurrence",
+    "pivotNodes": [
+      {
+        "panBlock": "Node_H_0",
+        "startPosition": 2044,
+        "strand": -1
+      }
+    ],
+    "pathNodes": [
+      {
+        "panBlock": "Node_H_0",
+        "startPosition": 1735,
+        "strand": -1
+      }
+    ]
+  },
+  {
+    "type": "present/inversion",
+    "pivotNodes": [
+      {
+        "panBlock": "Node_H_1",
+        "startPosition": 2266,
+        "strand": -1
+      }
+    ],
+    "pathNodes": [
+      {
+        "panBlock": "Node_H_1",
+        "startPosition": 1957,
+        "strand": 1
+      }
+    ]
+  },
+  {
+    "type": "present/match",
+    "pivotNodes": [
+      {
+        "panBlock": "Node_I",
+        "startPosition": 2488,
+        "strand": 1
+      },
+      {
+        "panBlock": "Node_J",
+        "startPosition": 2546,
+        "strand": 1
+      }
+    ],
+    "pathNodes": [
+      {
+        "panBlock": "Node_I",
+        "startPosition": 2179,
+        "strand": 1
+      },
+      {
+        "panBlock": "Node_J",
+        "startPosition": 2237,
+        "strand": 1
+      }
+    ]
+  },
+  {
+    "type": "disruption/insertion/cooccurrence",
+    "pivotNodes": [
+      {
+        "panBlock": "Node_A_2",
+        "startPosition": 2822,
+        "strand": 1
+      }
+    ],
+    "pathNodes": [
+      {
+        "panBlock": "Node_K",
+        "startPosition": 2513,
+        "strand": 1
+      },
+      {
+        "panBlock": "Node_L",
+        "startPosition": 2833,
+        "strand": 1
+      }
+    ]
+  },
+  {
+    "type": "present/match/cooccurrence",
+    "pivotNodes": [
+      {
+        "panBlock": "Node_A_2",
+        "startPosition": 2822,
+        "strand": 1
+      }
+    ],
+    "pathNodes": [
+      {
+        "panBlock": "Node_A_2",
+        "startPosition": 3299,
+        "strand": 1
+      }
+    ]
+  },
+  {
+    "type": "disruption/absent/swap",
+    "pivotNodes": [
+      {
+        "panBlock": "Node_N",
+        "startPosition": 2933,
+        "strand": -1
+      }
+    ],
+    "pathNodes": [
+      {
+        "panBlock": "Node_A_3",
+        "startPosition": 3410,
+        "strand": 1
+      }
+    ]
+  },
+  {
+    "type": "present/inversion/chain/backward",
+    "pivotNodes": [
+      {
+        "panBlock": "Node_M",
+        "startPosition": 3478,
+        "strand": -1
+      },
+      {
+        "panBlock": "Node_N",
+        "startPosition": 2933,
+        "strand": -1
+      }
+    ],
+    "pathNodes": [
+      {
+        "panBlock": "Node_M",
+        "startPosition": 3521,
+        "strand": 1
+      },
+      {
+        "panBlock": "Node_N",
+        "startPosition": 3689,
+        "strand": 1
+      }
+    ]
+  },
+  {
+    "type": "present/match",
+    "pivotNodes": [
+      {
+        "panBlock": "Node_O",
+        "startPosition": 3646,
+        "strand": 1
+      }
+    ],
+    "pathNodes": [
+      {
+        "panBlock": "Node_O",
+        "startPosition": 4234,
+        "strand": 1
+      }
+    ]
+  },
+  {
+    "type": "disruption/absent/swap",
+    "pivotNodes": [
+      {
+        "panBlock": "Node_P",
+        "startPosition": 4386,
+        "strand": 1
+      },
+      {
+        "panBlock": "Node_Q",
+        "startPosition": 4873,
+        "strand": -1
+      },
+      {
+        "panBlock": "Node_R",
+        "startPosition": 5128,
+        "strand": 1
+      }
+    ],
+    "pathNodes": [
+      {
+        "panBlock": "Node_S",
+        "startPosition": 4974,
+        "strand": 1
+      },
+      {
+        "panBlock": "Node_T",
+        "startPosition": 5328,
+        "strand": -1
+      }
+    ]
+  },
+  {
+    "type": "present/match",
+    "pivotNodes": [
+      {
+        "panBlock": "Node_U",
+        "startPosition": 5249,
+        "strand": 1
+      }
+    ],
+    "pathNodes": [
+      {
+        "panBlock": "Node_U",
+        "startPosition": 5780,
+        "strand": 1
+      }
+    ]
+  },
+  {
+    "type": "disruption/absent/swap",
+    "pivotNodes": [
+      {
+        "panBlock": "Node_V",
+        "startPosition": 5897,
+        "strand": 1
+      }
+    ],
+    "pathNodes": [
+      {
+        "panBlock": "Node_A_4",
+        "startPosition": 6428,
+        "strand": 1
+      }
+    ]
+  }
+]

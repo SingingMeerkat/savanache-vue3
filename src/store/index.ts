@@ -1,9 +1,19 @@
 import { createStore } from "vuex";
 
 export default createStore({
-  state: {},
+  state: {
+    selectedAssemblies: [],
+  },
   getters: {},
-  mutations: {},
-  actions: {},
+  mutations: {
+    setSelectedAssemblies(state, selectedAssemblies) {
+      state.selectedAssemblies = selectedAssemblies;
+    },
+  },
+  actions: {
+    setSelectedAssemblies({ commit, state }, selectedAssemblies) {
+      commit("setSelectedAssemblies", selectedAssemblies);
+    },
+  },
   modules: {},
 });

@@ -1,0 +1,191 @@
+{
+  "Aphrodite": {
+    "Node_A_0": {
+      "Ganymede": {
+        "Cooccurence": true,
+        "Present": false
+      },
+      "Leonidas": {
+        "Cooccurence": true,
+        "Present": false
+      }
+    },
+    "Node_A_1": {
+      "Ganymede": {
+        "Cooccurence": true,
+        "Present": false
+      },
+      "Leonidas": {
+        "Cooccurence": true,
+        "Present": false
+      }
+    },
+    "Node_B": {
+      "Ganymede": {
+        "Present": true
+      },
+      "Leonidas": {
+        "Present": true
+      }
+    },
+    "Node_D": {
+      "Ganymede": {
+        "Present": true,
+        "Insertion": true
+      },
+      "Leonidas": {
+        "Present": false
+      }
+    },
+    "Node_E": {
+      "Ganymede": {
+        "Present": true
+      },
+      "Leonidas": {
+        "Present": true,
+        "InversionChain": "start"
+      }
+    },
+    "Node_F": {
+      "Ganymede": {
+        "Present": true
+      },
+      "Leonidas": {
+        "Present": true,
+        "InversionChain": true
+      }
+    },
+    "Node_G": {
+      "Ganymede": {
+        "Present": true
+      },
+      "Leonidas": {
+        "Present": true,
+        "InversionChain": "end"
+      }
+    },
+    "Node_H_0": {
+      "Ganymede": {
+        "Present": true
+      },
+      "Leonidas": {
+        "Present": true,
+        "Cooccurence": true
+      }
+    },
+    "Node_H_1": {
+      "Ganymede": {
+        "Present": false,
+        "Swap": "start",
+        "Cooccurence": true
+      },
+      "Leonidas": {
+        "Present": true,
+        "Cooccurence": true,
+        "Inversion": true
+      }
+    },
+    "Node_I": {
+      "Ganymede": {
+        "Present": false,
+        "Swap": true
+      },
+      "Leonidas": {
+        "Present": true
+      }
+    },
+    "Node_J": {
+      "Ganymede": {
+        "Present": false,
+        "Swap": true
+      },
+      "Leonidas": {
+        "Present": true
+      }
+    },
+    "Node_A_2": {
+      "Ganymede": {
+        "Present": false,
+        "Swap": "end",
+        "Cooccurence": true
+      },
+      "Leonidas": {
+        "Present": true,
+        "Cooccurence": true,
+        "Insertion": true
+      }
+    },
+    "Node_N": {
+      "Ganymede": {
+        "Present": true
+      },
+      "Leonidas": {
+        "Present": true,
+        "InversionChain": "start"
+      }
+    },
+    "Node_M": {
+      "Ganymede": {
+        "Present": true
+      },
+      "Leonidas": {
+        "Present": true,
+        "InversionChain": "end"
+      }
+    },
+    "Node_O": {
+      "Ganymede": {
+        "Present": true
+      },
+      "Leonidas": {
+        "Present": true
+      }
+    },
+    "Node_P": {
+      "Ganymede": {
+        "Present": true
+      },
+      "Leonidas": {
+        "Present": false,
+        "Swap": "start"
+      }
+    },
+    "Node_Q": {
+      "Ganymede": {
+        "Present": true,
+        "Inversion": true
+      },
+      "Leonidas": {
+        "Present": false,
+        "Swap": true
+      }
+    },
+    "Node_R": {
+      "Ganymede": {
+        "Present": true
+      },
+      "Leonidas": {
+        "Present": false,
+        "Swap": "end"
+      }
+    },
+    "Node_U": {
+      "Ganymede": {
+        "Present": true
+      },
+      "Leonidas": {
+        "Present": true
+      }
+    },
+    "Node_V": {
+      "Ganymede": {
+        "Present": false,
+        "Swap": "start"
+      },
+      "Leonidas": {
+        "Present": false,
+        "Swap": "start"
+      }
+    }
+  }
+}

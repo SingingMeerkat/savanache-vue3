@@ -1,0 +1,105 @@
+{
+  "panSkeleton": {
+    //A Node / pangenomic block
+    "panID_XXX": {
+      //or have it as a ppty
+      "length": 33333,
+      "traversals": {
+        // We assume a panNode can be traversed only once by a genome
+        // coocurrences would create new nodes
+        "assemblyNameA": indexOfPosInPathA,
+        "assemblyNameB": indexOfPosInPathB
+      },
+      // Assuming N panNodes / panBlocks...
+      "cooccurrences": (panID_1,
+      panID_2,
+      ...
+      panID_N),
+      "neighborNodes": {
+        // Is it needed, though?
+        "before": (panID_A,
+        panID_B...),
+        "after": (panID_C,
+        panID_D...)
+      }
+    },
+    "panID_YYY": {
+      ...
+    },
+    ...
+  },
+  "paths": {
+    // A path
+    "assembly_A": {
+      "nodeSuccession": [
+        // or steps
+        {
+          "panBlock": panID_x,
+          "startPosition": startCoordOnThisAssembly,
+          "strand": -1
+          // ou +1, selon
+        },
+        {
+          // Second node, etc
+          ...
+        }
+      ]
+    },
+    "assembly_B": {
+      ...
+    },
+    ...
+  }
+}
+
+//How to store annotations?
+{
+  "structuralAnnotations_comparedWithPIVOT": {
+    "assembly_A": [
+      //Sparse array with as many entries as queried PIVOT blocks
+      ,,,
+{
+  "deletion": {
+    ...
+  }
+},
+,,,
+{
+"cooccurrence": {...},
+"insertion": {...}
+},,
+],
+"assembly_B": [
+{
+"coocurrence": {...}
+},,
+{
+"cooccurrence": {...},
+"deletion": {...},
+"inversion": {
+...
+}
+},,
+,,,,
+{
+"inversion": {...},
+"swap": {
+...
+}
+},
+],
+...
+}
+}
+// What structure per type? What properties for each?
+{
+"cooccurrence": {
+},
+"deletion": {
+},
+"insertion": {
+},
+"inversion": {
+},
+"swap"
+}

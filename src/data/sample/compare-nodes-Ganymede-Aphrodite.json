@@ -1,0 +1,181 @@
+{
+  "Node_B": {
+    "disruption/insertion": [
+      {
+        "pathNode": "Node_A_0",
+        "pivotIndex": 0,
+        "pathIndex": 0
+      },
+      {
+        "pathNode": "Node_A_1",
+        "pivotIndex": 0,
+        "pathIndex": 1
+      }
+    ],
+    "present/match": [
+      {
+        "pathNode": "Node_B",
+        "pivotIndex": 0,
+        "pathIndex": 2
+      }
+    ]
+  },
+  "Node_C": {
+    "disruption/absent/deletion": [
+      {
+        "pathNode": "Node_D",
+        "pivotIndex": 1,
+        "pathIndex": 3
+      }
+    ]
+  },
+  "Node_D": {
+    "present/match": [
+      {
+        "pathNode": "Node_D",
+        "pivotIndex": 2,
+        "pathIndex": 3
+      }
+    ]
+  },
+  "Node_E": {
+    "present/match": [
+      {
+        "pathNode": "Node_E",
+        "pivotIndex": 3,
+        "pathIndex": 4
+      }
+    ]
+  },
+  "Node_F": {
+    "present/match": [
+      {
+        "pathNode": "Node_F",
+        "pivotIndex": 4,
+        "pathIndex": 5
+      }
+    ]
+  },
+  "Node_G": {
+    "present/match": [
+      {
+        "pathNode": "Node_G",
+        "pivotIndex": 5,
+        "pathIndex": 6
+      }
+    ]
+  },
+  "Node_H_0": {
+    "present/match/cooccurrence": [
+      {
+        "pathNode": "Node_H_0",
+        "pivotIndex": 6,
+        "pathIndex": 7
+      }
+    ]
+  },
+  "Node_L": {
+    "disruption/absent/swap": [
+      {
+        "pathNode": "Node_H_1",
+        "pivotIndex": 7,
+        "pathIndex": 8
+      },
+      {
+        "pathNode": "Node_I",
+        "pivotIndex": 7,
+        "pathIndex": 9
+      },
+      {
+        "pathNode": "Node_J",
+        "pivotIndex": 7,
+        "pathIndex": 10
+      },
+      {
+        "pathNode": "Node_A_2",
+        "pivotIndex": 7,
+        "pathIndex": 11
+      }
+    ]
+  },
+  "Node_N": {
+    "present/match": [
+      {
+        "pathNode": "Node_N",
+        "pivotIndex": 8,
+        "pathIndex": 12
+      }
+    ]
+  },
+  "Node_M": {
+    "present/match": [
+      {
+        "pathNode": "Node_M",
+        "pivotIndex": 9,
+        "pathIndex": 13
+      }
+    ]
+  },
+  "Node_O": {
+    "present/match": [
+      {
+        "pathNode": "Node_O",
+        "pivotIndex": 10,
+        "pathIndex": 14
+      }
+    ]
+  },
+  "Node_P": {
+    "present/match": [
+      {
+        "pathNode": "Node_P",
+        "pivotIndex": 11,
+        "pathIndex": 15
+      }
+    ]
+  },
+  "Node_Q": {
+    "present/inversion": [
+      {
+        "pathNode": "Node_Q",
+        "pivotIndex": 12,
+        "pathIndex": 16
+      }
+    ]
+  },
+  "Node_R": {
+    "present/match": [
+      {
+        "pathNode": "Node_R",
+        "pivotIndex": 13,
+        "pathIndex": 17
+      }
+    ]
+  },
+  "Node_U": {
+    "present/match": [
+      {
+        "pathNode": "Node_U",
+        "pivotIndex": 14,
+        "pathIndex": 18
+      }
+    ]
+  },
+  "Node_A_4": {
+    "disruption/absent/swap/cooccurrence": [
+      {
+        "pathNode": "Node_V",
+        "pivotIndex": 15,
+        "pathIndex": 19
+      }
+    ]
+  },
+  "Node_A_5": {
+    "disruption/absent/swap/cooccurrence": [
+      {
+        "pivotIndex": 16,
+        "pathIndex": 20
+      }
+    ]
+  }
+}
