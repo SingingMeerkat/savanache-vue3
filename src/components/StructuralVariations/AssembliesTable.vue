@@ -4,34 +4,27 @@
       <thead>
         <tr>
           <th>
-            <v-checkbox @model="selectAll" hide-details inline></v-checkbox>
+            <v-checkbox v-model="allSelected" hide-details inline></v-checkbox>
           </th>
-          <th
-            v-for="header in someHeaders"
-            :key="`header-cell-${header.value}`"
-          >
-            {{ header.text }}
+          <th v-for="column in columns" :key="`header-column-${column.value}`">
+            {{ column.text }}
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="item in someItems"
-          :key="`row-${item.id}`"
-          @click="selectItem(item)"
-        >
+        <tr v-for="row in rows" :key="`row-${row.name}`" @click="selectRow(row)">
           <td>
             <v-checkbox
-              @change="selectItem(item)"
+              v-model="rowSelected[row.name]"
               hide-details
               inline
             ></v-checkbox>
           </td>
           <td
-            v-for="header in someHeaders"
-            :key="`row-${item.id}-cell-${header.value}`"
+            v-for="column in columns"
+            :key="`row-${row.name}-column-${column.value}`"
           >
-            {{ item[header.value] }}
+            {{ row[column.value] }}
           </td>
         </tr>
       </tbody>
@@ -40,10 +33,23 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, Ref, ref, UnwrapRef } from "vue";
+import {
+  computed,
+  defineComponent,
+  Ref,
+  ref,
+  unref,
+  UnwrapRef,
+  watch,
+} from "vue";
 import { getData } from "@/data/data-source";
 import { Paths } from "@/interfaces/pangenome-json";
 import { mapActions, mapState } from "vuex";
+
+interface PathRow {
+  name: string;
+  steps: number;
+}
 
 export default defineComponent({
   name: "StructuralVariationsAssembliesTable",
@@ -51,7 +57,7 @@ export default defineComponent({
   computed: mapState(["selectedAssemblies"]),
   methods: mapActions(["setSelectedAssemblies"]),
   setup() {
-    const someHeaders = ref([
+    const columns = [
       {
         text: "Name",
         value: "name",
@@ -62,59 +68,42 @@ export default defineComponent({
         value: "steps",
         sortable: true,
       },
-    ]);
+    ];
 
-    const someItems: Ref<
-      UnwrapRef<Array<{ id: string; name: string; steps: number }>>
-    > = ref([]);
-
-    const selected: Ref<
-      UnwrapRef<Array<{ id: string; name: string; steps: number }>>
-    > = ref([]);
-
-    const selectAll = computed({
-      get: () => someItems.value.every((i) => selected.value.includes(i)),
-      set: (value) => {
-        if (value) {
-          selected.value = [...someItems.value];
-        } else {
-          selected.value = [];
-        }
-      },
-    });
-
-    const phenotypeFilter = ref("");
-
-    const heteroticGroupFilter = ref("");
+    const rows = ref([] as Array<PathRow>);
+    const rowSelected = ref({} as { [k: string]: boolean });
 
     getData().then((data) => {
       if (data) {
-        const paths = Object.keys(data.pangenome.paths) as Array<keyof Paths>;
-
-        someItems.value = paths.map((key) => ({
-          id: key,
-          name: key,
-          steps: data.pangenome.paths[key].steps.length,
+        const pathNames = Object.keys(data.pangenome.paths) as Array<
+          keyof Paths
+        >;
+        rows.value = pathNames.map((pathName) => ({
+          name: pathName,
+          steps: data.pangenome.paths[pathName].steps.length,
         }));
+        rowSelected.value = rows.value.reduce(
+          (result, path) => ({ ...result, [path.name]: false }),
+          {} as { [k: string]: boolean }
+        );
       }
     });
 
-    const selectItem = (item: { id: string; name: string; steps: number }) => {
-      if (selected.value.indexOf(item) >= 0) {
-        selected.value = selected.value.filter((s) => s !== item);
-      } else {
-        selected.value.push(item);
-      }
+    const allSelected = computed({
+      get: () => rows.value.every((path) => rowSelected.value[path.name]),
+      set: (value: boolean) => rows.value.forEach((path) => (rowSelected.value[path.name] = value)),
+    });
+
+    const selectRow = (row: PathRow) => {
+      rowSelected.value[row.name] = !rowSelected.value[row.name];
     };
+
     return {
-      someHeaders,
-      someItems,
-      selected,
-      selectAll,
-      // selected: store.selectedAssemblies,
-      phenotypeFilter,
-      heteroticGroupFilter,
-      selectItem,
+      rows,
+      columns,
+      allSelected,
+      rowSelected,
+      selectRow,
     };
   },
 });

@@ -32,8 +32,7 @@
         </v-list>
       </v-navigation-drawer>
 
-      <router-view :key="$route.fullPath" class="router-view mt-2">
-      </router-view>
+      <router-view :key="$route.fullPath"> </router-view>
     </v-main>
   </v-app>
 </template>
