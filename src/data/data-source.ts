@@ -9,7 +9,7 @@ export const getData = async () => {
   }
   const { default: pangenome } = (await import(
     "../data/sample/handcrafted3AssembliesPangenome.json"
-  )) as { default: PangenomeJson };
+    )) as { default: PangenomeJson };
   const { default: pivots } = (await import("../data/sample/pivots.json")) as {
     default: PivotJson;
   };

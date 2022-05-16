@@ -2,12 +2,12 @@
   <v-app>
     <v-app-bar app>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-app-bar-title> Something </v-app-bar-title>
+      <v-app-bar-title> Something</v-app-bar-title>
       <div class="margin-auto">
         <v-tabs v-model="selectedRoute" class="header-tabs">
-          <v-tab> Pangenome Selection </v-tab>
-          <v-tab> Structural Variations </v-tab>
-          <v-tab> Presence Absence </v-tab>
+          <v-tab> Pangenome Selection</v-tab>
+          <v-tab> Structural Variations</v-tab>
+          <v-tab> Presence Absence</v-tab>
         </v-tabs>
       </div>
     </v-app-bar>
@@ -19,20 +19,20 @@
           <v-list-item-title class="text-h6">
             v-list-item-title
           </v-list-item-title>
-          <v-list-item-subtitle> v-list-item-subtitle </v-list-item-subtitle>
+          <v-list-item-subtitle> v-list-item-subtitle</v-list-item-subtitle>
         </v-list-item>
 
         <v-divider></v-divider>
 
         <v-list>
           <v-list-item :to="{ name: 'Home' }" exact link>
-            <v-list-item-icon icon="mdi-home"> </v-list-item-icon>
+            <v-list-item-icon icon="mdi-home"></v-list-item-icon>
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-navigation-drawer>
 
-      <router-view :key="$route.fullPath"> </router-view>
+      <router-view :key="$route.fullPath"></router-view>
     </v-main>
   </v-app>
 </template>
@@ -51,7 +51,7 @@ export default defineComponent({
     const routes = [
       "/pangenome_selection",
       "/structural_variations",
-      "/presence_absence",
+      "/presence_absence"
     ];
 
     const drawer = ref(false);
@@ -82,9 +82,9 @@ export default defineComponent({
 
     return {
       drawer,
-      selectedRoute,
+      selectedRoute
     };
-  },
+  }
 });
 </script>
 

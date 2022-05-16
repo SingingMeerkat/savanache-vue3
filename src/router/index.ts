@@ -5,13 +5,13 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     name: "Home",
     component: () =>
-      import(/* webpackChunkName: "home" */ "../views/HomeView.vue"),
+      import(/* webpackChunkName: "home" */ "../views/HomeView.vue")
   },
   {
     path: "/pangenome_selection",
     name: "Pangenome Selection",
     component: () =>
-      import(/* webpackChunkName: "home" */ "../views/HomeView.vue"),
+      import(/* webpackChunkName: "home" */ "../views/HomeView.vue")
   },
   {
     path: "/structural_variations",
@@ -19,13 +19,13 @@ const routes: Array<RouteRecordRaw> = [
     component: () =>
       import(
         /* webpackChunkName: "structural_variations" */ "../views/StructuralVariations.vue"
-      ),
+        )
   },
   {
     path: "/presence_absence",
     name: "Presence Absence",
     component: () =>
-      import(/* webpackChunkName: "home" */ "../views/HomeView.vue"),
+      import(/* webpackChunkName: "home" */ "../views/HomeView.vue")
   },
   {
     path: "/about",
@@ -34,13 +34,13 @@ const routes: Array<RouteRecordRaw> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
-  },
+      import(/* webpackChunkName: "about" */ "../views/AboutView.vue")
+  }
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes,
+  routes
 });
 
 export default router;

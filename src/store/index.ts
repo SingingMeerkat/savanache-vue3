@@ -2,10 +2,20 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
-    selectedAssemblies: {},
+    selectedAssemblies: {} as { [k: string]: boolean },
+    selectedPivot: ""
   },
   getters: {},
-  mutations: {},
+  mutations: {
+    setSelectedAssemblies(state, selectedAssemblies) {
+      console.log("setSelectedAssemblies", selectedAssemblies);
+      state.selectedAssemblies = selectedAssemblies;
+    },
+    setSelectedPivot(state, selectedPivot) {
+      console.log("setSelectedPivot", selectedPivot);
+      state.selectedPivot = selectedPivot;
+    }
+  },
   actions: {},
-  modules: {},
+  modules: {}
 });
