@@ -100,7 +100,8 @@
         "Swap": true
       },
       "Leonidas": {
-        "Present": true
+        "Present": true,
+        "Insertion": true
       }
     },
     "Node_A_2": {

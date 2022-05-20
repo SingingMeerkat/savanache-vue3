@@ -7,15 +7,15 @@ export const getData = async () => {
   if (dataCache) {
     return dataCache;
   }
-  const { default: pangenome } = (await import(
+  const pangenomeImport = await import(
     "../data/sample/handcrafted3AssembliesPangenome.json"
-    )) as { default: PangenomeJson };
-  const { default: pivots } = (await import("../data/sample/pivots.json")) as {
-    default: PivotJson;
-  };
+    );
 
-  if (pangenome && pivots) {
-    dataCache = { pangenome, pivots };
+  const pivotsImport = await import("../data/sample/pivots.json");
+
+  if (pangenomeImport && pangenomeImport.default && pivotsImport && pivotsImport.default) {
+    dataCache = { pangenome: pangenomeImport.default, pivots: pivotsImport.default };
+
     return dataCache;
   }
 };
