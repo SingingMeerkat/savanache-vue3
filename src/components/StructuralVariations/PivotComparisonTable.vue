@@ -17,12 +17,23 @@
           <!-- "Header" column -->
           <div class="data-labels col-2 d-flex flex-column pr-0 mr-n1">
 
-            <div class="data-label elevation-1 px-3 mb-1">
-              {{ pivot.name }}
+            <div v-for="assembly in beforePivotRows" :key="`assembly-header-${assembly.name}`"
+                 class="data-label elevation-1 px-3">
+              {{ assembly.name }}
             </div>
 
-            <div v-for="assembly in assemblies" :key="`assembly-header-${assembly.name}`"
-                 class="data-label elevation-1 px-3 mb-1">
+            <div class="data-label elevation-1 pivot-label-row px-3 d-flex">
+              <div class="arrows d-flex flex-column justify-space-around">
+                <a @click="movePivotUp" class="up-arrow"></a>
+                <a @click="movePivotDown" class="down-arrow"></a>
+              </div>
+              <div class="pivot-label">
+                {{ pivot.name }}
+              </div>
+            </div>
+
+            <div v-for="assembly in afterPivotRows" :key="`assembly-header-${assembly.name}`"
+                 class="data-label elevation-1 px-3">
               {{ assembly.name }}
             </div>
 
@@ -31,8 +42,24 @@
           <!-- "Data" column rows -->
           <div class="data-block-rows col-10 d-flex flex-column pl-0 mr-1">
 
+            <div v-for="(assembly, aIndex) in beforePivotRows" :key="`assembly-row-${assembly.name}`"
+                 class="data-block-row d-flex flex-row">
+              <!--              , {'selected-block': isBlockSelected(block, assembly)}-->
+              <!--              @click="selectBlock(block, assembly)"-->
+              <div v-for="(pivotStep, psIndex) in pivot.path.steps"
+                   :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
+                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'above-pivot', { 'pivot-neighbor': aIndex === beforePivotRows.length - 1 }]">
+                <div v-for="blockClass in blockClasses(pivot.name, pivotStep.panBlock, assembly.name)"
+                     :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}-block-${blockClass}`"
+                     :class="[ blockClass, 'data-block-cell']"></div>
+                <!--                , `block-type-${getUpperBlock(block, assembly)}`-->
+                <!--                <div :class="['data-block-cell-top']"></div>-->
+                <!--                , `block-type-${getLowerBlock(block, assembly)}`-->
+                <!--                <div :class="['data-block-cell-bottom']"></div>-->
+              </div>
+            </div>
 
-            <div class="pivot-data-block-row d-flex flex-row mb-1">
+            <div class="pivot-data-block-row d-flex flex-row">
               <div v-for="(pivotStep, psIndex) in pivot.path.steps"
                    :key="`pivot-row-${pivot.name}-step-${pivotStep.panBlock}`"
                    :class="['data-block-column', `pivot-block-${psIndex % 2}`, `elevation-1`]">
@@ -41,13 +68,13 @@
             </div>
 
 
-            <div v-for="assembly in assemblies" :key="`assembly-row-${assembly.name}`"
-                 class="data-block-row d-flex flex-row mb-1">
+            <div v-for="(assembly, aIndex) in afterPivotRows" :key="`assembly-row-${assembly.name}`"
+                 class="data-block-row d-flex flex-row">
               <!--              , {'selected-block': isBlockSelected(block, assembly)}-->
               <!--              @click="selectBlock(block, assembly)"-->
               <div v-for="(pivotStep, psIndex) in pivot.path.steps"
                    :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
-                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`]">
+                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'below-pivot', { 'pivot-neighbor': aIndex === 0 }]">
                 <div v-for="blockClass in blockClasses(pivot.name, pivotStep.panBlock, assembly.name)"
                      :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}-block-${blockClass}`"
                      :class="[ blockClass, 'data-block-cell']"></div>
@@ -103,6 +130,8 @@ export default defineComponent({
         }), {});
       }
     });
+
+    const pivotRowIndex = ref(1);
 
     const pivot = computed(() => ({ name: selectedPivot.value, path: paths.value[selectedPivot.value] }));
     const assemblies = computed(() => Object.keys(paths.value).filter(pathName => selectedAssemblies.value[pathName]).map(pathName => ({
@@ -163,17 +192,59 @@ export default defineComponent({
       return cssClasses;
     };
 
+    const beforePivotRows = computed(() => assemblies.value.slice(0, pivotRowIndex.value));
+    const afterPivotRows = computed(() => assemblies.value.slice(pivotRowIndex.value));
+
+    const movePivotUp = () => pivotRowIndex.value--;
+    const movePivotDown = () => pivotRowIndex.value++;
+
     return {
       pivot,
       assemblies,
       blockClasses,
       pivotColor,
+      pivotRowIndex,
+      beforePivotRows,
+      afterPivotRows,
+      movePivotUp,
+      movePivotDown,
     };
   }
 });
 </script>
 
 <style lang="scss" scoped>
+
+.arrows {
+  position: absolute;
+  height: 100%;
+  left: 0.25rem;
+  padding: 0.125rem 0;
+}
+
+.up-arrow, .down-arrow {
+  display: block;
+}
+
+.up-arrow {
+  width: 0;
+  height: 0;
+  border-left: 0.3rem solid transparent;
+  border-right: 0.3rem solid transparent;
+
+  border-bottom: 0.5rem solid #aaa;
+
+}
+.down-arrow {
+  width: 0;
+  height: 0;
+  border-left: 0.3rem solid transparent;
+  border-right: 0.3rem solid transparent;
+
+  border-top: 0.5rem solid #aaa;
+
+}
+
 .structural-variations-table {
 }
 
@@ -210,181 +281,74 @@ export default defineComponent({
 }
 
 
-
 .data-block-column {
   position: relative;
 
-
-
-  &.selected-block {
-    .data-block-cell-top, .data-block-cell-bottom {
-      border: 1px solid green !important;
-    }
-
-    .data-block-cell-top {
-      border-bottom-color: transparent !important;
-    }
-
-    .data-block-cell-bottom {
-      border-top-color: transparent !important;
-    }
-
-    //box-shadow: inset 0 0 5px black !important;
-  }
-
-  &:hover {
-    .data-block-cell-top, .data-block-cell-bottom {
-      border: 1px solid red !important;
-    }
-
-    .data-block-cell-top {
-      border-bottom-color: transparent !important;
-    }
-
-    .data-block-cell-bottom {
-      border-top-color: transparent !important;
-    }
-
-    //box-shadow: inset 0 0 5px black !important;
-  }
-
-  //width: calc(1.5rem + 2px);
-  //height: calc(3rem + 4px);
   width: 1.5rem;
   height: 3rem;
   background: #eee;
+  border: 1px solid transparent;
 
-  .data-block-cell-top, .data-block-cell-bottom {
-    border: 1px solid #eee;
-  }
-
-  //border-right: 1px solid white;
-  //border-left: 1px solid white;
 
   &.block-1 {
     background: white;
+    //border: 1px solid white;
 
     .data-block-cell-top, .data-block-cell-bottom {
-      border: 1px solid white;
     }
   }
 
   .pivot-data-block-cell {
-    width: calc(1.5rem - 1px);
-    height: 3rem; // calc(3rem + 1px);
+    width: calc(1.5rem - 2px);
+    height: calc(3rem - 2px);
   }
 
-  .data-block-cell-top {
-    //border: 1px solid white;
-    width: calc(1.5rem - 2px);
-    height: calc(1.5rem - 2px);
+}
 
-    &.block-type-present {
-      background: black;
-    }
-  }
 
-  .data-block-cell-bottom {
-    //border: 1px solid white;
+.pivot-label-row {
+  position: relative;
+  line-height: 2rem !important;
+}
 
-    position: relative;
-    width: calc(1.5rem - 2px);
-    height: calc(1.5rem - 2px);
-    //overflow: hidden;
-
-    &::before {
-      position: absolute;
-      content: '';
-      display: block;
-      width: calc(1.5rem - 4px);
-      height: calc(1.5rem - 4px);
-      //background: blue;
-    }
-
-    &::after {
-      position: absolute;
-      content: '';
-      display: block;
-      width: calc(1.5rem - 4px);
-      height: calc(1.5rem - 4px);
-      //background: red;
-    }
-
-    //case 0:
-    //return 'duplication';
-    //case 1:
-    //return 'deletion';
-    //case 2:
-    //return 'insertion';
-    //case 3:
-    //return 'switch';
-    //case 4:
-    //return 'inversion';
-    //case 5:
-    //return 'inversion chain';
-    //case 6:
-    //return 'translocation';
-
-    &.block-type-deletion::before {
-      //background: green;
-      border-top: 2px solid black;
-    }
-
-    &.block-type-insertion::before {
-      //background: blue;
-      border-right: 2px solid black;
-    }
-
-    &.block-type-switch::before {
-      border-top: 2px solid black;
-    }
-
-    &.block-type-switch::after {
-      border-right: 2px solid black;
-    }
-
-    &.block-type-inversion::before {
-      //background: lightcoral;
-      background: linear-gradient(45deg, red 0%, red 50%, transparent 50%, transparent 100%);
-      transform: translateY(-50%) scale(0.66) rotate(-45deg);
-    }
-
-    &.block-type-inversion_chain::before {
-      background: linear-gradient(45deg, red 0%, red 50%, transparent 50%, transparent 100%);
-      transform: translateY(-50%) scale(0.66) rotate(-45deg);
-    }
-
-    &.block-type-inversion_chain::after {
-      transform: translateX(50%);
-      border-top: 2px solid red;
-      z-index: 1;
-    }
-
-    &.block-type-translocation::before {
-      background: lightblue;
-      border-radius: 0 0 1.5rem 1.5rem;
-      //transform: translateY(-25%);
-    }
-
-    &.block-type-translocation::after {
-      border-top: 2px solid black;
+.pivot-data-block-row {
+  .data-block-column {
+    height: 2rem;
+    .pivot-data-block-cell {
+      height: calc(2rem - 2px);
     }
   }
 }
+
 
 .data-block-row {
   overflow: visible;
 
   .data-block-column {
-    border: 1px solid #eee;
+    //border: 1px solid #eee;
     overflow: visible;
 
+    &.above-pivot {
+      transform: rotate(180deg);
+    }
+
+    &.below-pivot {
+
+    }
+
+    &.pivot-neighbor {
+      .block-cooccurence {
+        transform: rotate(180deg);
+      }
+    }
     .data-block-cell {
       display: block;
-      width: 100%;
-      height: 50%;
+      width: calc(1.5rem - 2px);
+      height: calc(1.5rem - 2px);
+
       position: absolute;
       overflow: visible;
+
 
       &.block-present {
         background: black;
@@ -394,17 +358,16 @@ export default defineComponent({
       &.block-cooccurence {
         bottom: 50%;
         background: #0086CA;
-        height: 40%;
         border-radius: 1rem 1rem 0 0;
       }
 
       &.block-insertion {
         bottom: 50%;
-        right: -0.25rem;
+        right: -0.3rem;
         width: 0;
         height: 0;
-        border-left: 0.2rem solid transparent;
-        border-right: 0.2rem solid transparent;
+        border-left: 0.25rem solid transparent;
+        border-right: 0.25rem solid transparent;
         border-bottom: 1rem solid #81CD06;
         z-index: 1;
       }
