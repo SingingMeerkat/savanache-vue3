@@ -48,7 +48,9 @@
               <!--              @click="selectBlock(block, assembly)"-->
               <div v-for="(pivotStep, psIndex) in pivot.path.steps"
                    :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
-                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'above-pivot', { 'pivot-neighbor': aIndex === beforePivotRows.length - 1 }]">
+                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'above-pivot', { 'pivot-neighbor': aIndex === beforePivotRows.length - 1, 'selected': selectedBlock && selectedBlock.assembly.name === assembly.name && selectedBlock.pivotStep.panBlock === pivotStep.panBlock }]"
+                   @click="selectBlock(assembly, pivotStep)"
+              >
                 <div v-for="blockClass in blockClasses(pivot.name, pivotStep.panBlock, assembly.name)"
                      :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}-block-${blockClass}`"
                      :class="[ blockClass, 'data-block-cell']"></div>
@@ -74,7 +76,9 @@
               <!--              @click="selectBlock(block, assembly)"-->
               <div v-for="(pivotStep, psIndex) in pivot.path.steps"
                    :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
-                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'below-pivot', { 'pivot-neighbor': aIndex === 0 }]">
+                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'below-pivot', { 'pivot-neighbor': aIndex === 0, 'selected': selectedBlock && selectedBlock.assembly.name === assembly.name && selectedBlock.pivotStep.panBlock === pivotStep.panBlock }]"
+                   @click="selectBlock(assembly, pivotStep)"
+              >
                 <div v-for="blockClass in blockClasses(pivot.name, pivotStep.panBlock, assembly.name)"
                      :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}-block-${blockClass}`"
                      :class="[ blockClass, 'data-block-cell']"></div>
@@ -175,12 +179,15 @@ export default defineComponent({
       return `rgb(${colors.red}, ${colors.green}, ${colors.blue}`;
     };
 
+    const selectedSVs = computed<Array<string>>(() => store.state.selectedSVs);
+
     const blockClasses = (pivotName: keyof PivotJson, nodeName: keyof Pivot, pathName: keyof PivotNode) => {
       const pathBlock = getBlock(pivotName, nodeName, pathName);
       const cssClasses = [`block-${nodeName}`];
       if (pathBlock) {
         const props = Object.keys(pathBlock) as Array<keyof PathNode>;
-        cssClasses.push(...props.map((prop) => {
+
+        cssClasses.push(...props.filter(value => (!selectedSVs.value.length || selectedSVs.value.includes(value) || value === 'Present')).map((prop) => {
           const value = pathBlock[prop];
           if (value === true) {
             return `block-${prop.toLowerCase()}`;
@@ -195,8 +202,15 @@ export default defineComponent({
     const beforePivotRows = computed(() => assemblies.value.slice(0, pivotRowIndex.value));
     const afterPivotRows = computed(() => assemblies.value.slice(pivotRowIndex.value));
 
-    const movePivotUp = () => pivotRowIndex.value--;
-    const movePivotDown = () => pivotRowIndex.value++;
+    const movePivotUp = () => (pivotRowIndex.value > 0) ? pivotRowIndex.value-- : undefined;
+    const movePivotDown = () => (pivotRowIndex.value < assemblies.value.length) ? pivotRowIndex.value++ : undefined;
+
+    const selectedBlock = ref()
+
+    const selectBlock = (assembly: unknown, pivotStep: unknown) => {
+      selectedBlock.value = {assembly, pivotStep};
+      console.log('selectedBlock', selectedBlock.value)
+    };
 
     return {
       pivot,
@@ -208,6 +222,8 @@ export default defineComponent({
       afterPivotRows,
       movePivotUp,
       movePivotDown,
+      selectedBlock,
+      selectBlock,
     };
   }
 });
@@ -303,6 +319,13 @@ export default defineComponent({
     height: calc(3rem - 2px);
   }
 
+  &:hover {
+    border-color: red;
+  }
+
+  &.selected {
+    border-color: green;
+  }
 }
 
 
@@ -313,6 +336,9 @@ export default defineComponent({
 
 .pivot-data-block-row {
   .data-block-column {
+    &:hover {
+      border-color: transparent;
+    }
     height: 2rem;
     .pivot-data-block-cell {
       height: calc(2rem - 2px);
@@ -329,7 +355,7 @@ export default defineComponent({
     overflow: visible;
 
     &.above-pivot {
-      transform: rotate(180deg);
+      transform: scaleY(-100%);
     }
 
     &.below-pivot {
@@ -338,7 +364,7 @@ export default defineComponent({
 
     &.pivot-neighbor {
       .block-cooccurence {
-        transform: rotate(180deg);
+        transform: scaleY(-100%);
       }
     }
     .data-block-cell {
