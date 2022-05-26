@@ -171,10 +171,21 @@ export default defineComponent({
         return result;
       }, 0);
       const totalCount = blocks.length;
+      const percentPresent = (presentCount / totalCount);
+      const presentColor = {
+        red: 236,
+        green: 135,
+        blue: 1,
+      };
+      const absentColor = {
+        red: 0,
+        green: 159,
+        blue: 236,
+      }
       const colors = {
-        red: Math.min(511 * (1 - (presentCount / totalCount)), 255),
-        green: Math.min(511 * (presentCount / totalCount), 255),
-        blue: 0,
+        red: ((presentColor.red - absentColor.red) * percentPresent) + (absentColor.red),
+        green: ((presentColor.green - absentColor.green) * percentPresent) + (absentColor.green),
+        blue: ((presentColor.blue - absentColor.blue) * percentPresent) + (absentColor.blue),
       };
       return `rgb(${colors.red}, ${colors.green}, ${colors.blue}`;
     };
