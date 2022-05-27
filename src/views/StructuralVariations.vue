@@ -1,9 +1,20 @@
 <template>
   <v-container class="structural-variations" fluid>
-    StructuralVariations
-    <StructuralVariationsFilters></StructuralVariationsFilters>
-    <StructuralVariationsPivotComparisonTable></StructuralVariationsPivotComparisonTable>
-    <StructuralVariationsAssembliesTable></StructuralVariationsAssembliesTable>
+    <v-row>
+      <v-col cols="12">
+        <StructuralVariationsFilters></StructuralVariationsFilters>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
+        <StructuralVariationsPivotComparisonTable></StructuralVariationsPivotComparisonTable>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="6">
+        <StructuralVariationsAssembliesTable></StructuralVariationsAssembliesTable>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 

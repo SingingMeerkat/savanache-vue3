@@ -103,6 +103,7 @@ import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
 import { PangenomeJson, Path, Paths } from "@/interfaces/pangenome-json";
 import { PathNode, Pivot, PivotJson, PivotNode } from "@/interfaces/pivot-json";
+import { reactiveVuexObject } from "@/store/helper";
 // import {selectedAssemblies, selectedChromosome, selectedPivot} from '@/data/some-data-source';
 
 export default defineComponent({
@@ -115,7 +116,9 @@ export default defineComponent({
       get: () => store.state.selectedPivot,
       set: (value) => store.commit("setSelectedPivot", value)
     });
-    const selectedAssemblies = computed<{ [k: string]: boolean }>(() => store.state.selectedAssemblies);
+
+    const selectedAssemblies = reactiveVuexObject(store.state.selectedAssemblies, store.commit, "setSelectedAssemblies");
+    const selectedSVs = reactiveVuexObject(store.state.selectedSVs, store.commit, "setSelectedSVs");
 
     const paths = ref<{ [k: string]: Path }>({});
     const pangenome = ref<PangenomeJson>();
@@ -189,8 +192,6 @@ export default defineComponent({
       };
       return `rgb(${colors.red}, ${colors.green}, ${colors.blue}`;
     };
-
-    const selectedSVs = computed<Array<string>>(() => store.state.selectedSVs);
 
     const blockClasses = (pivotName: keyof PivotJson, nodeName: keyof Pivot, pathName: keyof PivotNode) => {
       const pathBlock = getBlock(pivotName, nodeName, pathName);
