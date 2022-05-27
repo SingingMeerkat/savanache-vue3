@@ -1,4 +1,4 @@
-import { computed, ref, watch } from "vue";
+import { computed, ref, unref, watch, WatchStopHandle } from "vue";
 import { Commit } from "vuex";
 
 export const reactiveVuexObject = <T extends object>(state: T, commit: Commit, mutationName: any) => {
@@ -6,34 +6,39 @@ export const reactiveVuexObject = <T extends object>(state: T, commit: Commit, m
   const selectedState = computed(() => state);
   const setSelectedState = (data: T) => commit(mutationName, data);
 
-  const selectedLocal = ref(clone(selectedState.value ));
+  const selectedLocal = ref(unref(selectedState));
+
+  let stopStateWatch: WatchStopHandle = () => undefined;
+  let stopLocalWatch: WatchStopHandle = () => undefined;
 
   const startWatch = () => {
-    const stopStateWatch = watch(selectedState, (newVal) => {
+    stopStateWatch();
+    stopLocalWatch();
+
+    stopStateWatch = watch(selectedState, (newVal) => {
       console.log(mutationName, 'watch', 'selectedState', 'newVal', newVal);
       stopWatch();
-      selectedLocal.value = clone(newVal);
+      selectedLocal.value = unref(newVal);
       startWatch();
     }, { deep: true });
 
-    const stopLocalWatch = watch(selectedLocal, (newVal) => {
+    stopLocalWatch = watch(selectedLocal, (newVal) => {
       console.log(mutationName, 'watch', 'selectedLocal', 'newVal', newVal);
       stopWatch();
-      setSelectedState(clone(newVal));
+      setSelectedState(unref(newVal));
       startWatch();
     }, { deep: true });
 
-    return {stopStateWatch, stopLocalWatch};
   }
-
-  const {stopStateWatch, stopLocalWatch} = startWatch();
 
   const stopWatch = () => {
     stopStateWatch();
     stopLocalWatch();
   }
 
+  startWatch();
+  
   return selectedLocal;
 }
 
-const clone = <T extends object | []>(obj: T) => (Array.isArray(obj) ? [...obj] : {...obj});
+// const clone = <T extends object | []>(obj: T) => (Array.isArray(obj) ? [...obj] : {...obj});
