@@ -14,6 +14,9 @@
       <v-col cols="6">
         <StructuralVariationsAssembliesTable></StructuralVariationsAssembliesTable>
       </v-col>
+      <v-col cols="6">
+        <StructuralVariationsPivotDetails></StructuralVariationsPivotDetails>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -23,13 +26,15 @@ import { defineComponent } from "vue";
 import StructuralVariationsAssembliesTable from "../components/StructuralVariations/AssembliesTable.vue";
 import StructuralVariationsFilters from "../components/StructuralVariations/Filters.vue";
 import StructuralVariationsPivotComparisonTable from "../components/StructuralVariations/PivotComparisonTable.vue";
+import StructuralVariationsPivotDetails from "../components/StructuralVariations/PivotDetails.vue";
 
 export default defineComponent({
   name: "StructuralVariations",
   components: {
     StructuralVariationsFilters,
     StructuralVariationsPivotComparisonTable,
-    StructuralVariationsAssembliesTable
+    StructuralVariationsAssembliesTable,
+    StructuralVariationsPivotDetails
   },
   setup() {
     return {};

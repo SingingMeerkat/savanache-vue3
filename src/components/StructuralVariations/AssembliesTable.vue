@@ -1,5 +1,5 @@
 <template>
-  <v-table density="compact" class="structural-variations-some-table">
+  <v-table class="structural-variations-some-table" density="compact">
     <thead>
     <tr>
       <th>
@@ -33,18 +33,19 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { getData } from "@/data/data-source";
 import { Paths } from "@/interfaces/pangenome-json";
 import { useStore } from "vuex";
 import { PathRow } from "@/interfaces/path-row";
-import { reactiveVuexObject } from "@/store/helper";
+import { reactiveVuex } from "@/store/helper";
 
 export default defineComponent({
   name: "StructuralVariationsAssembliesTable",
   components: {},
   setup() {
     const store = useStore();
+    const selectedAssemblies = reactiveVuex<typeof store.state.selectedAssemblies>(store, "selectedAssemblies", "setSelectedAssemblies");
 
     const paths = ref([] as Array<PathRow>);
 
@@ -59,7 +60,8 @@ export default defineComponent({
       }
     });
 
-    const selectedAssemblies = reactiveVuexObject(store.state.selectedAssemblies, store.commit, "setSelectedAssemblies");
+
+    // const selectedAssemblies = reactiveVuexObject(store.state.selectedAssemblies, store.commit, "setSelectedAssemblies");
 
     const allSelected = computed({
       get: () => paths.value.every((path) => selectedAssemblies.value[path.name]),

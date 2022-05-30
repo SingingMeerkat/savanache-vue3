@@ -24,23 +24,18 @@
 
 <script lang="ts">
 
-import { computed, defineComponent, ref, watch } from "vue";
+import { defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
-import { PathRow } from "@/interfaces/path-row";
-import { reactiveVuexObject } from "@/store/helper";
+import { reactiveVuex } from "@/store/helper";
 
 export default defineComponent({
   name: "StructuralVariationsFilters",
   components: {},
   setup() {
     const store = useStore();
-
-    const selectedPivot = computed<string>({
-      get: () => store.state.selectedPivot,
-      set: (value) => store.commit("setSelectedPivot", value)
-    });
-    const selectedSVs = reactiveVuexObject(store.state.selectedSVs, store.commit, "setSelectedSVs");
+    const selectedPivot = reactiveVuex<typeof store.state.selectedPivot>(store, "selectedPivot", "setSelectedPivot");
+    const selectedSVs = reactiveVuex<typeof store.state.selectedSVs>(store, "selectedSVs", "setSelectedSVs");
 
     const pivotItems = ref<Array<string>>([]);
 
@@ -51,18 +46,18 @@ export default defineComponent({
     });
 
     const svItems = [
-      'Insertion',
-      'Swap',
-      'Cooccurence',
-      'Inversion',
-      'InversionChain',
+      "Insertion",
+      "Swap",
+      "Cooccurence",
+      "Inversion",
+      "InversionChain"
     ];
 
     return {
       pivotItems,
       selectedPivot,
       svItems,
-      selectedSVs,
+      selectedSVs
     };
   }
 });

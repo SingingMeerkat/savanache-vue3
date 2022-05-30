@@ -24,8 +24,8 @@
 
             <div class="data-label elevation-1 pivot-label-row px-3 d-flex">
               <div class="arrows d-flex flex-column justify-space-around">
-                <a @click="movePivotUp" class="up-arrow"></a>
-                <a @click="movePivotDown" class="down-arrow"></a>
+                <a class="up-arrow" @click="movePivotUp"></a>
+                <a class="down-arrow" @click="movePivotDown"></a>
               </div>
               <div class="pivot-label">
                 {{ pivot.name }}
@@ -48,8 +48,8 @@
               <!--              @click="selectBlock(block, assembly)"-->
               <div v-for="(pivotStep, psIndex) in pivot.path.steps"
                    :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
-                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'above-pivot', { 'pivot-neighbor': aIndex === beforePivotRows.length - 1, 'selected': selectedBlock && selectedBlock.assembly.name === assembly.name && selectedBlock.pivotStep.panBlock === pivotStep.panBlock }]"
-                   @click="selectBlock(assembly, pivotStep)"
+                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'above-pivot', { 'pivot-neighbor': aIndex === beforePivotRows.length - 1, 'selected': selectedBlock.assembly && selectedBlock.assembly.name === assembly.name && selectedBlock.pivotStep && selectedBlock.pivotStep.panBlock === pivotStep.panBlock }]"
+                   @click="selectBlock(pivot.name, assembly.name, pivotStep.panBlock)"
               >
                 <div v-for="blockClass in blockClasses(pivot.name, pivotStep.panBlock, assembly.name)"
                      :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}-block-${blockClass}`"
@@ -65,7 +65,8 @@
               <div v-for="(pivotStep, psIndex) in pivot.path.steps"
                    :key="`pivot-row-${pivot.name}-step-${pivotStep.panBlock}`"
                    :class="['data-block-column', `pivot-block-${psIndex % 2}`, `elevation-1`]">
-                <div :class="['pivot-data-block-cell']" :style="{ background: pivotColor(pivot.name, pivotStep.panBlock, assemblies) }"></div>
+                <div :class="['pivot-data-block-cell']"
+                     :style="{ background: pivotColor(pivot.name, pivotStep.panBlock, assemblies) }"></div>
               </div>
             </div>
 
@@ -76,8 +77,8 @@
               <!--              @click="selectBlock(block, assembly)"-->
               <div v-for="(pivotStep, psIndex) in pivot.path.steps"
                    :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
-                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'below-pivot', { 'pivot-neighbor': aIndex === 0, 'selected': selectedBlock && selectedBlock.assembly.name === assembly.name && selectedBlock.pivotStep.panBlock === pivotStep.panBlock }]"
-                   @click="selectBlock(assembly, pivotStep)"
+                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'below-pivot', { 'pivot-neighbor': aIndex === 0, 'selected': selectedBlock.assembly && selectedBlock.assembly.name === assembly.name && selectedBlock.pivotStep && selectedBlock.pivotStep.panBlock === pivotStep.panBlock }]"
+                   @click="selectBlock(pivot, assembly, pivotStep)"
               >
                 <div v-for="blockClass in blockClasses(pivot.name, pivotStep.panBlock, assembly.name)"
                      :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}-block-${blockClass}`"
@@ -101,9 +102,10 @@
 import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
-import { PangenomeJson, Path, Paths } from "@/interfaces/pangenome-json";
-import { PathNode, Pivot, PivotJson, PivotNode } from "@/interfaces/pivot-json";
-import { reactiveVuexObject } from "@/store/helper";
+import { PangenomeJson, PanNode, PanNodes, Path, Paths } from "@/interfaces/pangenome-json";
+import { PathNode, PivotJson, PivotNode } from "@/interfaces/pivot-json";
+import { reactiveVuex } from "@/store/helper";
+import { SelectedAssemblies, SelectedBlock, SelectedPivot, SelectedSVs } from "@/store";
 // import {selectedAssemblies, selectedChromosome, selectedPivot} from '@/data/some-data-source';
 
 export default defineComponent({
@@ -111,14 +113,10 @@ export default defineComponent({
   components: {},
   setup() {
     const store = useStore();
-
-    const selectedPivot = computed<string>({
-      get: () => store.state.selectedPivot,
-      set: (value) => store.commit("setSelectedPivot", value)
-    });
-
-    const selectedAssemblies = reactiveVuexObject(store.state.selectedAssemblies, store.commit, "setSelectedAssemblies");
-    const selectedSVs = reactiveVuexObject(store.state.selectedSVs, store.commit, "setSelectedSVs");
+    const selectedPivot = reactiveVuex<SelectedPivot>(store, "selectedPivot", "setSelectedPivot");
+    const selectedAssemblies = reactiveVuex<SelectedAssemblies>(store, "selectedAssemblies", "setSelectedAssemblies");
+    const selectedSVs = reactiveVuex<SelectedSVs>(store, "selectedSVs", "setSelectedSVs");
+    const selectedBlock = reactiveVuex<SelectedBlock>(store, "selectedBlock", "setSelectedBlock");
 
     const paths = ref<{ [k: string]: Path }>({});
     const pangenome = ref<PangenomeJson>();
@@ -146,7 +144,7 @@ export default defineComponent({
       path: paths.value[pathName]
     })));
 
-    const getBlock = (pivotName: keyof PivotJson, nodeName: keyof Pivot, pathName: keyof PivotNode): PathNode | undefined => {
+    const getBlock = (pivotName: keyof PivotJson, nodeName: keyof PanNodes<PanNode>, pathName: keyof PivotNode): PathNode | undefined => {
       if (pivots.value) {
         const nodes = pivots.value[pivotName];
         if (nodes) {
@@ -157,15 +155,15 @@ export default defineComponent({
           }
         }
       }
-    }
+    };
 
-    const isPresent = (pivotName: keyof PivotJson, nodeName: keyof Pivot, pathName: keyof PivotNode): boolean | undefined => {
+    const isPresent = (pivotName: keyof PivotJson, nodeName: keyof PanNodes<PanNode>, pathName: keyof PivotNode): boolean | undefined => {
       const pathBlock = getBlock(pivotName, nodeName, pathName);
-      console.log('isPresent', pivotName, nodeName, pathName, pathBlock && pathBlock.Present);
+      console.log("isPresent", pivotName, nodeName, pathName, pathBlock && pathBlock.Present);
       return pathBlock && pathBlock.Present;
-    }
+    };
 
-    const pivotColor = (pivotName: keyof PivotJson, nodeName: keyof Pivot, paths: Array<{  name: keyof PivotNode }>) => {
+    const pivotColor = (pivotName: keyof PivotJson, nodeName: keyof PanNodes<PanNode>, paths: Array<{ name: keyof PivotNode }>) => {
       const blocks = paths.map(path => getBlock(pivotName, nodeName, path.name));
       const presentCount = blocks.reduce((result, block) => {
         if (block && block.Present) {
@@ -178,32 +176,32 @@ export default defineComponent({
       const presentColor = {
         red: 236,
         green: 135,
-        blue: 1,
+        blue: 1
       };
       const absentColor = {
         red: 0,
         green: 159,
-        blue: 236,
-      }
+        blue: 236
+      };
       const colors = {
         red: ((presentColor.red - absentColor.red) * percentPresent) + (absentColor.red),
         green: ((presentColor.green - absentColor.green) * percentPresent) + (absentColor.green),
-        blue: ((presentColor.blue - absentColor.blue) * percentPresent) + (absentColor.blue),
+        blue: ((presentColor.blue - absentColor.blue) * percentPresent) + (absentColor.blue)
       };
       return `rgb(${colors.red}, ${colors.green}, ${colors.blue}`;
     };
 
-    const blockClasses = (pivotName: keyof PivotJson, nodeName: keyof Pivot, pathName: keyof PivotNode) => {
+    const blockClasses = (pivotName: keyof PivotJson, nodeName: keyof PanNodes<PanNode>, pathName: keyof PivotNode) => {
       const pathBlock = getBlock(pivotName, nodeName, pathName);
       const cssClasses = [`block-${nodeName}`];
       if (pathBlock) {
         const props = Object.keys(pathBlock) as Array<keyof PathNode>;
 
-        cssClasses.push(...props.filter(value => (!selectedSVs.value.length || selectedSVs.value.includes(value) || value === 'Present')).map((prop) => {
+        cssClasses.push(...props.filter(value => (!selectedSVs.value.length || selectedSVs.value.includes(value) || value === "Present")).map((prop) => {
           const value = pathBlock[prop];
           if (value === true) {
             return `block-${prop.toLowerCase()}`;
-          } else if (value) {
+          } else if (typeof value === 'string') {
             return `block-${prop.toLowerCase()}-${value.toLowerCase()}`;
           }
         }).filter((value) => !!value) as string[]);
@@ -217,11 +215,9 @@ export default defineComponent({
     const movePivotUp = () => (pivotRowIndex.value > 0) ? pivotRowIndex.value-- : undefined;
     const movePivotDown = () => (pivotRowIndex.value < assemblies.value.length) ? pivotRowIndex.value++ : undefined;
 
-    const selectedBlock = ref()
-
-    const selectBlock = (assembly: unknown, pivotStep: unknown) => {
-      selectedBlock.value = {assembly, pivotStep};
-      console.log('selectedBlock', selectedBlock.value)
+    const selectBlock = (pivot: keyof Paths, assembly: keyof Paths, block: keyof PanNodes<PanNode>) => {
+      selectedBlock.value = { pivot, assembly, block };
+      console.log("selectedBlock", selectedBlock.value);
     };
 
     return {
@@ -235,7 +231,7 @@ export default defineComponent({
       movePivotUp,
       movePivotDown,
       selectedBlock,
-      selectBlock,
+      selectBlock
     };
   }
 });
@@ -263,6 +259,7 @@ export default defineComponent({
   border-bottom: 0.5rem solid #aaa;
 
 }
+
 .down-arrow {
   width: 0;
   height: 0;
@@ -351,7 +348,9 @@ export default defineComponent({
     &:hover {
       border-color: transparent;
     }
+
     height: 2rem;
+
     .pivot-data-block-cell {
       height: calc(2rem - 2px);
     }
@@ -379,6 +378,7 @@ export default defineComponent({
         transform: scaleY(-100%);
       }
     }
+
     .data-block-cell {
       display: block;
       width: calc(1.5rem - 2px);

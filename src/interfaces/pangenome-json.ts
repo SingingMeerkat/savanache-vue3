@@ -1,5 +1,5 @@
 export interface PangenomeJson {
-  panSkeleton: PanSkeleton;
+  panSkeleton: PanNodes<PanNode>;
   paths: Paths;
 }
 
@@ -14,58 +14,53 @@ export interface Path {
 }
 
 export interface Step {
-  panBlock: string;
+  panBlock: keyof PanNodes<PanNode>;
   startPosition: number;
   strand: number;
 }
 
-export interface PanSkeleton {
-  Node_A_0: PanNode;
-  Node_A_1: PanNode;
-  Node_A_2: PanNode;
-  Node_A_3: PanNode;
-  Node_A_4: PanNode;
-  Node_A_5: PanNode;
-  Node_B: PanNode;
-  Node_C: PanNode;
-  Node_D: PanNode;
-  Node_E: PanNode;
-  Node_F: PanNode;
-  Node_G: PanNode;
-  Node_H_0: PanNode;
-  Node_H_1: PanNode;
-  Node_I: PanNode;
-  Node_J: PanNode;
-  Node_K: PanNode;
-  Node_L: PanNode;
-  Node_M: PanNode;
-  Node_N: PanNode;
-  Node_O: PanNode;
-  Node_P: PanNode;
-  Node_Q: PanNode;
-  Node_R: PanNode;
-  Node_S: PanNode;
-  Node_T: PanNode;
-  Node_U: PanNode;
-  Node_V: PanNode;
+export interface PanNodes<T> {
+  Node_A_0: T;
+  Node_A_1: T;
+  Node_A_2: T;
+  Node_A_3: T;
+  Node_A_4: T;
+  Node_A_5: T;
+  Node_B: T;
+  Node_C: T;
+  Node_D: T;
+  Node_E: T;
+  Node_F: T;
+  Node_G: T;
+  Node_H_0: T;
+  Node_H_1: T;
+  Node_I: T;
+  Node_J: T;
+  Node_K: T;
+  Node_L: T;
+  Node_M: T;
+  Node_N: T;
+  Node_O: T;
+  Node_P: T;
+  Node_Q: T;
+  Node_R: T;
+  Node_S: T;
+  Node_T: T;
+  Node_U: T;
+  Node_V: T;
 }
 
 export interface PanNode {
   length: number;
   traversals: Traversals;
-  cooccurrences: string[];
+  cooccurrences: (keyof PanNodes<PanNode>)[];
   neighborNodes: NeighborNodes;
-  
+
 }
 
 export interface NeighborNodes {
-  before: string[];
-  after: string[];
-}
-
-export interface NeighborNodes {
-  before: string[];
-  after: string[];
+  before: (keyof PanNodes<PanNode>)[];
+  after: (keyof PanNodes<PanNode>)[];
 }
 
 export interface Traversals {
