@@ -94,10 +94,7 @@
     "Node_I": {
       "Ganymede": {
         "Present": false,
-        "Swap": true,
-        "Nodes": [
-          "Node_L"
-        ]
+        "Swap": true
       },
       "Leonidas": {
         "Present": true
@@ -106,10 +103,7 @@
     "Node_J": {
       "Ganymede": {
         "Present": false,
-        "Swap": true,
-        "Nodes": [
-          "Node_L"
-        ]
+        "Swap": true
       },
       "Leonidas": {
         "Present": true,
@@ -120,10 +114,7 @@
       "Ganymede": {
         "Present": false,
         "Swap": "end",
-        "Cooccurence": true,
-        "Nodes": [
-          "Node_L"
-        ]
+        "Cooccurence": true
       },
       "Leonidas": {
         "Present": true,
@@ -196,7 +187,11 @@
     "Node_V": {
       "Ganymede": {
         "Present": false,
-        "Swap": "start"
+        "Swap": "start",
+        "Nodes": [
+          "Node_A4",
+          "Node_A5"
+        ]
       },
       "Leonidas": {
         "Present": false,

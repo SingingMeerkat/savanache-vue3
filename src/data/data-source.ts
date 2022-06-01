@@ -14,7 +14,7 @@ export const getData = async () => {
   const pivotsImport = await import("../data/sample/pivots.json");
 
   if (pangenomeImport && pangenomeImport.default && pivotsImport && pivotsImport.default) {
-    dataCache = { pangenome: pangenomeImport.default, pivots: pivotsImport.default };
+    dataCache = { pangenome: pangenomeImport.default as never, pivots: pivotsImport.default as never };
 
     return dataCache;
   }

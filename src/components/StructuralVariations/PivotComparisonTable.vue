@@ -78,7 +78,7 @@
               <div v-for="(pivotStep, psIndex) in pivot.path.steps"
                    :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
                    :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'below-pivot', { 'pivot-neighbor': aIndex === 0, 'selected': selectedBlock.assembly && selectedBlock.assembly.name === assembly.name && selectedBlock.pivotStep && selectedBlock.pivotStep.panBlock === pivotStep.panBlock }]"
-                   @click="selectBlock(pivot, assembly, pivotStep)"
+                   @click="selectBlock(pivot.name, assembly.name, pivotStep.panBlock)"
               >
                 <div v-for="blockClass in blockClasses(pivot.name, pivotStep.panBlock, assembly.name)"
                      :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}-block-${blockClass}`"
@@ -103,7 +103,7 @@ import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
 import { PangenomeJson, PanNode, PanNodes, Path, Paths } from "@/interfaces/pangenome-json";
-import { PathNode, PivotJson, PivotNode } from "@/interfaces/pivot-json";
+import { PivotJson, PivotPathNode } from "@/interfaces/pivot-json";
 import { reactiveVuex } from "@/store/helper";
 import { SelectedAssemblies, SelectedBlock, SelectedPivot, SelectedSVs } from "@/store";
 // import {selectedAssemblies, selectedChromosome, selectedPivot} from '@/data/some-data-source';
@@ -127,7 +127,7 @@ export default defineComponent({
         pangenome.value = data.pangenome;
         pivots.value = data.pivots;
 
-        const pathNames = Object.keys(pangenome.value.paths) as Array<keyof Paths>;
+        const pathNames = Object.keys(pangenome.value.paths) as Array<keyof Paths<Path>>;
 
         paths.value = pathNames.reduce((result, pathName) => ({
           ...result,
@@ -144,7 +144,7 @@ export default defineComponent({
       path: paths.value[pathName]
     })));
 
-    const getBlock = (pivotName: keyof PivotJson, nodeName: keyof PanNodes<PanNode>, pathName: keyof PivotNode): PathNode | undefined => {
+    const getBlock = (pivotName: keyof PivotJson, nodeName: keyof PanNodes<never>, pathName: keyof Paths<never>): PivotPathNode | undefined => {
       if (pivots.value) {
         const nodes = pivots.value[pivotName];
         if (nodes) {
@@ -157,13 +157,13 @@ export default defineComponent({
       }
     };
 
-    const isPresent = (pivotName: keyof PivotJson, nodeName: keyof PanNodes<PanNode>, pathName: keyof PivotNode): boolean | undefined => {
+    const isPresent = (pivotName: keyof PivotJson, nodeName: keyof PanNodes<PanNode>, pathName: keyof Paths<never>): boolean | undefined => {
       const pathBlock = getBlock(pivotName, nodeName, pathName);
       console.log("isPresent", pivotName, nodeName, pathName, pathBlock && pathBlock.Present);
       return pathBlock && pathBlock.Present;
     };
 
-    const pivotColor = (pivotName: keyof PivotJson, nodeName: keyof PanNodes<PanNode>, paths: Array<{ name: keyof PivotNode }>) => {
+    const pivotColor = (pivotName: keyof PivotJson, nodeName: keyof PanNodes<PanNode>, paths: Array<{ name: keyof Paths<never> }>) => {
       const blocks = paths.map(path => getBlock(pivotName, nodeName, path.name));
       const presentCount = blocks.reduce((result, block) => {
         if (block && block.Present) {
@@ -191,17 +191,17 @@ export default defineComponent({
       return `rgb(${colors.red}, ${colors.green}, ${colors.blue}`;
     };
 
-    const blockClasses = (pivotName: keyof PivotJson, nodeName: keyof PanNodes<PanNode>, pathName: keyof PivotNode) => {
+    const blockClasses = (pivotName: keyof PivotJson, nodeName: keyof PanNodes<never>, pathName: keyof Paths<never>) => {
       const pathBlock = getBlock(pivotName, nodeName, pathName);
       const cssClasses = [`block-${nodeName}`];
       if (pathBlock) {
-        const props = Object.keys(pathBlock) as Array<keyof PathNode>;
+        const props = Object.keys(pathBlock) as Array<keyof PivotPathNode>;
 
         cssClasses.push(...props.filter(value => (!selectedSVs.value.length || selectedSVs.value.includes(value) || value === "Present")).map((prop) => {
           const value = pathBlock[prop];
           if (value === true) {
             return `block-${prop.toLowerCase()}`;
-          } else if (typeof value === 'string') {
+          } else if (typeof value === "string") {
             return `block-${prop.toLowerCase()}-${value.toLowerCase()}`;
           }
         }).filter((value) => !!value) as string[]);
@@ -215,7 +215,7 @@ export default defineComponent({
     const movePivotUp = () => (pivotRowIndex.value > 0) ? pivotRowIndex.value-- : undefined;
     const movePivotDown = () => (pivotRowIndex.value < assemblies.value.length) ? pivotRowIndex.value++ : undefined;
 
-    const selectBlock = (pivot: keyof Paths, assembly: keyof Paths, block: keyof PanNodes<PanNode>) => {
+    const selectBlock = (pivot: keyof Paths<never>, assembly: keyof Paths<never>, block: keyof PanNodes<never>) => {
       selectedBlock.value = { pivot, assembly, block };
       console.log("selectedBlock", selectedBlock.value);
     };

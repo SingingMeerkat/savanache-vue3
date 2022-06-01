@@ -1,6 +1,5 @@
 import { createStore } from "vuex";
-import { PanNode, PanNodes, Paths } from "@/interfaces/pangenome-json";
-import { PivotNode } from "@/interfaces/pivot-json";
+import { PanNodes, Paths } from "@/interfaces/pangenome-json";
 
 export default createStore({
   state: {
@@ -38,10 +37,10 @@ export interface SelectedAssemblies {
 
 export type SelectedSVs = Array<string>;
 
-export type SelectedPivot = string;
+export type SelectedPivot = keyof Paths<never>;
 
 export interface SelectedBlock {
-  assembly: undefined | keyof Paths;
-  pivot: undefined | keyof Paths;
-  block: undefined | keyof PanNodes<PanNode> | keyof PanNodes<PivotNode>;
+  assembly: undefined | keyof Paths<never>;
+  pivot: undefined | keyof Paths<never>;
+  block: undefined | keyof PanNodes<never>;
 }

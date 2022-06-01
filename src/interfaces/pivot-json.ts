@@ -1,10 +1,6 @@
-import { PanNodes } from "@/interfaces/pangenome-json";
+import { PanNodes, Paths } from "@/interfaces/pangenome-json";
 
-export interface PivotJson {
-  Aphrodite?: PanNodes<PivotNode>;
-  // Ganymede?: Pivot;
-  // Leonidas?: Pivot;
-}
+export type PivotJson = Paths<PanNodes<Paths<PivotPathNode>>>
 
 // export interface Pivot {
 //   Node_A_0: PivotNode;
@@ -29,13 +25,13 @@ export interface PivotJson {
 //   Node_V: PivotNode;
 // }
 
-export interface PivotNode {
-  // Aphrodite?: PathNode;
-  Ganymede?: PathNode;
-  Leonidas?: PathNode;
-}
+// export interface PivotNode {
+//   // Aphrodite?: PathNode;
+//   Ganymede?: PivotPathNode;
+//   Leonidas?: PivotPathNode;
+// }
 
-export interface PathNode {
+export interface PivotPathNode {
   Present?: boolean;
   Insertion?: boolean;
   Swap?: boolean | string;

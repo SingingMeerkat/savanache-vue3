@@ -1,4 +1,6 @@
+import { Path, Paths } from "@/interfaces/pangenome-json";
+
 export interface PathRow {
-  name: string;
+  name: keyof Paths<Path>;
   steps: number;
 }

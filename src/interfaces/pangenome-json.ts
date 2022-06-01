@@ -1,12 +1,12 @@
 export interface PangenomeJson {
   panSkeleton: PanNodes<PanNode>;
-  paths: Paths;
+  paths: Paths<Path>;
 }
 
-export interface Paths {
-  Aphrodite: Path;
-  Ganymede: Path;
-  Leonidas: Path;
+export interface Paths<T> {
+  Aphrodite?: T;
+  Ganymede?: T;
+  Leonidas?: T;
 }
 
 export interface Path {

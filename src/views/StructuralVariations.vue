@@ -11,10 +11,12 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="6">
+      <v-col cols="12">
         <StructuralVariationsAssembliesTable></StructuralVariationsAssembliesTable>
       </v-col>
-      <v-col cols="6">
+    </v-row>
+    <v-row>
+      <v-col cols="12">
         <StructuralVariationsPivotDetails></StructuralVariationsPivotDetails>
       </v-col>
     </v-row>

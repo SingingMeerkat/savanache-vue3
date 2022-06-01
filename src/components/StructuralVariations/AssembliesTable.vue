@@ -35,7 +35,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
 import { getData } from "@/data/data-source";
-import { Paths } from "@/interfaces/pangenome-json";
+import { Path, Paths } from "@/interfaces/pangenome-json";
 import { useStore } from "vuex";
 import { PathRow } from "@/interfaces/path-row";
 import { reactiveVuex } from "@/store/helper";
@@ -51,10 +51,10 @@ export default defineComponent({
 
     getData().then((data) => {
       if (data) {
-        const pathNames = Object.keys(data.pangenome.paths) as Array<keyof Paths>;
+        const pathNames = Object.keys(data.pangenome.paths) as Array<keyof Paths<Path>>;
         paths.value = pathNames.map((pathName) => ({
           name: pathName,
-          steps: data.pangenome.paths[pathName].steps.length
+          steps: data.pangenome.paths[pathName] && data.pangenome.paths[pathName]?.steps.length || 0
         }));
         allSelected.value = false;
       }

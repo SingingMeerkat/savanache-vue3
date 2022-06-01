@@ -88,11 +88,11 @@ export const reactiveVuex = <T>(store: Store<any>, stateName: string, mutationNa
 
 
 const clone = <T>(obj: T) => {
-  if (typeof obj === 'object') {
+  if (typeof obj === "object") {
     if (Array.isArray(obj)) {
       return [...obj];
     } else {
-      return {...obj};
+      return { ...obj };
     }
   }
   return obj;
