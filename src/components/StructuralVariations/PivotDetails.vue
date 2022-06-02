@@ -14,6 +14,9 @@
             </div>
 
             <div class="data-label elevation-1 px-3">
+            </div>
+
+            <div class="data-label elevation-1 px-3">
               {{ pivotName }}
             </div>
 
@@ -27,32 +30,46 @@
                    :key="`assembly-row-${assemblyName}-step-${assemblyStep.name}`"
                    :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`]"
               >
-                <div v-for="blockClass in assemblyStep.classes"
-                     :key="`assembly-row-${assemblyName}-step-${assemblyStep.panBlock}-block-${blockClass}`"
-                     :class="[ blockClass, 'data-block-cell']"></div>
+                <div :class="[`assembly-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="blockType in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-text-${blockType}`">
+                </div>
                 <div class="block-label">
                   {{ assemblyStep.name }}
                 </div>
-                <div class="block-type" v-for="blockType in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-blocktype-${blockType}`">
+                <div :class="[`assembly-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="blockType in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-${blockType}`">
                   [{{ blockType }}]
                 </div>
               </div>
             </div>
 
             <div class="data-block-row d-flex flex-row">
+              <div v-for="(visualStep, psIndex) in visualSteps"
+                   :key="`visual-row-step-${visualStep.name}`"
+                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`]"
+              >
+                <div :class="[`visual-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="blockType in visualStep.blockTypes" :key="`visual-${visualName}-step-${visualStep.name}-block-type-text-${blockType}`">
+                </div>
+                <div class="block-label">
+                </div>
+                <div :class="[`visual-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="blockType in visualStep.blockTypes" :key="`visual-${visualName}-step-${visualStep.name}-block-type-${blockType}`">
+                </div>
+
+              </div>
+            </div>
+            
+            <div class="data-block-row d-flex flex-row">
               <div v-for="(pivotStep, psIndex) in pivotSteps"
                    :key="`pivot-row-${pivotName}-step-${pivotStep.name}`"
                    :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`]"
               >
-                <div v-for="blockClass in pivotStep.classes"
-                     :key="`pivot-row-${pivotName}-step-${pivotStep.panBlock}-block-${blockClass}`"
-                     :class="[ blockClass, 'data-block-cell']"></div>
-                <div class="block-label">
-                {{ pivotStep.name }}
+                <div :class="[`pivot-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="blockType in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-text-${blockType}`">
                 </div>
-                <div class="block-type" v-for="blockType in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-blocktype-${blockType}`">
+                <div class="block-label">
+                  {{ pivotStep.name }}
+                </div>
+                <div :class="[`pivot-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="blockType in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-${blockType}`">
                   [{{ blockType }}]
                 </div>
+
               </div>
             </div>
 
@@ -103,19 +120,28 @@ export default defineComponent({
     });
     const pivotSteps = ref<unknown[]>([]);
     const assemblySteps = ref<unknown[]>([]);
+    const visualSteps = ref<unknown[]>([]);
 
     watch(selectedBlock, () => {
       pivotSteps.value = [];
       assemblySteps.value = [];
+      visualSteps.value = [];
 
       if (pangenome.value && selectedBlock.value.pivot && pivots.value) {
+
+
+
+
         const pivotPath = pangenome.value.paths[selectedBlock.value.pivot];
         const pivotNodes = pivots.value[selectedBlock.value.pivot];
 
         if (pivotPath) {
 
-          pivotPath.steps.forEach((step) => {
+          const blockIndex = pivotPath.steps.findIndex(step => step.panBlock === selectedBlock.value.block);
+          const minIndex = Math.max(blockIndex - 1, 0);
+          const maxIndex = Math.min(blockIndex + 2, pivotPath.steps.length - 1);
 
+          pivotPath.steps.slice(minIndex, maxIndex).forEach((step) => {
             const pivotNode = pivotNodes ? pivotNodes[step.panBlock] : undefined;
             // const pivotBlock = pangenome.value?.panSkeleton[step.panBlock];
             const pivotPathNode = (selectedBlock.value.assembly && pivotNode) ? pivotNode[selectedBlock.value.assembly] : undefined;
@@ -132,6 +158,8 @@ export default defineComponent({
                   pivotPathNode.Nodes.forEach((node) => {
                     pivotSteps.value.push({ name: '' });
                     assemblySteps.value.push({ name: node, blockTypes: ['Insertion'] });
+                    visualSteps.value.push({ name: node, blockTypes: ['Insertion'] });
+
                   });
                 }
 
@@ -140,18 +168,30 @@ export default defineComponent({
                   name: step.panBlock,
                   blockTypes: assemblyBlockTypes.filter(p => p !== 'Insertion')
                 });
+                visualSteps.value.push({
+                  name: step.panBlock,
+                  blockTypes: assemblyBlockTypes.filter(p => p !== 'Insertion')
+                });
+
 
               // Swap
               } else if (pivotPathNode.Swap) {
 
                 if (pivotPathNode.Nodes && pivotPathNode.Nodes.length) {
                   pivotPathNode.Nodes.forEach((node, i) => {
+
                     pivotSteps.value.push({ name: i === 0 ? step.panBlock: '', blockTypes: pivotBlockTypes });
                     assemblySteps.value.push({ name: node, blockTypes: assemblyBlockTypes });
+                    visualSteps.value.push({ name: node, blockTypes: assemblyBlockTypes });
+
+
                   });
                 } else {
                   pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
                   assemblySteps.value.push({ name: '', blockTypes: assemblyBlockTypes });
+                  visualSteps.value.push({ name: '', blockTypes: assemblyBlockTypes });
+
+
                 }
 
               } else {
@@ -167,6 +207,7 @@ export default defineComponent({
 
                   pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
                   assemblySteps.value.push({ name: step.panBlock, blockTypes: assemblyBlockTypes });
+                  visualSteps.value.push({ name: step.panBlock, blockTypes: assemblyBlockTypes });
 
                 } else {
 
@@ -174,10 +215,12 @@ export default defineComponent({
                     pivotPathNode.Nodes.forEach((node) => {
                       pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
                       assemblySteps.value.push({ name: node, blockTypes: assemblyBlockTypes });
+                      visualSteps.value.push({ name: node, blockTypes: assemblyBlockTypes });
                     });
                   } else {
                     pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
                     assemblySteps.value.push({ name: '', blockTypes: assemblyBlockTypes });
+                    visualSteps.value.push({ name: '', blockTypes: assemblyBlockTypes });
                   }
 
                 }
@@ -281,6 +324,7 @@ export default defineComponent({
       selectedBlock,
       pivotSteps,
       assemblySteps,
+      visualSteps,
       pivotName,
       assemblyName
     };
@@ -338,8 +382,41 @@ export default defineComponent({
   //}
 }
 
-.block-label, .block-type {
+.block-label, .block-type, .block-text {
+  position: relative;
   font-size: 0.75rem;
+  //z-index: 2;
+}
+
+.block-type {
+  z-index: 1;
+}
+.block-label {
+  z-index: 2;
+}
+.block-text {
+  z-index: 3;
+}
+
+.assembly-block.block-type.block-type-insertion {
+  position: absolute;
+  top: 0;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  background-color: #81CD06;
+  //z-index: 0;
+}
+.visual-block.block-type.block-type-insertion {
+  //bottom: 50%;
+  //right: -0.3rem;
+  width: 0;
+  height: 0;
+  top: 0;
+  border-left: 2.9rem solid transparent;
+  border-right: 2.9rem solid transparent;
+  border-top: 3rem solid #81CD06;
+  //z-index: 1;
 }
 
 //.pivot-label-row {
