@@ -48,11 +48,6 @@
               >
                 <div :class="[`visual-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="blockType in visualStep.blockTypes" :key="`visual-${visualName}-step-${visualStep.name}-block-type-text-${blockType}`">
                 </div>
-                <div class="block-label">
-                </div>
-                <div :class="[`visual-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="blockType in visualStep.blockTypes" :key="`visual-${visualName}-step-${visualStep.name}-block-type-${blockType}`">
-                </div>
-
               </div>
             </div>
             
@@ -141,13 +136,16 @@ export default defineComponent({
           const minIndex = Math.max(blockIndex - 1, 0);
           const maxIndex = Math.min(blockIndex + 2, pivotPath.steps.length - 1);
 
+          // TODO: If the node that's clicked is a co-occurence, go look for its co-occurences and render them differently
+          // TODO: Render inversion chains somehow
           pivotPath.steps.slice(minIndex, maxIndex).forEach((step) => {
             const pivotNode = pivotNodes ? pivotNodes[step.panBlock] : undefined;
             // const pivotBlock = pangenome.value?.panSkeleton[step.panBlock];
             const pivotPathNode = (selectedBlock.value.assembly && pivotNode) ? pivotNode[selectedBlock.value.assembly] : undefined;
             const baseBlockTypes = pivotPathNode ? Object.entries(pivotPathNode).filter(([key, value]) => value && typeof value !== 'object' && key !== 'Present').map(([key, value]) => key) : [];
-            const assemblyBlockTypes = baseBlockTypes.filter((value) => value !== 'Cooccurence');
             const pivotBlockTypes = baseBlockTypes.filter((value) => value === 'Cooccurence');
+            const assemblyBlockTypes = baseBlockTypes.filter((value) => value !== 'Cooccurence');
+            const visualBlockTypes = [...baseBlockTypes];
 
             if (pivotPathNode) {
 
@@ -170,7 +168,7 @@ export default defineComponent({
                 });
                 visualSteps.value.push({
                   name: step.panBlock,
-                  blockTypes: assemblyBlockTypes.filter(p => p !== 'Insertion')
+                  blockTypes: visualBlockTypes.filter(p => p !== 'Insertion')
                 });
 
 
@@ -182,14 +180,14 @@ export default defineComponent({
 
                     pivotSteps.value.push({ name: i === 0 ? step.panBlock: '', blockTypes: pivotBlockTypes });
                     assemblySteps.value.push({ name: node, blockTypes: assemblyBlockTypes });
-                    visualSteps.value.push({ name: node, blockTypes: assemblyBlockTypes });
+                    visualSteps.value.push({ name: node, blockTypes: visualBlockTypes });
 
 
                   });
                 } else {
                   pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
                   assemblySteps.value.push({ name: '', blockTypes: assemblyBlockTypes });
-                  visualSteps.value.push({ name: '', blockTypes: assemblyBlockTypes });
+                  visualSteps.value.push({ name: '', blockTypes: visualBlockTypes });
 
 
                 }
@@ -207,7 +205,7 @@ export default defineComponent({
 
                   pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
                   assemblySteps.value.push({ name: step.panBlock, blockTypes: assemblyBlockTypes });
-                  visualSteps.value.push({ name: step.panBlock, blockTypes: assemblyBlockTypes });
+                  visualSteps.value.push({ name: step.panBlock, blockTypes: visualBlockTypes });
 
                 } else {
 
@@ -215,12 +213,12 @@ export default defineComponent({
                     pivotPathNode.Nodes.forEach((node) => {
                       pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
                       assemblySteps.value.push({ name: node, blockTypes: assemblyBlockTypes });
-                      visualSteps.value.push({ name: node, blockTypes: assemblyBlockTypes });
+                      visualSteps.value.push({ name: node, blockTypes: visualBlockTypes });
                     });
                   } else {
                     pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
                     assemblySteps.value.push({ name: '', blockTypes: assemblyBlockTypes });
-                    visualSteps.value.push({ name: '', blockTypes: assemblyBlockTypes });
+                    visualSteps.value.push({ name: '', blockTypes: visualBlockTypes });
                   }
 
                 }
@@ -419,6 +417,72 @@ export default defineComponent({
   //z-index: 1;
 }
 
+.assembly-block.block-type.block-type-inversion {
+  position: absolute;
+  top: 0;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  background-color: #9D0D0D;
+  //z-index: 0;
+}
+
+.visual-block.block-type.block-type-inversion {
+  width: 20px;
+  height: 100%;
+  top: 0;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+}
+
+.visual-block.block-type.block-type-inversion:before {
+  display: block;
+  content: "";
+  width: 10px;
+  height: 100%;
+  background: linear-gradient(-45deg, #9D0D0D 25%, transparent 25%), linear-gradient(-135deg, #9D0D0D 25%, transparent 25%);
+  background-size: 10px 10px;
+  background-position: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.visual-block.block-type.block-type-inversion:after {
+  display: block;
+  content: "";
+  width: 10px;
+  height: 100%;
+  background: linear-gradient(45deg, #9D0D0D 25%, transparent 25%), linear-gradient(135deg, #9D0D0D 25%, transparent 25%);
+  background-size: 10px 10px;
+  background-position: 0 -7px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 10px;
+}
+
+.visual-block.block-type.block-type-cooccurence {
+  position: absolute;
+  //width: 100%;
+  left: -1px;
+  right: -1px;
+  height: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  border-bottom: 2px solid #0086CA;
+}
+
+.pivot-block.block-type.block-type-cooccurence {
+  position: absolute;
+  height: calc(50% + 1px);
+  left: 50%;
+  top: calc(-50% - 1px);
+  transform: translateX(-50%);
+  border-left: 2px solid #0086CA;
+}
 //.pivot-label-row {
 //  position: relative;
 //  line-height: 2rem !important;
