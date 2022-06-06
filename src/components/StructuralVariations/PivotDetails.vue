@@ -26,42 +26,42 @@
           <div class="data-block-rows col-10 d-flex flex-column pl-0 mr-1">
 
             <div class="data-block-row d-flex flex-row">
-              <div v-for="(assemblyStep, psIndex) in assemblySteps"
-                   :key="`assembly-row-${assemblyName}-step-${assemblyStep.name}`"
-                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`]"
+              <div v-for="(assemblyStep, asIndex) in assemblySteps"
+                   :key="`assembly-row-${assemblyName}-step-${assemblyStep.name}-${asIndex}`"
+                   :class="['data-block-column', `block-${asIndex % 2}`, `elevation-1`]"
               >
-                <div :class="[`assembly-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="blockType in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-text-${blockType}`">
+                <div :class="[`assembly-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-text-${blockType}-${asIndex}-${btIndex}`">
                 </div>
                 <div class="block-label">
                   {{ assemblyStep.name }}
                 </div>
-                <div :class="[`assembly-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="blockType in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-${blockType}`">
+                <div :class="[`assembly-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-${blockType}-${asIndex}-${btIndex}`">
                   [{{ blockType }}]
                 </div>
               </div>
             </div>
 
             <div class="data-block-row d-flex flex-row">
-              <div v-for="(visualStep, psIndex) in visualSteps"
-                   :key="`visual-row-step-${visualStep.name}`"
-                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`]"
+              <div v-for="(visualStep, vsIndex) in visualSteps"
+                   :key="`visual-row-step-${visualStep.name}-${vsIndex}`"
+                   :class="['data-block-column', `block-${vsIndex % 2}`, `elevation-1`]"
               >
-                <div :class="[`visual-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="blockType in visualStep.blockTypes" :key="`visual-${visualName}-step-${visualStep.name}-block-type-text-${blockType}`">
+                <div :class="[`visual-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in visualStep.blockTypes" :key="`visual-step-${visualStep.name}-block-type-text-${blockType}-${vsIndex}-${btIndex}`">
                 </div>
               </div>
             </div>
             
             <div class="data-block-row d-flex flex-row">
               <div v-for="(pivotStep, psIndex) in pivotSteps"
-                   :key="`pivot-row-${pivotName}-step-${pivotStep.name}`"
+                   :key="`pivot-row-${pivotName}-step-${pivotStep.name}-${psIndex}`"
                    :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`]"
               >
-                <div :class="[`pivot-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="blockType in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-text-${blockType}`">
+                <div :class="[`pivot-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-text-${blockType}-${psIndex}-${btIndex}`">
                 </div>
                 <div class="block-label">
                   {{ pivotStep.name }}
                 </div>
-                <div :class="[`pivot-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="blockType in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-${blockType}`">
+                <div :class="[`pivot-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-${blockType}-${psIndex}-${btIndex}`">
                   [{{ blockType }}]
                 </div>
 
