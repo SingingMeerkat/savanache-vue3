@@ -80,8 +80,8 @@
 import { computed, defineComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
-import { PangenomeJson, Path, Paths } from "@/interfaces/pangenome-json";
-import { PivotJson } from "@/interfaces/pivot-json";
+import { PangenomeJson, PanNodes, Path, Paths } from "@/interfaces/pangenome-json";
+import { PivotJson, PivotPathNode } from "@/interfaces/pivot-json";
 import { reactiveVuex } from "@/store/helper";
 import { SelectedAssemblies, SelectedBlock, SelectedPivot, SelectedSVs } from "@/store";
 // import {selectedAssemblies, selectedChromosome, selectedPivot} from '@/data/some-data-source';
@@ -137,6 +137,39 @@ export default defineComponent({
 
         if (selectedBlockSkeletonNode.cooccurrences && selectedBlockSkeletonNode.cooccurrences.length) {
           [selectedBlock.value.block, ...selectedBlockSkeletonNode.cooccurrences].forEach((nodeName) => {
+
+            let pivotNodeAltNames = '';
+            if (pivots.value && selectedBlock.value.pivot) {
+              const a = pivots.value[selectedBlock.value.pivot];
+              if (a) {
+                const b = a[nodeName];
+                if (b && selectedBlock.value.assembly) {
+                  const c = b[selectedBlock.value.assembly];
+                  if (c && c.Nodes && c.Nodes.length) {
+                    pivotNodeAltNames = c.Nodes.join(', ');
+                  }
+                }
+              }
+            }
+
+            let pathNodeAltNames = '';
+            if (pivots.value && selectedBlock.value.pivot) {
+              const a = pivots.value[selectedBlock.value.pivot];
+              if (a) {
+                const entries = Object.entries(a) as Array<[keyof PanNodes<Paths<PivotPathNode>>, Paths<PivotPathNode>]>;
+                entries.forEach(([key, value]) => {
+                  if (selectedBlock.value.assembly) {
+                    const path = value[selectedBlock.value.assembly];
+                    if (path && path.Nodes && path.Nodes.includes(nodeName)) {
+                      pathNodeAltNames = key;
+                    }
+                  }
+
+                });
+              }
+            }
+            // const pivotNode = pivots.value.[selectedBlock.value.pivot!]![nodeName][selectedBlock.value.assembly!];
+
             const skeletonNode = pangenome.value?.panSkeleton[nodeName];
 
             const pivotIndex = skeletonNode?.traversals[selectedBlock.value.pivot!];
@@ -175,6 +208,8 @@ export default defineComponent({
                 if (!visualStep.blockTypes.includes('Pivot')) {
                   visualStep.blockTypes.push('Pivot');
                 }
+              } else {
+                pivotStep.name = pathNodeAltNames;
               }
 
               if (assemblyIndex !== undefined) {
@@ -186,6 +221,8 @@ export default defineComponent({
                 if (!visualStep.blockTypes.includes('Assembly')) {
                   visualStep.blockTypes.push('Assembly');
                 }
+              } else {
+                assemblyStep.name = pivotNodeAltNames;
               }
 
               pivotSteps.value.push(pivotStep);
