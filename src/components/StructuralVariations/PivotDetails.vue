@@ -50,7 +50,7 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="data-block-row d-flex flex-row">
               <div v-for="(pivotStep, psIndex) in pivotSteps"
                    :key="`pivot-row-${pivotName}-step-${pivotStep.name}-${psIndex}`"
@@ -113,6 +113,7 @@ export default defineComponent({
         }), {});
       }
     });
+
     const pivotSteps = ref<unknown[]>([]);
     const assemblySteps = ref<unknown[]>([]);
     const visualSteps = ref<unknown[]>([]);
@@ -122,110 +123,198 @@ export default defineComponent({
       assemblySteps.value = [];
       visualSteps.value = [];
 
-      if (pangenome.value && selectedBlock.value.pivot && pivots.value) {
+      if (pangenome.value && selectedBlock.value.pivot && selectedBlock.value.block && selectedBlock.value.assembly && pivots.value) {
+
+        const selectedBlockPivotPath = pangenome.value.paths[selectedBlock.value.pivot];
+
+        const selectedBlockAssemblyPath = pangenome.value.paths[selectedBlock.value.assembly];
+
+        const selectedBlockSkeletonNode = pangenome.value.panSkeleton[selectedBlock.value.block];
 
 
+        // Has "cooccurences"
+        // selectedBlockSkeletonNode.cooccurrences
+
+        if (selectedBlockSkeletonNode.cooccurrences && selectedBlockSkeletonNode.cooccurrences.length) {
+          [selectedBlock.value.block, ...selectedBlockSkeletonNode.cooccurrences].forEach((nodeName) => {
+            const skeletonNode = pangenome.value?.panSkeleton[nodeName];
+
+            const pivotIndex = skeletonNode?.traversals[selectedBlock.value.pivot!];
+            const assemblyIndex = skeletonNode?.traversals[selectedBlock.value.assembly!];
+
+            const pivotStep = {
+              name: '',
+              blockTypes: [] as string[],
+              pivotIndex,
+              assemblyIndex,
+            };
+
+            const visualStep = {
+              name: '',
+              blockTypes: [] as string[],
+              pivotIndex,
+              assemblyIndex,
+            };
 
 
-        const pivotPath = pangenome.value.paths[selectedBlock.value.pivot];
-        const pivotNodes = pivots.value[selectedBlock.value.pivot];
+            const assemblyStep = {
+              name: '',
+              blockTypes: [] as string[],
+              pivotIndex,
+              assemblyIndex,
+            };
 
-        if (pivotPath) {
+            if (pivotIndex !== undefined || assemblyIndex !== undefined) {
 
-          const blockIndex = pivotPath.steps.findIndex(step => step.panBlock === selectedBlock.value.block);
-          const minIndex = Math.max(blockIndex - 1, 0);
-          const maxIndex = Math.min(blockIndex + 2, pivotPath.steps.length - 1);
-
-          // TODO: If the node that's clicked is a co-occurence, go look for its co-occurences and render them differently
-          // TODO: Render inversion chains somehow
-          pivotPath.steps.slice(minIndex, maxIndex).forEach((step) => {
-            const pivotNode = pivotNodes ? pivotNodes[step.panBlock] : undefined;
-            // const pivotBlock = pangenome.value?.panSkeleton[step.panBlock];
-            const pivotPathNode = (selectedBlock.value.assembly && pivotNode) ? pivotNode[selectedBlock.value.assembly] : undefined;
-            const baseBlockTypes = pivotPathNode ? Object.entries(pivotPathNode).filter(([key, value]) => value && typeof value !== 'object' && key !== 'Present').map(([key, value]) => key) : [];
-            const pivotBlockTypes = baseBlockTypes.filter((value) => value === 'Cooccurence');
-            const assemblyBlockTypes = baseBlockTypes.filter((value) => value !== 'Cooccurence');
-            const visualBlockTypes = [...baseBlockTypes];
-
-            if (pivotPathNode) {
-
-              // Insertion
-              if (pivotPathNode.Insertion) {
-
-                if (pivotPathNode.Nodes && pivotPathNode.Nodes.length) {
-                  pivotPathNode.Nodes.forEach((node) => {
-                    pivotSteps.value.push({ name: '' });
-                    assemblySteps.value.push({ name: node, blockTypes: ['Insertion'] });
-                    visualSteps.value.push({ name: node, blockTypes: ['Insertion'] });
-
-                  });
+              if (pivotIndex !== undefined) {
+                pivotStep.name = nodeName;
+                pivotStep.blockTypes.push('Cooccurence');
+                if (!visualStep.blockTypes.includes('Cooccurence')) {
+                  visualStep.blockTypes.push('Cooccurence');
                 }
-
-                pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
-                assemblySteps.value.push({
-                  name: step.panBlock,
-                  blockTypes: assemblyBlockTypes.filter(p => p !== 'Insertion')
-                });
-                visualSteps.value.push({
-                  name: step.panBlock,
-                  blockTypes: visualBlockTypes.filter(p => p !== 'Insertion')
-                });
-
-
-              // Swap
-              } else if (pivotPathNode.Swap) {
-
-                if (pivotPathNode.Nodes && pivotPathNode.Nodes.length) {
-                  pivotPathNode.Nodes.forEach((node, i) => {
-
-                    pivotSteps.value.push({ name: i === 0 ? step.panBlock: '', blockTypes: pivotBlockTypes });
-                    assemblySteps.value.push({ name: node, blockTypes: assemblyBlockTypes });
-                    visualSteps.value.push({ name: node, blockTypes: visualBlockTypes });
-
-
-                  });
-                } else {
-                  pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
-                  assemblySteps.value.push({ name: '', blockTypes: assemblyBlockTypes });
-                  visualSteps.value.push({ name: '', blockTypes: visualBlockTypes });
-
-
-                }
-
-              } else {
-
-                if (pivotPathNode.Present) {
-
-                  // if (pivotPathNode.Nodes && pivotPathNode.Nodes.length) {
-                  //   pivotPathNode.Nodes.forEach((node) => {
-                  //     pivotSteps.value.push({ name: '' });
-                  //     assemblySteps.value.push({ name: node, blockTypes });
-                  //   });
-                  // }
-
-                  pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
-                  assemblySteps.value.push({ name: step.panBlock, blockTypes: assemblyBlockTypes });
-                  visualSteps.value.push({ name: step.panBlock, blockTypes: visualBlockTypes });
-
-                } else {
-
-                  if (pivotPathNode.Nodes && pivotPathNode.Nodes.length) {
-                    pivotPathNode.Nodes.forEach((node) => {
-                      pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
-                      assemblySteps.value.push({ name: node, blockTypes: assemblyBlockTypes });
-                      visualSteps.value.push({ name: node, blockTypes: visualBlockTypes });
-                    });
-                  } else {
-                    pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
-                    assemblySteps.value.push({ name: '', blockTypes: assemblyBlockTypes });
-                    visualSteps.value.push({ name: '', blockTypes: visualBlockTypes });
-                  }
-
+                if (!visualStep.blockTypes.includes('Pivot')) {
+                  visualStep.blockTypes.push('Pivot');
                 }
               }
+
+              if (assemblyIndex !== undefined) {
+                assemblyStep.name = nodeName;
+                assemblyStep.blockTypes.push('Cooccurence');
+                if (!visualStep.blockTypes.includes('Cooccurence')) {
+                  visualStep.blockTypes.push('Cooccurence');
+                }
+                if (!visualStep.blockTypes.includes('Assembly')) {
+                  visualStep.blockTypes.push('Assembly');
+                }
+              }
+
+              pivotSteps.value.push(pivotStep);
+              visualSteps.value.push(visualStep);
+              assemblySteps.value.push(assemblyStep);
+
             }
+
+            pivotSteps.value.sort((a: any, b: any) => a.assemblyIndex - b.assemblyIndex).sort((a: any, b: any) => a.pivotIndex - b.pivotIndex);
+            visualSteps.value.sort((a: any, b: any) => a.assemblyIndex - b.assemblyIndex).sort((a: any, b: any) => a.pivotIndex - b.pivotIndex);
+            assemblySteps.value.sort((a: any, b: any) => a.assemblyIndex - b.assemblyIndex).sort((a: any, b: any) => a.pivotIndex - b.pivotIndex);
           });
         }
+        // const selectedBlockPivotNodes = pivots.value[selectedBlock.value.pivot];
+        //
+        // if (selectedBlockPivotNodes) {
+        //   const selectedBlockPivotAssemblies = selectedBlockPivotNodes[selectedBlock.value.block];
+        //   const selectedBlockPivotAssemblyNode = selectedBlockPivotAssemblies[selectedBlock.value.assembly];
+        //
+        //   // Has "cooccurences"
+        //   // selectedBlockPivotAssemblyNode.Cooccurence
+        // }
+        //
+        // const pivotPath = pangenome.value.paths[selectedBlock.value.pivot];
+        // const pivotNodes = pivots.value[selectedBlock.value.pivot];
+        //
+        // if (pivotPath) {
+        //
+        //   const blockIndex = pivotPath.steps.findIndex(step => step.panBlock === selectedBlock.value.block);
+        //   const minIndex = Math.max(blockIndex - 1, 0);
+        //   const maxIndex = Math.min(blockIndex + 2, pivotPath.steps.length - 1);
+        //
+        //   // TODO: If the node that's clicked is a co-occurence, go look for its co-occurences and render them differently
+        //   // TODO: Render inversion chains somehow
+        //   pivotPath.steps.slice(minIndex, maxIndex).forEach((step) => {
+        //     const pivotNode = pivotNodes ? pivotNodes[step.panBlock] : undefined;
+        //     // const pivotBlock = pangenome.value?.panSkeleton[step.panBlock];
+        //     const pivotPathNode = (selectedBlock.value.assembly && pivotNode) ? pivotNode[selectedBlock.value.assembly] : undefined;
+        //     const baseBlockTypes = pivotPathNode ? Object.entries(pivotPathNode).filter(([key, value]) => value && typeof value !== 'object' && key !== 'Present').map(([key, value]) => key) : [];
+        //     const pivotBlockTypes = baseBlockTypes.filter((value) => value === 'Cooccurence');
+        //     const assemblyBlockTypes = baseBlockTypes.filter((value) => value !== 'Cooccurence');
+        //     const visualBlockTypes = [...baseBlockTypes];
+        //
+        //     if (pivotPathNode) {
+        //
+        //       // Cooccurence
+        //       if (pivotPathNode.Cooccurence) {
+        //
+        //
+        //       }
+        //       // Insertion
+        //       else if (pivotPathNode.Insertion) {
+        //
+        //         if (pivotPathNode.Nodes && pivotPathNode.Nodes.length) {
+        //           pivotPathNode.Nodes.forEach((node) => {
+        //             pivotSteps.value.push({ name: '' });
+        //             assemblySteps.value.push({ name: node, blockTypes: ['Insertion'] });
+        //             visualSteps.value.push({ name: node, blockTypes: ['Insertion'] });
+        //
+        //           });
+        //         }
+        //
+        //         pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
+        //         assemblySteps.value.push({
+        //           name: step.panBlock,
+        //           blockTypes: assemblyBlockTypes.filter(p => p !== 'Insertion')
+        //         });
+        //         visualSteps.value.push({
+        //           name: step.panBlock,
+        //           blockTypes: visualBlockTypes.filter(p => p !== 'Insertion')
+        //         });
+        //
+        //
+        //
+        //       }
+        //       // Swap
+        //       else if (pivotPathNode.Swap) {
+        //
+        //         if (pivotPathNode.Nodes && pivotPathNode.Nodes.length) {
+        //           pivotPathNode.Nodes.forEach((node, i) => {
+        //
+        //             pivotSteps.value.push({ name: i === 0 ? step.panBlock: '', blockTypes: pivotBlockTypes });
+        //             assemblySteps.value.push({ name: node, blockTypes: assemblyBlockTypes });
+        //             visualSteps.value.push({ name: node, blockTypes: visualBlockTypes });
+        //
+        //
+        //           });
+        //         } else {
+        //           pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
+        //           assemblySteps.value.push({ name: '', blockTypes: assemblyBlockTypes });
+        //           visualSteps.value.push({ name: '', blockTypes: visualBlockTypes });
+        //
+        //
+        //         }
+        //
+        //       } else {
+        //
+        //         if (pivotPathNode.Present) {
+        //
+        //           // if (pivotPathNode.Nodes && pivotPathNode.Nodes.length) {
+        //           //   pivotPathNode.Nodes.forEach((node) => {
+        //           //     pivotSteps.value.push({ name: '' });
+        //           //     assemblySteps.value.push({ name: node, blockTypes });
+        //           //   });
+        //           // }
+        //
+        //           pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
+        //           assemblySteps.value.push({ name: step.panBlock, blockTypes: assemblyBlockTypes });
+        //           visualSteps.value.push({ name: step.panBlock, blockTypes: visualBlockTypes });
+        //
+        //         } else {
+        //
+        //           if (pivotPathNode.Nodes && pivotPathNode.Nodes.length) {
+        //             pivotPathNode.Nodes.forEach((node) => {
+        //               pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
+        //               assemblySteps.value.push({ name: node, blockTypes: assemblyBlockTypes });
+        //               visualSteps.value.push({ name: node, blockTypes: visualBlockTypes });
+        //             });
+        //           } else {
+        //             pivotSteps.value.push({ name: step.panBlock, blockTypes: pivotBlockTypes });
+        //             assemblySteps.value.push({ name: '', blockTypes: assemblyBlockTypes });
+        //             visualSteps.value.push({ name: '', blockTypes: visualBlockTypes });
+        //           }
+        //
+        //         }
+        //       }
+        //     }
+        //   });
+        // }
       }
     });
 
@@ -483,6 +572,16 @@ export default defineComponent({
   transform: translateX(-50%);
   border-left: 2px solid #0086CA;
 }
+
+.assembly-block.block-type.block-type-cooccurence {
+  position: absolute;
+  height: calc(50% + 1px);
+  left: 50%;
+  bottom: calc(-50% - 1px);
+  transform: translateX(-50%);
+  border-left: 2px solid #0086CA;
+}
+
 //.pivot-label-row {
 //  position: relative;
 //  line-height: 2rem !important;
