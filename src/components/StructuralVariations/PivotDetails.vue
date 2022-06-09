@@ -28,7 +28,7 @@
             <div class="data-block-row d-flex flex-row">
               <div v-for="(assemblyStep, asIndex) in assemblySteps"
                    :key="`assembly-row-${assemblyName}-step-${assemblyStep.name}-${asIndex}`"
-                   :class="['data-block-column', `block-${asIndex % 2}`, `elevation-1`]"
+                   :class="['data-block-column', `block-${asIndex % 2}`, `elevation-1`, ...assemblyStep.blockStyles.map(style => `block-style-${style.toLowerCase()}`)]"
               >
                 <div :class="[`assembly-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-text-${blockType}-${asIndex}-${btIndex}`">
                 </div>
@@ -44,7 +44,7 @@
             <div class="data-block-row d-flex flex-row">
               <div v-for="(visualStep, vsIndex) in visualSteps"
                    :key="`visual-row-step-${visualStep.name}-${vsIndex}`"
-                   :class="['data-block-column', `block-${vsIndex % 2}`, `elevation-1`]"
+                   :class="['data-block-column', `block-${vsIndex % 2}`, `elevation-1`, ...visualStep.blockStyles.map(style => `block-style-${style.toLowerCase()}`)]"
               >
                 <div :class="[`visual-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in visualStep.blockTypes" :key="`visual-step-${visualStep.name}-block-type-text-${blockType}-${vsIndex}-${btIndex}`">
                 </div>
@@ -54,7 +54,7 @@
             <div class="data-block-row d-flex flex-row">
               <div v-for="(pivotStep, psIndex) in pivotSteps"
                    :key="`pivot-row-${pivotName}-step-${pivotStep.name}-${psIndex}`"
-                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`]"
+                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, ...pivotStep.blockStyles.map(style => `block-style-${style.toLowerCase()}`)]"
               >
                 <div :class="[`pivot-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-text-${blockType}-${psIndex}-${btIndex}`">
                 </div>
@@ -136,7 +136,45 @@ export default defineComponent({
         // selectedBlockSkeletonNode.cooccurrences
 
         if (selectedBlockSkeletonNode.cooccurrences && selectedBlockSkeletonNode.cooccurrences.length) {
-          [selectedBlock.value.block, ...selectedBlockSkeletonNode.cooccurrences].forEach((nodeName) => {
+          const originalCooccurences = [selectedBlock.value.block, ...selectedBlockSkeletonNode.cooccurrences];
+          let allCooccurences = originalCooccurences.reduce((result, nodeName) => {
+            if (pangenome.value) {
+              const nodeSkel = pangenome.value.panSkeleton[nodeName];
+              if (selectedBlock.value.pivot && selectedBlock.value.assembly) {
+                const pivotIndex = nodeSkel.traversals[selectedBlock.value.pivot];
+                const assemblyIndex = nodeSkel.traversals[selectedBlock.value.assembly]
+                const pivotPath = pangenome.value.paths[selectedBlock.value.pivot];
+                const assemblyPath = pangenome.value.paths[selectedBlock.value.assembly];
+                if (pivotPath && pivotIndex) {
+                  const prevPivotPathNode = pivotPath.steps[pivotIndex - 1];
+                  const nextPivotPathNode = pivotPath.steps[pivotIndex + 1];
+                  if (prevPivotPathNode && !result.includes(prevPivotPathNode.panBlock)) {
+                    result.push(prevPivotPathNode.panBlock);
+                  }
+                  if (nextPivotPathNode && !result.includes(nextPivotPathNode.panBlock)) {
+                    result.push(nextPivotPathNode.panBlock);
+                  }
+                }
+                if (assemblyPath && assemblyIndex) {
+                  const prevAssemblyPathNode = assemblyPath.steps[assemblyIndex - 1];
+                  const nextAssemblyPathNode = assemblyPath.steps[assemblyIndex + 1];
+                  if (prevAssemblyPathNode && !result.includes(prevAssemblyPathNode.panBlock)) {
+                    result.push(prevAssemblyPathNode.panBlock);
+                  }
+                  if (nextAssemblyPathNode && !result.includes(nextAssemblyPathNode.panBlock)) {
+                    result.push(nextAssemblyPathNode.panBlock);
+                  }
+                }
+              }
+            }
+            if (!result.includes(nodeName)) {
+              result.push(nodeName);
+            }
+
+            return result;
+          }, [] as Array<keyof PanNodes<never>>);
+
+          allCooccurences.forEach((nodeName) => {
 
             let pivotNodeAltNames = '';
             if (pivots.value && selectedBlock.value.pivot) {
@@ -178,6 +216,7 @@ export default defineComponent({
             const pivotStep = {
               name: '',
               blockTypes: [] as string[],
+              blockStyles: [] as string[],
               pivotIndex,
               assemblyIndex,
             };
@@ -185,6 +224,7 @@ export default defineComponent({
             const visualStep = {
               name: '',
               blockTypes: [] as string[],
+              blockStyles: [] as string[],
               pivotIndex,
               assemblyIndex,
             };
@@ -193,15 +233,18 @@ export default defineComponent({
             const assemblyStep = {
               name: '',
               blockTypes: [] as string[],
+              blockStyles: [] as string[],
               pivotIndex,
               assemblyIndex,
             };
 
-            if (pivotIndex !== undefined || assemblyIndex !== undefined) {
+            if ((pivotIndex !== undefined || assemblyIndex !== undefined) && originalCooccurences.includes(nodeName)) {
 
-              if (pivotIndex !== undefined) {
+              if (pivotIndex !== undefined && originalCooccurences.includes(nodeName)) {
                 pivotStep.name = nodeName;
-                pivotStep.blockTypes.push('Cooccurence');
+                if (pivotIndex === undefined || assemblyIndex === undefined) {
+                  pivotStep.blockTypes.push('Cooccurence');
+                }
                 if (!visualStep.blockTypes.includes('Cooccurence')) {
                   visualStep.blockTypes.push('Cooccurence');
                 }
@@ -212,7 +255,7 @@ export default defineComponent({
                 pivotStep.name = pathNodeAltNames;
               }
 
-              if (assemblyIndex !== undefined) {
+              if (assemblyIndex !== undefined && originalCooccurences.includes(nodeName)) {
                 assemblyStep.name = nodeName;
                 assemblyStep.blockTypes.push('Cooccurence');
                 if (!visualStep.blockTypes.includes('Cooccurence')) {
@@ -229,6 +272,33 @@ export default defineComponent({
               visualSteps.value.push(visualStep);
               assemblySteps.value.push(assemblyStep);
 
+            } else if ((pivotIndex !== undefined || assemblyIndex !== undefined)) {
+              pivotStep.name = pathNodeAltNames || nodeName;
+              assemblyStep.name = pivotNodeAltNames || nodeName;
+              if (!pivotStep.blockStyles.includes('Fade')) {
+                pivotStep.blockStyles.push('Fade');
+              }
+              if (!assemblyStep.blockStyles.includes('Fade')) {
+                assemblyStep.blockStyles.push('Fade');
+              }
+              if (!visualStep.blockStyles.includes('Fade')) {
+                visualStep.blockStyles.push('Fade');
+              }
+              if (!visualStep.blockTypes.includes('Cooccurence')) {
+                visualStep.blockTypes.push('Cooccurence');
+              }
+              pivotSteps.value.push(pivotStep);
+              visualSteps.value.push(visualStep);
+              assemblySteps.value.push(assemblyStep);
+            }
+            if (nodeName === selectedBlock.value.block && !pivotStep.blockStyles.includes('Selected')) {
+              pivotStep.blockStyles.push('Selected');
+            }
+            if (nodeName === selectedBlock.value.block && !assemblyStep.blockStyles.includes('Selected')) {
+              assemblyStep.blockStyles.push('Selected');
+            }
+            if (nodeName === selectedBlock.value.block && !visualStep.blockStyles.includes('Selected')) {
+              visualStep.blockStyles.push('Selected');
             }
 
             pivotSteps.value.sort((a: any, b: any) => a.assemblyIndex - b.assemblyIndex).sort((a: any, b: any) => a.pivotIndex - b.pivotIndex);
@@ -619,6 +689,24 @@ export default defineComponent({
   border-left: 2px solid #0086CA;
 }
 
+.visual-block.block-type.block-type-inversion {
+  width: 20px;
+  height: 100%;
+  top: 0;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+}
+.block-style-fade {
+  opacity: 0.5;
+  .visual-block.block-type.block-type-cooccurence {
+    border-bottom-style: dashed;
+  }
+}
+
+.block-style-selected {
+  background: rgba(127, 255, 63, 0.5) !important;
+}
 //.pivot-label-row {
 //  position: relative;
 //  line-height: 2rem !important;
