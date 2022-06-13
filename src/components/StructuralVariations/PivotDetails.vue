@@ -3,11 +3,13 @@
 
     <div class="table-container">
       <v-card tile>
+
+
         <div v-if="selectedBlock.pivot && selectedBlock.assembly && selectedBlock.block"
              class="data-area d-flex flex-row">
 
           <!-- "Header" column -->
-          <div class="data-labels col-2 d-flex flex-column pr-0 mr-n1">
+          <div class="data-labels col-2 d-flex flex-column pr-0 mr-n1 pt-5 pb-1">
 
             <div class="data-label elevation-1 px-3">
               {{ assemblyName }}
@@ -21,22 +23,24 @@
             </div>
 
           </div>
-
           <!-- "Data" column rows -->
-          <div class="data-block-rows col-10 d-flex flex-column pl-0 mr-1">
+          <div class="data-block-rows col-10 d-flex flex-column pl-0 mr-1 pt-5 pb-1">
 
             <div class="data-block-row d-flex flex-row">
-              <div v-for="(assemblyStep, asIndex) in assemblySteps"
-                   :key="`assembly-row-${assemblyName}-step-${assemblyStep.name}-${asIndex}`"
-                   :class="['data-block-column', `block-${asIndex % 2}`, `elevation-1`, ...assemblyStep.blockStyles.map(style => `block-style-${style.toLowerCase()}`)]"
-              >
-                <div :class="[`assembly-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-text-${blockType}-${asIndex}-${btIndex}`">
-                </div>
-                <div class="block-label">
-                  {{ assemblyStep.name }}
-                </div>
-                <div :class="[`assembly-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-${blockType}-${asIndex}-${btIndex}`">
-                  [{{ blockType }}]
+              <div :style="{ left: assemblyOffset+'px' }" class="block-wrapper">
+                <div v-for="(assemblyStep, asIndex) in assemblySteps"
+                     :key="`assembly-row-${assemblyName}-step-${assemblyStep.name}-${asIndex}`"
+                     :class="['data-block-column', `block-${asIndex % 2}`, ...assemblyStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`)]"
+                     :style="assemblyStep.blockStyles"
+                >
+                  <div :class="[`assembly-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-text-${blockType}-${asIndex}-${btIndex}`">
+                  </div>
+                  <div class="block-label">
+                    {{ assemblyStep.name }}
+                  </div>
+                  <div :class="[`assembly-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-${blockType}-${asIndex}-${btIndex}`">
+                    [{{ blockType }}]
+                  </div>
                 </div>
               </div>
             </div>
@@ -44,7 +48,8 @@
             <div class="data-block-row d-flex flex-row">
               <div v-for="(visualStep, vsIndex) in visualSteps"
                    :key="`visual-row-step-${visualStep.name}-${vsIndex}`"
-                   :class="['data-block-column', `block-${vsIndex % 2}`, `elevation-1`, ...visualStep.blockStyles.map(style => `block-style-${style.toLowerCase()}`)]"
+                   :class="['visual-block', 'data-block-column', `block-${vsIndex % 2}`, `elevation-1`, ...visualStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`)]"
+                   :style="visualStep.blockStyles"
               >
                 <div :class="[`visual-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in visualStep.blockTypes" :key="`visual-step-${visualStep.name}-block-type-text-${blockType}-${vsIndex}-${btIndex}`">
                 </div>
@@ -52,22 +57,24 @@
             </div>
 
             <div class="data-block-row d-flex flex-row">
-              <div v-for="(pivotStep, psIndex) in pivotSteps"
-                   :key="`pivot-row-${pivotName}-step-${pivotStep.name}-${psIndex}`"
-                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, ...pivotStep.blockStyles.map(style => `block-style-${style.toLowerCase()}`)]"
-              >
-                <div :class="[`pivot-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-text-${blockType}-${psIndex}-${btIndex}`">
-                </div>
-                <div class="block-label">
-                  {{ pivotStep.name }}
-                </div>
-                <div :class="[`pivot-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-${blockType}-${psIndex}-${btIndex}`">
-                  [{{ blockType }}]
-                </div>
+              <div :style="{ left: pivotOffset+'px' }" class="block-wrapper">
+                <div v-for="(pivotStep, psIndex) in pivotSteps"
+                     :key="`pivot-row-${pivotName}-step-${pivotStep.name}-${psIndex}`"
+                     :class="['data-block-column', `block-${psIndex % 2}`, ...pivotStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`)]"
+                     :style="pivotStep.blockStyles"
+                >
+                  <div :class="[`pivot-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-text-${blockType}-${psIndex}-${btIndex}`">
+                  </div>
+                  <div class="block-label">
+                    {{ pivotStep.name }}
+                  </div>
+                  <div :class="[`pivot-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-${blockType}-${psIndex}-${btIndex}`">
+                    [{{ blockType }}]
+                  </div>
 
+                </div>
               </div>
             </div>
-
           </div>
         </div>
       </v-card>
@@ -118,10 +125,17 @@ export default defineComponent({
     const assemblySteps = ref<unknown[]>([]);
     const visualSteps = ref<unknown[]>([]);
 
+    const assemblyOffset = ref<number>(0);
+    const pivotOffset = ref<number>(0);
+
+    const colors = {} as any;
+    const tops = {} as any;
+
     watch(selectedBlock, () => {
       pivotSteps.value = [];
       assemblySteps.value = [];
       visualSteps.value = [];
+
 
       if (pangenome.value && selectedBlock.value.pivot && selectedBlock.value.block && selectedBlock.value.assembly && pivots.value) {
 
@@ -129,183 +143,334 @@ export default defineComponent({
 
         const selectedBlockAssemblyPath = pangenome.value.paths[selectedBlock.value.assembly];
 
-        const selectedBlockSkeletonNode = pangenome.value.panSkeleton[selectedBlock.value.block];
+        // const selectedBlockSkeletonNode = pangenome.value.panSkeleton[selectedBlock.value.block];
 
 
+        assemblyOffset.value = 0;
+        pivotOffset.value = 0;
+
+        selectedBlockPivotPath?.steps.forEach(step => {
+          const panBlock = pangenome.value?.panSkeleton[step.panBlock];
+
+          const otherIndex = panBlock?.traversals[selectedBlock.value.assembly!];
+          const otherPanBlock = selectedBlockAssemblyPath?.steps[otherIndex!];
+
+          const lastStep: any = pivotSteps.value[pivotSteps.value.length - 1];
+
+          if (!colors[step.panBlock]) {
+            colors[step.panBlock] = `rgba(${(Math.random() * 255)}, ${(Math.random() * 255)}, ${(Math.random() * 255)}, {{alpha}})`
+          }
+          if (!tops[step.panBlock]) {
+            tops[step.panBlock] = `${Math.random() * 1}rem`
+          }
+
+          if (otherPanBlock && step.panBlock === selectedBlock.value.block) {
+            if (otherPanBlock.startPosition >= step.startPosition) {
+              pivotOffset.value = (otherPanBlock.startPosition - step.startPosition) / 4;
+              assemblyOffset.value = 0;
+            } else {
+              pivotOffset.value = 0;
+              assemblyOffset.value = (step.startPosition - otherPanBlock.startPosition) / 4;
+            }
+          }
+          // const colorChars = step.panBlock.split('');
+          // const colorsNumbersR = colorChars.slice(0, colorChars.length / 3).reduce((result, letter) => {
+          //   return result += letter.charCodeAt(0);
+          // }, 0) * 60;
+          // const colorsNumbersG = colorChars.slice(colorChars.length / 3, colorChars.length / 3 * 2).reduce((result, letter) => {
+          //   return result += letter.charCodeAt(0);
+          // }, 0) * 60;
+          // const colorsNumbersB = colorChars.slice(colorChars.length / 3 * 2, colorChars.length).reduce((result, letter) => {
+          //   return result += letter.charCodeAt(0);
+          // }, 0) * 60;
+
+          let alpha = step.panBlock === selectedBlock.value.block ? 1 : 0.5;
+          if (otherIndex === undefined) {
+            alpha -= 0.25
+          }
+
+          const pivotStep = {
+            name: step.panBlock,
+            blockTypes: [] as string[],
+            blockClasses: step.panBlock === selectedBlock.value.block ? ['selected'] : [] as string[],
+            blockStyles: {
+              width: (panBlock!.length! / 4) + 'px',
+              // left: Math.max(step.startPosition, otherPanBlock ? otherPanBlock!.startPosition : 0, lastStep ? parseInt(lastStep.blockStyles.left) + parseInt(lastStep.blockStyles.width) : 0) / 4  + 'px',
+              left: step.startPosition / 4 + 'px',
+              backgroundColor: colors[step.panBlock].replace('{{alpha}}', alpha),
+              // top: tops[step.panBlock],
+            },
+          };
+          pivotSteps.value.push(pivotStep);
+
+          // if (otherPanBlock && otherPanBlock.startPosition !== undefined) {
+          //
+          //   const left = Math.min(step.startPosition, otherPanBlock ? otherPanBlock!.startPosition : step.startPosition) / 4;
+          //   const width = (Math.max(step.startPosition, otherPanBlock ? otherPanBlock!.startPosition : step.startPosition) / 4) - left;
+          //   const visualStep = {
+          //     name: step.panBlock,
+          //     blockTypes: [] as string[],
+          //     blockClasses: [] as string[],
+          //     blockStyles: {
+          //       // width: (panBlock!.length! / 4) + 'px',
+          //       width: width + 'px',
+          //       // left: Math.max(step.startPosition, otherPanBlock ? otherPanBlock!.startPosition : 0, lastStep ? parseInt(lastStep.blockStyles.left) + parseInt(lastStep.blockStyles.width) : 0) / 4  + 'px',
+          //       left: left + 'px',
+          //       backgroundColor: colors[step.panBlock],
+          //       top: tops[step.panBlock],
+          //     },
+          //   };
+          //   visualSteps.value.push(visualStep);
+          // }
+
+
+        });
+
+        selectedBlockAssemblyPath?.steps.forEach(step => {
+          const panBlock = pangenome.value?.panSkeleton[step.panBlock];
+
+          const otherIndex = panBlock?.traversals[selectedBlock.value.pivot!];
+          const otherPanBlock = selectedBlockPivotPath?.steps[otherIndex!];
+
+          const lastStep: any = assemblySteps.value[assemblySteps.value.length - 1];
+
+          if (!colors[step.panBlock]) {
+            colors[step.panBlock] = `rgba(${(Math.random() * 255)}, ${(Math.random() * 255)}, ${(Math.random() * 255)}, {{alpha}})`
+          }
+          if (!tops[step.panBlock]) {
+            tops[step.panBlock] = `${Math.random() * 1}rem`
+          }
+          // const colorChars = step.panBlock.split('');
+          // const colorsNumbersR = colorChars.slice(0, colorChars.length / 3).reduce((result, letter) => {
+          //   return result += letter.charCodeAt(0);
+          // }, 0) * 60;
+          // const colorsNumbersG = colorChars.slice(colorChars.length / 3, colorChars.length / 3 * 2).reduce((result, letter) => {
+          //   return result += letter.charCodeAt(0);
+          // }, 0) * 60;
+          // const colorsNumbersB = colorChars.slice(colorChars.length / 3 * 2, colorChars.length).reduce((result, letter) => {
+          //   return result += letter.charCodeAt(0);
+          // }, 0) * 60;
+
+          let alpha = step.panBlock === selectedBlock.value.block ? 1 : 0.5;
+          if (otherIndex === undefined) {
+            alpha -= 0.4
+          }
+
+          const assemblyStep = {
+            name: step.panBlock,
+            blockTypes: [] as string[],
+            blockClasses: step.panBlock === selectedBlock.value.block ? ['selected'] : [] as string[],
+            blockStyles: {
+              width: (panBlock!.length! / 4) + 'px',
+              // left: Math.max(step.startPosition, otherPanBlock ? otherPanBlock!.startPosition : 0, lastStep ? parseInt(lastStep.blockStyles.left) + parseInt(lastStep.blockStyles.width) : 0) / 4  + 'px',
+              left: step.startPosition / 4 + 'px',
+              backgroundColor: colors[step.panBlock].replace('{{alpha}}', alpha),
+              // top: tops[step.panBlock],
+            },
+          };
+          assemblySteps.value.push(assemblyStep);
+        });
+
+        return;
         // Has "cooccurences"
         // selectedBlockSkeletonNode.cooccurrences
 
-        if (selectedBlockSkeletonNode.cooccurrences && selectedBlockSkeletonNode.cooccurrences.length) {
-          const originalCooccurences = [selectedBlock.value.block, ...selectedBlockSkeletonNode.cooccurrences];
-          let allCooccurences = originalCooccurences.reduce((result, nodeName) => {
-            if (pangenome.value) {
-              const nodeSkel = pangenome.value.panSkeleton[nodeName];
-              if (selectedBlock.value.pivot && selectedBlock.value.assembly) {
-                const pivotIndex = nodeSkel.traversals[selectedBlock.value.pivot];
-                const assemblyIndex = nodeSkel.traversals[selectedBlock.value.assembly]
-                const pivotPath = pangenome.value.paths[selectedBlock.value.pivot];
-                const assemblyPath = pangenome.value.paths[selectedBlock.value.assembly];
-                if (pivotPath && pivotIndex) {
-                  const prevPivotPathNode = pivotPath.steps[pivotIndex - 1];
-                  const nextPivotPathNode = pivotPath.steps[pivotIndex + 1];
-                  if (prevPivotPathNode && !result.includes(prevPivotPathNode.panBlock)) {
-                    result.push(prevPivotPathNode.panBlock);
-                  }
-                  if (nextPivotPathNode && !result.includes(nextPivotPathNode.panBlock)) {
-                    result.push(nextPivotPathNode.panBlock);
-                  }
-                }
-                if (assemblyPath && assemblyIndex) {
-                  const prevAssemblyPathNode = assemblyPath.steps[assemblyIndex - 1];
-                  const nextAssemblyPathNode = assemblyPath.steps[assemblyIndex + 1];
-                  if (prevAssemblyPathNode && !result.includes(prevAssemblyPathNode.panBlock)) {
-                    result.push(prevAssemblyPathNode.panBlock);
-                  }
-                  if (nextAssemblyPathNode && !result.includes(nextAssemblyPathNode.panBlock)) {
-                    result.push(nextAssemblyPathNode.panBlock);
-                  }
-                }
-              }
-            }
-            if (!result.includes(nodeName)) {
-              result.push(nodeName);
-            }
-
-            return result;
-          }, [] as Array<keyof PanNodes<never>>);
-
-          allCooccurences.forEach((nodeName) => {
-
-            let pivotNodeAltNames = '';
-            if (pivots.value && selectedBlock.value.pivot) {
-              const a = pivots.value[selectedBlock.value.pivot];
-              if (a) {
-                const b = a[nodeName];
-                if (b && selectedBlock.value.assembly) {
-                  const c = b[selectedBlock.value.assembly];
-                  if (c && c.Nodes && c.Nodes.length) {
-                    pivotNodeAltNames = c.Nodes.join(', ');
-                  }
-                }
-              }
-            }
-
-            let pathNodeAltNames = '';
-            if (pivots.value && selectedBlock.value.pivot) {
-              const a = pivots.value[selectedBlock.value.pivot];
-              if (a) {
-                const entries = Object.entries(a) as Array<[keyof PanNodes<Paths<PivotPathNode>>, Paths<PivotPathNode>]>;
-                entries.forEach(([key, value]) => {
-                  if (selectedBlock.value.assembly) {
-                    const path = value[selectedBlock.value.assembly];
-                    if (path && path.Nodes && path.Nodes.includes(nodeName)) {
-                      pathNodeAltNames = key;
-                    }
-                  }
-
-                });
-              }
-            }
-            // const pivotNode = pivots.value.[selectedBlock.value.pivot!]![nodeName][selectedBlock.value.assembly!];
-
-            const skeletonNode = pangenome.value?.panSkeleton[nodeName];
-
-            const pivotIndex = skeletonNode?.traversals[selectedBlock.value.pivot!];
-            const assemblyIndex = skeletonNode?.traversals[selectedBlock.value.assembly!];
-
-            const pivotStep = {
-              name: '',
-              blockTypes: [] as string[],
-              blockStyles: [] as string[],
-              pivotIndex,
-              assemblyIndex,
-            };
-
-            const visualStep = {
-              name: '',
-              blockTypes: [] as string[],
-              blockStyles: [] as string[],
-              pivotIndex,
-              assemblyIndex,
-            };
 
 
-            const assemblyStep = {
-              name: '',
-              blockTypes: [] as string[],
-              blockStyles: [] as string[],
-              pivotIndex,
-              assemblyIndex,
-            };
 
-            if ((pivotIndex !== undefined || assemblyIndex !== undefined) && originalCooccurences.includes(nodeName)) {
+        // if (selectedBlockSkeletonNode.cooccurrences && selectedBlockSkeletonNode.cooccurrences.length) {
+        //   const originalCooccurences = [selectedBlock.value.block, ...selectedBlockSkeletonNode.cooccurrences];
+        //   let allCooccurences = originalCooccurences.reduce((result, nodeName) => {
+        //     if (pangenome.value) {
+        //       const nodeSkel = pangenome.value.panSkeleton[nodeName];
+        //       if (selectedBlock.value.pivot && selectedBlock.value.assembly) {
+        //         const pivotIndex = nodeSkel.traversals[selectedBlock.value.pivot];
+        //         const assemblyIndex = nodeSkel.traversals[selectedBlock.value.assembly]
+        //         const pivotPath = pangenome.value.paths[selectedBlock.value.pivot];
+        //         const assemblyPath = pangenome.value.paths[selectedBlock.value.assembly];
+        //         if (pivotPath && pivotIndex) {
+        //           const prevPivotPathNode = pivotPath.steps[pivotIndex - 1];
+        //           const nextPivotPathNode = pivotPath.steps[pivotIndex + 1];
+        //           if (prevPivotPathNode && !result.includes(prevPivotPathNode.panBlock)) {
+        //             result.push(prevPivotPathNode.panBlock);
+        //           }
+        //           if (nextPivotPathNode && !result.includes(nextPivotPathNode.panBlock)) {
+        //             result.push(nextPivotPathNode.panBlock);
+        //           }
+        //         }
+        //         if (assemblyPath && assemblyIndex) {
+        //           const prevAssemblyPathNode = assemblyPath.steps[assemblyIndex - 1];
+        //           const nextAssemblyPathNode = assemblyPath.steps[assemblyIndex + 1];
+        //           if (prevAssemblyPathNode && !result.includes(prevAssemblyPathNode.panBlock)) {
+        //             result.push(prevAssemblyPathNode.panBlock);
+        //           }
+        //           if (nextAssemblyPathNode && !result.includes(nextAssemblyPathNode.panBlock)) {
+        //             result.push(nextAssemblyPathNode.panBlock);
+        //           }
+        //         }
+        //       }
+        //     }
+        //     if (!result.includes(nodeName)) {
+        //       result.push(nodeName);
+        //     }
+        //
+        //     return result;
+        //   }, [] as Array<keyof PanNodes<never>>);
+        //
+        //   allCooccurences.forEach((nodeName) => {
+        //
+        //     let pivotNodeAltNames = '';
+        //     if (pivots.value && selectedBlock.value.pivot) {
+        //       const a = pivots.value[selectedBlock.value.pivot];
+        //       if (a) {
+        //         const b = a[nodeName];
+        //         if (b && selectedBlock.value.assembly) {
+        //           const c = b[selectedBlock.value.assembly];
+        //           if (c && c.Nodes && c.Nodes.length) {
+        //             pivotNodeAltNames = c.Nodes.join(', ');
+        //           }
+        //         }
+        //       }
+        //     }
+        //
+        //     let pathNodeAltNames = '';
+        //     if (pivots.value && selectedBlock.value.pivot) {
+        //       const a = pivots.value[selectedBlock.value.pivot];
+        //       if (a) {
+        //         const entries = Object.entries(a) as Array<[keyof PanNodes<Paths<PivotPathNode>>, Paths<PivotPathNode>]>;
+        //         entries.forEach(([key, value]) => {
+        //           if (selectedBlock.value.assembly) {
+        //             const path = value[selectedBlock.value.assembly];
+        //             if (path && path.Nodes && path.Nodes.includes(nodeName)) {
+        //               pathNodeAltNames = key;
+        //             }
+        //           }
+        //
+        //         });
+        //       }
+        //     }
+        //     // const pivotNode = pivots.value.[selectedBlock.value.pivot!]![nodeName][selectedBlock.value.assembly!];
+        //
+        //     const skeletonNode = pangenome.value?.panSkeleton[nodeName];
+        //
+        //     const pivotIndex = skeletonNode?.traversals[selectedBlock.value.pivot!];
+        //     const assemblyIndex = skeletonNode?.traversals[selectedBlock.value.assembly!];
+        //
+        //     const pivotPath = pangenome.value?.paths[selectedBlock.value.pivot!];
+        //     const assemblyPath = pangenome.value?.paths[selectedBlock.value.assembly!];
+        //
+        //     const pivotPathNode = pivotPath?.steps[pivotIndex!];
+        //     const assemblyPathNode = assemblyPath?.steps[assemblyIndex!];
+        //
+        //
+        //
+        //     const pivotStep = {
+        //       name: '',
+        //       blockTypes: [] as string[],
+        //       blockClasses: [] as string[],
+        //       blockStyles: {
+        //         width: skeletonNode?.length + 'px',
+        //         left: (pivotPathNode?.startPosition || assemblyPathNode?.startPosition) + 'px',
+        //       } as any,
+        //       pivotIndex,
+        //       assemblyIndex,
+        //     };
+        //
+        //     const visualStep = {
+        //       name: '',
+        //       blockTypes: [] as string[],
+        //       blockClasses: [] as string[],
+        //       blockStyles: {} as any,
+        //       pivotIndex,
+        //       assemblyIndex,
+        //     };
+        //
+        //
+        //     const assemblyStep = {
+        //       name: '',
+        //       blockTypes: [] as string[],
+        //       blockClasses: [] as string[],
+        //       blockStyles: {
+        //         width: skeletonNode?.length + 'px',
+        //         left: (assemblyPathNode?.startPosition || pivotPathNode?.startPosition) + 'px',
+        //       } as any,
+        //       pivotIndex,
+        //       assemblyIndex,
+        //     };
+        //
+        //     if ((pivotIndex !== undefined || assemblyIndex !== undefined) && originalCooccurences.includes(nodeName)) {
+        //
+        //       if (pivotIndex !== undefined && originalCooccurences.includes(nodeName)) {
+        //         pivotStep.name = nodeName;
+        //         if (pivotIndex === undefined || assemblyIndex === undefined) {
+        //           pivotStep.blockTypes.push('Cooccurence');
+        //         }
+        //         if (!visualStep.blockTypes.includes('Cooccurence')) {
+        //           visualStep.blockTypes.push('Cooccurence');
+        //         }
+        //         if (!visualStep.blockTypes.includes('Pivot')) {
+        //           visualStep.blockTypes.push('Pivot');
+        //         }
+        //       } else {
+        //         pivotStep.name = pathNodeAltNames;
+        //       }
+        //
+        //       if (assemblyIndex !== undefined && originalCooccurences.includes(nodeName)) {
+        //         assemblyStep.name = nodeName;
+        //         assemblyStep.blockTypes.push('Cooccurence');
+        //         if (!visualStep.blockTypes.includes('Cooccurence')) {
+        //           visualStep.blockTypes.push('Cooccurence');
+        //         }
+        //         if (!visualStep.blockTypes.includes('Assembly')) {
+        //           visualStep.blockTypes.push('Assembly');
+        //         }
+        //       } else {
+        //         assemblyStep.name = pivotNodeAltNames;
+        //       }
+        //
+        //       pivotSteps.value.push(pivotStep);
+        //       visualSteps.value.push(visualStep);
+        //       assemblySteps.value.push(assemblyStep);
+        //
+        //     } else if ((pivotIndex !== undefined || assemblyIndex !== undefined)) {
+        //       pivotStep.name = pathNodeAltNames || nodeName;
+        //       assemblyStep.name = pivotNodeAltNames || nodeName;
+        //       if (!pivotStep.blockClasses.includes('Fade')) {
+        //         pivotStep.blockClasses.push('Fade');
+        //       }
+        //       if (!assemblyStep.blockClasses.includes('Fade')) {
+        //         assemblyStep.blockClasses.push('Fade');
+        //       }
+        //       if (!visualStep.blockClasses.includes('Fade')) {
+        //         visualStep.blockClasses.push('Fade');
+        //       }
+        //       if (!visualStep.blockTypes.includes('Cooccurence')) {
+        //         visualStep.blockTypes.push('Cooccurence');
+        //       }
+        //       pivotSteps.value.push(pivotStep);
+        //       visualSteps.value.push(visualStep);
+        //       assemblySteps.value.push(assemblyStep);
+        //     }
+        //     if (nodeName === selectedBlock.value.block && !pivotStep.blockClasses.includes('Selected')) {
+        //       pivotStep.blockClasses.push('Selected');
+        //     }
+        //     if (nodeName === selectedBlock.value.block && !assemblyStep.blockClasses.includes('Selected')) {
+        //       assemblyStep.blockClasses.push('Selected');
+        //     }
+        //     if (nodeName === selectedBlock.value.block && !visualStep.blockClasses.includes('Selected')) {
+        //       visualStep.blockClasses.push('Selected');
+        //     }
+        //
+        //     pivotSteps.value.sort((a: any, b: any) => a.assemblyIndex - b.assemblyIndex).sort((a: any, b: any) => a.pivotIndex - b.pivotIndex);
+        //     visualSteps.value.sort((a: any, b: any) => a.assemblyIndex - b.assemblyIndex).sort((a: any, b: any) => a.pivotIndex - b.pivotIndex);
+        //     assemblySteps.value.sort((a: any, b: any) => a.assemblyIndex - b.assemblyIndex).sort((a: any, b: any) => a.pivotIndex - b.pivotIndex);
+        //   });
+        // }
 
-              if (pivotIndex !== undefined && originalCooccurences.includes(nodeName)) {
-                pivotStep.name = nodeName;
-                if (pivotIndex === undefined || assemblyIndex === undefined) {
-                  pivotStep.blockTypes.push('Cooccurence');
-                }
-                if (!visualStep.blockTypes.includes('Cooccurence')) {
-                  visualStep.blockTypes.push('Cooccurence');
-                }
-                if (!visualStep.blockTypes.includes('Pivot')) {
-                  visualStep.blockTypes.push('Pivot');
-                }
-              } else {
-                pivotStep.name = pathNodeAltNames;
-              }
 
-              if (assemblyIndex !== undefined && originalCooccurences.includes(nodeName)) {
-                assemblyStep.name = nodeName;
-                assemblyStep.blockTypes.push('Cooccurence');
-                if (!visualStep.blockTypes.includes('Cooccurence')) {
-                  visualStep.blockTypes.push('Cooccurence');
-                }
-                if (!visualStep.blockTypes.includes('Assembly')) {
-                  visualStep.blockTypes.push('Assembly');
-                }
-              } else {
-                assemblyStep.name = pivotNodeAltNames;
-              }
 
-              pivotSteps.value.push(pivotStep);
-              visualSteps.value.push(visualStep);
-              assemblySteps.value.push(assemblyStep);
 
-            } else if ((pivotIndex !== undefined || assemblyIndex !== undefined)) {
-              pivotStep.name = pathNodeAltNames || nodeName;
-              assemblyStep.name = pivotNodeAltNames || nodeName;
-              if (!pivotStep.blockStyles.includes('Fade')) {
-                pivotStep.blockStyles.push('Fade');
-              }
-              if (!assemblyStep.blockStyles.includes('Fade')) {
-                assemblyStep.blockStyles.push('Fade');
-              }
-              if (!visualStep.blockStyles.includes('Fade')) {
-                visualStep.blockStyles.push('Fade');
-              }
-              if (!visualStep.blockTypes.includes('Cooccurence')) {
-                visualStep.blockTypes.push('Cooccurence');
-              }
-              pivotSteps.value.push(pivotStep);
-              visualSteps.value.push(visualStep);
-              assemblySteps.value.push(assemblyStep);
-            }
-            if (nodeName === selectedBlock.value.block && !pivotStep.blockStyles.includes('Selected')) {
-              pivotStep.blockStyles.push('Selected');
-            }
-            if (nodeName === selectedBlock.value.block && !assemblyStep.blockStyles.includes('Selected')) {
-              assemblyStep.blockStyles.push('Selected');
-            }
-            if (nodeName === selectedBlock.value.block && !visualStep.blockStyles.includes('Selected')) {
-              visualStep.blockStyles.push('Selected');
-            }
 
-            pivotSteps.value.sort((a: any, b: any) => a.assemblyIndex - b.assemblyIndex).sort((a: any, b: any) => a.pivotIndex - b.pivotIndex);
-            visualSteps.value.sort((a: any, b: any) => a.assemblyIndex - b.assemblyIndex).sort((a: any, b: any) => a.pivotIndex - b.pivotIndex);
-            assemblySteps.value.sort((a: any, b: any) => a.assemblyIndex - b.assemblyIndex).sort((a: any, b: any) => a.pivotIndex - b.pivotIndex);
-          });
-        }
         // const selectedBlockPivotNodes = pivots.value[selectedBlock.value.pivot];
         //
         // if (selectedBlockPivotNodes) {
@@ -520,7 +685,9 @@ export default defineComponent({
       assemblySteps,
       visualSteps,
       pivotName,
-      assemblyName
+      assemblyName,
+      assemblyOffset,
+      pivotOffset,
     };
   }
 });
@@ -533,33 +700,61 @@ export default defineComponent({
 }
 
 .data-label {
-  height: 3rem;
-  line-height: 3rem;
+  height: 2rem;
+  line-height: 2rem;
+}
+
+.data-block-row {
+  position: relative;
+  margin: 0 0.5rem;
 }
 
 .data-block-row, .data-block-column {
-  height: 3rem;
+  height: 2rem;
 }
 
 .data-label {
   width: 8rem;
 }
 
-.data-block-rows, .data-block-row {
-  //line-height: 3rem;
-  height: 3rem;
+.data-block-row {
+  //line-height: 2rem;
+  height: 2rem;
 }
 
 .data-block-column {
-  position: relative;
+  position: absolute;
+  top: 1.5rem;
+  height: 0.5rem;
+  line-height: 1rem;
+  //text-align: center;
+  //width: 6rem;
+  background: rgba(127, 127, 127, 0.5);
+  border: 1px solid white;
+  transition: all 100ms;
+  z-index: 1;
+  .block-label {
+    transition: all 100ms;
 
-  width: 6rem;
-  background: #eee;
-  border: 1px solid transparent;
+    position: absolute;
+    transform: rotate(-30deg);
+    border: inherit;
+    transform-origin: 0 0;
+    background: inherit;
+    line-height: 1em;
+    padding: 2px;
+    //border-radius: 2px;
+    left: -9px;
+    top: -17px;
+  }
 
 
   &.block-1 {
-    background: white;
+    //background: rgba(0, 127, 0, 0.5);
+  }
+
+  &.block-2 {
+    //background: rgba(0, 0, 127, 0.5);
   }
 
   //.pivot-data-block-cell {
@@ -705,7 +900,19 @@ export default defineComponent({
 }
 
 .block-style-selected {
-  background: rgba(127, 255, 63, 0.5) !important;
+  border: 1px solid black;
+  z-index: 2;
+}
+
+.visual-block {
+  border: 0 none;
+  height: 100%;
+  transform: translateY(-50%);
+}
+
+.block-wrapper {
+  position: absolute;
+  transition: all 500ms;
 }
 //.pivot-label-row {
 //  position: relative;
