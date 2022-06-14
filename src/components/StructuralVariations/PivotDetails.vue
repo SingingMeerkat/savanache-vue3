@@ -30,17 +30,17 @@
               <div :style="{ left: assemblyOffset+'px' }" class="block-wrapper">
                 <div v-for="(assemblyStep, asIndex) in assemblySteps"
                      :key="`assembly-row-${assemblyName}-step-${assemblyStep.name}-${asIndex}`"
-                     :class="['data-block-column', `block-${asIndex % 2}`, ...assemblyStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`)]"
+                     :class="['data-block-column', `block-${asIndex % 2}`, ...assemblyStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`), ...assemblyStep.blockTypes.map(style => `block-type-${style.toLowerCase()}`)]"
                      :style="assemblyStep.blockStyles"
                 >
-                  <div :class="[`assembly-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-text-${blockType}-${asIndex}-${btIndex}`">
-                  </div>
+<!--                  <div :class="[`assembly-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-text-${blockType}-${asIndex}-${btIndex}`">-->
+<!--                  </div>-->
                   <div class="block-label">
                     {{ assemblyStep.name }}
                   </div>
-                  <div :class="[`assembly-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-${blockType}-${asIndex}-${btIndex}`">
-                    [{{ blockType }}]
-                  </div>
+<!--                  <div :class="[`assembly-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-${blockType}-${asIndex}-${btIndex}`">-->
+<!--                    [{{ blockType }}]-->
+<!--                  </div>-->
                 </div>
               </div>
             </div>
@@ -60,17 +60,17 @@
               <div :style="{ left: pivotOffset+'px' }" class="block-wrapper">
                 <div v-for="(pivotStep, psIndex) in pivotSteps"
                      :key="`pivot-row-${pivotName}-step-${pivotStep.name}-${psIndex}`"
-                     :class="['data-block-column', `block-${psIndex % 2}`, ...pivotStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`)]"
+                     :class="['data-block-column', `block-${psIndex % 2}`, ...pivotStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`), ...pivotStep.blockTypes.map(style => `block-type-${style.toLowerCase()}`)]"
                      :style="pivotStep.blockStyles"
                 >
-                  <div :class="[`pivot-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-text-${blockType}-${psIndex}-${btIndex}`">
-                  </div>
+<!--                  <div :class="[`pivot-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-text-${blockType}-${psIndex}-${btIndex}`">-->
+<!--                  </div>-->
                   <div class="block-label">
                     {{ pivotStep.name }}
                   </div>
-                  <div :class="[`pivot-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-${blockType}-${psIndex}-${btIndex}`">
-                    [{{ blockType }}]
-                  </div>
+<!--                  <div :class="[`pivot-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-${blockType}-${psIndex}-${btIndex}`">-->
+<!--                    [{{ blockType }}]-->
+<!--                  </div>-->
 
                 </div>
               </div>
@@ -150,12 +150,16 @@ export default defineComponent({
         pivotOffset.value = 0;
 
         selectedBlockPivotPath?.steps.forEach(step => {
+
           const panBlock = pangenome.value?.panSkeleton[step.panBlock];
 
           const otherIndex = panBlock?.traversals[selectedBlock.value.assembly!];
           const otherPanBlock = selectedBlockAssemblyPath?.steps[otherIndex!];
 
           const lastStep: any = pivotSteps.value[pivotSteps.value.length - 1];
+
+          const pivotPathNode = pivots.value![selectedBlock.value.pivot!]![step.panBlock][selectedBlock.value.assembly!];
+          const blockTypes = pivotPathNode ? Object.entries(pivotPathNode).filter(([key, value]) => value && typeof value !== 'object' && key !== 'Insertion').map(([key, value]) => key) : [];
 
           if (!colors[step.panBlock]) {
             colors[step.panBlock] = `rgba(${(Math.random() * 255)}, ${(Math.random() * 255)}, ${(Math.random() * 255)}, {{alpha}})`
@@ -191,13 +195,13 @@ export default defineComponent({
 
           const pivotStep = {
             name: step.panBlock,
-            blockTypes: [] as string[],
+            blockTypes,
             blockClasses: step.panBlock === selectedBlock.value.block ? ['selected'] : [] as string[],
             blockStyles: {
               width: (panBlock!.length! / 4) + 'px',
               // left: Math.max(step.startPosition, otherPanBlock ? otherPanBlock!.startPosition : 0, lastStep ? parseInt(lastStep.blockStyles.left) + parseInt(lastStep.blockStyles.width) : 0) / 4  + 'px',
               left: step.startPosition / 4 + 'px',
-              backgroundColor: colors[step.panBlock].replace('{{alpha}}', alpha),
+              // backgroundColor: colors[step.panBlock].replace('{{alpha}}', alpha),
               // top: tops[step.panBlock],
             },
           };
@@ -234,12 +238,30 @@ export default defineComponent({
 
           const lastStep: any = assemblySteps.value[assemblySteps.value.length - 1];
 
+          let pivotPathNode = null as any;
+          let reversePanBlock = null;
+          if (pivots.value![selectedBlock.value.pivot!]![step.panBlock]) {
+            pivotPathNode = {...pivots.value![selectedBlock.value.pivot!]![step.panBlock][selectedBlock.value.assembly!], Insertion: undefined };
+          } else {
+              Object.entries(pivots.value![selectedBlock.value.pivot!] as any).every(([key, value]: [string, any]) => {
+                const thing = value[selectedBlock.value.assembly!];
+                if (thing.Nodes && thing.Nodes.includes(step.panBlock)) {
+                  reversePanBlock = key;
+                  pivotPathNode = {...thing, Cooccurence: undefined };
+                  return selectedBlock.value.block !== key;
+                }
+                return true;
+              });
+          }
+          const blockTypes = pivotPathNode ? Object.entries(pivotPathNode).filter(([key, value]) => value && typeof value !== 'object').map(([key, value]) => key) : [];
+
           if (!colors[step.panBlock]) {
             colors[step.panBlock] = `rgba(${(Math.random() * 255)}, ${(Math.random() * 255)}, ${(Math.random() * 255)}, {{alpha}})`
           }
           if (!tops[step.panBlock]) {
             tops[step.panBlock] = `${Math.random() * 1}rem`
           }
+
           // const colorChars = step.panBlock.split('');
           // const colorsNumbersR = colorChars.slice(0, colorChars.length / 3).reduce((result, letter) => {
           //   return result += letter.charCodeAt(0);
@@ -256,15 +278,20 @@ export default defineComponent({
             alpha -= 0.4
           }
 
+          if (pivotPathNode && pivotPathNode.Nodes && pivotPathNode.Nodes) {
+            const p = selectedBlock.value.block;
+            const l = pivotPathNode.Nodes.includes(selectedBlock.value.block);
+            console.log('selectedBlock.value.block', selectedBlock.value.block);
+          }
           const assemblyStep = {
             name: step.panBlock,
-            blockTypes: [] as string[],
-            blockClasses: step.panBlock === selectedBlock.value.block ? ['selected'] : [] as string[],
+            blockTypes,
+            blockClasses: (step.panBlock === selectedBlock.value.block || reversePanBlock === selectedBlock.value.block) ? ['selected'] : [] as string[],
             blockStyles: {
               width: (panBlock!.length! / 4) + 'px',
               // left: Math.max(step.startPosition, otherPanBlock ? otherPanBlock!.startPosition : 0, lastStep ? parseInt(lastStep.blockStyles.left) + parseInt(lastStep.blockStyles.width) : 0) / 4  + 'px',
               left: step.startPosition / 4 + 'px',
-              backgroundColor: colors[step.panBlock].replace('{{alpha}}', alpha),
+              // backgroundColor: colors[step.panBlock].replace('{{alpha}}', alpha),
               // top: tops[step.panBlock],
             },
           };
@@ -723,13 +750,17 @@ export default defineComponent({
 }
 
 .data-block-column {
+  //display: inline-block;
+  //position: relative;
   position: absolute;
   top: 1.5rem;
   height: 0.5rem;
   line-height: 1rem;
   //text-align: center;
   //width: 6rem;
-  background: rgba(127, 127, 127, 0.5);
+  background: lightgray;
+  opacity: 0.25;
+  //background: rgba(127, 127, 127, 0.5);
   border: 1px solid white;
   transition: all 100ms;
   z-index: 1;
@@ -785,6 +816,39 @@ export default defineComponent({
 }
 .block-text {
   z-index: 3;
+}
+
+.block-type-present {
+  background: black;
+  color: white;
+}
+
+.block-type-insertion {
+  background: #81CD06 !important;
+  color: black;
+}
+
+.block-type-inversion, .block-type-inversionchain {
+  background: #9D0D0D !important;
+  color: white;
+}
+
+.block-type-cooccurence {
+  background: #0086CA !important;
+  color: white;
+}
+
+.block-type-swap {
+  background: #8148A4 !important;
+  color: white;
+}
+
+.block-type-inversion.block-type-cooccurence, .block-type-inversionchain.block-type-cooccurence {
+  background: linear-gradient(0deg, #0086CA 50%, #9D0D0D 50%) !important;
+}
+
+.block-type-swap.block-type-cooccurence {
+  background: linear-gradient(0deg, #0086CA 50%, #8148A4 50%) !important;
 }
 
 .assembly-block.block-type.block-type-insertion {
@@ -902,6 +966,7 @@ export default defineComponent({
 .block-style-selected {
   border: 1px solid black;
   z-index: 2;
+  opacity: 1;
 }
 
 .visual-block {
@@ -913,6 +978,7 @@ export default defineComponent({
 .block-wrapper {
   position: absolute;
   transition: all 500ms;
+  //white-space: nowrap;
 }
 //.pivot-label-row {
 //  position: relative;
