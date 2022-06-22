@@ -1,43 +1,43 @@
 <template>
-  <v-table class="structural-variations-some-table" density="compact">
-    <thead>
-    <tr>
-      <th>
-        <v-checkbox v-model="allSelected" density="compact" hide-details inline></v-checkbox>
-      </th>
-      <th v-for="column in columns" :key="`header-column-${column.value}`">
-        {{ column.text }}
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr v-for="row in rows" :key="`row-${row.name}`" @click.stop="selectRow(row)">
-      <td>
-        <v-checkbox
-          :model-value="selectedAssemblies[row.name]"
-          density="compact"
-          hide-details
-          inline
-          @click.stop="selectRow(row)"
-        ></v-checkbox>
-      </td>
-      <td
-        v-for="column in columns"
-        :key="`row-${row.name}-column-${column.value}`"
-      >
-        {{ row[column.value] }}
-      </td>
-    </tr>
-    </tbody>
-  </v-table>
+  <div class="structural-variations-some-table">
+    <v-table density="compact">
+      <thead>
+      <tr>
+        <th>
+          <v-checkbox v-model="allSelected" density="compact" hide-details inline></v-checkbox>
+        </th>
+        <th v-for="column in columns" :key="`header-column-${column.value}`">
+          {{ column.text }}
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="row in rows" :key="`row-${row.name}`" @click.stop="selectRow(row)">
+        <td>
+          <v-checkbox
+            :model-value="selectedAssemblies[row.name]"
+            density="compact"
+            hide-details
+            inline
+            @click.stop="selectRow(row)"
+          ></v-checkbox>
+        </td>
+        <td
+          v-for="column in columns"
+          :key="`row-${row.name}-column-${column.value}`"
+        >
+          {{ row[column.value] }}
+        </td>
+      </tr>
+      </tbody>
+    </v-table>
+  </div>
 </template>
 
-<script lang="ts">
+<script>
 import { computed, defineComponent, ref } from "vue";
 import { getData } from "@/data/data-source";
-import { Path, Paths } from "@/interfaces/pangenome-json";
 import { useStore } from "vuex";
-import { PathRow } from "@/interfaces/path-row";
 import { reactiveVuex } from "@/store/helper";
 
 export default defineComponent({
@@ -45,13 +45,13 @@ export default defineComponent({
   components: {},
   setup() {
     const store = useStore();
-    const selectedAssemblies = reactiveVuex<typeof store.state.selectedAssemblies>(store, "selectedAssemblies", "setSelectedAssemblies");
+    const selectedAssemblies = reactiveVuex(store, "selectedAssemblies", "setSelectedAssemblies");
 
-    const paths = ref([] as Array<PathRow>);
+    const paths = ref([]);
 
     getData().then((data) => {
       if (data) {
-        const pathNames = Object.keys(data.pangenome.paths) as Array<keyof Paths<Path>>;
+        const pathNames = Object.keys(data.pangenome.paths);
         paths.value = pathNames.map((pathName) => ({
           name: pathName,
           steps: data.pangenome.paths[pathName] && data.pangenome.paths[pathName]?.steps.length || 0
@@ -65,10 +65,10 @@ export default defineComponent({
 
     const allSelected = computed({
       get: () => paths.value.every((path) => selectedAssemblies.value[path.name]),
-      set: (value: boolean) => paths.value.forEach((path) => (selectedAssemblies.value[path.name] = value))
+      set: (value) => paths.value.forEach((path) => (selectedAssemblies.value[path.name] = value))
     });
 
-    const selectRow = (row: PathRow) => {
+    const selectRow = (row) => {
       selectedAssemblies.value[row.name] = !selectedAssemblies.value[row.name];
     };
 

@@ -6,7 +6,7 @@
       "length": 33333,
       "traversals": {
         // We assume a panNode can be traversed only once by a genome
-        // coocurrences would create new nodes
+        // cooccurrences would create new nodes
         "assemblyNameA": indexOfPosInPathA,
         "assemblyNameB": indexOfPosInPathB
       },
@@ -71,7 +71,7 @@
 ],
 "assembly_B": [
 {
-"coocurrence": {...}
+"cooccurrence": {...}
 },,
 {
 "cooccurrence": {...},

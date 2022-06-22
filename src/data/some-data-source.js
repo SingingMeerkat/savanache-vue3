@@ -61,15 +61,15 @@
 //     },
 //   };
 //
-//   const getCooccurenceFor = (pivotBlock, panBlock) => {
+//   const getcooccurrenceFor = (pivotBlock, panBlock) => {
 //     // if (/_\w_\d$/.test(panBlock)) {
 //     //     debugger;
 //     // }
 //     const results = [];
-//     const cooccurences = pivotBlock && pivotBlock.cooccurrences;
-//     if (cooccurences) {
-//       for (let i = 0; i < cooccurences.length; i++) {
-//         const blockName = cooccurences[i];
+//     const cooccurrences = pivotBlock && pivotBlock.cooccurrences;
+//     if (cooccurrences) {
+//       for (let i = 0; i < cooccurrences.length; i++) {
+//         const blockName = cooccurrences[i];
 //         const coBlock = panSkeleton[blockName];
 //         const coTraversal = coBlock.traversals[pathName];
 //         // if (/_\w_\d$/.test(panBlock)) {
@@ -106,7 +106,7 @@
 //       pivotNode && pathNode && pivotNode.strand !== pathNode.strand;
 //
 //     const cooccurrences =
-//       pivotNode && getCooccurenceFor(pivotBlock, pivotPanBlock);
+//       pivotNode && getcooccurrenceFor(pivotBlock, pivotPanBlock);
 //
 //     if (present) {
 //       pivotNode.present = true;
@@ -665,7 +665,7 @@
 //   );
 // };
 //
-// const isCooccurence = (
+// const iscooccurrence = (
 //   pivotName,
 //   pivotNode,
 //   pathName,
@@ -710,7 +710,7 @@
 //   );
 // };
 //
-// const getCooccurences = (node, panSkeleton) => {
+// const getcooccurrences = (node, panSkeleton) => {
 //   const block = panSkeleton[node.panBlock];
 //   if (block && block.cooccurrences) {
 //     return block.cooccurrences.map((panBlock) => panSkeleton[panBlock]);

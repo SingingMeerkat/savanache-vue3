@@ -1,7 +1,4 @@
-import { PangenomeJson } from "@/interfaces/pangenome-json";
-import { PivotJson } from "@/interfaces/pivot-json";
-
-let dataCache: undefined | { pangenome: PangenomeJson; pivots: PivotJson };
+let dataCache;
 
 export const getData = async () => {
   if (dataCache) {
@@ -14,7 +11,7 @@ export const getData = async () => {
   const pivotsImport = await import("../data/sample/pivots.json");
 
   if (pangenomeImport && pangenomeImport.default && pivotsImport && pivotsImport.default) {
-    dataCache = { pangenome: pangenomeImport.default as never, pivots: pivotsImport.default as never };
+    dataCache = { pangenome: pangenomeImport.default, pivots: pivotsImport.default };
 
     return dataCache;
   }

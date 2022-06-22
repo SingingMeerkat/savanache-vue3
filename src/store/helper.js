@@ -1,5 +1,4 @@
-import { computed, Ref, ref, unref, UnwrapRef, watch, WatchStopHandle } from "vue";
-import { Store } from "vuex";
+import { computed, ref, unref, watch } from "vue";
 
 // So this is technically relying on tracking by reference, and then the watches just sit on top of that to make things official.
 // Really it should work without it but I haven't been able to figure it out, maybe there's some magic behind the scenes that only really works in a component
@@ -44,17 +43,17 @@ import { Store } from "vuex";
 //   return selectedLocal;
 // }
 
-export const reactiveVuex = <T>(store: Store<any>, stateName: string, mutationName: string): Ref<UnwrapRef<T>> => {
+export const reactiveVuex = (store, stateName, mutationName) => {
 
   const selectedState = computed(() => store.state[stateName]);
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const setSelectedState = (data) => store.commit(mutationName, data);
 
-  const selectedLocal = ref<T>(clone(unref(selectedState)));
+  const selectedLocal = ref(clone(unref(selectedState)));
 
-  let stopStateWatch: WatchStopHandle = () => undefined;
-  let stopLocalWatch: WatchStopHandle = () => undefined;
+  let stopStateWatch = () => undefined;
+  let stopLocalWatch = () => undefined;
 
   const startWatch = () => {
     stopStateWatch();
@@ -87,7 +86,7 @@ export const reactiveVuex = <T>(store: Store<any>, stateName: string, mutationNa
 };
 
 
-const clone = <T>(obj: T) => {
+const clone = (obj) => {
   if (typeof obj === "object") {
     if (Array.isArray(obj)) {
       return [...obj];

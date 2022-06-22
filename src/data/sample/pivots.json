@@ -2,21 +2,21 @@
   "Aphrodite": {
     "Node_A_0": {
       "Ganymede": {
-        "Cooccurence": true,
+        "cooccurrence": true,
         "Present": false
       },
       "Leonidas": {
-        "Cooccurence": true,
+        "cooccurrence": true,
         "Present": false
       }
     },
     "Node_A_1": {
       "Ganymede": {
-        "Cooccurence": true,
+        "cooccurrence": true,
         "Present": false
       },
       "Leonidas": {
-        "Cooccurence": true,
+        "cooccurrence": true,
         "Present": false
       }
     },
@@ -73,21 +73,21 @@
       },
       "Leonidas": {
         "Present": true,
-        "Cooccurence": true
+        "cooccurrence": true
       }
     },
     "Node_H_1": {
       "Ganymede": {
         "Present": false,
         "Swap": "start",
-        "Cooccurence": true,
+        "cooccurrence": true,
         "Nodes": [
           "Node_L"
         ]
       },
       "Leonidas": {
         "Present": true,
-        "Cooccurence": true,
+        "cooccurrence": true,
         "Inversion": true
       }
     },
@@ -120,14 +120,14 @@
       "Ganymede": {
         "Present": false,
         "Swap": "end",
-        "Cooccurence": true,
+        "cooccurrence": true,
         "Nodes": [
           "Node_L"
         ]
       },
       "Leonidas": {
         "Present": true,
-        "Cooccurence": true,
+        "cooccurrence": true,
         "Insertion": true
       }
     },

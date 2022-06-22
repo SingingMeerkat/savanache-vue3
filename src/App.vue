@@ -37,7 +37,7 @@
   </v-app>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent, getCurrentInstance, ref, watch } from "vue";
 
 export default defineComponent({

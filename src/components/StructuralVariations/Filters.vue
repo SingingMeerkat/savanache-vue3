@@ -22,7 +22,7 @@
   </v-row>
 </template>
 
-<script lang="ts">
+<script>
 
 import { defineComponent, ref } from "vue";
 import { useStore } from "vuex";
@@ -34,10 +34,10 @@ export default defineComponent({
   components: {},
   setup() {
     const store = useStore();
-    const selectedPivot = reactiveVuex<typeof store.state.selectedPivot>(store, "selectedPivot", "setSelectedPivot");
-    const selectedSVs = reactiveVuex<typeof store.state.selectedSVs>(store, "selectedSVs", "setSelectedSVs");
+    const selectedPivot = reactiveVuex(store, "selectedPivot", "setSelectedPivot");
+    const selectedSVs = reactiveVuex(store, "selectedSVs", "setSelectedSVs");
 
-    const pivotItems = ref<Array<string>>([]);
+    const pivotItems = ref([]);
 
     getData().then((data) => {
       if (data) {
@@ -48,7 +48,7 @@ export default defineComponent({
     const svItems = [
       "Insertion",
       "Swap",
-      "Cooccurence",
+      "cooccurrence",
       "Inversion",
       "InversionChain"
     ];

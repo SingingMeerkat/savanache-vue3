@@ -97,15 +97,12 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 
 import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
-import { PangenomeJson, PanNode, PanNodes, Path, Paths } from "@/interfaces/pangenome-json";
-import { PivotJson, PivotPathNode } from "@/interfaces/pivot-json";
 import { reactiveVuex } from "@/store/helper";
-import { SelectedAssemblies, SelectedBlock, SelectedPivot, SelectedSVs } from "@/store";
 // import {selectedAssemblies, selectedChromosome, selectedPivot} from '@/data/some-data-source';
 
 export default defineComponent({
@@ -113,21 +110,21 @@ export default defineComponent({
   components: {},
   setup() {
     const store = useStore();
-    const selectedPivot = reactiveVuex<SelectedPivot>(store, "selectedPivot", "setSelectedPivot");
-    const selectedAssemblies = reactiveVuex<SelectedAssemblies>(store, "selectedAssemblies", "setSelectedAssemblies");
-    const selectedSVs = reactiveVuex<SelectedSVs>(store, "selectedSVs", "setSelectedSVs");
-    const selectedBlock = reactiveVuex<SelectedBlock>(store, "selectedBlock", "setSelectedBlock");
+    const selectedPivot = reactiveVuex(store, "selectedPivot", "setSelectedPivot");
+    const selectedAssemblies = reactiveVuex(store, "selectedAssemblies", "setSelectedAssemblies");
+    const selectedSVs = reactiveVuex(store, "selectedSVs", "setSelectedSVs");
+    const selectedBlock = reactiveVuex(store, "selectedBlock", "setSelectedBlock");
 
-    const paths = ref<{ [k: string]: Path }>({});
-    const pangenome = ref<PangenomeJson>();
-    const pivots = ref<PivotJson>();
+    const paths = ref({});
+    const pangenome = ref();
+    const pivots = ref();
 
     getData().then((data) => {
       if (data) {
         pangenome.value = data.pangenome;
         pivots.value = data.pivots;
 
-        const pathNames = Object.keys(pangenome.value.paths) as Array<keyof Paths<Path>>;
+        const pathNames = Object.keys(pangenome.value.paths);
 
         paths.value = pathNames.reduce((result, pathName) => ({
           ...result,
@@ -144,7 +141,7 @@ export default defineComponent({
       path: paths.value[pathName]
     })));
 
-    const getBlock = (pivotName: keyof PivotJson, nodeName: keyof PanNodes<never>, pathName: keyof Paths<never>): PivotPathNode | undefined => {
+    const getBlock = (pivotName, nodeName, pathName) => {
       if (pivots.value) {
         const nodes = pivots.value[pivotName];
         if (nodes) {
@@ -157,13 +154,13 @@ export default defineComponent({
       }
     };
 
-    const isPresent = (pivotName: keyof PivotJson, nodeName: keyof PanNodes<PanNode>, pathName: keyof Paths<never>): boolean | undefined => {
+    const isPresent = (pivotName, nodeName, pathName) => {
       const pathBlock = getBlock(pivotName, nodeName, pathName);
       console.log("isPresent", pivotName, nodeName, pathName, pathBlock && pathBlock.Present);
       return pathBlock && pathBlock.Present;
     };
 
-    const pivotColor = (pivotName: keyof PivotJson, nodeName: keyof PanNodes<PanNode>, paths: Array<{ name: keyof Paths<never> }>) => {
+    const pivotColor = (pivotName, nodeName, paths) => {
       const blocks = paths.map(path => getBlock(pivotName, nodeName, path.name));
       const presentCount = blocks.reduce((result, block) => {
         if (block && block.Present) {
@@ -191,11 +188,11 @@ export default defineComponent({
       return `rgb(${colors.red}, ${colors.green}, ${colors.blue}`;
     };
 
-    const blockClasses = (pivotName: keyof PivotJson, nodeName: keyof PanNodes<never>, pathName: keyof Paths<never>) => {
+    const blockClasses = (pivotName, nodeName, pathName) => {
       const pathBlock = getBlock(pivotName, nodeName, pathName);
       const cssClasses = [`block-${nodeName}`];
       if (pathBlock) {
-        const props = Object.keys(pathBlock) as Array<keyof PivotPathNode>;
+        const props = Object.keys(pathBlock);
 
         cssClasses.push(...props.filter(value => (!selectedSVs.value.length || selectedSVs.value.includes(value) || value === "Present")).map((prop) => {
           const value = pathBlock[prop];
@@ -204,7 +201,7 @@ export default defineComponent({
           } else if (typeof value === "string") {
             return `block-${prop.toLowerCase()}-${value.toLowerCase()}`;
           }
-        }).filter((value) => !!value) as string[]);
+        }).filter((value) => !!value));
       }
       return cssClasses;
     };
@@ -215,7 +212,7 @@ export default defineComponent({
     const movePivotUp = () => (pivotRowIndex.value > 0) ? pivotRowIndex.value-- : undefined;
     const movePivotDown = () => (pivotRowIndex.value < assemblies.value.length) ? pivotRowIndex.value++ : undefined;
 
-    const selectBlock = (pivot: keyof Paths<never>, assembly: keyof Paths<never>, block: keyof PanNodes<never>) => {
+    const selectBlock = (pivot, assembly, block) => {
       selectedBlock.value = { pivot, assembly, block };
       console.log("selectedBlock", selectedBlock.value);
     };
@@ -374,7 +371,7 @@ export default defineComponent({
     }
 
     &.pivot-neighbor {
-      .block-cooccurence {
+      .block-cooccurrence {
         transform: scaleY(-100%);
       }
     }
@@ -393,7 +390,7 @@ export default defineComponent({
         bottom: 0;
       }
 
-      &.block-cooccurence {
+      &.block-cooccurrence {
         bottom: 50%;
         background: #0086CA;
         border-radius: 1rem 1rem 0 0;
@@ -401,7 +398,7 @@ export default defineComponent({
 
       &.block-insertion {
         bottom: 50%;
-        right: -0.3rem;
+        left: -0.3rem;
         width: 0;
         height: 0;
         border-left: 0.25rem solid transparent;

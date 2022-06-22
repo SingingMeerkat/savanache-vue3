@@ -35,7 +35,7 @@ export interface PivotPathNode {
   Present?: boolean;
   Insertion?: boolean;
   Swap?: boolean | string;
-  Cooccurence?: boolean;
+  cooccurrence?: boolean;
   Inversion?: boolean;
   InversionChain?: boolean | string;
   Nodes?: Array<string>;
