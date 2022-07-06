@@ -108,7 +108,7 @@ export default defineComponent({
 }
 
 .top-row {
-  height: 10rem;
+  height: auto;
 }
 
 .middle-row {
@@ -116,7 +116,7 @@ export default defineComponent({
 }
 
 .bottom-row {
-  height: 20rem;
+  height: auto;
 }
 
 .arrows {

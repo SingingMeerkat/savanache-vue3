@@ -48,7 +48,12 @@
               <!--              @click="selectBlock(block, assembly)"-->
               <div v-for="(pivotStep, psIndex) in pivot.path.steps"
                    :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
-                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'above-pivot', { 'pivot-neighbor': aIndex === beforePivotRows.length - 1, 'selected': selectedBlock.assembly && selectedBlock.assembly.name === assembly.name && selectedBlock.pivotStep && selectedBlock.pivotStep.panBlock === pivotStep.panBlock }]"
+                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'above-pivot',
+                   {
+                     'pivot-neighbor': aIndex === beforePivotRows.length - 1,
+                     'selected': selectedBlock.assembly && selectedBlock.assembly.name === assembly.name && selectedBlock.pivotStep && selectedBlock.pivotStep.panBlock === pivotStep.panBlock,
+                     'outside-range': pivotStep.startPosition < positionMin || pivotStep.startPosition > positionMax,
+                   }]"
                    @click="selectBlock(pivot.name, assembly.name, pivotStep.panBlock)"
               >
                 <div v-for="blockClass in blockClasses(pivot.name, pivotStep.panBlock, assembly.name)"
@@ -64,7 +69,12 @@
             <div class="pivot-data-block-row d-flex flex-row">
               <div v-for="(pivotStep, psIndex) in pivot.path.steps"
                    :key="`pivot-row-${pivot.name}-step-${pivotStep.panBlock}`"
-                   :class="['data-block-column', `pivot-block-${psIndex % 2}`, `elevation-1`]">
+                   :class="[
+                   'data-block-column', `pivot-block-${psIndex % 2}`, `elevation-1`,
+                   {
+                      'outside-range': pivotStep.startPosition < positionMin || pivotStep.startPosition > positionMax,
+                   }
+                   ]">
                 <div :class="['pivot-data-block-cell']"
                      :style="{ background: pivotColor(pivot.name, pivotStep.panBlock, assemblies) }"></div>
               </div>
@@ -77,7 +87,12 @@
               <!--              @click="selectBlock(block, assembly)"-->
               <div v-for="(pivotStep, psIndex) in pivot.path.steps"
                    :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
-                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'below-pivot', { 'pivot-neighbor': aIndex === 0, 'selected': selectedBlock.assembly && selectedBlock.assembly.name === assembly.name && selectedBlock.pivotStep && selectedBlock.pivotStep.panBlock === pivotStep.panBlock }]"
+                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'bloe-pivot',
+                   {
+                     'pivot-neighbor': aIndex === 0,
+                     'selected': selectedBlock.assembly && selectedBlock.assembly.name === assembly.name && selectedBlock.pivotStep && selectedBlock.pivotStep.panBlock === pivotStep.panBlock,
+                     'outside-range': pivotStep.startPosition < positionMin || pivotStep.startPosition > positionMax,
+                   }]"
                    @click="selectBlock(pivot.name, assembly.name, pivotStep.panBlock)"
               >
                 <div v-for="blockClass in blockClasses(pivot.name, pivotStep.panBlock, assembly.name)"
@@ -114,6 +129,12 @@ export default defineComponent({
     const selectedAssemblies = reactiveVuex(store, "selectedAssemblies", "setSelectedAssemblies");
     const selectedSVs = reactiveVuex(store, "selectedSVs", "setSelectedSVs");
     const selectedBlock = reactiveVuex(store, "selectedBlock", "setSelectedBlock");
+
+    const lengthMin = reactiveVuex(store, "lengthMin", "setLengthMin");
+    const lengthMax = reactiveVuex(store, "lengthMax", "setLengthMax");
+
+    const positionMin = reactiveVuex(store, "positionMin", "setPositionMin");
+    const positionMax = reactiveVuex(store, "positionMax", "setPositionMax");
 
     const paths = ref({});
     const pangenome = ref();
@@ -228,7 +249,13 @@ export default defineComponent({
       movePivotUp,
       movePivotDown,
       selectedBlock,
-      selectBlock
+      selectBlock,
+
+      lengthMin,
+      lengthMax,
+
+      positionMin,
+      positionMax,
     };
   }
 });
@@ -503,7 +530,13 @@ export default defineComponent({
       }
 
     }
-  }
 
+
+  }
 }
+
+.outside-range {
+  display: none;
+}
+
 </style>

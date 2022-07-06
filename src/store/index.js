@@ -5,7 +5,11 @@ export default createStore({
     selectedAssemblies: {},
     selectedSVs: [],
     selectedPivot: "",
-    selectedBlock: { assembly: undefined, pivot: undefined, block: undefined }
+    selectedBlock: { assembly: undefined, pivot: undefined, block: undefined },
+    lengthMin: 0,
+    lengthMax: 100,
+    positionMin: 0,
+    positionMax: 100,
   },
   getters: {},
   mutations: {
@@ -24,7 +28,23 @@ export default createStore({
     setSelectedBlock(state, selectedBlock) {
       console.log("setSelectedBlock", selectedBlock);
       state.selectedBlock = selectedBlock;
-    }
+    },
+    setLengthMin(state, lengthMin) {
+      console.log("setLengthMin", lengthMin);
+      state.lengthMin = lengthMin;
+    },
+    setLengthMax(state, lengthMax) {
+      console.log("setLengthMax", lengthMax);
+      state.lengthMax = lengthMax;
+    },
+    setPositionMin(state, positionMin) {
+      console.log("setPositionMin", positionMin);
+      state.positionMin = positionMin;
+    },
+    setPositionMax(state, positionMax) {
+      console.log("setPositionMax", positionMax);
+      state.positionMax = positionMax;
+    },
   },
   actions: {},
   modules: {}
