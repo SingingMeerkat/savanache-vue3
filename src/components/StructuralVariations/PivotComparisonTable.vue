@@ -52,11 +52,21 @@
                    {
                      'pivot-neighbor': aIndex === beforePivotRows.length - 1,
                      'selected': selectedBlock.assembly && selectedBlock.assembly.name === assembly.name && selectedBlock.pivotStep && selectedBlock.pivotStep.panBlock === pivotStep.panBlock,
-                     'outside-range': pivotStep.startPosition < positionMin || pivotStep.startPosition > positionMax,
+                     'outside-range':
+                     pivotStep.startPosition < positionMin ||
+                     pivotStep.startPosition > positionMax ||
+                     (
+
+                       (
+                         getVariationLength(pivotStep.panBlock, assembly.name) < lengthMin ||
+                         getVariationLength(pivotStep.panBlock, assembly.name) > lengthMax
+                         )
+                     ),
                    }]"
-                   @click="selectBlock(pivot.name, assembly.name, pivotStep.panBlock)"
+                   @click="selectBlock(assembly.name, pivotStep.panBlock)"
               >
-                <div v-for="blockClass in blockClasses(pivot.name, pivotStep.panBlock, assembly.name)"
+                {{getVariationLength(pivotStep.panBlock, assembly.name)}}
+                <div v-for="blockClass in blockClasses(pivotStep.panBlock, assembly.name)"
                      :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}-block-${blockClass}`"
                      :class="[ blockClass, 'data-block-cell']"></div>
                 <!--                , `block-type-${getUpperBlock(block, assembly)}`-->
@@ -72,11 +82,12 @@
                    :class="[
                    'data-block-column', `pivot-block-${psIndex % 2}`, `elevation-1`,
                    {
-                      'outside-range': pivotStep.startPosition < positionMin || pivotStep.startPosition > positionMax,
-                   }
-                   ]">
+                      'outside-range':
+                     pivotStep.startPosition < positionMin ||
+                     pivotStep.startPosition > positionMax
+                   }]">
                 <div :class="['pivot-data-block-cell']"
-                     :style="{ background: pivotColor(pivot.name, pivotStep.panBlock, assemblies) }"></div>
+                     :style="{ background: pivotColor(pivotStep.panBlock, assemblies) }"></div>
               </div>
             </div>
 
@@ -91,11 +102,21 @@
                    {
                      'pivot-neighbor': aIndex === 0,
                      'selected': selectedBlock.assembly && selectedBlock.assembly.name === assembly.name && selectedBlock.pivotStep && selectedBlock.pivotStep.panBlock === pivotStep.panBlock,
-                     'outside-range': pivotStep.startPosition < positionMin || pivotStep.startPosition > positionMax,
+                     'outside-range':
+                     pivotStep.startPosition < positionMin ||
+                     pivotStep.startPosition > positionMax ||
+                     (
+
+                       (
+                         getVariationLength(pivotStep.panBlock, assembly.name) < lengthMin ||
+                         getVariationLength(pivotStep.panBlock, assembly.name) > lengthMax
+                         )
+                     ),
                    }]"
-                   @click="selectBlock(pivot.name, assembly.name, pivotStep.panBlock)"
+                   @click="selectBlock(assembly.name, pivotStep.panBlock)"
               >
-                <div v-for="blockClass in blockClasses(pivot.name, pivotStep.panBlock, assembly.name)"
+                {{getVariationLength(pivotStep.panBlock, assembly.name)}}
+                <div v-for="blockClass in blockClasses(pivotStep.panBlock, assembly.name)"
                      :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}-block-${blockClass}`"
                      :class="[ blockClass, 'data-block-cell']"></div>
                 <!--                , `block-type-${getUpperBlock(block, assembly)}`-->
@@ -162,9 +183,9 @@ export default defineComponent({
       path: paths.value[pathName]
     })));
 
-    const getBlock = (pivotName, nodeName, pathName) => {
+    const getBlock = (nodeName, pathName) => {
       if (pivots.value) {
-        const nodes = pivots.value[pivotName];
+        const nodes = pivots.value[selectedPivot.value];
         if (nodes) {
           const node = nodes[nodeName];
           if (node) {
@@ -175,14 +196,19 @@ export default defineComponent({
       }
     };
 
-    const isPresent = (pivotName, nodeName, pathName) => {
-      const pathBlock = getBlock(pivotName, nodeName, pathName);
-      console.log("isPresent", pivotName, nodeName, pathName, pathBlock && pathBlock.Present);
-      return pathBlock && pathBlock.Present;
-    };
+    const getVariationLength = (nodeName, pathName) => {
+      const block = getBlock(nodeName, pathName);
+      return block.variationLength;
+    }
 
-    const pivotColor = (pivotName, nodeName, paths) => {
-      const blocks = paths.map(path => getBlock(pivotName, nodeName, path.name));
+    // const isPresent = (pivotName, nodeName, pathName) => {
+    //   const pathBlock = getBlock(pivotName, nodeName, pathName);
+    //   console.log("isPresent", pivotName, nodeName, pathName, pathBlock && pathBlock.Present);
+    //   return pathBlock && pathBlock.Present;
+    // };
+
+    const pivotColor = (nodeName, paths) => {
+      const blocks = paths.map(path => getBlock(nodeName, path.name));
       const presentCount = blocks.reduce((result, block) => {
         if (block && block.Present) {
           result++;
@@ -209,8 +235,8 @@ export default defineComponent({
       return `rgb(${colors.red}, ${colors.green}, ${colors.blue}`;
     };
 
-    const blockClasses = (pivotName, nodeName, pathName) => {
-      const pathBlock = getBlock(pivotName, nodeName, pathName);
+    const blockClasses = (nodeName, pathName) => {
+      const pathBlock = getBlock(nodeName, pathName);
       const cssClasses = [`block-${nodeName}`];
       if (pathBlock) {
         const props = Object.keys(pathBlock);
@@ -233,8 +259,8 @@ export default defineComponent({
     const movePivotUp = () => (pivotRowIndex.value > 0) ? pivotRowIndex.value-- : undefined;
     const movePivotDown = () => (pivotRowIndex.value < assemblies.value.length) ? pivotRowIndex.value++ : undefined;
 
-    const selectBlock = (pivot, assembly, block) => {
-      selectedBlock.value = { pivot, assembly, block };
+    const selectBlock = (assembly, block) => {
+      selectedBlock.value = { pivot: selectedPivot.value, assembly, block };
       console.log("selectedBlock", selectedBlock.value);
     };
 
@@ -256,6 +282,10 @@ export default defineComponent({
 
       positionMin,
       positionMax,
+
+      getBlock,
+
+      getVariationLength,
     };
   }
 });
@@ -536,7 +566,8 @@ export default defineComponent({
 }
 
 .outside-range {
-  display: none;
+  opacity: 0.1;
+  //display: none;
 }
 
 </style>

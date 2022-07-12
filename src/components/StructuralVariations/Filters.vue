@@ -152,7 +152,7 @@ export default defineComponent({
     const pivotItems = ref([]);
 
     const minLength = 0;
-    const maxLength = 10000;
+    const maxLength = 1000;
     const lengthStep = 10;
 
     const minPosition = 0;
