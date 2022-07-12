@@ -61,11 +61,12 @@
                          getVariationLength(pivotStep.panBlock, assembly.name) < lengthMin ||
                          getVariationLength(pivotStep.panBlock, assembly.name) > lengthMax
                          )
-                     ),
+                     ) ||
+                     isNotInSVSelection(pivotStep.panBlock, assembly.name),
                    }]"
                    @click="selectBlock(assembly.name, pivotStep.panBlock)"
               >
-                {{getVariationLength(pivotStep.panBlock, assembly.name)}}
+                <div class="block-count-label">{{getVariationLength(pivotStep.panBlock, assembly.name)}}</div>
                 <div v-for="blockClass in blockClasses(pivotStep.panBlock, assembly.name)"
                      :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}-block-${blockClass}`"
                      :class="[ blockClass, 'data-block-cell']"></div>
@@ -111,11 +112,12 @@
                          getVariationLength(pivotStep.panBlock, assembly.name) < lengthMin ||
                          getVariationLength(pivotStep.panBlock, assembly.name) > lengthMax
                          )
-                     ),
+                     ) ||
+                     isNotInSVSelection(pivotStep.panBlock, assembly.name),
                    }]"
                    @click="selectBlock(assembly.name, pivotStep.panBlock)"
               >
-                {{getVariationLength(pivotStep.panBlock, assembly.name)}}
+                <div class="block-count-label">{{getVariationLength(pivotStep.panBlock, assembly.name)}}</div>
                 <div v-for="blockClass in blockClasses(pivotStep.panBlock, assembly.name)"
                      :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}-block-${blockClass}`"
                      :class="[ blockClass, 'data-block-cell']"></div>
@@ -201,6 +203,16 @@ export default defineComponent({
       return block.variationLength;
     }
 
+
+    const isNotInSVSelection = (nodeName, pathName) => {
+      if (!selectedSVs.value || !selectedSVs.value.length) {
+        return false;
+      }
+      const block = getBlock(nodeName, pathName);
+      const found = Object.entries(block).filter(([key, value]) => !!value).find(([key, value]) => selectedSVs.value.includes(key));
+      return !found;
+    };
+
     // const isPresent = (pivotName, nodeName, pathName) => {
     //   const pathBlock = getBlock(pivotName, nodeName, pathName);
     //   console.log("isPresent", pivotName, nodeName, pathName, pathBlock && pathBlock.Present);
@@ -241,7 +253,7 @@ export default defineComponent({
       if (pathBlock) {
         const props = Object.keys(pathBlock);
 
-        cssClasses.push(...props.filter(value => (!selectedSVs.value.length || selectedSVs.value.includes(value) || value === "Present")).map((prop) => {
+        cssClasses.push(...props.map((prop) => {
           const value = pathBlock[prop];
           if (value === true) {
             return `block-${prop.toLowerCase()}`;
@@ -286,6 +298,8 @@ export default defineComponent({
       getBlock,
 
       getVariationLength,
+
+      isNotInSVSelection,
     };
   }
 });
@@ -570,4 +584,12 @@ export default defineComponent({
   //display: none;
 }
 
+.block-count-label {
+  position: absolute;
+  font-size: 0.5rem;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
 </style>

@@ -7,9 +7,9 @@ export default createStore({
     selectedPivot: "",
     selectedBlock: { assembly: undefined, pivot: undefined, block: undefined },
     lengthMin: 0,
-    lengthMax: 100,
+    lengthMax: 1000,
     positionMin: 0,
-    positionMax: 100,
+    positionMax: 1000,
   },
   getters: {},
   mutations: {
