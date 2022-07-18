@@ -1,14 +1,12 @@
 <template>
   <div class="structural-variations-details">
 
-      <v-card tile>
-
 
         <div v-if="selectedBlock.pivot && selectedBlock.assembly && selectedBlock.block"
              class="data-area d-flex flex-row">
 
           <!-- "Header" column -->
-          <div class="data-labels col-2 d-flex flex-column ma-1 pt-5">
+          <div class="data-labels col-2 d-flex flex-column ma-1 pt-1">
 
             <div class="data-label elevation-1 px-3">
               {{ assemblyName }}
@@ -23,7 +21,7 @@
 
           </div>
           <!-- "Data" column rows -->
-          <div class="data-block-rows col-10 d-flex flex-column ma-1 pt-5" ref="dataBlockRowsRef">
+          <div class="data-block-rows col-10 d-flex flex-column ma-1 pt-1" ref="dataBlockRowsRef">
 
             <div class="data-block-row d-flex flex-row">
               <div :style="{ left: assemblyOffset+'px' }" class="block-wrapper">
@@ -78,7 +76,6 @@
             </div>
           </div>
         </div>
-      </v-card>
   </div>
 </template>
 
@@ -340,19 +337,25 @@ export default defineComponent({
   transition: all 100ms;
   z-index: 1;
 
+  &:hover:not(.block-style-selected) {
+    z-index: 3;
+    opacity: 0.75;
+  }
+
   .block-label {
     transition: all 100ms;
 
     position: absolute;
-    transform: rotate(-30deg);
+    //transform: rotate(-30deg);
+    transform: rotate(-15deg);
     border: inherit;
     transform-origin: 0 0;
     background: inherit;
     line-height: 1em;
     padding: 2px;
     //border-radius: 2px;
-    left: -9px;
-    top: -17px;
+    left: -6px;
+    top: -19px;
   }
 
 
