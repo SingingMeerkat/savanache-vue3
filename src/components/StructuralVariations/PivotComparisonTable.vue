@@ -51,7 +51,7 @@
                    :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'above-pivot',
                    {
                      'pivot-neighbor': aIndex === beforePivotRows.length - 1,
-                     'selected': selectedBlock.assembly && selectedBlock.assembly.name === assembly.name && selectedBlock.pivotStep && selectedBlock.pivotStep.panBlock === pivotStep.panBlock,
+                     'selected': selectedBlock && selectedBlock.assembly === assembly.name && selectedBlock.block === pivotStep.panBlock,
                      'outside-range':
                      pivotStep.startPosition < positionFilter[0] ||
                      pivotStep.startPosition > positionFilter[1] ||
@@ -102,7 +102,7 @@
                    :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'bloe-pivot',
                    {
                      'pivot-neighbor': aIndex === 0,
-                     'selected': selectedBlock.assembly && selectedBlock.assembly.name === assembly.name && selectedBlock.pivotStep && selectedBlock.pivotStep.panBlock === pivotStep.panBlock,
+                     'selected': selectedBlock && selectedBlock.assembly === assembly.name && selectedBlock.block === pivotStep.panBlock,
                      'outside-range':
                      pivotStep.startPosition < positionFilter[0] ||
                      pivotStep.startPosition > positionFilter[1] ||
@@ -392,11 +392,13 @@ export default defineComponent({
   }
 
   &:hover {
-    border-color: red;
+    border-color: rgba(0, 255, 255, 1);
+    background-color: rgba(0, 255, 255, 0.75);
   }
 
   &.selected {
-    border-color: green;
+    border-color: rgba(0, 255, 0, 1);
+    background-color: rgba(0, 255, 0, 0.75);
   }
 }
 

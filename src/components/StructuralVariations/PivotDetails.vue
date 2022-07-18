@@ -6,7 +6,7 @@
              class="data-area d-flex flex-row">
 
           <!-- "Header" column -->
-          <div class="data-labels col-2 d-flex flex-column ma-1 pt-1">
+          <div class="data-labels col-2 d-flex flex-column pt-2">
 
             <div class="data-label elevation-1 px-3">
               {{ assemblyName }}
@@ -21,7 +21,7 @@
 
           </div>
           <!-- "Data" column rows -->
-          <div class="data-block-rows col-10 d-flex flex-column ma-1 pt-1" ref="dataBlockRowsRef">
+          <div class="data-block-rows col-10 d-flex flex-column pt-2" ref="dataBlockRowsRef">
 
             <div class="data-block-row d-flex flex-row">
               <div :style="{ left: assemblyOffset+'px' }" class="block-wrapper">
