@@ -22,53 +22,43 @@
       </v-col>
       <v-col cols="4" class="d-flex">
 
-        <v-slider
-          v-model="positionMin"
-          :min="minPosition"
-          :max="positionMax-positionStep"
+        <v-range-slider
+          v-model="positionFilter"
+          :min="positionLimit[0]"
+          :max="positionLimit[1]"
           :step="positionStep"
-          placeholder="Start Position"
-          label="Start Position"
+          placeholder="Position"
+          label="Position"
           hide-details
-          class="v-col-6"
+          class="v-col-12"
           thumb-label
+          :disabled="!positionLimit[1]"
         >
           <template v-slot:prepend>
             <v-text-field
-              v-model="positionMin"
+              v-model="positionFilter[0]"
               type="number"
               density="compact"
               hide-details
               variant="outlined"
-              placeholder="Start Position"
-              label="Start Position"
+              placeholder="Min Position"
+              label="Min Position"
+              :disabled="!positionLimit[1]"
             ></v-text-field>
           </template>
-        </v-slider>
-
-        <v-slider
-          v-model="positionMax"
-          :min="positionMin+positionStep"
-          :max="maxPosition"
-          :step="positionStep"
-          placeholder="End Position"
-          label="End Position"
-          hide-details
-          class="v-col-6"
-          thumb-label
-        >
           <template v-slot:append>
             <v-text-field
-              v-model="positionMax"
+              v-model="positionFilter[1]"
               type="number"
               density="compact"
               hide-details
               variant="outlined"
-              placeholder="End Position"
-              label="End Position"
+              placeholder="Max Position"
+              label="Max Position"
+              :disabled="!positionLimit[1]"
             ></v-text-field>
           </template>
-        </v-slider>
+        </v-range-slider>
 
       </v-col>
     </v-row>
@@ -81,53 +71,43 @@
       </v-col>
       <v-col cols="4" class="d-flex">
 
-        <v-slider
-          v-model="lengthMin"
-          :min="minLength"
-          :max="lengthMax-lengthStep"
+        <v-range-slider
+          v-model="lengthFilter"
+          :min="lengthLimit[0]"
+          :max="lengthLimit[1]"
           :step="lengthStep"
-          placeholder="Min Length"
-          label="Min Length"
+          placeholder="Length"
+          label="Length"
           hide-details
-          class="v-col-6"
+          class="v-col-12"
           thumb-label
+          :disabled="!lengthLimit[1]"
         >
           <template v-slot:prepend>
             <v-text-field
-              v-model="lengthMin"
+              v-model="lengthFilter[0]"
               type="number"
               density="compact"
               hide-details
               variant="outlined"
               placeholder="Min Length"
               label="Min Length"
+              :disabled="!lengthLimit[1]"
             ></v-text-field>
           </template>
-        </v-slider>
-
-        <v-slider
-          v-model="lengthMax"
-          :min="lengthMin+lengthStep"
-          :max="maxLength"
-          :step="lengthStep"
-          placeholder="Max Length"
-          label="Max Length"
-          hide-details
-          class="v-col-6"
-          thumb-label
-        >
           <template v-slot:append>
             <v-text-field
-              v-model="lengthMax"
+              v-model="lengthFilter[1]"
               type="number"
               density="compact"
               hide-details
               variant="outlined"
               placeholder="Max Length"
               label="Max Length"
+              :disabled="!lengthLimit[1]"
             ></v-text-field>
           </template>
-        </v-slider>
+        </v-range-slider>
 
       </v-col>
     </v-row>
@@ -151,19 +131,15 @@ export default defineComponent({
 
     const pivotItems = ref([]);
 
-    const minLength = 0;
-    const maxLength = 1000;
     const lengthStep = 10;
 
-    const minPosition = 0;
-    const maxPosition = ref(10000);
     const positionStep = 10;
 
-    const lengthMin = reactiveVuex(store, "lengthMin", "setLengthMin"); // ref((Math.round(maxLength * 0.01) / lengthStep) * lengthStep);
-    const lengthMax = reactiveVuex(store, "lengthMax", "setLengthMax"); // ref((Math.round(maxLength * 0.01) / lengthStep) * lengthStep);
+    const lengthFilter = reactiveVuex(store, "lengthFilter", "setLengthFilter"); // ref((Math.round(limitLength * 0.01) / lengthStep) * lengthStep);
+    const lengthLimit = reactiveVuex(store, "lengthLimit", "setLengthLimit"); // ref((Math.round(limitLength * 0.01) / lengthStep) * lengthStep);
 
-    const positionMin = reactiveVuex(store, "positionMin", "setPositionMin"); // ref((Math.round(maxPosition * 0.01) / positionStep) * positionStep);
-    const positionMax = reactiveVuex(store, "positionMax", "setPositionMax"); // ref((Math.round(maxPosition * 0.99) / positionStep) * positionStep);
+    const positionFilter = reactiveVuex(store, "positionFilter", "setPositionFilter"); // ref((Math.round(limitPosition * 0.01) / positionStep) * positionStep);
+    const positionLimit = reactiveVuex(store, "positionLimit", "setPositionLimit"); // ref((Math.round(limitPosition * 0.99) / positionStep) * positionStep);
 
     let data;
 
@@ -175,13 +151,29 @@ export default defineComponent({
     });
 
     watch(selectedPivot, () => {
+      let start;
+      let end;
+      let minLength = 0;
+      let maxLength;
       if (data) {
         const steps = data.pangenome.paths[selectedPivot.value].steps;
-        const lastStep = steps[steps.length - 1];
-        const startPosition = lastStep.startPosition + data.pangenome.panSkeleton[lastStep.panBlock].length;
-        maxPosition.value = lastStep.startPosition;
-        positionMax.value = startPosition;
+        if (steps && steps.length) {
+          steps.forEach((step) => {
+            const panBlock = data.pangenome.panSkeleton[step.panBlock];
+            start = start === undefined ? step.startPosition : Math.min(step.startPosition, start);
+            end = end === undefined ? step.startPosition : Math.max(step.startPosition + panBlock.length);
+            // minLength = minLength === undefined ? panBlock.length : Math.min(panBlock.length, minLength);
+            maxLength = maxLength === undefined ? panBlock.length : Math.max(panBlock.length, maxLength);
+          });
+        }
       }
+      lengthLimit.value = [minLength, maxLength];
+      lengthFilter.value = [minLength, maxLength];
+
+      positionFilter.value = [start, end];
+      positionLimit.value = [start, end];
+
+      return { start, end, minLength, maxLength };
     });
 
     const svItems = [
@@ -198,16 +190,14 @@ export default defineComponent({
       svItems,
       selectedSVs,
 
-      lengthMin,
-      lengthMax,
-      minLength,
-      maxLength,
+      lengthLimit,
+      lengthFilter,
+
+      positionLimit,
+      positionFilter,
+
       lengthStep,
 
-      positionMin,
-      positionMax,
-      minPosition,
-      maxPosition,
       positionStep,
 
     };

@@ -100,7 +100,7 @@ export default defineComponent({
       > .v-card {
         padding: 1rem;
         position: relative;
-        overflow: auto;
+        overflow: visible;
         height: 100%;
       }
     }

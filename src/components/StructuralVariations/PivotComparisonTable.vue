@@ -53,13 +53,13 @@
                      'pivot-neighbor': aIndex === beforePivotRows.length - 1,
                      'selected': selectedBlock.assembly && selectedBlock.assembly.name === assembly.name && selectedBlock.pivotStep && selectedBlock.pivotStep.panBlock === pivotStep.panBlock,
                      'outside-range':
-                     pivotStep.startPosition < positionMin ||
-                     pivotStep.startPosition > positionMax ||
+                     pivotStep.startPosition < positionFilter[0] ||
+                     pivotStep.startPosition > positionFilter[1] ||
                      (
 
                        (
-                         getVariationLength(pivotStep.panBlock, assembly.name) < lengthMin ||
-                         getVariationLength(pivotStep.panBlock, assembly.name) > lengthMax
+                         getVariationLength(pivotStep.panBlock, assembly.name) < lengthFilter[0] ||
+                         getVariationLength(pivotStep.panBlock, assembly.name) > lengthFilter[1]
                          )
                      ) ||
                      isNotInSVSelection(pivotStep.panBlock, assembly.name),
@@ -84,8 +84,8 @@
                    'data-block-column', `pivot-block-${psIndex % 2}`, `elevation-1`,
                    {
                       'outside-range':
-                     pivotStep.startPosition < positionMin ||
-                     pivotStep.startPosition > positionMax
+                     pivotStep.startPosition < positionFilter[0] ||
+                     pivotStep.startPosition > positionFilter[1]
                    }]">
                 <div :class="['pivot-data-block-cell']"
                      :style="{ background: pivotColor(pivotStep.panBlock, assemblies) }"></div>
@@ -104,13 +104,13 @@
                      'pivot-neighbor': aIndex === 0,
                      'selected': selectedBlock.assembly && selectedBlock.assembly.name === assembly.name && selectedBlock.pivotStep && selectedBlock.pivotStep.panBlock === pivotStep.panBlock,
                      'outside-range':
-                     pivotStep.startPosition < positionMin ||
-                     pivotStep.startPosition > positionMax ||
+                     pivotStep.startPosition < positionFilter[0] ||
+                     pivotStep.startPosition > positionFilter[1] ||
                      (
 
                        (
-                         getVariationLength(pivotStep.panBlock, assembly.name) < lengthMin ||
-                         getVariationLength(pivotStep.panBlock, assembly.name) > lengthMax
+                         getVariationLength(pivotStep.panBlock, assembly.name) < lengthFilter[0] ||
+                         getVariationLength(pivotStep.panBlock, assembly.name) > lengthFilter[1]
                          )
                      ) ||
                      isNotInSVSelection(pivotStep.panBlock, assembly.name),
@@ -137,7 +137,7 @@
 
 <script>
 
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
 import { reactiveVuex } from "@/store/helper";
@@ -153,11 +153,8 @@ export default defineComponent({
     const selectedSVs = reactiveVuex(store, "selectedSVs", "setSelectedSVs");
     const selectedBlock = reactiveVuex(store, "selectedBlock", "setSelectedBlock");
 
-    const lengthMin = reactiveVuex(store, "lengthMin", "setLengthMin");
-    const lengthMax = reactiveVuex(store, "lengthMax", "setLengthMax");
-
-    const positionMin = reactiveVuex(store, "positionMin", "setPositionMin");
-    const positionMax = reactiveVuex(store, "positionMax", "setPositionMax");
+    const lengthFilter = reactiveVuex(store, "lengthFilter", "setLengthFilter"); // ref((Math.round(limitLength * 0.01) / lengthStep) * lengthStep);
+    const positionFilter = reactiveVuex(store, "positionFilter", "setPositionFilter"); // ref((Math.round(limitPosition * 0.01) / positionStep) * positionStep);
 
     const paths = ref({});
     const pangenome = ref();
@@ -289,11 +286,9 @@ export default defineComponent({
       selectedBlock,
       selectBlock,
 
-      lengthMin,
-      lengthMax,
-
-      positionMin,
-      positionMax,
+      lengthFilter,
+      
+      positionFilter,
 
       getBlock,
 
@@ -587,9 +582,16 @@ export default defineComponent({
 .block-count-label {
   position: absolute;
   font-size: 0.5rem;
-  top: 25%;
+  top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 5;
 }
+
+.above-pivot {
+  .block-count-label {
+    transform: translate(-50%, -50%) scaleY(-100%) ;
+  }
+}
+
 </style>

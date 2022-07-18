@@ -6,10 +6,10 @@ export default createStore({
     selectedSVs: [],
     selectedPivot: "",
     selectedBlock: { assembly: undefined, pivot: undefined, block: undefined },
-    lengthMin: 0,
-    lengthMax: 1000,
-    positionMin: 0,
-    positionMax: 1000,
+    lengthFilter: [0, 0],
+    lengthLimit: [0, 0],
+    positionFilter: [0, 0],
+    positionLimit: [0, 0],
   },
   getters: {},
   mutations: {
@@ -29,21 +29,21 @@ export default createStore({
       console.log("setSelectedBlock", selectedBlock);
       state.selectedBlock = selectedBlock;
     },
-    setLengthMin(state, lengthMin) {
-      console.log("setLengthMin", lengthMin);
-      state.lengthMin = lengthMin;
+    setLengthFilter(state, lengthFilter) {
+      console.log("setLengthFilter", lengthFilter);
+      state.lengthFilter = lengthFilter;
     },
-    setLengthMax(state, lengthMax) {
-      console.log("setLengthMax", lengthMax);
-      state.lengthMax = lengthMax;
+    setLengthLimit(state, lengthLimit) {
+      console.log("setLengthLimit", lengthLimit);
+      state.lengthLimit = lengthLimit;
     },
-    setPositionMin(state, positionMin) {
-      console.log("setPositionMin", positionMin);
-      state.positionMin = positionMin;
+    setPositionFilter(state, positionFilter) {
+      console.log("setPositionFilter", positionFilter);
+      state.positionFilter = positionFilter;
     },
-    setPositionMax(state, positionMax) {
-      console.log("setPositionMax", positionMax);
-      state.positionMax = positionMax;
+    setPositionLimit(state, positionLimit) {
+      console.log("setPositionLimit", positionLimit);
+      state.positionLimit = positionLimit;
     },
   },
   actions: {},

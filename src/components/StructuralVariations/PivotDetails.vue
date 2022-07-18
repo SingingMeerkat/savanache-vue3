@@ -1,7 +1,6 @@
 <template>
   <div class="structural-variations-details">
 
-    <div class="table-container">
       <v-card tile>
 
 
@@ -9,7 +8,7 @@
              class="data-area d-flex flex-row">
 
           <!-- "Header" column -->
-          <div class="data-labels col-2 d-flex flex-column pr-0 mr-n1 pt-5 pb-1">
+          <div class="data-labels col-2 d-flex flex-column ma-1 pt-5">
 
             <div class="data-label elevation-1 px-3">
               {{ assemblyName }}
@@ -24,7 +23,7 @@
 
           </div>
           <!-- "Data" column rows -->
-          <div class="data-block-rows col-10 d-flex flex-column pl-0 mr-1 pt-5 pb-1">
+          <div class="data-block-rows col-10 d-flex flex-column ma-1 pt-5" ref="dataBlockRowsRef">
 
             <div class="data-block-row d-flex flex-row">
               <div :style="{ left: assemblyOffset+'px' }" class="block-wrapper">
@@ -80,13 +79,12 @@
           </div>
         </div>
       </v-card>
-    </div>
   </div>
 </template>
 
 <script>
 
-import { computed, defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
 import { reactiveVuex } from "@/store/helper";
@@ -97,6 +95,8 @@ export default defineComponent({
   name: "StructuralVariationsPivotDetails",
   components: {},
   setup() {
+    const dataBlockRowsRef = ref(null);
+
     const store = useStore();
     const selectedPivot = reactiveVuex(store, "selectedPivot", "setSelectedPivot");
     const selectedAssemblies = reactiveVuex(store, "selectedAssemblies", "setSelectedAssemblies");
@@ -127,6 +127,7 @@ export default defineComponent({
 
     const assemblyOffset = ref(0);
     const pivotOffset = ref(0);
+    const scrollOffset = ref(0);
 
     const colors = {};
     const tops = {};
@@ -142,10 +143,19 @@ export default defineComponent({
 
       assemblyOffset.value = 0;
       pivotOffset.value = 0;
+      scrollOffset.value = 0;
 
       selectedBlockPivotPath.steps.forEach(step => {
+
+        console.log('step.panBlock', step.panBlock, 'step', step);
+
         const panBlock = pangenome.value.panSkeleton[step.panBlock];
+
+        console.log('selectedBlock.value.assembly', selectedBlock.value.assembly, 'panBlock.traversals', panBlock.traversals);
+
         const otherIndex = panBlock.traversals[selectedBlock.value.assembly];
+
+        console.log('otherIndex', otherIndex, 'selectedBlockAssemblyPath', selectedBlockAssemblyPath, 'selectedBlockAssemblyPath.steps', selectedBlockAssemblyPath.steps);
 
         const otherPanBlock = selectedBlockAssemblyPath.steps[otherIndex];
 
@@ -155,14 +165,33 @@ export default defineComponent({
 
         const blockTypes = pivotPathNode ? Object.entries(pivotPathNode).filter(([key, value]) => value && typeof value !== "object" && key !== "Insertion").map(([key]) => key) : [];
 
+        console.log('step.panBlock', step.panBlock, 'otherPanBlock', otherPanBlock, 'selectedBlock', selectedBlock.value);
+
         const offsets = calculateOffset({
           step,
           otherPanBlock,
           selectedBlock
         });
 
-        assemblyOffset.value = offsets.assemblyOffset;
-        pivotOffset.value = offsets.pivotOffset;
+        console.log('OFFSETS', JSON.stringify(offsets));
+
+        if (selectedBlock.value.block === step.panBlock) {
+          assemblyOffset.value = offsets.assemblyOffset;
+          pivotOffset.value = offsets.pivotOffset;
+          scrollOffset.value = offsets.totalOffset;
+
+          if (dataBlockRowsRef.value) {
+            const proportions = ((dataBlockRowsRef.value.clientWidth / 3) - (panBlock.length / (4 * 3)));
+            console.log('scrollOffset.value', scrollOffset.value, 'panBlock.length', panBlock.length, 'dataBlockRowsRef.value.clientWidth', dataBlockRowsRef.value.clientWidth, 'proportions', proportions);
+            dataBlockRowsRef.value.scrollLeft = scrollOffset.value - proportions;
+          } else {
+            setTimeout(() => {
+              const proportions = ((dataBlockRowsRef.value.clientWidth / 3) - (panBlock.length / (4 * 3)));
+              console.log('scrollOffset.value', scrollOffset.value, 'panBlock.length', panBlock.length, 'dataBlockRowsRef.value.clientWidth', dataBlockRowsRef.value.clientWidth, 'proportions', proportions);
+              dataBlockRowsRef.value.scrollLeft = scrollOffset.value - proportions;
+            }, 100);
+          }
+        }
 
         const selected = isSelectedStep({
           step,
@@ -238,7 +267,6 @@ export default defineComponent({
       }
     });
 
-
     const pivotName = computed(() => selectedBlock.value.pivot);
     const assemblyName = computed(() => selectedBlock.value.assembly);
 
@@ -250,13 +278,24 @@ export default defineComponent({
       pivotName,
       assemblyName,
       assemblyOffset,
-      pivotOffset
+      pivotOffset,
+      scrollOffset,
+      dataBlockRowsRef,
     };
   }
 });
 </script>
 
 <style lang="scss" scoped>
+
+.structural-variations-details {
+
+}
+
+.data-block-rows {
+  overflow: auto;
+  width: 100%;
+}
 
 .data-area {
   //overflow: auto;

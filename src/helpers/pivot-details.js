@@ -44,6 +44,7 @@ export const calculateOffset = ({
                                 }) => {
   let pivotOffset = 0;
   let assemblyOffset = 0;
+  let totalOffset = 0;
   if (otherPanBlock && step.panBlock === selectedBlock.value.block) {
     if (otherPanBlock.startPosition >= step.startPosition) {
       pivotOffset = (otherPanBlock.startPosition - step.startPosition) / 4;
@@ -53,5 +54,6 @@ export const calculateOffset = ({
       assemblyOffset = (step.startPosition - otherPanBlock.startPosition) / 4;
     }
   }
-  return { pivotOffset, assemblyOffset };
+  totalOffset = (Math.min(otherPanBlock ? otherPanBlock.startPosition : step.startPosition, step.startPosition) / 4) + Math.max(pivotOffset, assemblyOffset);
+  return { pivotOffset, assemblyOffset, totalOffset };
 };
