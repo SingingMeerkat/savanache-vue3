@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="6">
         <v-select
-          v-model="selectedPivot"
+          v-model="selectedPivotName"
           :items="pivotItems"
           dense
           hide-details
@@ -12,7 +12,7 @@
       </v-col>
       <v-col cols="2">
         <v-select
-          v-model="selectedSVs"
+          v-model="selectedSVTypeNames"
           :items="svItems"
           dense
           hide-details
@@ -20,42 +20,42 @@
           multiple
         ></v-select>
       </v-col>
-      <v-col cols="4" class="d-flex">
+      <v-col class="d-flex" cols="4">
 
         <v-range-slider
           v-model="positionFilter"
-          :min="positionLimit[0]"
-          :max="positionLimit[1]"
-          :step="positionStep"
-          placeholder="Position"
-          label="Position"
-          hide-details
-          class="v-col-12"
-          thumb-label
           :disabled="!positionLimit[1]"
+          :max="positionLimit[1]"
+          :min="positionLimit[0]"
+          :step="positionStep"
+          class="v-col-12"
+          hide-details
+          label="Position"
+          placeholder="Position"
+          thumb-label
         >
           <template v-slot:prepend>
             <v-text-field
               v-model="positionFilter[0]"
-              type="number"
+              :disabled="!positionLimit[1]"
               density="compact"
               hide-details
-              variant="outlined"
-              placeholder="Min Position"
               label="Min Position"
-              :disabled="!positionLimit[1]"
+              placeholder="Min Position"
+              type="number"
+              variant="outlined"
             ></v-text-field>
           </template>
           <template v-slot:append>
             <v-text-field
               v-model="positionFilter[1]"
-              type="number"
+              :disabled="!positionLimit[1]"
               density="compact"
               hide-details
-              variant="outlined"
-              placeholder="Max Position"
               label="Max Position"
-              :disabled="!positionLimit[1]"
+              placeholder="Max Position"
+              type="number"
+              variant="outlined"
             ></v-text-field>
           </template>
         </v-range-slider>
@@ -69,42 +69,42 @@
       <v-col cols="4">
 
       </v-col>
-      <v-col cols="4" class="d-flex">
+      <v-col class="d-flex" cols="4">
 
         <v-range-slider
           v-model="lengthFilter"
-          :min="lengthLimit[0]"
-          :max="lengthLimit[1]"
-          :step="lengthStep"
-          placeholder="Length"
-          label="Length"
-          hide-details
-          class="v-col-12"
-          thumb-label
           :disabled="!lengthLimit[1]"
+          :max="lengthLimit[1]"
+          :min="lengthLimit[0]"
+          :step="lengthStep"
+          class="v-col-12"
+          hide-details
+          label="Length"
+          placeholder="Length"
+          thumb-label
         >
           <template v-slot:prepend>
             <v-text-field
               v-model="lengthFilter[0]"
-              type="number"
+              :disabled="!lengthLimit[1]"
               density="compact"
               hide-details
-              variant="outlined"
-              placeholder="Min Length"
               label="Min Length"
-              :disabled="!lengthLimit[1]"
+              placeholder="Min Length"
+              type="number"
+              variant="outlined"
             ></v-text-field>
           </template>
           <template v-slot:append>
             <v-text-field
               v-model="lengthFilter[1]"
-              type="number"
+              :disabled="!lengthLimit[1]"
               density="compact"
               hide-details
-              variant="outlined"
-              placeholder="Max Length"
               label="Max Length"
-              :disabled="!lengthLimit[1]"
+              placeholder="Max Length"
+              type="number"
+              variant="outlined"
             ></v-text-field>
           </template>
         </v-range-slider>
@@ -126,8 +126,8 @@ export default defineComponent({
   components: {},
   setup() {
     const store = useStore();
-    const selectedPivot = reactiveVuex(store, "selectedPivot", "setSelectedPivot");
-    const selectedSVs = reactiveVuex(store, "selectedSVs", "setSelectedSVs");
+    const selectedPivotName = reactiveVuex(store, "selectedPivotName", "setselectedPivotName");
+    const selectedSVTypeNames = reactiveVuex(store, "selectedSVTypeNames", "setselectedSVTypeNames");
 
     const pivotItems = ref([]);
 
@@ -150,13 +150,13 @@ export default defineComponent({
       }
     });
 
-    watch(selectedPivot, () => {
+    watch(selectedPivotName, () => {
       let start;
       let end;
       let minLength = 0;
       let maxLength;
       if (data) {
-        const steps = data.pangenome.paths[selectedPivot.value].steps;
+        const steps = data.pangenome.paths[selectedPivotName.value].steps;
         if (steps && steps.length) {
           steps.forEach((step) => {
             const panBlock = data.pangenome.panSkeleton[step.panBlock];
@@ -177,18 +177,18 @@ export default defineComponent({
     });
 
     const svItems = [
-      "Insertion",
-      "Swap",
-      "cooccurrence",
-      "Inversion",
-      "InversionChain"
+      "insertion",
+      "swap",
+      "dupe",
+      "inversion",
+      "inversionChain"
     ];
 
     return {
       pivotItems,
-      selectedPivot,
+      selectedPivotName,
       svItems,
-      selectedSVs,
+      selectedSVTypeNames,
 
       lengthLimit,
       lengthFilter,
@@ -198,7 +198,7 @@ export default defineComponent({
 
       lengthStep,
 
-      positionStep,
+      positionStep
 
     };
   }

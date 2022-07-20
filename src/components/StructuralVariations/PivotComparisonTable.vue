@@ -51,7 +51,7 @@
                    :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'above-pivot',
                    {
                      'pivot-neighbor': aIndex === beforePivotRows.length - 1,
-                     'selected': selectedBlock && selectedBlock.assembly === assembly.name && selectedBlock.block === pivotStep.panBlock,
+                     'selected': selectedBlock && selectedBlock.assemblyName === assembly.name && selectedBlock.blockName === pivotStep.panBlock,
                      'outside-range':
                      pivotStep.startPosition < positionFilter[0] ||
                      pivotStep.startPosition > positionFilter[1] ||
@@ -66,7 +66,7 @@
                    }]"
                    @click="selectBlock(assembly.name, pivotStep.panBlock)"
               >
-                <div class="block-count-label">{{getVariationLength(pivotStep.panBlock, assembly.name)}}</div>
+                <div class="block-count-label">{{ getVariationLength(pivotStep.panBlock, assembly.name) }}</div>
                 <div v-for="blockClass in blockClasses(pivotStep.panBlock, assembly.name)"
                      :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}-block-${blockClass}`"
                      :class="[ blockClass, 'data-block-cell']"></div>
@@ -102,7 +102,7 @@
                    :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'bloe-pivot',
                    {
                      'pivot-neighbor': aIndex === 0,
-                     'selected': selectedBlock && selectedBlock.assembly === assembly.name && selectedBlock.block === pivotStep.panBlock,
+                     'selected': selectedBlock && selectedBlock.assemblyName === assembly.name && selectedBlock.blockName === pivotStep.panBlock,
                      'outside-range':
                      pivotStep.startPosition < positionFilter[0] ||
                      pivotStep.startPosition > positionFilter[1] ||
@@ -117,7 +117,7 @@
                    }]"
                    @click="selectBlock(assembly.name, pivotStep.panBlock)"
               >
-                <div class="block-count-label">{{getVariationLength(pivotStep.panBlock, assembly.name)}}</div>
+                <div class="block-count-label">{{ getVariationLength(pivotStep.panBlock, assembly.name) }}</div>
                 <div v-for="blockClass in blockClasses(pivotStep.panBlock, assembly.name)"
                      :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}-block-${blockClass}`"
                      :class="[ blockClass, 'data-block-cell']"></div>
@@ -137,20 +137,20 @@
 
 <script>
 
-import { computed, defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
 import { reactiveVuex } from "@/store/helper";
-// import {selectedAssemblies, selectedChromosome, selectedPivot} from '@/data/some-data-source';
+// import {selectedAssemblyNameKeys, selectedChromosome, selectedPivotName} from '@/data/some-data-source';
 
 export default defineComponent({
   name: "StructuralVariationsPivotComparisonTable",
   components: {},
   setup() {
     const store = useStore();
-    const selectedPivot = reactiveVuex(store, "selectedPivot", "setSelectedPivot");
-    const selectedAssemblies = reactiveVuex(store, "selectedAssemblies", "setSelectedAssemblies");
-    const selectedSVs = reactiveVuex(store, "selectedSVs", "setSelectedSVs");
+    const selectedPivotName = reactiveVuex(store, "selectedPivotName", "setselectedPivotName");
+    const selectedAssemblyNameKeys = reactiveVuex(store, "selectedAssemblyNameKeys", "setselectedAssemblyNameKeys");
+    const selectedSVTypeNames = reactiveVuex(store, "selectedSVTypeNames", "setselectedSVTypeNames");
     const selectedBlock = reactiveVuex(store, "selectedBlock", "setSelectedBlock");
 
     const lengthFilter = reactiveVuex(store, "lengthFilter", "setLengthFilter"); // ref((Math.round(limitLength * 0.01) / lengthStep) * lengthStep);
@@ -176,15 +176,15 @@ export default defineComponent({
 
     const pivotRowIndex = ref(1);
 
-    const pivot = computed(() => ({ name: selectedPivot.value, path: paths.value[selectedPivot.value] }));
-    const assemblies = computed(() => Object.keys(paths.value).filter(pathName => selectedAssemblies.value[pathName]).map(pathName => ({
+    const pivot = computed(() => ({ name: selectedPivotName.value, path: paths.value[selectedPivotName.value] }));
+    const assemblies = computed(() => Object.keys(paths.value).filter(pathName => selectedAssemblyNameKeys.value[pathName]).map(pathName => ({
       name: pathName,
       path: paths.value[pathName]
     })));
 
     const getBlock = (nodeName, pathName) => {
       if (pivots.value) {
-        const nodes = pivots.value[selectedPivot.value];
+        const nodes = pivots.value[selectedPivotName.value];
         if (nodes) {
           const node = nodes[nodeName];
           if (node) {
@@ -198,34 +198,34 @@ export default defineComponent({
     const getVariationLength = (nodeName, pathName) => {
       const block = getBlock(nodeName, pathName);
       return block.variationLength;
-    }
+    };
 
 
     const isNotInSVSelection = (nodeName, pathName) => {
-      if (!selectedSVs.value || !selectedSVs.value.length) {
+      if (!selectedSVTypeNames.value || !selectedSVTypeNames.value.length) {
         return false;
       }
       const block = getBlock(nodeName, pathName);
-      const found = Object.entries(block).filter(([key, value]) => !!value).find(([key, value]) => selectedSVs.value.includes(key));
+      const found = Object.entries(block).filter(([key, value]) => !!value).find(([key, value]) => selectedSVTypeNames.value.includes(key));
       return !found;
     };
 
-    // const isPresent = (pivotName, nodeName, pathName) => {
+    // const ispresent = (pivotName, nodeName, pathName) => {
     //   const pathBlock = getBlock(pivotName, nodeName, pathName);
-    //   console.log("isPresent", pivotName, nodeName, pathName, pathBlock && pathBlock.Present);
-    //   return pathBlock && pathBlock.Present;
+    //   console.log("ispresent", pivotName, nodeName, pathName, pathBlock && pathBlock.present);
+    //   return pathBlock && pathBlock.present;
     // };
 
     const pivotColor = (nodeName, paths) => {
       const blocks = paths.map(path => getBlock(nodeName, path.name));
       const presentCount = blocks.reduce((result, block) => {
-        if (block && block.Present) {
+        if (block && block.present) {
           result++;
         }
         return result;
       }, 0);
       const totalCount = blocks.length;
-      const percentPresent = (presentCount / totalCount);
+      const percentpresent = (presentCount / totalCount);
       const presentColor = {
         red: 236,
         green: 135,
@@ -237,9 +237,9 @@ export default defineComponent({
         blue: 236
       };
       const colors = {
-        red: ((presentColor.red - absentColor.red) * percentPresent) + (absentColor.red),
-        green: ((presentColor.green - absentColor.green) * percentPresent) + (absentColor.green),
-        blue: ((presentColor.blue - absentColor.blue) * percentPresent) + (absentColor.blue)
+        red: ((presentColor.red - absentColor.red) * percentpresent) + (absentColor.red),
+        green: ((presentColor.green - absentColor.green) * percentpresent) + (absentColor.green),
+        blue: ((presentColor.blue - absentColor.blue) * percentpresent) + (absentColor.blue)
       };
       return `rgb(${colors.red}, ${colors.green}, ${colors.blue}`;
     };
@@ -269,7 +269,7 @@ export default defineComponent({
     const movePivotDown = () => (pivotRowIndex.value < assemblies.value.length) ? pivotRowIndex.value++ : undefined;
 
     const selectBlock = (assembly, block) => {
-      selectedBlock.value = { pivot: selectedPivot.value, assembly, block };
+      selectedBlock.value = { pivot: selectedPivotName.value, assembly, block };
       console.log("selectedBlock", selectedBlock.value);
     };
 
@@ -287,14 +287,14 @@ export default defineComponent({
       selectBlock,
 
       lengthFilter,
-      
+
       positionFilter,
 
       getBlock,
 
       getVariationLength,
 
-      isNotInSVSelection,
+      isNotInSVSelection
     };
   }
 });
@@ -439,7 +439,7 @@ export default defineComponent({
     }
 
     &.pivot-neighbor {
-      .block-cooccurrence {
+      .block-dupe {
         transform: scaleY(-100%);
       }
     }
@@ -458,7 +458,7 @@ export default defineComponent({
         bottom: 0;
       }
 
-      &.block-cooccurrence {
+      &.block-dupe {
         bottom: 50%;
         background: #0086CA;
         border-radius: 1rem 1rem 0 0;
@@ -515,7 +515,7 @@ export default defineComponent({
       }
 
 
-      &.block-inversionchain, &.block-inversionchain-start, &.block-inversionchain-end {
+      &.block-inversionChain, &.block-inversionChain-start, &.block-inversionChain-end {
         //left: 0.2rem;
 
         bottom: 50%;
@@ -538,26 +538,26 @@ export default defineComponent({
       }
 
 
-      &.block-inversionchain::before {
+      &.block-inversionChain::before {
         left: -1px;
         right: -1px;
         //width: calc(100% + 2px);
         border-bottom: 0.2rem solid #9D0D0D;
       }
 
-      &.block-inversionchain-start::before {
+      &.block-inversionChain-start::before {
         left: 50%;
         right: -1px;
         border-bottom: 0.2rem solid #9D0D0D;
       }
 
-      &.block-inversionchain-end::before {
+      &.block-inversionChain-end::before {
         left: -1px;
         right: 50%;
         border-bottom: 0.2rem solid #9D0D0D;
       }
 
-      &.block-inversionchain::after, &.block-inversionchain-start::after, &.block-inversionchain-end::after {
+      &.block-inversionChain::after, &.block-inversionChain-start::after, &.block-inversionChain-end::after {
         display: block;
         content: "";
         position: absolute;
@@ -592,7 +592,7 @@ export default defineComponent({
 
 .above-pivot {
   .block-count-label {
-    transform: translate(-50%, -50%) scaleY(-100%) ;
+    transform: translate(-50%, -50%) scaleY(-100%);
   }
 }
 

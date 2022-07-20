@@ -1,5 +1,5 @@
 export interface PangenomeJson {
-  panSkeleton: PanNodes<PanNode>;
+  panSkeleton: Pannodes<PanNode>;
   paths: Paths<Path>;
 }
 
@@ -14,12 +14,12 @@ export interface Path {
 }
 
 export interface Step {
-  panBlock: keyof PanNodes<PanNode>;
+  panBlock: keyof Pannodes<PanNode>;
   startPosition: number;
   strand: number;
 }
 
-export interface PanNodes<T> {
+export interface Pannodes<T> {
   Node_A_0: T;
   Node_A_1: T;
   Node_A_2: T;
@@ -53,14 +53,14 @@ export interface PanNodes<T> {
 export interface PanNode {
   length: number;
   traversals: Traversals;
-  cooccurrences: (keyof PanNodes<PanNode>)[];
-  neighborNodes: NeighborNodes;
+  dupes: (keyof Pannodes<PanNode>)[];
+  neighbors: neighbors;
 
 }
 
-export interface NeighborNodes {
-  before: (keyof PanNodes<PanNode>)[];
-  after: (keyof PanNodes<PanNode>)[];
+export interface neighbors {
+  before: (keyof Pannodes<PanNode>)[];
+  after: (keyof Pannodes<PanNode>)[];
 }
 
 export interface Traversals {

@@ -1,14 +1,14 @@
 [
   {
     "type": "disruption/insertion",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_B",
         "startPosition": 0,
         "strand": 1
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_A_0",
         "startPosition": 0,
@@ -23,14 +23,14 @@
   },
   {
     "type": "present/match",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_B",
         "startPosition": 0,
         "strand": 1
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_B",
         "startPosition": 222,
@@ -40,18 +40,18 @@
   },
   {
     "type": "disruption/absent/deletion",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_C",
         "startPosition": 456,
         "strand": 1
       }
     ],
-    "pathNodes": []
+    "pathnodes": []
   },
   {
     "type": "present/match",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_D",
         "startPosition": 860,
@@ -73,7 +73,7 @@
         "strand": 1
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_D",
         "startPosition": 678,
@@ -97,15 +97,15 @@
     ]
   },
   {
-    "type": "present/match/cooccurrence",
-    "pivotNodes": [
+    "type": "present/match/dupe",
+    "pivotnodes": [
       {
         "panBlock": "Node_H_0",
         "startPosition": 2226,
         "strand": -1
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_H_0",
         "startPosition": 2044,
@@ -115,14 +115,14 @@
   },
   {
     "type": "disruption/absent/swap",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_L",
         "startPosition": 2448,
         "strand": 1
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_H_1",
         "startPosition": 2266,
@@ -147,7 +147,7 @@
   },
   {
     "type": "present/match",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_N",
         "startPosition": 2914,
@@ -169,7 +169,7 @@
         "strand": 1
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_N",
         "startPosition": 2933,
@@ -194,14 +194,14 @@
   },
   {
     "type": "present/inversion",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_Q",
         "startPosition": 4854,
         "strand": 1
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_Q",
         "startPosition": 4873,
@@ -211,7 +211,7 @@
   },
   {
     "type": "present/match",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_R",
         "startPosition": 5109,
@@ -223,7 +223,7 @@
         "strand": 1
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_R",
         "startPosition": 5128,
@@ -237,8 +237,8 @@
     ]
   },
   {
-    "type": "disruption/absent/swap/cooccurrence",
-    "pivotNodes": [
+    "type": "disruption/absent/swap/dupe",
+    "pivotnodes": [
       {
         "panBlock": "Node_A_4",
         "startPosition": 11108,
@@ -250,7 +250,7 @@
         "strand": 1
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_V",
         "startPosition": 5897,

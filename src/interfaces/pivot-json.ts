@@ -1,6 +1,6 @@
-import { PanNodes, Paths } from "@/interfaces/pangenome-json";
+import { Pannodes, Paths } from "@/interfaces/pangenome-json";
 
-export type PivotJson = Paths<PanNodes<Paths<PivotPathNode>>>
+export type PivotJson = Paths<Pannodes<Paths<PivotPathNode>>>
 
 // export interface Pivot {
 //   Node_A_0: PivotNode;
@@ -32,11 +32,11 @@ export type PivotJson = Paths<PanNodes<Paths<PivotPathNode>>>
 // }
 
 export interface PivotPathNode {
-  Present?: boolean;
-  Insertion?: boolean;
-  Swap?: boolean | string;
-  cooccurrence?: boolean;
-  Inversion?: boolean;
-  InversionChain?: boolean | string;
-  Nodes?: Array<string>;
+  present?: boolean;
+  insertion?: boolean;
+  swap?: boolean | string;
+  dupe?: boolean;
+  inversion?: boolean;
+  inversionChain?: boolean | string;
+  nodes?: Array<string>;
 }

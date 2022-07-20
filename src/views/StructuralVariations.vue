@@ -1,6 +1,6 @@
 <template>
   <v-container class="structural-variations" fluid>
-    <v-row class="top-row" v-show="!hideTopRow">
+    <v-row v-show="!hideTopRow" class="top-row">
       <v-col cols="12">
         <v-card>
           <StructuralVariationsFilters></StructuralVariationsFilters>
@@ -9,26 +9,26 @@
     </v-row>
     <v-row class="middle-row">
       <v-col cols="12">
-        <a class="up-arrow" @click="toggleTopRow" v-show="!hideTopRow"></a>
-        <a class="down-arrow" @click="toggleBottomRow" v-show="!hideBottomRow"></a>
-        <a class="up-arrow-inverted" @click="toggleTopRow" v-show="hideTopRow"></a>
-        <a class="down-arrow-inverted" @click="toggleBottomRow" v-show="hideBottomRow"></a>
+        <a v-show="!hideTopRow" class="up-arrow" @click="toggleTopRow"></a>
+        <a v-show="!hideBottomRow" class="down-arrow" @click="toggleBottomRow"></a>
+        <a v-show="hideTopRow" class="up-arrow-inverted" @click="toggleTopRow"></a>
+        <a v-show="hideBottomRow" class="down-arrow-inverted" @click="toggleBottomRow"></a>
         <v-card>
           <StructuralVariationsPivotComparisonTable></StructuralVariationsPivotComparisonTable>
         </v-card>
       </v-col>
     </v-row>
-    <v-row class="bottom-row" v-show="!hideBottomRow">
-      <v-col :cols="assembliesTableCols" v-show="assembliesTableCols > 0">
-        <a class="right-arrow" @click="moveColsRight" v-show="pivotDetailsCols > 0"></a>
-        <a class="right-arrow-inverted" @click="moveColsLeft" v-show="pivotDetailsCols === 0"></a>
+    <v-row v-show="!hideBottomRow" class="bottom-row">
+      <v-col v-show="assembliesTableCols > 0" :cols="assembliesTableCols">
+        <a v-show="pivotDetailsCols > 0" class="right-arrow" @click="moveColsRight"></a>
+        <a v-show="pivotDetailsCols === 0" class="right-arrow-inverted" @click="moveColsLeft"></a>
         <v-card>
           <StructuralVariationsAssembliesTable></StructuralVariationsAssembliesTable>
         </v-card>
       </v-col>
-      <v-col :cols="pivotDetailsCols" v-show="pivotDetailsCols > 0">
-        <a class="left-arrow" @click="moveColsLeft" v-show="assembliesTableCols > 0"></a>
-        <a class="left-arrow-inverted" @click="moveColsRight" v-show="assembliesTableCols === 0"></a>
+      <v-col v-show="pivotDetailsCols > 0" :cols="pivotDetailsCols">
+        <a v-show="assembliesTableCols > 0" class="left-arrow" @click="moveColsLeft"></a>
+        <a v-show="assembliesTableCols === 0" class="left-arrow-inverted" @click="moveColsRight"></a>
         <v-card>
           <StructuralVariationsPivotDetails></StructuralVariationsPivotDetails>
         </v-card>
@@ -76,7 +76,7 @@ export default defineComponent({
       hideBottomRow,
 
       toggleTopRow,
-      toggleBottomRow,
+      toggleBottomRow
     };
   }
 });
@@ -87,16 +87,19 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   height: 100%;
+
   > .v-row {
     margin: 0.25rem;
     position: relative;
     overflow: visible;
     flex-grow: 1;
     flex-shrink: 1;
+
     > .v-col {
       position: relative;
       overflow: visible;
       height: 100%;
+
       > .v-card {
         padding: 1rem;
         position: relative;
@@ -128,11 +131,12 @@ export default defineComponent({
 
 .left-arrow, .right-arrow, .up-arrow, .down-arrow {
   &, &-inverted {
-  display: block;
-  position: absolute;
-  z-index: 3;
-  width: 1.5rem;
-  height: 1.5rem;
+    display: block;
+    position: absolute;
+    z-index: 3;
+    width: 1.5rem;
+    height: 1.5rem;
+
     &::after {
       content: "";
       display: block;
@@ -192,7 +196,6 @@ export default defineComponent({
     border-left: 0 solid transparent !important;
   }
 }
-
 
 
 .up-arrow, .down-arrow {

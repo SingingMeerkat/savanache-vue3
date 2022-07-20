@@ -15,7 +15,7 @@
       <tr v-for="row in rows" :key="`row-${row.name}`" @click.stop="selectRow(row)">
         <td>
           <v-checkbox
-            :model-value="selectedAssemblies[row.name]"
+            :model-value="selectedAssemblyNameKeys[row.name]"
             density="compact"
             hide-details
             inline
@@ -45,7 +45,7 @@ export default defineComponent({
   components: {},
   setup() {
     const store = useStore();
-    const selectedAssemblies = reactiveVuex(store, "selectedAssemblies", "setSelectedAssemblies");
+    const selectedAssemblyNameKeys = reactiveVuex(store, "selectedAssemblyNameKeys", "setselectedAssemblyNameKeys");
 
     const paths = ref([]);
 
@@ -61,15 +61,15 @@ export default defineComponent({
     });
 
 
-    // const selectedAssemblies = reactiveVuexObject(store.state.selectedAssemblies, store.commit, "setSelectedAssemblies");
+    // const selectedAssemblyNameKeys = reactiveVuexObject(store.state.selectedAssemblyNameKeys, store.commit, "setselectedAssemblyNameKeys");
 
     const allSelected = computed({
-      get: () => paths.value.every((path) => selectedAssemblies.value[path.name]),
-      set: (value) => paths.value.forEach((path) => (selectedAssemblies.value[path.name] = value))
+      get: () => paths.value.every((path) => selectedAssemblyNameKeys.value[path.name]),
+      set: (value) => paths.value.forEach((path) => (selectedAssemblyNameKeys.value[path.name] = value))
     });
 
     const selectRow = (row) => {
-      selectedAssemblies.value[row.name] = !selectedAssemblies.value[row.name];
+      selectedAssemblyNameKeys.value[row.name] = !selectedAssemblyNameKeys.value[row.name];
     };
 
     const columns = [
@@ -89,7 +89,7 @@ export default defineComponent({
       rows: paths,
       columns,
       allSelected,
-      selectedAssemblies,
+      selectedAssemblyNameKeys,
       selectRow
     };
   }

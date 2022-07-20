@@ -2,91 +2,91 @@
   <div class="structural-variations-details">
 
 
-        <div v-if="selectedBlock.pivot && selectedBlock.assembly && selectedBlock.block"
-             class="data-area d-flex flex-row">
+    <div v-if="selectedBlock.pivotName && selectedBlock.assemblyName && selectedBlock.blockName"
+         class="data-area d-flex flex-row">
 
-          <!-- "Header" column -->
-          <div class="data-labels col-2 d-flex flex-column pt-2">
+      <!-- "Header" column -->
+      <div class="data-labels col-2 d-flex flex-column pt-2">
 
-            <div class="data-label elevation-1 px-3">
-              {{ assemblyName }}
-            </div>
+        <div class="data-label elevation-1 px-3">
+          {{ assemblyName }}
+        </div>
 
-            <div class="data-label elevation-1 px-3">
-            </div>
+        <div class="data-label elevation-1 px-3">
+        </div>
 
-            <div class="data-label elevation-1 px-3">
-              {{ pivotName }}
-            </div>
+        <div class="data-label elevation-1 px-3">
+          {{ pivotName }}
+        </div>
 
-          </div>
-          <!-- "Data" column rows -->
-          <div class="data-block-rows col-10 d-flex flex-column pt-2" ref="dataBlockRowsRef">
+      </div>
+      <!-- "Data" column rows -->
+      <div ref="dataBlockRowsRef" class="data-block-rows col-10 d-flex flex-column pt-2">
 
-            <div class="data-block-row d-flex flex-row">
-              <div :style="{ left: assemblyOffset+'px' }" class="block-wrapper">
-                <div v-for="(assemblyStep, asIndex) in assemblySteps"
-                     :key="`assembly-row-${assemblyName}-step-${assemblyStep.name}-${asIndex}`"
-                     :class="['data-block-column', `block-${asIndex % 2}`, ...assemblyStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`), ...assemblyStep.blockTypes.map(style => `block-type-${style.toLowerCase()}`)]"
-                     :style="assemblyStep.blockStyles"
-                >
-                  <!--                  <div :class="[`assembly-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-text-${blockType}-${asIndex}-${btIndex}`">-->
-                  <!--                  </div>-->
-                  <div class="block-label">
-                    {{ assemblyStep.name }}
-                  </div>
-                  <!--                  <div :class="[`assembly-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-${blockType}-${asIndex}-${btIndex}`">-->
-                  <!--                    [{{ blockType }}]-->
-                  <!--                  </div>-->
-                </div>
+        <div class="data-block-row d-flex flex-row">
+          <div :style="{ left: assemblyOffset+'px' }" class="block-wrapper">
+            <div v-for="(assemblyStep, asIndex) in assemblySteps"
+                 :key="`assembly-row-${assemblyName}-step-${assemblyStep.name}-${asIndex}`"
+                 :class="['data-block-column', `block-${asIndex % 2}`, ...assemblyStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`), ...assemblyStep.blockTypes.map(style => `block-type-${style.toLowerCase()}`)]"
+                 :style="assemblyStep.blockStyles"
+            >
+              <!--                  <div :class="[`assembly-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-text-${blockType}-${asIndex}-${btIndex}`">-->
+              <!--                  </div>-->
+              <div class="block-label">
+                {{ assemblyStep.name }}
               </div>
-            </div>
-
-            <div class="data-block-row d-flex flex-row">
-              <div v-for="(visualStep, vsIndex) in visualSteps"
-                   :key="`visual-row-step-${visualStep.name}-${vsIndex}`"
-                   :class="['visual-block', 'data-block-column', `block-${vsIndex % 2}`, `elevation-1`, ...visualStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`)]"
-                   :style="visualStep.blockStyles"
-              >
-                <div v-for="(blockType, btIndex) in visualStep.blockTypes"
-                     :key="`visual-step-${visualStep.name}-block-type-text-${blockType}-${vsIndex}-${btIndex}`"
-                     :class="[`visual-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]">
-                </div>
-              </div>
-            </div>
-
-            <div class="data-block-row d-flex flex-row">
-              <div :style="{ left: pivotOffset+'px' }" class="block-wrapper">
-                <div v-for="(pivotStep, psIndex) in pivotSteps"
-                     :key="`pivot-row-${pivotName}-step-${pivotStep.name}-${psIndex}`"
-                     :class="['data-block-column', `block-${psIndex % 2}`, ...pivotStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`), ...pivotStep.blockTypes.map(style => `block-type-${style.toLowerCase()}`)]"
-                     :style="pivotStep.blockStyles"
-                >
-                  <!--                  <div :class="[`pivot-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-text-${blockType}-${psIndex}-${btIndex}`">-->
-                  <!--                  </div>-->
-                  <div class="block-label">
-                    {{ pivotStep.name }}
-                  </div>
-                  <!--                  <div :class="[`pivot-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-${blockType}-${psIndex}-${btIndex}`">-->
-                  <!--                    [{{ blockType }}]-->
-                  <!--                  </div>-->
-
-                </div>
-              </div>
+              <!--                  <div :class="[`assembly-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-${blockType}-${asIndex}-${btIndex}`">-->
+              <!--                    [{{ blockType }}]-->
+              <!--                  </div>-->
             </div>
           </div>
         </div>
+
+        <div class="data-block-row d-flex flex-row">
+          <div v-for="(visualStep, vsIndex) in visualSteps"
+               :key="`visual-row-step-${visualStep.name}-${vsIndex}`"
+               :class="['visual-block', 'data-block-column', `block-${vsIndex % 2}`, `elevation-1`, ...visualStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`)]"
+               :style="visualStep.blockStyles"
+          >
+            <div v-for="(blockType, btIndex) in visualStep.blockTypes"
+                 :key="`visual-step-${visualStep.name}-block-type-text-${blockType}-${vsIndex}-${btIndex}`"
+                 :class="[`visual-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]">
+            </div>
+          </div>
+        </div>
+
+        <div class="data-block-row d-flex flex-row">
+          <div :style="{ left: pivotOffset+'px' }" class="block-wrapper">
+            <div v-for="(pivotStep, psIndex) in pivotSteps"
+                 :key="`pivot-row-${pivotName}-step-${pivotStep.name}-${psIndex}`"
+                 :class="['data-block-column', `block-${psIndex % 2}`, ...pivotStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`), ...pivotStep.blockTypes.map(style => `block-type-${style.toLowerCase()}`)]"
+                 :style="pivotStep.blockStyles"
+            >
+              <!--                  <div :class="[`pivot-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-text-${blockType}-${psIndex}-${btIndex}`">-->
+              <!--                  </div>-->
+              <div class="block-label">
+                {{ pivotStep.name }}
+              </div>
+              <!--                  <div :class="[`pivot-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-${blockType}-${psIndex}-${btIndex}`">-->
+              <!--                    [{{ blockType }}]-->
+              <!--                  </div>-->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 
-import { computed, defineComponent, onMounted, ref, watch } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
 import { reactiveVuex } from "@/store/helper";
 import { calculateOffset, isSelectedStep, newVisualStep } from "@/helpers/pivot-details";
-// import {selectedAssemblies, selectedChromosome, selectedPivot} from '@/data/some-data-source';
+// import {selectedAssemblyNameKeys, selectedChromosome, selectedPivotName} from '@/data/some-data-source';
 
 export default defineComponent({
   name: "StructuralVariationsPivotDetails",
@@ -95,9 +95,9 @@ export default defineComponent({
     const dataBlockRowsRef = ref(null);
 
     const store = useStore();
-    const selectedPivot = reactiveVuex(store, "selectedPivot", "setSelectedPivot");
-    const selectedAssemblies = reactiveVuex(store, "selectedAssemblies", "setSelectedAssemblies");
-    const selectedSVs = reactiveVuex(store, "selectedSVs", "setSelectedSVs");
+    const selectedPivotName = reactiveVuex(store, "selectedPivotName", "setselectedPivotName");
+    const selectedAssemblyNameKeys = reactiveVuex(store, "selectedAssemblyNameKeys", "setselectedAssemblyNameKeys");
+    const selectedSVTypeNames = reactiveVuex(store, "selectedSVTypeNames", "setselectedSVTypeNames");
     const selectedBlock = reactiveVuex(store, "selectedBlock", "setSelectedBlock");
 
     const paths = ref({});
@@ -144,25 +144,25 @@ export default defineComponent({
 
       selectedBlockPivotPath.steps.forEach(step => {
 
-        console.log('step.panBlock', step.panBlock, 'step', step);
+        console.log("step.panBlock", step.panBlock, "step", step);
 
         const panBlock = pangenome.value.panSkeleton[step.panBlock];
 
-        console.log('selectedBlock.value.assembly', selectedBlock.value.assembly, 'panBlock.traversals', panBlock.traversals);
+        console.log("selectedBlock.value.assembly", selectedBlock.value.assembly, "panBlock.traversals", panBlock.traversals);
 
         const otherIndex = panBlock.traversals[selectedBlock.value.assembly];
 
-        console.log('otherIndex', otherIndex, 'selectedBlockAssemblyPath', selectedBlockAssemblyPath, 'selectedBlockAssemblyPath.steps', selectedBlockAssemblyPath.steps);
+        console.log("otherIndex", otherIndex, "selectedBlockAssemblyPath", selectedBlockAssemblyPath, "selectedBlockAssemblyPath.steps", selectedBlockAssemblyPath.steps);
 
         const otherPanBlock = selectedBlockAssemblyPath.steps[otherIndex];
 
-        const pivotPathNodes = pivots.value[selectedBlock.value.pivot];
+        const pivotPathnodes = pivots.value[selectedBlock.value.pivot];
 
-        const pivotPathNode = pivotPathNodes[step.panBlock][selectedBlock.value.assembly];
+        const pivotPathNode = pivotPathnodes[step.panBlock][selectedBlock.value.assembly];
 
-        const blockTypes = pivotPathNode ? Object.entries(pivotPathNode).filter(([key, value]) => value && typeof value !== "object" && key !== "Insertion").map(([key]) => key) : [];
+        const blockTypes = pivotPathNode ? Object.entries(pivotPathNode).filter(([key, value]) => value && typeof value !== "object" && key !== "insertion").map(([key]) => key) : [];
 
-        console.log('step.panBlock', step.panBlock, 'otherPanBlock', otherPanBlock, 'selectedBlock', selectedBlock.value);
+        console.log("step.panBlock", step.panBlock, "otherPanBlock", otherPanBlock, "selectedBlock", selectedBlock.value);
 
         const offsets = calculateOffset({
           step,
@@ -170,7 +170,7 @@ export default defineComponent({
           selectedBlock
         });
 
-        console.log('OFFSETS', JSON.stringify(offsets));
+        console.log("OFFSETS", JSON.stringify(offsets));
 
         if (selectedBlock.value.block === step.panBlock) {
           assemblyOffset.value = offsets.assemblyOffset;
@@ -179,12 +179,12 @@ export default defineComponent({
 
           if (dataBlockRowsRef.value) {
             const proportions = ((dataBlockRowsRef.value.clientWidth / 3) - (panBlock.length / (4 * 3)));
-            console.log('scrollOffset.value', scrollOffset.value, 'panBlock.length', panBlock.length, 'dataBlockRowsRef.value.clientWidth', dataBlockRowsRef.value.clientWidth, 'proportions', proportions);
+            console.log("scrollOffset.value", scrollOffset.value, "panBlock.length", panBlock.length, "dataBlockRowsRef.value.clientWidth", dataBlockRowsRef.value.clientWidth, "proportions", proportions);
             dataBlockRowsRef.value.scrollLeft = scrollOffset.value - proportions;
           } else {
             setTimeout(() => {
               const proportions = ((dataBlockRowsRef.value.clientWidth / 3) - (panBlock.length / (4 * 3)));
-              console.log('scrollOffset.value', scrollOffset.value, 'panBlock.length', panBlock.length, 'dataBlockRowsRef.value.clientWidth', dataBlockRowsRef.value.clientWidth, 'proportions', proportions);
+              console.log("scrollOffset.value", scrollOffset.value, "panBlock.length", panBlock.length, "dataBlockRowsRef.value.clientWidth", dataBlockRowsRef.value.clientWidth, "proportions", proportions);
               dataBlockRowsRef.value.scrollLeft = scrollOffset.value - proportions;
             }, 100);
           }
@@ -221,19 +221,19 @@ export default defineComponent({
           let pivotPathNode = null;
           let reversePanBlock = "";
 
-          const pivotPathNodes = pivots.value[selectedBlock.value.pivot];
+          const pivotPathnodes = pivots.value[selectedBlock.value.pivot];
 
-          if (pivotPathNodes[step.panBlock]) {
+          if (pivotPathnodes[step.panBlock]) {
 
             // Make it so the block that has the "insert" property on it, doesn't show up as "the" insert (the block before it should show up as the insert)
-            pivotPathNode = { ...pivotPathNodes[step.panBlock][selectedBlock.value.assembly], Insertion: undefined };
+            pivotPathNode = { ...pivotPathnodes[step.panBlock][selectedBlock.value.assembly], insertion: undefined };
           } else {
             // Grab all the kinds of structural variations on the pivot (They are key:value pairs, either boolean, or string (start, end, etc.))
             Object.entries(pivots.value[selectedBlock.value.pivot]).every(([key, value]) => {
               const thing = value[selectedBlock.value.assembly];
-              if (thing.Nodes && thing.Nodes.includes(step.panBlock)) {
+              if (thing.nodes && thing.nodes.includes(step.panBlock)) {
                 reversePanBlock = key;
-                pivotPathNode = { ...thing, cooccurrence: undefined };
+                pivotPathNode = { ...thing, dupe: undefined };
                 return selectedBlock.value.block !== key;
               }
               return true;
@@ -241,8 +241,8 @@ export default defineComponent({
           }
           const blockTypes = pivotPathNode ? Object.entries(pivotPathNode).filter(([key, value]) => value && typeof value !== "object").map(([key, value]) => key) : [];
 
-          if (panBlock.cooccurrences.length && !blockTypes.includes("cooccurrence")) {
-            blockTypes.push("cooccurrence");
+          if (panBlock.dupes.length && !blockTypes.includes("dupe")) {
+            blockTypes.push("dupe");
           }
 
           const selected = isSelectedStep({
@@ -277,7 +277,7 @@ export default defineComponent({
       assemblyOffset,
       pivotOffset,
       scrollOffset,
-      dataBlockRowsRef,
+      dataBlockRowsRef
     };
   }
 });
@@ -409,12 +409,12 @@ export default defineComponent({
   color: black;
 }
 
-.block-type-inversion, .block-type-inversionchain {
+.block-type-inversion, .block-type-inversionChain {
   background: #9D0D0D !important;
   color: white;
 }
 
-.block-type-cooccurrence {
+.block-type-dupe {
   background: #0086CA !important;
   color: white;
 }
@@ -424,11 +424,11 @@ export default defineComponent({
   color: white;
 }
 
-.block-type-inversion.block-type-cooccurrence, .block-type-inversionchain.block-type-cooccurrence {
+.block-type-inversion.block-type-dupe, .block-type-inversionChain.block-type-dupe {
   background: linear-gradient(0deg, #0086CA 50%, #9D0D0D 50%) !important;
 }
 
-.block-type-swap.block-type-cooccurrence {
+.block-type-swap.block-type-dupe {
   background: linear-gradient(0deg, #0086CA 50%, #8148A4 50%) !important;
 }
 
@@ -501,7 +501,7 @@ export default defineComponent({
   left: 10px;
 }
 
-.visual-block.block-type.block-type-cooccurrence {
+.visual-block.block-type.block-type-dupe {
   position: absolute;
   //width: 100%;
   left: -1px;
@@ -512,7 +512,7 @@ export default defineComponent({
   border-bottom: 2px solid #0086CA;
 }
 
-.pivot-block.block-type.block-type-cooccurrence {
+.pivot-block.block-type.block-type-dupe {
   position: absolute;
   height: calc(50% + 1px);
   left: 50%;
@@ -521,7 +521,7 @@ export default defineComponent({
   border-left: 2px solid #0086CA;
 }
 
-.assembly-block.block-type.block-type-cooccurrence {
+.assembly-block.block-type.block-type-dupe {
   position: absolute;
   height: calc(50% + 1px);
   left: 50%;
@@ -542,7 +542,7 @@ export default defineComponent({
 .block-style-fade {
   opacity: 0.5;
 
-  .visual-block.block-type.block-type-cooccurrence {
+  .visual-block.block-type.block-type-dupe {
     border-bottom-style: dashed;
   }
 }

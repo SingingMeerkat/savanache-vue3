@@ -5,14 +5,14 @@
       "traversals": {
         "Aphrodite": 0
       },
-      "cooccurrences": [
+      "dupes": [
         "Node_A_1",
         "Node_A_2",
         "Node_A_3",
         "Node_A_4",
         "Node_A_5"
       ],
-      "neighborNodes": {
+      "neighbors": {
         "before": [],
         "after": [
           "Node_A_1"
@@ -24,14 +24,14 @@
       "traversals": {
         "Aphrodite": 1
       },
-      "cooccurrences": [
+      "dupes": [
         "Node_A_0",
         "Node_A_2",
         "Node_A_3",
         "Node_A_4",
         "Node_A_5"
       ],
-      "neighborNodes": {
+      "neighbors": {
         "before": [
           "Node_A_0"
         ],
@@ -46,14 +46,14 @@
         "Aphrodite": 11,
         "Leonidas": 10
       },
-      "cooccurrences": [
+      "dupes": [
         "Node_A_0",
         "Node_A_1",
         "Node_A_3",
         "Node_A_4",
         "Node_A_5"
       ],
-      "neighborNodes": {
+      "neighbors": {
         "before": [
           "Node_J",
           "Node_L"
@@ -69,14 +69,14 @@
       "traversals": {
         "Leonidas": 11
       },
-      "cooccurrences": [
+      "dupes": [
         "Node_A_0",
         "Node_A_1",
         "Node_A_2",
         "Node_A_4",
         "Node_A_5"
       ],
-      "neighborNodes": {
+      "neighbors": {
         "before": [
           "Node_A_2"
         ],
@@ -91,14 +91,14 @@
         "Ganymede": 15,
         "Leonidas": 18
       },
-      "cooccurrences": [
+      "dupes": [
         "Node_A_0",
         "Node_A_1",
         "Node_A_2",
         "Node_A_3",
         "Node_A_5"
       ],
-      "neighborNodes": {
+      "neighbors": {
         "before": [
           "Node_U"
         ],
@@ -112,14 +112,14 @@
       "traversals": {
         "Ganymede": 16
       },
-      "cooccurrences": [
+      "dupes": [
         "Node_A_0",
         "Node_A_1",
         "Node_A_2",
         "Node_A_3",
         "Node_A_4"
       ],
-      "neighborNodes": {
+      "neighbors": {
         "before": [
           "Node_A_4"
         ],
@@ -133,8 +133,8 @@
         "Ganymede": 0,
         "Leonidas": 0
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_A_1"
         ],
@@ -150,8 +150,8 @@
       "traversals": {
         "Ganymede": 1
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_B"
         ],
@@ -166,8 +166,8 @@
         "Aphrodite": 3,
         "Ganymede": 2
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_B",
           "Node_C"
@@ -184,8 +184,8 @@
         "Ganymede": 3,
         "Leonidas": 3
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_D",
           "Node_F"
@@ -203,8 +203,8 @@
         "Ganymede": 4,
         "Leonidas": 2
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_E",
           "Node_G"
@@ -222,8 +222,8 @@
         "Ganymede": 5,
         "Leonidas": 1
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_B",
           "Node_F"
@@ -241,10 +241,10 @@
         "Ganymede": 6,
         "Leonidas": 4
       },
-      "cooccurrences": [
+      "dupes": [
         "Node_H_1"
       ],
-      "neighborNodes": {
+      "neighbors": {
         "before": [
           "Node_E",
           "Node_G"
@@ -261,10 +261,10 @@
         "Aphrodite": 8,
         "Leonidas": 5
       },
-      "cooccurrences": [
+      "dupes": [
         "Node_H_0"
       ],
-      "neighborNodes": {
+      "neighbors": {
         "before": [
           "Node_H_0"
         ],
@@ -279,8 +279,8 @@
         "Aphrodite": 9,
         "Leonidas": 6
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_H_1"
         ],
@@ -295,8 +295,8 @@
         "Aphrodite": 10,
         "Leonidas": 7
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_I"
         ],
@@ -311,8 +311,8 @@
       "traversals": {
         "Leonidas": 8
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_J"
         ],
@@ -327,8 +327,8 @@
         "Ganymede": 7,
         "Leonidas": 9
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_H",
           "Node_K"
@@ -346,8 +346,8 @@
         "Ganymede": 9,
         "Leonidas": 12
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_A_3",
           "Node_N"
@@ -365,8 +365,8 @@
         "Ganymede": 8,
         "Leonidas": 13
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_A_2",
           "Node_L",
@@ -385,8 +385,8 @@
         "Ganymede": 10,
         "Leonidas": 14
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_M",
           "Node_N"
@@ -403,8 +403,8 @@
         "Aphrodite": 15,
         "Ganymede": 11
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [],
         "after": []
       }
@@ -415,8 +415,8 @@
         "Aphrodite": 16,
         "Ganymede": 12
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_P"
         ],
@@ -431,8 +431,8 @@
         "Aphrodite": 17,
         "Ganymede": 13
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_Q"
         ],
@@ -446,8 +446,8 @@
       "traversals": {
         "Leonidas": 15
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_O"
         ],
@@ -461,8 +461,8 @@
       "traversals": {
         "Leonidas": 16
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_S"
         ],
@@ -478,8 +478,8 @@
         "Ganymede": 14,
         "Leonidas": 17
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_R",
           "Node_T"
@@ -494,8 +494,8 @@
       "traversals": {
         "Aphrodite": 19
       },
-      "cooccurrences": [],
-      "neighborNodes": {
+      "dupes": [],
+      "neighbors": {
         "before": [
           "Node_U"
         ],

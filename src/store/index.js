@@ -2,28 +2,28 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
-    selectedAssemblies: {},
-    selectedSVs: [],
-    selectedPivot: "",
-    selectedBlock: { assembly: undefined, pivot: undefined, block: undefined },
+    selectedAssemblyNameKeys: {},
+    selectedSVTypeNames: [],
+    selectedPivotName: "",
+    selectedBlock: { assemblyName: undefined, pivotName: undefined, blockName: undefined },
     lengthFilter: [0, 0],
     lengthLimit: [0, 0],
     positionFilter: [0, 0],
-    positionLimit: [0, 0],
+    positionLimit: [0, 0]
   },
   getters: {},
   mutations: {
-    setSelectedAssemblies(state, selectedAssemblies) {
-      console.log("setSelectedAssemblies", selectedAssemblies);
-      state.selectedAssemblies = selectedAssemblies;
+    setselectedAssemblyNameKeys(state, selectedAssemblyNameKeys) {
+      console.log("setselectedAssemblyNameKeys", selectedAssemblyNameKeys);
+      state.selectedAssemblyNameKeys = selectedAssemblyNameKeys;
     },
-    setSelectedSVs(state, selectedSVs) {
-      console.log("setSelectedSVs", selectedSVs);
-      state.selectedSVs = selectedSVs;
+    setselectedSVTypeNames(state, selectedSVTypeNames) {
+      console.log("setselectedSVTypeNames", selectedSVTypeNames);
+      state.selectedSVTypeNames = selectedSVTypeNames;
     },
-    setSelectedPivot(state, selectedPivot) {
-      console.log("setSelectedPivot", selectedPivot);
-      state.selectedPivot = selectedPivot;
+    setselectedPivotName(state, selectedPivotName) {
+      console.log("setselectedPivotName", selectedPivotName);
+      state.selectedPivotName = selectedPivotName;
     },
     setSelectedBlock(state, selectedBlock) {
       console.log("setSelectedBlock", selectedBlock);
@@ -44,22 +44,22 @@ export default createStore({
     setPositionLimit(state, positionLimit) {
       console.log("setPositionLimit", positionLimit);
       state.positionLimit = positionLimit;
-    },
+    }
   },
   actions: {},
   modules: {}
 });
 
-// export interface SelectedAssemblies {
+// export interface selectedAssemblyNameKeys {
 //   [k: string]: boolean;
 // }
 //
-// export type SelectedSVs = Array<string>;
+// export type selectedSVTypeNames = Array<string>;
 //
-// export type SelectedPivot = keyof Paths<never>;
+// export type selectedPivotName = keyof Paths<never>;
 //
 // export interface SelectedBlock {
 //   assembly: undefined | keyof Paths<never>;
 //   pivot: undefined | keyof Paths<never>;
-//   block: undefined | keyof PanNodes<never>;
+//   block: undefined | keyof Pannodes<never>;
 // }

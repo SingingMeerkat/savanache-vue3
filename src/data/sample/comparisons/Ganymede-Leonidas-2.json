@@ -1,7 +1,7 @@
 [
   {
     "type": "present",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_B",
         "startPosition": 0,
@@ -9,7 +9,7 @@
         "present": true
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_B",
         "startPosition": 0,
@@ -19,7 +19,7 @@
   },
   {
     "type": "disruption/absent/swap",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_C",
         "startPosition": 456,
@@ -33,7 +33,7 @@
         "absent": true
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_G",
         "startPosition": 456,
@@ -48,7 +48,7 @@
   },
   {
     "type": "present/inversion/chain/forward",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_E",
         "startPosition": 947,
@@ -71,7 +71,7 @@
         "inversion": true
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_E",
         "startPosition": 1480,
@@ -91,16 +91,16 @@
   },
   {
     "type": "present",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_H_0",
         "startPosition": 2226,
         "strand": -1,
         "present": true,
-        "cooccurrence": true
+        "dupe": true
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_H_0",
         "startPosition": 1735,
@@ -110,7 +110,7 @@
   },
   {
     "type": "disruption/insertion",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_L",
         "startPosition": 2448,
@@ -118,7 +118,7 @@
         "absent": true
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_H_1",
         "startPosition": 1957,
@@ -143,7 +143,7 @@
   },
   {
     "type": "present",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_L",
         "startPosition": 2448,
@@ -151,7 +151,7 @@
         "present": true
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_L",
         "startPosition": 2833,
@@ -161,7 +161,7 @@
   },
   {
     "type": "disruption/absent/swap",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_N",
         "startPosition": 2914,
@@ -169,7 +169,7 @@
         "absent": true
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_A_2",
         "startPosition": 3299,
@@ -184,7 +184,7 @@
   },
   {
     "type": "present/inversion/chain/backward",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_M",
         "startPosition": 3459,
@@ -200,7 +200,7 @@
         "inversion": true
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_M",
         "startPosition": 3521,
@@ -215,7 +215,7 @@
   },
   {
     "type": "present",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_O",
         "startPosition": 3627,
@@ -223,7 +223,7 @@
         "present": true
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_O",
         "startPosition": 4234,
@@ -233,7 +233,7 @@
   },
   {
     "type": "disruption/absent/swap",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_P",
         "startPosition": 4367,
@@ -253,7 +253,7 @@
         "absent": true
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_S",
         "startPosition": 4974,
@@ -268,7 +268,7 @@
   },
   {
     "type": "present",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_U",
         "startPosition": 5230,
@@ -280,10 +280,10 @@
         "startPosition": 11108,
         "strand": 1,
         "present": true,
-        "cooccurrence": true
+        "dupe": true
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       {
         "panBlock": "Node_U",
         "startPosition": 5780,
@@ -298,16 +298,16 @@
   },
   {
     "type": "disruption/other",
-    "pivotNodes": [
+    "pivotnodes": [
       {
         "panBlock": "Node_A_5",
         "startPosition": 11219,
         "strand": 1,
         "absent": true,
-        "cooccurrence": true
+        "dupe": true
       }
     ],
-    "pathNodes": [
+    "pathnodes": [
       null
     ]
   }

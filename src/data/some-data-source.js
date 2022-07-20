@@ -36,8 +36,8 @@
 //
 // const newRegion = (type) => ({
 //   type,
-//   pivotNodes: [],
-//   pathNodes: [],
+//   pivotnodes: [],
+//   pathnodes: [],
 // });
 //
 // const doThing = (pivotName, pathName, data) => {
@@ -61,15 +61,15 @@
 //     },
 //   };
 //
-//   const getcooccurrenceFor = (pivotBlock, panBlock) => {
+//   const getdupeFor = (pivotBlock, panBlock) => {
 //     // if (/_\w_\d$/.test(panBlock)) {
 //     //     debugger;
 //     // }
 //     const results = [];
-//     const cooccurrences = pivotBlock && pivotBlock.cooccurrences;
-//     if (cooccurrences) {
-//       for (let i = 0; i < cooccurrences.length; i++) {
-//         const blockName = cooccurrences[i];
+//     const dupes = pivotBlock && pivotBlock.dupes;
+//     if (dupes) {
+//       for (let i = 0; i < dupes.length; i++) {
+//         const blockName = dupes[i];
 //         const coBlock = panSkeleton[blockName];
 //         const coTraversal = coBlock.traversals[pathName];
 //         // if (/_\w_\d$/.test(panBlock)) {
@@ -105,8 +105,8 @@
 //     const inversion =
 //       pivotNode && pathNode && pivotNode.strand !== pathNode.strand;
 //
-//     const cooccurrences =
-//       pivotNode && getcooccurrenceFor(pivotBlock, pivotPanBlock);
+//     const dupes =
+//       pivotNode && getdupeFor(pivotBlock, pivotPanBlock);
 //
 //     if (present) {
 //       pivotNode.present = true;
@@ -118,8 +118,8 @@
 //       pivotNode.inversion = true;
 //     }
 //
-//     if (cooccurrences.length > 0) {
-//       pivotNode.cooccurrence = true;
+//     if (dupes.length > 0) {
+//       pivotNode.dupe = true;
 //     }
 //
 //     // debugger;
@@ -140,7 +140,7 @@
 //
 //       present,
 //       inversion,
-//       cooccurrences,
+//       dupes,
 //     };
 //   };
 //
@@ -215,13 +215,13 @@
 //     if (current.present && !current.inversion) {
 //       const type = "present";
 //
-//       // if (current.cooccurrences.length > 0) {
-//       //     type += '/cooccurrence';
+//       // if (current.dupes.length > 0) {
+//       //     type += '/dupe';
 //       // }
 //
 //       region = checkUpdateRegion(region, type);
-//       region.pivotNodes.push(current.pivotNode);
-//       region.pathNodes.push(current.pathNode);
+//       region.pivotnodes.push(current.pivotNode);
+//       region.pathnodes.push(current.pathNode);
 //
 //       pushKey(current.pivotPanBlock, type, {
 //         pathNode: current.pathPanBlock,
@@ -265,13 +265,13 @@
 //       if (testForwardPivot.length > 1) {
 //         debugger;
 //
-//         // Inversion chain! (probably?)
+//         // inversion chain! (probably?)
 //         type += "/chain/forward";
 //
 //         region = checkUpdateRegion(region, type);
 //         for (let i = 0; i < testForwardPivot.length; i++) {
-//           region.pivotNodes.push(testForwardPivot[i]);
-//           region.pathNodes.push(testForwardPath[i]);
+//           region.pivotnodes.push(testForwardPivot[i]);
+//           region.pathnodes.push(testForwardPath[i]);
 //
 //           pushKey(testForwardPivot[i].panBlock, type, {
 //             pathNode: testForwardPath[i].panBlock,
@@ -280,19 +280,19 @@
 //           });
 //         }
 //
-//         params.push("[Inversion Chain]");
+//         params.push("[inversion Chain]");
 //         pivotIndex += testForwardPivot.length - 1;
 //         pathIndex++;
 //       } else if (testBackwardPivot.length > 1) {
 //         debugger;
 //
-//         // Inversion chain! (probably?)
+//         // inversion chain! (probably?)
 //         type += "/chain/backward";
 //
 //         region = checkUpdateRegion(region, type);
 //         for (let i = 0; i < testBackwardPivot.length; i++) {
-//           region.pivotNodes.push(testBackwardPivot[i]);
-//           region.pathNodes.push(testBackwardPath[i]);
+//           region.pivotnodes.push(testBackwardPivot[i]);
+//           region.pathnodes.push(testBackwardPath[i]);
 //
 //           pushKey(testBackwardPivot[i].panBlock, type, {
 //             pathNode: testBackwardPath[i].panBlock,
@@ -301,13 +301,13 @@
 //           });
 //         }
 //
-//         params.push("[Inversion Chain]");
+//         params.push("[inversion Chain]");
 //         // pivotIndex += testBackwardPivot.length - 2;
 //         pathIndex += testBackwardPivot.length;
 //       } else {
 //         region = checkUpdateRegion(region, type);
-//         region.pivotNodes.push(current.pivotNode);
-//         region.pathNodes.push(current.pathNode);
+//         region.pivotnodes.push(current.pivotNode);
+//         region.pathnodes.push(current.pathNode);
 //
 //         pushKey(current.pivotPanBlock, type, {
 //           pathNode: current.pathPanBlock,
@@ -315,15 +315,15 @@
 //           pathIndex,
 //         });
 //
-//         params.push("[Inversion]");
+//         params.push("[inversion]");
 //         pathIndex++;
 //       }
 //
 //       // } else if (current.pathIndexFromPivotBlock === undefined && current.pivotIndexFromPathBlock === undefined) {
 //       //     region = checkUpdateRegion(region, 'swap');
-//       //     region.pivotNodes.push(current.pivotNode);
-//       //     region.pathNodes.push(current.pathNode);
-//       //     params.push('[Swap]');
+//       //     region.pivotnodes.push(current.pivotNode);
+//       //     region.pathnodes.push(current.pathNode);
+//       //     params.push('[swap]');
 //       //     pathIndex++;
 //     } else {
 //       let type = "disruption";
@@ -336,7 +336,7 @@
 //       // Pivot block doesn't exist in path, but path block exists in pivot
 //       // It's an absence
 //       // region = checkUpdateRegion(region, 'absence');
-//       // region.pivotNodes.push(current.pivotNode);
+//       // region.pivotnodes.push(current.pivotNode);
 //
 //       const trackedPivotBlocks = [];
 //       const trackedPathBlocks = [];
@@ -429,15 +429,15 @@
 //           // debugger;
 //           type += "/absent/swap";
 //
-//           // if (current.cooccurrences.length > 0) {
-//           //     type += '/cooccurrence';
+//           // if (current.dupes.length > 0) {
+//           //     type += '/dupe';
 //           // }
 //
 //           region = checkUpdateRegion(region, type);
-//           params.push("[Swap]");
+//           params.push("[swap]");
 //           for (let i = pivotIndex; i < foundPathBlockIndexInPivot; i++) {
 //             const gap = getPropsFor(i, pathIndex);
-//             region.pivotNodes.push(gap.pivotNode);
+//             region.pivotnodes.push(gap.pivotNode);
 //
 //             pushKey(gap.pivotPanBlock, type, {
 //               pathNode: current.pathPanBlock,
@@ -447,7 +447,7 @@
 //           }
 //           for (let i = pathIndex; i < foundPivotBlockIndexInPath; i++) {
 //             const gap = getPropsFor(pivotIndex, i);
-//             region.pathNodes.push(gap.pathNode);
+//             region.pathnodes.push(gap.pathNode);
 //
 //             pushKey(current.pivotPanBlock, type, {
 //               pathNode: gap.pathPanBlock,
@@ -468,15 +468,15 @@
 //           // debugger;
 //           type += "/insertion";
 //
-//           // if (current.cooccurrences.length > 0) {
-//           //     type += '/cooccurrence';
+//           // if (current.dupes.length > 0) {
+//           //     type += '/dupe';
 //           // }
 //
 //           region = checkUpdateRegion(region, type);
-//           params.push("[Insertion]");
+//           params.push("[insertion]");
 //           for (let i = pivotIndex; i <= foundPathBlockIndexInPivot; i++) {
 //             const gap = getPropsFor(i, pathIndex);
-//             region.pivotNodes.push(gap.pivotNode);
+//             region.pivotnodes.push(gap.pivotNode);
 //
 //             pushKey(gap.pivotPanBlock, type, {
 //               pathNode: current.pathPanBlock,
@@ -486,7 +486,7 @@
 //           }
 //           for (let i = pathIndex; i < foundPivotBlockIndexInPath; i++) {
 //             const gap = getPropsFor(pivotIndex, i);
-//             region.pathNodes.push(gap.pathNode);
+//             region.pathnodes.push(gap.pathNode);
 //
 //             pushKey(current.pivotPanBlock, type, {
 //               pathNode: gap.pathPanBlock,
@@ -507,15 +507,15 @@
 //           // debugger;
 //           type += "/absent/deletion";
 //
-//           // if (current.cooccurrences.length > 0) {
-//           //     type += '/cooccurrence';
+//           // if (current.dupes.length > 0) {
+//           //     type += '/dupe';
 //           // }
 //
 //           region = checkUpdateRegion(region, type);
 //           params.push("[Deletion]");
 //           for (let i = pivotIndex; i < foundPathBlockIndexInPivot; i++) {
 //             const gap = getPropsFor(i, pathIndex);
-//             region.pivotNodes.push(gap.pivotNode);
+//             region.pivotnodes.push(gap.pivotNode);
 //
 //             pushKey(gap.pivotPanBlock, type, {
 //               pathNode: current.pathPanBlock,
@@ -525,7 +525,7 @@
 //           }
 //           for (let i = pathIndex; i < foundPivotBlockIndexInPath; i++) {
 //             const gap = getPropsFor(pivotIndex, i);
-//             region.pathNodes.push(gap.pathNode);
+//             region.pathnodes.push(gap.pathNode);
 //
 //             pushKey(current.pivotPanBlock, type, {
 //               pathNode: gap.pathPanBlock,
@@ -547,15 +547,15 @@
 //           // debugger;
 //           type += "/translocation";
 //
-//           // if (current.cooccurrences.length > 0) {
-//           //     type += '/cooccurrence';
+//           // if (current.dupes.length > 0) {
+//           //     type += '/dupe';
 //           // }
 //
 //           region = checkUpdateRegion(region, type);
 //           params.push("[Translocation]");
 //           for (let i = pivotIndex; i <= foundPathBlockIndexInPivot; i++) {
 //             const gap = getPropsFor(i, pathIndex);
-//             region.pivotNodes.push(gap.pivotNode);
+//             region.pivotnodes.push(gap.pivotNode);
 //
 //             pushKey(gap.pivotPanBlock, type, {
 //               pathNode: current.pathPanBlock,
@@ -565,7 +565,7 @@
 //           }
 //           for (let i = pathIndex; i <= foundPivotBlockIndexInPath; i++) {
 //             const gap = getPropsFor(pivotIndex, i);
-//             region.pathNodes.push(gap.pathNode);
+//             region.pathnodes.push(gap.pathNode);
 //
 //             pushKey(current.pivotPanBlock, type, {
 //               pathNode: gap.pathPanBlock,
@@ -585,14 +585,14 @@
 //
 //         type += "/other";
 //
-//         // if (current.cooccurrences.length > 0) {
-//         //     type += '/cooccurrence';
+//         // if (current.dupes.length > 0) {
+//         //     type += '/dupe';
 //         // }
 //         // what else did I miss?
 //         // Case 1: At end of pivot array and it's a swap
 //         region = checkUpdateRegion(region, type);
-//         region.pivotNodes.push(current.pivotNode);
-//         region.pathNodes.push(current.pathNode);
+//         region.pivotnodes.push(current.pivotNode);
+//         region.pathnodes.push(current.pathNode);
 //
 //         pushKey(current.pivotPanBlock, type, {
 //           pathNode: current.pathPanBlock,
@@ -600,7 +600,7 @@
 //           pathIndex,
 //         });
 //
-//         params.push("[Swap]");
+//         params.push("[swap]");
 //         pathIndex++;
 //         debugger;
 //       }
@@ -643,7 +643,7 @@
 //   );
 // };
 //
-// const isInsertion = (pivotName, pivotNode, pathName, pathNode, panSkeleton) => {
+// const isinsertion = (pivotName, pivotNode, pathName, pathNode, panSkeleton) => {
 //   const pivotBlock = panSkeleton[pivotNode.panBlock];
 //   const pathBlock = panSkeleton[pathNode.panBlock];
 //   const pivotIndexInPathBlock = pathBlock.traversals[pivotName];
@@ -654,7 +654,7 @@
 //   );
 // };
 //
-// const isSwap = (pivotName, pivotNode, pathName, pathNode, panSkeleton) => {
+// const isswap = (pivotName, pivotNode, pathName, pathNode, panSkeleton) => {
 //   const pivotBlock = panSkeleton[pivotNode.panBlock];
 //   const pathBlock = panSkeleton[pathNode.panBlock];
 //   const pivotIndexInPathBlock = pathBlock.traversals[pivotName];
@@ -665,7 +665,7 @@
 //   );
 // };
 //
-// const iscooccurrence = (
+// const isdupe = (
 //   pivotName,
 //   pivotNode,
 //   pathName,
@@ -679,14 +679,14 @@
 //   // TODO
 // };
 //
-// const isInversion = (pivotNode, pathNode) => {
+// const isinversion = (pivotNode, pathNode) => {
 //   return (
 //     pivotNode.panBlock === pathNode.panBlock &&
 //     pivotNode.strand !== pathNode.strand
 //   );
 // };
 //
-// const isInversionChain = () => {
+// const isinversionChain = () => {
 //   // TODO
 // };
 //
@@ -710,10 +710,10 @@
 //   );
 // };
 //
-// const getcooccurrences = (node, panSkeleton) => {
+// const getdupes = (node, panSkeleton) => {
 //   const block = panSkeleton[node.panBlock];
-//   if (block && block.cooccurrences) {
-//     return block.cooccurrences.map((panBlock) => panSkeleton[panBlock]);
+//   if (block && block.dupes) {
+//     return block.dupes.map((panBlock) => panSkeleton[panBlock]);
 //   }
 // };
 //

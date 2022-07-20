@@ -6,16 +6,16 @@
       "length": 33333,
       "traversals": {
         // We assume a panNode can be traversed only once by a genome
-        // cooccurrences would create new nodes
+        // dupes would create new nodes
         "assemblyNameA": indexOfPosInPathA,
         "assemblyNameB": indexOfPosInPathB
       },
-      // Assuming N panNodes / panBlocks...
-      "cooccurrences": (panID_1,
+      // Assuming N pannodes / panBlocks...
+      "dupes": (panID_1,
       panID_2,
       ...
       panID_N),
-      "neighborNodes": {
+      "neighbors": {
         // Is it needed, though?
         "before": (panID_A,
         panID_B...),
@@ -31,7 +31,7 @@
   "paths": {
     // A path
     "assembly_A": {
-      "nodeSuccession": [
+      "nodesuccession": [
         // or steps
         {
           "panBlock": panID_x,
@@ -65,16 +65,16 @@
 },
 ,,,
 {
-"cooccurrence": {...},
+"dupe": {...},
 "insertion": {...}
 },,
 ],
 "assembly_B": [
 {
-"cooccurrence": {...}
+"dupe": {...}
 },,
 {
-"cooccurrence": {...},
+"dupe": {...},
 "deletion": {...},
 "inversion": {
 ...
@@ -93,7 +93,7 @@
 }
 // What structure per type? What properties for each?
 {
-"cooccurrence": {
+"dupe": {
 },
 "deletion": {
 },
