@@ -11,224 +11,363 @@ export const getData = () => {
 };
 
 
+const enumeratePangenomePathsOuterLoop = ({
+                                            pangenomeImport,
+                                            pivotsImport,
+                                            pivotPathName,
+                                            pivotPathData
+                                          }) => {
+
+  Object.entries(pangenomeImport.paths).forEach(([comparisonPathName, comparisonPathData]) => enumeratePangenomePathsInnerLoop({
+    pangenomeImport,
+    pivotsImport,
+    pivotPathName,
+    pivotPathData,
+    comparisonPathName,
+    comparisonPathData
+  }));
+
+  console.log('pivotPathName', pivotPathName);
+  console.log(pivotsImport);
+  // debugger;
+};
+
+
+const enumeratePangenomePathsInnerLoop = ({
+                                            pangenomeImport,
+                                            pivotsImport,
+                                            pivotPathName,
+                                            pivotPathData,
+                                            comparisonPathName,
+                                            comparisonPathData
+                                          }) => {
+
+
+  if (pivotPathName === comparisonPathName) {
+    return;
+  }
+
+  const pivotName = `${pivotPathName}#${comparisonPathName}`;
+
+  if (!pivotsImport[pivotName]) {
+    pivotsImport[pivotName] = [];
+  }
+
+  const pivot = pivotsImport[pivotName];
+
+  let lastPivotStep;
+
+  let lastPresentPivotStep;
+  let firstAbsentPivotStepAfterLastPresentPivotStep;
+
+  let lastAbsentPivotStep;
+  let lastAbsentPivotStepBeforeLastPresentPivotStep;
+
+  pivotPathData.steps.forEach((pivotPathStep, pivotPathStepsIndex) => {
+
+    const stepResult = enumeratePivotDataPathSteps({
+      pivot,
+      comparisonPathData,
+      pangenomeImport,
+      pivotPathStep,
+      pivotPathStepsIndex,
+
+      lastPivotStep,
+      lastPresentPivotStep,
+      lastAbsentPivotStep,
+      lastAbsentPivotStepBeforeLastPresentPivotStep,
+      firstAbsentPivotStepAfterLastPresentPivotStep
+    });
+
+    lastPivotStep = stepResult.lastPivotStep;
+    lastPresentPivotStep = stepResult.lastPresentPivotStep;
+    lastAbsentPivotStep = stepResult.lastAbsentPivotStep;
+    lastAbsentPivotStepBeforeLastPresentPivotStep = stepResult.lastAbsentPivotStepBeforeLastPresentPivotStep;
+    firstAbsentPivotStepAfterLastPresentPivotStep = stepResult.firstAbsentPivotStepAfterLastPresentPivotStep;
+  });
+
+  console.log('pivotPathName', pivotPathName, 'comparisonPathName', comparisonPathName);
+  console.log(pivotsImport);
+  // debugger;
+
+};
+
+const enumeratePivotDataPathSteps = ({
+                                       pivot,
+                                       firstAbsentPivotStepAfterLastPresentPivotStep,
+                                       lastAbsentPivotStepBeforeLastPresentPivotStep,
+                                       lastAbsentPivotStep,
+                                       lastPivotStep,
+                                       lastPresentPivotStep,
+                                       comparisonPathData,
+                                       pangenomeImport,
+                                       pivotPathStep,
+                                       pivotPathStepsIndex
+                                     }) => {
+  const pivotPathStepSkeletonBlock = pangenomeImport.panSkeleton[pivotPathStep.panBlock];
+  const pivotStep = {
+    panBlock: pivotPathStep.panBlock,
+    pivotStepIndex: pivotPathStepsIndex
+  };
+  pivot.push(pivotStep);
+
+  let lastComparisonPathStep;
+  comparisonPathData.steps.forEach((comparisonPathStep, comparisonPathStepsIndex) => {
+
+    const comparisonStepResult = enumerateComparisonDataPathSteps({
+      pivotPathStepSkeletonBlock,
+      pivotStep,
+      pangenomeImport,
+      comparisonPathStep,
+      lastComparisonPathStep,
+      comparisonPathStepsIndex,
+      pivotPathStepsIndex,
+      pivotPathStep,
+      lastPivotStep,
+      comparisonPathData,
+    });
+
+    lastComparisonPathStep = comparisonStepResult.lastComparisonPathStep;
+  });
+
+  // console.log("PRE", "\n\tpivotStep\t", pivotStep && pivotStep.panBlock, "\n\tlastPivotStep\t", lastPivotStep && lastPivotStep.panBlock, "\n\tlastPresentPivotStep\t", lastPresentPivotStep && lastPresentPivotStep.panBlock, "\n\tlastAbsentPivotStep\t", lastAbsentPivotStep && lastAbsentPivotStep.panBlock, "\n\tfirstAbsentPivotStepAfterLastPresentPivotStep\t", firstAbsentPivotStepAfterLastPresentPivotStep && firstAbsentPivotStepAfterLastPresentPivotStep.panBlock, "\n\tlastAbsentPivotStepBeforeLastPresentPivotStep\t", lastAbsentPivotStepBeforeLastPresentPivotStep && lastAbsentPivotStepBeforeLastPresentPivotStep.panBlock);
+
+  if (!pivotStep.present) {
+    if (lastPivotStep && lastPivotStep.present) {
+      firstAbsentPivotStepAfterLastPresentPivotStep = pivotStep;
+      firstAbsentPivotStepAfterLastPresentPivotStep.swapOrDelete = "start";
+
+      const swapNode = {
+        pivotStepIndex: pivotPathStepsIndex,
+        pivotStepPanBlock: pivotPathStep.panBlock,
+      };
+
+      firstAbsentPivotStepAfterLastPresentPivotStep.swapOrDeleteNodes = [
+        swapNode
+      ];
+
+      lastAbsentPivotStepBeforeLastPresentPivotStep = null;
+    }
+  }
+
+  if (pivotStep.present) {
+    if (lastPivotStep && !lastPivotStep.present) {
+
+      if (firstAbsentPivotStepAfterLastPresentPivotStep) {
+        lastAbsentPivotStepBeforeLastPresentPivotStep = lastPivotStep;
+        lastAbsentPivotStepBeforeLastPresentPivotStep.swapOrDelete = "end";
+        lastAbsentPivotStepBeforeLastPresentPivotStep.swapOrDeleteNodes = firstAbsentPivotStepAfterLastPresentPivotStep.swapOrDeleteNodes;
+
+        const swapNode = {
+          pivotStepIndex: lastPivotStep.pivotStepIndex,
+          pivotStepPanBlock: lastPivotStep.panBlock,
+        };
+
+        if (firstAbsentPivotStepAfterLastPresentPivotStep !== lastAbsentPivotStepBeforeLastPresentPivotStep) {
+          firstAbsentPivotStepAfterLastPresentPivotStep.swapOrDeleteNodes.push(swapNode);
+        }
+
+        console.log('lastPresentPivotStep', lastPresentPivotStep && lastPresentPivotStep.comparisonStepIndex, 'pivotStep', pivotStep.comparisonStepIndex);
+
+        // There was no gap in the comparison path, so it was merely a deletion (not a swap)
+        if (lastPresentPivotStep && lastPresentPivotStep.comparisonStepIndex === pivotStep.comparisonStepIndex - 1) {
+          firstAbsentPivotStepAfterLastPresentPivotStep.deleted = firstAbsentPivotStepAfterLastPresentPivotStep.swapOrDelete;
+          lastAbsentPivotStepBeforeLastPresentPivotStep.deleted = lastAbsentPivotStepBeforeLastPresentPivotStep.swapOrDelete;
+
+          firstAbsentPivotStepAfterLastPresentPivotStep.deletedNodes = firstAbsentPivotStepAfterLastPresentPivotStep.swapOrDeleteNodes;
+          lastAbsentPivotStepBeforeLastPresentPivotStep.deletedNodes = lastAbsentPivotStepBeforeLastPresentPivotStep.swapOrDeleteNodes;
+
+          delete firstAbsentPivotStepAfterLastPresentPivotStep.swapOrDelete;
+          delete lastAbsentPivotStepBeforeLastPresentPivotStep.swapOrDelete;
+
+          delete firstAbsentPivotStepAfterLastPresentPivotStep.swapOrDeleteNodes;
+          delete lastAbsentPivotStepBeforeLastPresentPivotStep.swapOrDeleteNodes;
+
+        }
+
+        firstAbsentPivotStepAfterLastPresentPivotStep = null;
+        lastAbsentPivotStepBeforeLastPresentPivotStep = null;
+
+      }
+    }
+  }
+
+  if (!pivotStep.present) {
+    lastAbsentPivotStep = pivotStep;
+  }
+
+  if (pivotStep.present) {
+    lastPresentPivotStep = pivotStep;
+  }
+
+  lastPivotStep = pivotStep;
+
+  // console.log("POST", "\n\tpivotStep\t", pivotStep && pivotStep.panBlock, "\n\tlastPivotStep\t", lastPivotStep && lastPivotStep.panBlock, "\n\tlastPresentPivotStep\t", lastPresentPivotStep && lastPresentPivotStep.panBlock, "\n\tlastAbsentPivotStep\t", lastAbsentPivotStep && lastAbsentPivotStep.panBlock, "\n\tfirstAbsentPivotStepAfterLastPresentPivotStep\t", firstAbsentPivotStepAfterLastPresentPivotStep && firstAbsentPivotStepAfterLastPresentPivotStep.panBlock, "\n\tlastAbsentPivotStepBeforeLastPresentPivotStep\t", lastAbsentPivotStepBeforeLastPresentPivotStep && lastAbsentPivotStepBeforeLastPresentPivotStep.panBlock);
+
+  return {
+    lastPivotStep,
+    lastPresentPivotStep,
+    lastAbsentPivotStep,
+    lastAbsentPivotStepBeforeLastPresentPivotStep,
+    firstAbsentPivotStepAfterLastPresentPivotStep
+  };
+
+};
+
+const enumerateComparisonDataPathSteps = ({
+                                            pivotPathStepSkeletonBlock,
+                                            pivotStep,
+                                            pangenomeImport,
+                                            comparisonPathStep,
+                                            lastComparisonPathStep,
+                                            comparisonPathStepsIndex,
+                                            pivotPathStepsIndex,
+                                            pivotPathStep,
+                                            lastPivotStep,
+                                            comparisonPathData,
+                                          }) => {
+
+  const comparisonPathStepSkeletonBlock = pangenomeImport.panSkeleton[comparisonPathStep.panBlock];
+
+  if (pivotPathStepSkeletonBlock.dupes.includes(comparisonPathStep.panBlock)) {
+    pivotStep.dupe = true;
+    if (!pivotStep.dupeNodes) {
+      pivotStep.dupeNodes = [];
+    }
+    const dupeNode = {
+      pivotStepIndex: pivotPathStepsIndex,
+      pivotStepPanBlock: pivotPathStep.panBlock,
+      comparisonStepIndex: comparisonPathStepsIndex,
+      comparisonStepPanBlock: comparisonPathStep.panBlock
+    };
+    pivotStep.dupeNodes.push(dupeNode);
+  }
+
+  // INVERSION, INSERTION, or INVERSION CHAIN
+  if (pivotPathStep.panBlock === comparisonPathStep.panBlock) {
+    pivotStep.present = true;
+    pivotStep.comparisonStepIndex = comparisonPathStepsIndex;
+
+    // INVERSION
+    if (pivotPathStep.strand !== comparisonPathStep.strand) {
+      pivotStep.inversion = true;
+    }
+
+    if (lastPivotStep) {
+
+      // DELETION
+      if (lastPivotStep.pivotStepIndex < pivotStep.pivotStepIndex - 1) {
+        // Don't think I can detect deletion here
+        pivotStep.deletion = true;
+      }
+
+      // INSERTION
+      if (lastPivotStep.comparisonStepIndex < pivotStep.comparisonStepIndex - 1) {
+
+        pivotStep.insertion = true;
+        pivotStep.insertionNodes = [];
+
+        for (let insertionPathStepsIndex = lastPivotStep.comparisonStepIndex + 1; insertionPathStepsIndex < pivotStep.comparisonStepIndex; insertionPathStepsIndex++) {
+          const insertionPathStep = comparisonPathData.steps[insertionPathStepsIndex];
+          const insertionPathStepSkeletonBlock = pangenomeImport.panSkeleton[insertionPathStep.panBlock];
+
+          const insertionNode = {
+            pivotStepIndex: pivotPathStepsIndex,
+            pivotStepPanBlock: pivotPathStep.panBlock,
+            comparisonStepIndex: insertionPathStepsIndex,
+            comparisonStepPanBlock: insertionPathStep.panBlock,
+          };
+          pivotStep.insertionNodes.push(insertionNode);
+        }
+      }
+
+      // INVERSION CHAIN
+      // Check the comparison step indices, if the last one is higher than this one,
+      // they're decrementing as the pivot steps increment and probably an inversion chain
+      if (lastPivotStep.comparisonStepIndex === pivotStep.comparisonStepIndex + 1) {
+
+        const inversionChainNodes = lastPivotStep.inversionChainNodes || [];
+
+        lastPivotStep.inversionChainNodes = inversionChainNodes;
+        pivotStep.inversionChainNodes = inversionChainNodes;
+
+        // Current step is inside an inversion chain
+        // pivotStep.inversionChain = pivotStep.inversionChain || "";
+        pivotStep.inversionChain = true;
+
+        if (pivotStep.inversionChain && !lastPivotStep.inversionChain) {
+          // Last step was the start of this inversion chain
+          lastPivotStep.inversionChain = 'start';
+
+          const inversionChainNode = {
+            pivotStepIndex: lastPivotStep.pivotStepIndex,
+            pivotStepPanBlock: lastPivotStep.panBlock,
+            comparisonStepIndex: lastPivotStep.comparisonStepIndex,
+            comparisonStepPanBlock: lastPivotStep.panBlock
+          };
+          inversionChainNodes.push(inversionChainNode);
+
+        } else {
+          // Last step was inside an inversion chain
+          lastPivotStep.inversionChain = true;
+        }
+
+        const inversionChainNode = {
+          pivotStepIndex: pivotPathStepsIndex,
+          pivotStepPanBlock: pivotPathStep.panBlock,
+          comparisonStepIndex: comparisonPathStepsIndex,
+          comparisonStepPanBlock: comparisonPathStep.panBlock
+        };
+
+        inversionChainNodes.push(inversionChainNode);
+
+      }
+
+      if (lastPivotStep.inversionChain && !pivotStep.inversionChain) {
+        // Current step is after (outside) an inversion chain, last step was last inside the inversion chain
+        lastPivotStep.inversionChain = 'end';
+      }
+    }
+
+  } else {
+
+
+    // Detect swap and/or delete??
+
+    // console.log('\n\tpivotPathStepsIndex\t', pivotPathStepsIndex, '\n\tcomparisonPathStepsIndex\t', comparisonPathStepsIndex, '\n\tpivotStep\t', pivotStep, '\n\tlastPivotStep\t', lastPivotStep, '\n\tpivotPathStep\t', pivotPathStep, '\n\tcomparisonPathStep\t', comparisonPathStep, '\n\tlastComparisonPathStep\t', lastComparisonPathStep);
+  }
+
+  lastComparisonPathStep = comparisonPathStep;
+  
+  return { lastComparisonPathStep };
+};
+
+
 const getDataInternal = async () => {
   if (dataCache) {
     return dataCache;
   }
-  const pangenomeImport = await import(
+  const { default: pangenomeImportDefault, ...pangenomeImport } = await import(
     "../data/sample/handcrafted3AssembliesPangenome.json"
     );
 
-  const pivotsImport = await import("../data/sample/pivots.json");
+  const { default: pivotsImportDefault, ...pivotsImport } = await import("../data/sample/pivots.json");
 
-  let lastPivotStep;
-  let lastPresentPivotStep;
+  const trackedPivotNodes = {};
+  const trackedPathNodes = {};
 
-  Object.entries(pangenomeImport.paths).forEach(([pivotPathName, pivotPathData]) => {
-    Object.entries(pangenomeImport.paths).forEach(([comparePathName, comparePathData]) => {
-      if (pivotPathName === comparePathName) {
-        return;
-      }
-      const pivotName = `${pivotPathName}#${comparePathName}`;
-      if (!pivotsImport[pivotName]) {
-        pivotsImport[pivotName] = [];
-      }
-      const pivot = pivotsImport[pivotName];
-      for (let pivotPathStepsIndex = 0; pivotPathStepsIndex < pivotPathData.steps.length; pivotPathStepsIndex++) {
+  Object.entries(pangenomeImport.paths).forEach(([pivotPathName, pivotPathData]) => enumeratePangenomePathsOuterLoop({
+    pangenomeImport,
+    pivotsImport,
+    pivotPathName,
+    pivotPathData
+  }));
 
-        const pivotPathStep = pivotPathData.steps[pivotPathStepsIndex];
-        const pivotPathStepSkeletonBlock = pangenomeImport.panSkeleton[pivotPathStep.panBlock];
-        // if (!pivot[pivotPathStep.panBlock]) {
-        //   pivot[pivotPathStep.panBlock] = { panBlock: pivotPathStep.panBlock };
-        // }
-        const pivotStep = {
-          // pivotPathName,
-          // comparePathName,
-          panBlock: pivotPathStep.panBlock,
-          pivotStepIndex: pivotPathStepsIndex,
-        }; // pivot[pivotPathStep.panBlock];
-        pivot.push(pivotStep);
-
-        for (let comparePathStepsIndex = 0; comparePathStepsIndex < comparePathData.steps.length; comparePathStepsIndex++) {
-
-          const comparePathStep = comparePathData.steps[comparePathStepsIndex];
-          const comparePathStepSkeletonBlock = pangenomeImport.panSkeleton[comparePathStep.panBlock];
-
-          if (pivotPathStepSkeletonBlock.dupes.includes(comparePathStep.panBlock)) {
-            if (!pivotStep.dupes) {
-              pivotStep.dupes = [];
-            }
-            const dupe = {
-              // pivotPathName,
-              // comparePathName,
-              pivotStepIndex: pivotPathStepsIndex,
-              compareStepIndex: comparePathStepsIndex,
-              // pivotStepPanBlock: pivotPathStep.panBlock,
-              compareStepPanBlock: comparePathStep.panBlock
-            };
-            pivotStep.dupes.push(dupe);
-          }
-
-          if (pivotPathStep.panBlock === comparePathStep.panBlock) {
-            pivotStep.present = true;
-            // pivotStep.pivotStepIndex = pivotPathStepsIndex;
-            pivotStep.compareStepIndex = comparePathStepsIndex;
-            if (pivotPathStep.strand !== comparePathStep.strand) {
-              pivotStep.inversion = true;
-            }
-
-            if (lastPivotStep) {
-              if (lastPivotStep.pivotStepIndex < pivotStep.pivotStepIndex - 1 && lastPivotStep.compareStepIndex < pivotStep.compareStepIndex - 1) {
-                pivotStep.swap = true;
-                // debugger;
-              } else if (lastPivotStep.pivotStepIndex < pivotStep.pivotStepIndex - 1) {
-                pivotStep.deletion = true;
-                // debugger;
-              } else if (lastPivotStep.compareStepIndex < pivotStep.compareStepIndex - 1) {
-
-                pivotStep.insertion = true;
-                pivotStep.insertionNodes = [];
-
-                for (let insertionPathStepsIndex = lastPivotStep.compareStepIndex + 1; insertionPathStepsIndex < pivotStep.compareStepIndex; insertionPathStepsIndex++) {
-                  const insertionPathStep = comparePathData.steps[insertionPathStepsIndex];
-                  const insertionPathStepSkeletonBlock = pangenomeImport.panSkeleton[insertionPathStep.panBlock];
-
-                  const insertion = {
-                    // pivotPathName,
-                    // comparePathName,
-                    // pivotStepIndex: pivotPathStepsIndex,
-                    compareStepIndex: insertionPathStepsIndex,
-                    // pivotStepPanBlock: pivotPathStep.panBlock,
-                    compareStepPanBlock: insertionPathStep.panBlock
-                  };
-                  pivotStep.insertionNodes.push(insertion);
-                }
-                // debugger;
-              }
-              if (lastPivotStep.compareStepIndex === pivotStep.compareStepIndex + 1) {
-
-                const inversionChainNodes = lastPivotStep.inversionChainNodes || [];
-                lastPivotStep.inversionChainNodes = inversionChainNodes;
-                pivotStep.inversionChainNodes = inversionChainNodes;
-
-                pivotStep.inversionChain = true;
-
-                if (pivotStep.inversionChain && !lastPivotStep.inversionChain) {
-                  lastPivotStep.inversionChain = true;
-                  const inversionChain = {
-                    // pivotPathName,
-                    // comparePathName,
-                    pivotStepIndex: lastPivotStep.pivotStepIndex,
-                    compareStepIndex: lastPivotStep.compareStepIndex,
-                    pivotStepPanBlock: lastPivotStep.panBlock,
-                    compareStepPanBlock: lastPivotStep.panBlock,
-                  };
-                  inversionChainNodes.push(inversionChain);
-                } else {
-                  lastPivotStep.inversionChain = true;
-                }
-
-                const inversionChain = {
-                  // pivotPathName,
-                  // comparePathName,
-                  pivotStepIndex: pivotPathStepsIndex,
-                  compareStepIndex: comparePathStepsIndex,
-                  pivotStepPanBlock: pivotPathStep.panBlock,
-                  compareStepPanBlock: comparePathStep.panBlock
-                };
-                inversionChainNodes.push(inversionChain);
-
-              }
-              if (lastPivotStep.inversionChain && !pivotStep.inversionChain) {
-                lastPivotStep.inversionChain = true;
-              }
-            }
-
-            // if (lastPresentPivotStep) {
-            //   if (lastPresentPivotStep.pivotStepIndex < pivotStep.pivotStepIndex - 1 && lastPresentPivotStep.compareStepIndex < pivotStep.compareStepIndex - 1) {
-            //     pivotStep.swap = true;
-            //     // debugger;
-            //   } else if (lastPresentPivotStep.pivotStepIndex < pivotStep.pivotStepIndex - 1) {
-            //     pivotStep.deletion = true;
-            //     // debugger;
-            //   } else if (lastPresentPivotStep.compareStepIndex < pivotStep.compareStepIndex - 1) {
-            //     pivotStep.insertion = true;
-            //     // debugger;
-            //   }
-            // }
-          }
-
-        }
-
-        lastPivotStep = pivotStep;
-        if (pivotStep.present) {
-          lastPresentPivotStep = pivotStep;
-        }
-      }
-    });
-  });
   console.log(pivotsImport);
-  // console.log(JSON.stringify(pivotsImport));
   debugger;
 
-  console.log("pivotsImport.default", pivotsImport.default);
-
-  Object.entries(pivotsImport.default).forEach(([pivotName, pivot]) => {
-    // console.log('pivotName', pivotName, 'pivot', pivot);
-    Object.entries(pivot).forEach(([pivotNodeName, pivotNode]) => {
-      // console.log('pivotName', pivotName, 'pivot', pivot, 'pivotNodeName', pivotNodeName, 'pivotNode', pivotNode);
-      Object.entries(pivotNode).forEach(([pivotNodeComparisonPathName, pivotNodeComparisonPath]) => {
-        const pathComparisonProps = Object.entries(pivotNodeComparisonPath);
-        console.log("pivotName", pivotName, "pivot", pivot, "pivotNodeName", pivotNodeName, "pivotNode", pivotNode, "pivotNodeComparisonPathName", pivotNodeComparisonPathName, "pivotNodeComparisonPath", pivotNodeComparisonPath, "pathComparisonProps", pathComparisonProps);
-        pivotNodeComparisonPath.variationLength = 0;
-        if (pathComparisonProps.length > 1 || !pivotNodeComparisonPath.present) {
-          pivotNodeComparisonPath.variationLength = pangenomeImport.panSkeleton[pivotNodeName].length;
-          if (!pivotNodeComparisonPath.nodes || !pivotNodeComparisonPath.nodes.length) {
-            pivotNodeComparisonPath.variationLength = pangenomeImport.panSkeleton[pivotNodeName].length;
-          } else {
-            let pathVariationFromPivot = 0;
-            pivotNodeComparisonPath.nodes.forEach(nodeName => {
-              pathVariationFromPivot += pangenomeImport.panSkeleton[nodeName].length;
-            });
-            pivotNodeComparisonPath.pathVariationFromPivot = pathVariationFromPivot;
-
-            let pivotVariationFromPath = 0;
-            const pivot2 = pivotsImport.default[pivotName];
-            Object.entries(pivot2).forEach(([pivotNodeName2, pivotNode2]) => {
-              const pivotNodeComparisonPath2 = pivotNode2[pivotNodeComparisonPathName];
-              if (pivotNodeComparisonPath2.nodes && pivotNodeComparisonPath2.nodes.find(nodeName => pivotNodeComparisonPath.nodes.includes(nodeName))) {
-                pivotVariationFromPath += pangenomeImport.panSkeleton[pivotNodeName2].length;
-              }
-            });
-            pivotNodeComparisonPath.pivotVariationFromPath = pivotVariationFromPath;
-
-            pivotNodeComparisonPath.variationLength = Math.max(pivotNodeComparisonPath.pathVariationFromPivot, pivotNodeComparisonPath.pivotVariationFromPath);
-            // debugger;
-            // const pivotNode2 = pivot2[pivotNodeName];
-            // const pivotNodeComparisonPath2 = pivotNode2[pivotNodeComparisonPathName];
-            // debugger;
-
-
-            //
-            // Object.entries(pivot).forEach(([pivotNodeName2, pivotNode2]) => {
-            //
-            //   debugger;
-            //   if (pivotNodeComparisonPath2.nodes && pivotNodeComparisonPath2.nodes.includes(pivotNodeName)) {
-            //     debugger;
-            //     pivotVariationFromPath += pangenomeImport.panSkeleton[pivotNodeName2].length;
-            //   }
-            // });
-          }
-          // pivotNodeComparisonPath.variationLength = Math.max(pivotNodeComparisonPath.variationLength, pangenomeImport.panSkeleton[pivotNodeName].length);
-        }
-        console.log("pivotNodeComparisonPath.variationLength", pivotNodeComparisonPath.variationLength);
-
-      });
-    });
-  });
-
   if (pangenomeImport && pangenomeImport.default && pivotsImport && pivotsImport.default) {
-    dataCache = { pangenome: pangenomeImport.default, pivots: pivotsImport.default };
+    dataCache = { pangenome: pangenomeImport, pivots: pivotsImport };
 
     return dataCache;
   }
