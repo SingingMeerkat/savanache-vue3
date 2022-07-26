@@ -55,18 +55,18 @@
                      'outside-range':
                      pivotStep.startPosition < positionFilter[0] ||
                      pivotStep.startPosition > positionFilter[1] ||
-                     (
-
-                       (
-                         getVariationLength(pivotStep.panBlock, assembly.name) < lengthFilter[0] ||
-                         getVariationLength(pivotStep.panBlock, assembly.name) > lengthFilter[1]
-                         )
-                     ) ||
+                     // (
+                     //
+                     //   (
+                     //     getVariationLength(pivotStep.panBlock, assembly.name) < lengthFilter[0] ||
+                     //     getVariationLength(pivotStep.panBlock, assembly.name) > lengthFilter[1]
+                     //     )
+                     // ) ||
                      isNotInSVSelection(pivotStep.panBlock, assembly.name),
                    }]"
                    @click="selectBlock(assembly.name, pivotStep.panBlock)"
               >
-                <div class="block-count-label">{{ getVariationLength(pivotStep.panBlock, assembly.name) }}</div>
+<!--                <div class="block-count-label">{{ // getVariationLength(pivotStep.panBlock, assembly.name) }}</div>-->
                 <div v-for="blockClass in blockClasses(pivotStep.panBlock, assembly.name)"
                      :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}-block-${blockClass}`"
                      :class="[ blockClass, 'data-block-cell']"></div>
@@ -106,18 +106,18 @@
                      'outside-range':
                      pivotStep.startPosition < positionFilter[0] ||
                      pivotStep.startPosition > positionFilter[1] ||
-                     (
-
-                       (
-                         getVariationLength(pivotStep.panBlock, assembly.name) < lengthFilter[0] ||
-                         getVariationLength(pivotStep.panBlock, assembly.name) > lengthFilter[1]
-                         )
-                     ) ||
+                     // (
+                     //
+                     //   (
+                     //     getVariationLength(pivotStep.panBlock, assembly.name) < lengthFilter[0] ||
+                     //     getVariationLength(pivotStep.panBlock, assembly.name) > lengthFilter[1]
+                     //     )
+                     // ) ||
                      isNotInSVSelection(pivotStep.panBlock, assembly.name),
                    }]"
                    @click="selectBlock(assembly.name, pivotStep.panBlock)"
               >
-                <div class="block-count-label">{{ getVariationLength(pivotStep.panBlock, assembly.name) }}</div>
+<!--                <div class="block-count-label">{{ // getVariationLength(pivotStep.panBlock, assembly.name) }}</div>-->
                 <div v-for="blockClass in blockClasses(pivotStep.panBlock, assembly.name)"
                      :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}-block-${blockClass}`"
                      :class="[ blockClass, 'data-block-cell']"></div>
@@ -186,10 +186,10 @@ export default defineComponent({
       if (pivots.value) {
         const nodes = pivots.value[selectedPivotName.value];
         if (nodes) {
-          const node = nodes[nodeName];
-          if (node) {
-            const pathBlock = node[pathName];
-            return pathBlock;
+          const pathData = nodes[pathName];
+          if (pathData && pathData.blocks) {
+            const node = pathData.blocks[nodeName];
+            return node;
           }
         }
       }
@@ -253,9 +253,9 @@ export default defineComponent({
         cssClasses.push(...props.map((prop) => {
           const value = pathBlock[prop];
           if (value === true) {
-            return `block-${prop.toLowerCase()}`;
+            return `block-${prop}`;
           } else if (typeof value === "string") {
-            return `block-${prop.toLowerCase()}-${value.toLowerCase()}`;
+            return `block-${prop}-${value}`;
           }
         }).filter((value) => !!value));
       }
@@ -478,9 +478,10 @@ export default defineComponent({
       &.block-swap-start {
         //background: red;
         //background: green;
+        right: 0;
         left: 0;
         bottom: 0.2rem;
-        width: 0;
+        //width: 0;
         height: 0;
         border-top: 0.5rem solid transparent;
         border-bottom: 0.5rem solid transparent;
@@ -493,12 +494,29 @@ export default defineComponent({
         //background: red;
         //background: green;
         right: 0;
+        left: 0;
         bottom: 0.2rem;
-        width: 0;
+        //width: 0;
         height: 0;
         border-top: 0.5rem solid transparent;
         border-bottom: 0.5rem solid transparent;
 
+        border-right: 0.5rem solid #8148A4;
+        //transform: translateY(10%);
+      }
+
+      &.block-swap-solo {
+        //background: red;
+        //background: green;
+        right: 0;
+        left: 0;
+        bottom: 0.2rem;
+        //width: calc(100%);
+        height: 0;
+        border-top: 0.5rem solid transparent;
+        border-bottom: 0.5rem solid transparent;
+
+        border-left: 0.5rem solid #8148A4;
         border-right: 0.5rem solid #8148A4;
         //transform: translateY(10%);
       }

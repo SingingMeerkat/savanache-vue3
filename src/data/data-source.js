@@ -30,14 +30,20 @@ const enumeratePangenomePathsOuterLoop = ({
       comparisonPathData
     });
     if (innerLoopResult && innerLoopResult.pivot) {
-      const pivotName = `${pivotPathName}#${comparisonPathName}`;
-      pivots[pivotName] = innerLoopResult.pivot;
+      // const pivotName = `${pivotPathName}#${comparisonPathName}`;
+      if (!pivots[pivotPathName]) {
+        pivots[pivotPathName] = {};
+      }
+      if (!pivots[pivotPathName][comparisonPathName]) {
+        pivots[pivotPathName][comparisonPathName] = {};
+      }
+      Object.assign(pivots[pivotPathName][comparisonPathName], innerLoopResult.pivot);
 
       let trackMissingComparisonSteps = [];
       let lastPresentStepBeforeMissing;
       let firstPresentStepAfterMissing;
 
-      innerLoopResult.pivot.forEach((pivotStep) => {
+      innerLoopResult.pivot.array.forEach((pivotStep) => {
         if (pivotStep.comparisonStepIndex !== undefined) {
           if (trackMissingComparisonSteps.length === 0) {
             lastPresentStepBeforeMissing = pivotStep;
@@ -70,25 +76,25 @@ const enumeratePangenomePathsOuterLoop = ({
                 if (swapOrDelete && swapOrDeleteNodes) {
                   // Deletion not detected on initial pass
                   trackMissingComparisonSteps.forEach((missingStep) => {
-                    missingStep.deleted_alt = missingStep.swapOrDelete || true;
-                    missingStep.deletedNodes_alt = missingStep.swapOrDeleteNodes || swapOrDeleteNodes;
+                    missingStep.deleted = missingStep.swapOrDelete || true;
+                    missingStep.deletedNodes = missingStep.swapOrDeleteNodes || swapOrDeleteNodes;
 
                     // TODO: Fill in missing nodes from nodes between the start and end
 
-                    if (missingStep.deletedNodes_alt && !missingStep.deletedNodes_alt.find(node => node.pivotStepIndex === missingStep.pivotStepIndex)) {
+                    if (missingStep.deletedNodes && !missingStep.deletedNodes.find(node => node.pivotStepIndex === missingStep.pivotStepIndex)) {
                       const deletedNode = {
                         pivotStepIndex: missingStep.pivotStepIndex,
                         pivotStepPanBlock: missingStep.panBlock,
                       };
-                      missingStep.deletedNodes_alt.push(deletedNode);
-                      missingStep.deletedNodes_alt.sort((a, b) => a.pivotStepIndex - b.pivotStepIndex);
+                      missingStep.deletedNodes.push(deletedNode);
+                      missingStep.deletedNodes.sort((a, b) => a.pivotStepIndex - b.pivotStepIndex);
                       // debugger;
                     }
 
                     delete missingStep.swapOrDelete;
                     delete missingStep.swapOrDeleteNodes;
 
-                    debugger;
+                    // debugger;
 
                   });
                   // debugger;
@@ -125,25 +131,25 @@ const enumeratePangenomePathsOuterLoop = ({
                   if (swapOrDelete && swapOrDeleteNodes) {
                     // Deletion not detected on initial pass
                     trackMissingComparisonSteps.forEach((missingStep) => {
-                      missingStep.swap_alt = missingStep.swapOrDelete || true;
-                      missingStep.swapPivotNodes_alt = missingStep.swapOrDeleteNodes || swapOrDeleteNodes;
-                      missingStep.swapComparisonNodes_alt = swapComparisonNodes;
+                      missingStep.swap = missingStep.swapOrDelete || true;
+                      missingStep.swapPivotNodes = missingStep.swapOrDeleteNodes || swapOrDeleteNodes;
+                      missingStep.swapComparisonNodes = swapComparisonNodes;
 
                       // TODO: Fill in missing nodes from nodes between the start and end
 
-                      if (missingStep.swapPivotNodes_alt && !missingStep.swapPivotNodes_alt.find(node => node.pivotStepIndex === missingStep.pivotStepIndex)) {
+                      if (missingStep.swapPivotNodes && !missingStep.swapPivotNodes.find(node => node.pivotStepIndex === missingStep.pivotStepIndex)) {
                         const swapNode = {
                           pivotStepIndex: missingStep.pivotStepIndex,
                           pivotStepPanBlock: missingStep.panBlock,
                         };
-                        missingStep.swapPivotNodes_alt.push(swapNode);
-                        missingStep.swapPivotNodes_alt.sort((a, b) => a.pivotStepIndex - b.pivotStepIndex);
+                        missingStep.swapPivotNodes.push(swapNode);
+                        missingStep.swapPivotNodes.sort((a, b) => a.pivotStepIndex - b.pivotStepIndex);
                         // debugger;
                       }
-                      
+
                       delete missingStep.swapOrDelete;
                       delete missingStep.swapOrDeleteNodes;
-                      debugger;
+                      // debugger;
 
                     });
                     // debugger;
@@ -154,7 +160,7 @@ const enumeratePangenomePathsOuterLoop = ({
                   } else {
                     // Swap detected on initial pass
                     // debugger;
-                    pivotStep.swapComparisonNodes_alt = swapComparisonNodes;
+                    pivotStep.swapComparisonNodes = swapComparisonNodes;
                     lastPresentStepBeforeMissing = pivotStep
                     firstPresentStepAfterMissing = null;
                     trackMissingComparisonSteps = [];
@@ -168,12 +174,12 @@ const enumeratePangenomePathsOuterLoop = ({
         }
       });
     }
-    console.log('innerLoopResult', innerLoopResult);
-    debugger;
+    // console.log('innerLoopResult', innerLoopResult);
+    // debugger;
   });
 
-  console.log('pivotPathName', pivotPathName);
-  console.log('pivots', pivots);
+  // console.log('pivotPathName', pivotPathName);
+  // console.log('pivots', pivots);
 
   return {pivots};
 };
@@ -200,7 +206,10 @@ const enumeratePangenomePathsInnerLoop = ({
   //
   // const pivot = pivotsImport[pivotName];
 
-  const pivot = []
+  const pivot = {
+    array: [],
+    blocks: {},
+  };
 
   let lastPivotStep;
 
@@ -213,7 +222,6 @@ const enumeratePangenomePathsInnerLoop = ({
   pivotPathData.steps.forEach((pivotPathStep, pivotPathStepsIndex) => {
 
     const stepResult = enumeratePivotDataPathSteps({
-      pivot,
       comparisonPathData,
       pangenomeImport,
       pivotPathStep,
@@ -226,15 +234,19 @@ const enumeratePangenomePathsInnerLoop = ({
       firstAbsentPivotStepAfterLastPresentPivotStep
     });
 
+    const pivotStep = stepResult.pivotStep;
     lastPivotStep = stepResult.lastPivotStep;
     lastPresentPivotStep = stepResult.lastPresentPivotStep;
     lastAbsentPivotStep = stepResult.lastAbsentPivotStep;
     lastAbsentPivotStepBeforeLastPresentPivotStep = stepResult.lastAbsentPivotStepBeforeLastPresentPivotStep;
     firstAbsentPivotStepAfterLastPresentPivotStep = stepResult.firstAbsentPivotStepAfterLastPresentPivotStep;
+
+    pivot.array.push(pivotStep);
+    pivot.blocks[pivotStep.panBlock] = pivotStep;
   });
 
-  console.log('pivotPathName', pivotPathName, 'comparisonPathName', comparisonPathName);
-  console.log('pivot', pivot);
+  // console.log('pivotPathName', pivotPathName, 'comparisonPathName', comparisonPathName);
+  // console.log('pivot', pivot);
   // debugger;
 
   return {pivot}
@@ -242,7 +254,7 @@ const enumeratePangenomePathsInnerLoop = ({
 };
 
 const enumeratePivotDataPathSteps = ({
-                                       pivot,
+                                       // pivot,
                                        firstAbsentPivotStepAfterLastPresentPivotStep,
                                        lastAbsentPivotStepBeforeLastPresentPivotStep,
                                        lastAbsentPivotStep,
@@ -258,7 +270,7 @@ const enumeratePivotDataPathSteps = ({
     panBlock: pivotPathStep.panBlock,
     pivotStepIndex: pivotPathStepsIndex
   };
-  pivot.push(pivotStep);
+  // pivot.push(pivotStep);
 
   let lastComparisonPathStep;
   comparisonPathData.steps.forEach((comparisonPathStep, comparisonPathStepsIndex) => {
@@ -318,7 +330,7 @@ const enumeratePivotDataPathSteps = ({
           lastAbsentPivotStepBeforeLastPresentPivotStep.swapOrDelete = 'solo';
         }
 
-        console.log('lastPresentPivotStep', lastPresentPivotStep && lastPresentPivotStep.comparisonStepIndex, 'pivotStep', pivotStep.comparisonStepIndex);
+        // console.log('lastPresentPivotStep', lastPresentPivotStep && lastPresentPivotStep.comparisonStepIndex, 'pivotStep', pivotStep.comparisonStepIndex);
 
         // There was no gap in the comparison path, so it was merely a deletion (not a swap)
         if (lastPresentPivotStep && lastPresentPivotStep.comparisonStepIndex === pivotStep.comparisonStepIndex - 1) {
@@ -356,6 +368,7 @@ const enumeratePivotDataPathSteps = ({
   // console.log("POST", "\n\tpivotStep\t", pivotStep && pivotStep.panBlock, "\n\tlastPivotStep\t", lastPivotStep && lastPivotStep.panBlock, "\n\tlastPresentPivotStep\t", lastPresentPivotStep && lastPresentPivotStep.panBlock, "\n\tlastAbsentPivotStep\t", lastAbsentPivotStep && lastAbsentPivotStep.panBlock, "\n\tfirstAbsentPivotStepAfterLastPresentPivotStep\t", firstAbsentPivotStepAfterLastPresentPivotStep && firstAbsentPivotStepAfterLastPresentPivotStep.panBlock, "\n\tlastAbsentPivotStepBeforeLastPresentPivotStep\t", lastAbsentPivotStepBeforeLastPresentPivotStep && lastAbsentPivotStepBeforeLastPresentPivotStep.panBlock);
 
   return {
+    pivotStep,
     lastPivotStep,
     lastPresentPivotStep,
     lastAbsentPivotStep,
@@ -378,6 +391,12 @@ const enumerateComparisonDataPathSteps = ({
                                             comparisonPathData,
                                           }) => {
 
+  // Detect highest index if it was an inversion chain
+  let highestComparisonStepIndex = lastPivotStep ? lastPivotStep.comparisonStepIndex : undefined;
+  if (lastPivotStep && lastPivotStep.inversionChain) {
+    lastPivotStep.inversionChainNodes.forEach(step => highestComparisonStepIndex = Math.max(highestComparisonStepIndex, step.comparisonStepIndex));
+  }
+  
   const comparisonPathStepSkeletonBlock = pangenomeImport.panSkeleton[comparisonPathStep.panBlock];
 
   if (pivotPathStepSkeletonBlock.dupes.includes(comparisonPathStep.panBlock)) {
@@ -413,12 +432,11 @@ const enumerateComparisonDataPathSteps = ({
       }
 
       // INSERTION
-      if (lastPivotStep.comparisonStepIndex < pivotStep.comparisonStepIndex - 1) {
-
+      if (highestComparisonStepIndex < pivotStep.comparisonStepIndex - 1) {
         pivotStep.insertion = true;
         pivotStep.insertionNodes = [];
 
-        for (let insertionPathStepsIndex = lastPivotStep.comparisonStepIndex + 1; insertionPathStepsIndex < pivotStep.comparisonStepIndex; insertionPathStepsIndex++) {
+        for (let insertionPathStepsIndex = highestComparisonStepIndex + 1; insertionPathStepsIndex < pivotStep.comparisonStepIndex; insertionPathStepsIndex++) {
           const insertionPathStep = comparisonPathData.steps[insertionPathStepsIndex];
           const insertionPathStepSkeletonBlock = pangenomeImport.panSkeleton[insertionPathStep.panBlock];
 
@@ -435,7 +453,7 @@ const enumerateComparisonDataPathSteps = ({
       // INVERSION CHAIN
       // Check the comparison step indices, if the last one is higher than this one,
       // they're decrementing as the pivot steps increment and probably an inversion chain
-      if (lastPivotStep.comparisonStepIndex === pivotStep.comparisonStepIndex + 1) {
+      if (highestComparisonStepIndex === pivotStep.comparisonStepIndex + 1 || lastPivotStep.comparisonStepIndex === pivotStep.comparisonStepIndex + 1) {
 
         const inversionChainNodes = lastPivotStep.inversionChainNodes || [];
 
@@ -454,6 +472,7 @@ const enumerateComparisonDataPathSteps = ({
             pivotStepIndex: lastPivotStep.pivotStepIndex,
             pivotStepPanBlock: lastPivotStep.panBlock,
             comparisonStepIndex: lastPivotStep.comparisonStepIndex,
+            highestComparisonStepIndex,
             comparisonStepPanBlock: lastPivotStep.panBlock
           };
           inversionChainNodes.push(inversionChainNode);
@@ -523,12 +542,9 @@ const getDataInternal = async () => {
 
   });
 
-  console.log(pivots);
-  debugger;
+  console.log('pivots', pivots);
 
-  if (pangenomeImport && pangenomeImport.default && pivotsImport && pivotsImport.default) {
-    dataCache = { pangenome: pangenomeImport, pivots: pivotsImport };
+  dataCache = { pangenome: pangenomeImport.default || pangenomeImport, pivots };
 
-    return dataCache;
-  }
+  return dataCache;
 };
