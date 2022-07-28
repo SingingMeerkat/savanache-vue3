@@ -60,14 +60,14 @@ export const reactiveVuex = (store, stateName, mutationName) => {
     stopLocalWatch();
 
     stopStateWatch = watch(selectedState, (newVal) => {
-      console.log(stateName, mutationName, "watch", "selectedState", "newVal", newVal);
+      // console.log(stateName, mutationName, "watch", "selectedState", "newVal", newVal);
       stopWatch();
       selectedLocal.value = clone(unref(newVal));
       startWatch();
     }, { deep: true });
 
     stopLocalWatch = watch(selectedLocal, (newVal) => {
-      console.log(stateName, mutationName, "watch", "selectedLocal", "newVal", newVal);
+      // console.log(stateName, mutationName, "watch", "selectedLocal", "newVal", newVal);
       stopWatch();
       setSelectedState(clone(unref(newVal)));
       startWatch();

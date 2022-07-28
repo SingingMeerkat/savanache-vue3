@@ -49,6 +49,7 @@ const enumeratePangenomePathsOuterLoop = ({
           // Detect if at the end of the array and there's still a swap or delete leftover
           // (Doing this because the rest of the process expects another "present" step to close the swap or gap)
           trackMissingComparisonSteps.push(pivotStep);
+          // firstPresentStepAfterMissing = pivotStepIndex;
         }
         if (pivotStep.comparisonStepIndex !== undefined || pivotStepIndex === innerLoopResult.pivot.array.length - 1) {
           if (trackMissingComparisonSteps.length === 0) {
@@ -423,6 +424,16 @@ const enumerateComparisonDataPathSteps = ({
     // INVERSION
     if (pivotPathStep.strand !== comparisonPathStep.strand) {
       pivotStep.inversion = true;
+      if (!pivotStep.inversionNodes) {
+        pivotStep.inversionNodes = [];
+      }
+      const inversionNode = {
+        pivotStepIndex: pivotPathStepsIndex,
+        pivotStepPanBlock: pivotPathStep.panBlock,
+        comparisonStepIndex: comparisonPathStepsIndex,
+        comparisonStepPanBlock: comparisonPathStep.panBlock
+      };
+      pivotStep.inversionNodes.push(inversionNode);
     }
 
     if (lastPivotStep) {

@@ -25,13 +25,13 @@ export const isSelectedStep = ({
                                  panBlock
                                }) => {
   let selected = false;
-  if (step && selectedBlock && step.panBlock === selectedBlock.value.block) {
+  if (step && selectedBlock && step.panBlock === selectedBlock.value.blockName) {
     selected = true;
   }
-  if (reversePanBlock && selectedBlock && reversePanBlock === selectedBlock.value.block) {
+  if (reversePanBlock && selectedBlock && reversePanBlock === selectedBlock.value.blockName) {
     selected = true;
   }
-  if (panBlock && selectedBlock && panBlock.dupes.includes(selectedBlock.value.block)) {
+  if (panBlock && selectedBlock && panBlock.dupes.includes(selectedBlock.value.blockName)) {
     selected = true;
   }
   return selected;
@@ -45,7 +45,7 @@ export const calculateOffset = ({
   let pivotOffset = 0;
   let assemblyOffset = 0;
   let totalOffset = 0;
-  if (otherPanBlock && step.panBlock === selectedBlock.value.block) {
+  if (otherPanBlock && step.panBlock === selectedBlock.value.blockName) {
     if (otherPanBlock.startPosition >= step.startPosition) {
       pivotOffset = (otherPanBlock.startPosition - step.startPosition) / 4;
       assemblyOffset = 0;

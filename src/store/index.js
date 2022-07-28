@@ -5,7 +5,7 @@ export default createStore({
     selectedAssemblyNameKeys: {},
     selectedSVTypeNames: [],
     selectedPivotName: "",
-    selectedBlock: { assemblyName: undefined, pivotName: undefined, blockName: undefined },
+    selectedBlock: { comparisonName: undefined, pivotName: undefined, blockName: undefined },
     lengthFilter: [0, 0],
     lengthLimit: [0, 0],
     positionFilter: [0, 0],

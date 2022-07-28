@@ -51,7 +51,7 @@
                    :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'above-pivot',
                    {
                      'pivot-neighbor': aIndex === beforePivotRows.length - 1,
-                     'selected': selectedBlock && selectedBlock.assemblyName === assembly.name && selectedBlock.blockName === pivotStep.panBlock,
+                     'selected': selectedBlock && selectedBlock.comparisonName === assembly.name && selectedBlock.blockName === pivotStep.panBlock,
                      'outside-range':
                      pivotStep.startPosition < positionFilter[0] ||
                      pivotStep.startPosition > positionFilter[1] ||
@@ -102,7 +102,7 @@
                    :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'bloe-pivot',
                    {
                      'pivot-neighbor': aIndex === 0,
-                     'selected': selectedBlock && selectedBlock.assemblyName === assembly.name && selectedBlock.blockName === pivotStep.panBlock,
+                     'selected': selectedBlock && selectedBlock.comparisonName === assembly.name && selectedBlock.blockName === pivotStep.panBlock,
                      'outside-range':
                      pivotStep.startPosition < positionFilter[0] ||
                      pivotStep.startPosition > positionFilter[1] ||
@@ -268,9 +268,9 @@ export default defineComponent({
     const movePivotUp = () => (pivotRowIndex.value > 0) ? pivotRowIndex.value-- : undefined;
     const movePivotDown = () => (pivotRowIndex.value < assemblies.value.length) ? pivotRowIndex.value++ : undefined;
 
-    const selectBlock = (assembly, block) => {
-      selectedBlock.value = { pivot: selectedPivotName.value, assembly, block };
-      console.log("selectedBlock", selectedBlock.value);
+    const selectBlock = (comparisonName, blockName) => {
+      selectedBlock.value = { pivotName: selectedPivotName.value, comparisonName, blockName };
+      // console.log("selectedBlock", selectedBlock.value);
     };
 
     return {

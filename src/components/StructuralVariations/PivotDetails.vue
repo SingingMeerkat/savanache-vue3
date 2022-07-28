@@ -1,73 +1,77 @@
 <template>
   <div class="structural-variations-details">
-
-
-    <div v-if="selectedBlock.pivotName && selectedBlock.assemblyName && selectedBlock.blockName"
+    <div v-if="selectedBlock.pivotName && selectedBlock.comparisonName && selectedBlock.blockName"
          class="data-area d-flex flex-row">
 
       <!-- "Header" column -->
-      <div class="data-labels col-2 d-flex flex-column pt-2">
+      <div class="data-labels col-2 d-flex flex-column pt-5 pb-1">
 
         <div class="data-label elevation-1 px-3">
-          {{ assemblyName }}
+          {{ selectedBlock.comparisonName }}
         </div>
 
-        <div class="data-label elevation-1 px-3">
-        </div>
+        <!--        <div class="data-label elevation-1 px-3">-->
+        <!--        </div>-->
 
         <div class="data-label elevation-1 px-3">
-          {{ pivotName }}
+          {{ selectedBlock.pivotName }}
         </div>
 
       </div>
       <!-- "Data" column rows -->
-      <div ref="dataBlockRowsRef" class="data-block-rows col-10 d-flex flex-column pt-2">
+      <div ref="dataBlockRowsRef" class="data-block-rows col-10 d-flex flex-column pt-5 pb-1">
 
         <div class="data-block-row d-flex flex-row">
-          <div :style="{ left: assemblyOffset+'px' }" class="block-wrapper">
-            <div v-for="(assemblyStep, asIndex) in assemblySteps"
-                 :key="`assembly-row-${assemblyName}-step-${assemblyStep.name}-${asIndex}`"
-                 :class="['data-block-column', `block-${asIndex % 2}`, ...assemblyStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`), ...assemblyStep.blockTypes.map(style => `block-type-${style.toLowerCase()}`)]"
-                 :style="assemblyStep.blockStyles"
+          <div :style="{ left: comparisonOffset+'px' }" class="block-wrapper">
+            <!--            , ...comparisonStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`), ...comparisonStep.blockTypes.map(style => `block-${style.toLowerCase()}`)-->
+            <!--            :style="comparisonStep.blockStyles"-->
+            <div v-for="(comparisonStep, index) in selectedComparisonSteps"
+                 :name="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlock}-${index}`"
+                 :key="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlock}-${index}`"
+                 :class="['data-block-column', `block-${index % 2}`, ...getComparisonStepClasses(comparisonStep.panBlock)]"
+                 :style="getComparisonStepStyles(comparisonStep.panBlock)"
             >
-              <!--                  <div :class="[`assembly-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-text-${blockType}-${asIndex}-${btIndex}`">-->
+              <!--                  <div :class="[`comparison-block`, `block-type`, `block-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in comparisonStep.blockTypes" :key="`comparison-${comparisonName}-step-${comparisonStep.name}-block-text-${blockType}-${asIndex}-${btIndex}`">-->
               <!--                  </div>-->
               <div class="block-label">
-                {{ assemblyStep.name }}
+                {{ comparisonStep.panBlock }}
               </div>
-              <!--                  <div :class="[`assembly-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in assemblyStep.blockTypes" :key="`assembly-${assemblyName}-step-${assemblyStep.name}-block-type-${blockType}-${asIndex}-${btIndex}`">-->
+              <!--                  <div :class="[`comparison-block`, `block-text`, `block-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in comparisonStep.blockTypes" :key="`comparison-${comparisonName}-step-${comparisonStep.name}-block-${blockType}-${asIndex}-${btIndex}`">-->
               <!--                    [{{ blockType }}]-->
               <!--                  </div>-->
             </div>
           </div>
         </div>
 
-        <div class="data-block-row d-flex flex-row">
-          <div v-for="(visualStep, vsIndex) in visualSteps"
-               :key="`visual-row-step-${visualStep.name}-${vsIndex}`"
-               :class="['visual-block', 'data-block-column', `block-${vsIndex % 2}`, `elevation-1`, ...visualStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`)]"
-               :style="visualStep.blockStyles"
-          >
-            <div v-for="(blockType, btIndex) in visualStep.blockTypes"
-                 :key="`visual-step-${visualStep.name}-block-type-text-${blockType}-${vsIndex}-${btIndex}`"
-                 :class="[`visual-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]">
-            </div>
-          </div>
-        </div>
+        <!--        <div class="data-block-row d-flex flex-row">-->
+        <!--          <div v-for="(visualStep, vsIndex) in visualSteps"-->
+        <!--               :key="`visual-row-step-${visualStep.name}-${vsIndex}`"-->
+        <!--               :class="['visual-block', 'data-block-column', `block-${vsIndex % 2}`, `elevation-1`, ...visualStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`)]"-->
+        <!--               :style="visualStep.blockStyles"-->
+        <!--          >-->
+        <!--            <div v-for="(blockType, btIndex) in visualStep.blockTypes"-->
+        <!--                 :key="`visual-step-${visualStep.name}-block-text-${blockType}-${vsIndex}-${btIndex}`"-->
+        <!--                 :class="[`visual-block`, `block-type`, `block-${blockType.toLowerCase()}`]">-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <!--        </div>-->
 
         <div class="data-block-row d-flex flex-row">
           <div :style="{ left: pivotOffset+'px' }" class="block-wrapper">
-            <div v-for="(pivotStep, psIndex) in pivotSteps"
-                 :key="`pivot-row-${pivotName}-step-${pivotStep.name}-${psIndex}`"
-                 :class="['data-block-column', `block-${psIndex % 2}`, ...pivotStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`), ...pivotStep.blockTypes.map(style => `block-type-${style.toLowerCase()}`)]"
-                 :style="pivotStep.blockStyles"
+            <!--            , ...pivotStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`), ...pivotStep.blockTypes.map(style => `block-${style.toLowerCase()}`)-->
+            <!--            :style="pivotStep.blockStyles"-->
+            <div v-for="(pivotStep, index) in selectedPivotSteps"
+                 :name="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlock}-${index}`"
+                 :key="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlock}-${index}`"
+                 :class="['data-block-column', `block-${index % 2}`, ...getPivotStepClasses(pivotStep.panBlock)]"
+                 :style="getPivotStepStyles(pivotStep.panBlock)"
             >
-              <!--                  <div :class="[`pivot-block`, `block-type`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-text-${blockType}-${psIndex}-${btIndex}`">-->
+              <!--                  <div :class="[`pivot-block`, `block-type`, `block-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-text-${blockType}-${psIndex}-${btIndex}`">-->
               <!--                  </div>-->
               <div class="block-label">
-                {{ pivotStep.name }}
+                {{ pivotStep.panBlock }}
               </div>
-              <!--                  <div :class="[`pivot-block`, `block-text`, `block-type-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-type-${blockType}-${psIndex}-${btIndex}`">-->
+              <!--                  <div :class="[`pivot-block`, `block-text`, `block-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-${blockType}-${psIndex}-${btIndex}`">-->
               <!--                    [{{ blockType }}]-->
               <!--                  </div>-->
 
@@ -86,7 +90,7 @@ import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
 import { reactiveVuex } from "@/store/helper";
 import { calculateOffset, isSelectedStep, newVisualStep } from "@/helpers/pivot-details";
-// import {selectedAssemblyNameKeys, selectedChromosome, selectedPivotName} from '@/data/some-data-source';
+// import {selectedComparisonNameKeys, selectedChromosome, selectedPivotName} from '@/data/some-data-source';
 
 export default defineComponent({
   name: "StructuralVariationsPivotDetails",
@@ -95,189 +99,352 @@ export default defineComponent({
     const dataBlockRowsRef = ref(null);
 
     const store = useStore();
-    const selectedPivotName = reactiveVuex(store, "selectedPivotName", "setselectedPivotName");
-    const selectedAssemblyNameKeys = reactiveVuex(store, "selectedAssemblyNameKeys", "setselectedAssemblyNameKeys");
-    const selectedSVTypeNames = reactiveVuex(store, "selectedSVTypeNames", "setselectedSVTypeNames");
     const selectedBlock = reactiveVuex(store, "selectedBlock", "setSelectedBlock");
 
-    const paths = ref({});
     const pangenome = ref();
     const pivots = ref();
+
+    const selectedPivotSteps = computed(() => {
+      if (pangenome.value && selectedBlock.value && pangenome.value.paths[selectedBlock.value.pivotName]) {
+        return pangenome.value.paths[selectedBlock.value.pivotName].steps;
+      }
+      return [];
+    });
+
+    const selectedComparisonSteps = computed(() => {
+      if (pangenome.value && selectedBlock.value && pangenome.value.paths[selectedBlock.value.comparisonName]) {
+        return pangenome.value.paths[selectedBlock.value.comparisonName].steps;
+      }
+      return [];
+    });
+
+    const selectedPivotBlock = computed(() => {
+      return pivots.value[selectedBlock.value.pivotName][selectedBlock.value.comparisonName].blocks[selectedBlock.value.blockName];
+    });
 
     getData().then((data) => {
       if (data) {
         pangenome.value = data.pangenome;
         pivots.value = data.pivots;
-
-        const pathNames = Object.keys(pangenome.value.paths);
-
-        paths.value = pathNames.reduce((result, pathName) => ({
-          ...result,
-          [pathName]: data.pangenome.paths[pathName]
-        }), {});
       }
     });
 
-    const pivotSteps = ref([]);
-    const assemblySteps = ref([]);
-    const visualSteps = ref([]);
-
-    const assemblyOffset = ref(0);
+    const comparisonOffset = ref(0);
     const pivotOffset = ref(0);
     const scrollOffset = ref(0);
 
     const colors = {};
     const tops = {};
 
-    watch(selectedBlock, () => {
-      pivotSteps.value = [];
-      assemblySteps.value = [];
-      visualSteps.value = [];
 
-      const selectedBlockPivotPath = pangenome.value.paths[selectedBlock.value.pivot];
+    const highlightComparisonBlock = (panBlock) => {
+      const panBlockMatch = panBlock === selectedBlock.value.blockName;
+      return panBlockMatch || comparisonNodeInPivotBlock(panBlock);
+    }
 
-      const selectedBlockAssemblyPath = pangenome.value.paths[selectedBlock.value.assembly];
+    const highlightPivotBlock = (panBlock) => {
+      return panBlock === selectedBlock.value.blockName;
+    }
 
-      assemblyOffset.value = 0;
-      pivotOffset.value = 0;
-      scrollOffset.value = 0;
+    const comparisonNodeInPivotBlock = (comparisonPanBlockName) => {
 
-      selectedBlockPivotPath.steps.forEach(step => {
+      const dupeNodes = selectedPivotBlock.value.dupeNodes && selectedPivotBlock.value.dupeNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
+      const swapComparisonNodes = selectedPivotBlock.value.swapComparisonNodes && selectedPivotBlock.value.swapComparisonNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
+      const insertionNodes = selectedPivotBlock.value.insertionNodes && selectedPivotBlock.value.insertionNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
+      const inversionChainNodes = selectedPivotBlock.value.inversionChainNodes && selectedPivotBlock.value.inversionChainNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
 
-        console.log("step.panBlock", step.panBlock, "step", step);
+      return dupeNodes || swapComparisonNodes || insertionNodes || inversionChainNodes;
+    };
 
-        const panBlock = pangenome.value.panSkeleton[step.panBlock];
+    const getComparisonStepClasses = (panBlockName) => {
+      const comparisonParent =
+        pivots.value[selectedBlock.value.pivotName][selectedBlock.value.comparisonName].array.filter(
+          (step) => {
+            const matchNode = step.panBlock === panBlockName;
+            const dupeNodes = step.dupeNodes && step.dupeNodes.find(node => node.comparisonStepPanBlock === panBlockName);
+            const swapComparisonNodes = step.swapComparisonNodes && step.swapComparisonNodes.find(node => node.comparisonStepPanBlock === panBlockName);
+            const insertionNodes = step.insertionNodes && step.insertionNodes.find(node => node.comparisonStepPanBlock === panBlockName);
+            const inversionChainNodes = step.inversionChainNodes && step.inversionChainNodes.find(node => node.comparisonStepPanBlock === panBlockName);
+            return matchNode || dupeNodes || swapComparisonNodes || insertionNodes || inversionChainNodes;
+          }).reduce((result, step) => {
 
-        console.log("selectedBlock.value.assembly", selectedBlock.value.assembly, "panBlock.traversals", panBlock.traversals);
-
-        const otherIndex = panBlock.traversals[selectedBlock.value.assembly];
-
-        console.log("otherIndex", otherIndex, "selectedBlockAssemblyPath", selectedBlockAssemblyPath, "selectedBlockAssemblyPath.steps", selectedBlockAssemblyPath.steps);
-
-        const otherPanBlock = selectedBlockAssemblyPath.steps[otherIndex];
-
-        const pivotPathnodes = pivots.value[selectedBlock.value.pivot];
-
-        const pivotPathNode = pivotPathnodes[step.panBlock][selectedBlock.value.assembly];
-
-        const blockTypes = pivotPathNode ? Object.entries(pivotPathNode).filter(([key, value]) => value && typeof value !== "object" && key !== "insertion").map(([key]) => key) : [];
-
-        console.log("step.panBlock", step.panBlock, "otherPanBlock", otherPanBlock, "selectedBlock", selectedBlock.value);
-
-        const offsets = calculateOffset({
-          step,
-          otherPanBlock,
-          selectedBlock
-        });
-
-        console.log("OFFSETS", JSON.stringify(offsets));
-
-        if (selectedBlock.value.block === step.panBlock) {
-          assemblyOffset.value = offsets.assemblyOffset;
-          pivotOffset.value = offsets.pivotOffset;
-          scrollOffset.value = offsets.totalOffset;
-
-          if (dataBlockRowsRef.value) {
-            const proportions = ((dataBlockRowsRef.value.clientWidth / 3) - (panBlock.length / (4 * 3)));
-            console.log("scrollOffset.value", scrollOffset.value, "panBlock.length", panBlock.length, "dataBlockRowsRef.value.clientWidth", dataBlockRowsRef.value.clientWidth, "proportions", proportions);
-            dataBlockRowsRef.value.scrollLeft = scrollOffset.value - proportions;
-          } else {
-            setTimeout(() => {
-              const proportions = ((dataBlockRowsRef.value.clientWidth / 3) - (panBlock.length / (4 * 3)));
-              console.log("scrollOffset.value", scrollOffset.value, "panBlock.length", panBlock.length, "dataBlockRowsRef.value.clientWidth", dataBlockRowsRef.value.clientWidth, "proportions", proportions);
-              dataBlockRowsRef.value.scrollLeft = scrollOffset.value - proportions;
-            }, 100);
-          }
-        }
-
-        const selected = isSelectedStep({
-          step,
-          selectedBlock,
-          reversePanBlock: null,
-          panBlock: null
-        });
-
-        const pivotStep = newVisualStep({
-          step,
-          blockTypes,
-          selected,
-          panBlock
-        });
-
-        pivotSteps.value.push(pivotStep);
-      });
-
-      if (selectedBlockAssemblyPath) {
-        selectedBlockAssemblyPath.steps.forEach(step => {
-
-          const panBlock = pangenome.value.panSkeleton[step.panBlock];
-
-          const otherIndex = panBlock.traversals[selectedBlock.value.pivot];
-
-          const otherPanBlock = selectedBlockPivotPath.steps[otherIndex];
-
-          const lastStep = assemblySteps.value[assemblySteps.value.length - 1];
-
-          let pivotPathNode = null;
-          let reversePanBlock = "";
-
-          const pivotPathnodes = pivots.value[selectedBlock.value.pivot];
-
-          if (pivotPathnodes[step.panBlock]) {
-
-            // Make it so the block that has the "insert" property on it, doesn't show up as "the" insert (the block before it should show up as the insert)
-            pivotPathNode = { ...pivotPathnodes[step.panBlock][selectedBlock.value.assembly], insertion: undefined };
-          } else {
-            // Grab all the kinds of structural variations on the pivot (They are key:value pairs, either boolean, or string (start, end, etc.))
-            Object.entries(pivots.value[selectedBlock.value.pivot]).every(([key, value]) => {
-              const thing = value[selectedBlock.value.assembly];
-              if (thing.nodes && thing.nodes.includes(step.panBlock)) {
-                reversePanBlock = key;
-                pivotPathNode = { ...thing, dupe: undefined };
-                return selectedBlock.value.block !== key;
-              }
-              return true;
-            });
-          }
-          const blockTypes = pivotPathNode ? Object.entries(pivotPathNode).filter(([key, value]) => value && typeof value !== "object").map(([key, value]) => key) : [];
-
-          if (panBlock.dupes.length && !blockTypes.includes("dupe")) {
-            blockTypes.push("dupe");
+          if (step.dupeNodes) {
+            if (!result.dupeNodes) {
+              result.dupeNodes = [...step.dupeNodes];
+            } else {
+              result.dupeNodes = [...result.dupeNodes, ...step.dupeNodes];
+            }
           }
 
-          const selected = isSelectedStep({
-            step,
-            selectedBlock,
-            reversePanBlock,
-            panBlock
-          });
+          if (step.swapComparisonNodes) {
+            if (!result.swapComparisonNodes) {
+              result.swapComparisonNodes = [...step.swapComparisonNodes];
+            } else {
+              result.swapComparisonNodes = [...result.swapComparisonNodes, ...step.swapComparisonNodes];
+            }
+          }
 
-          const assemblyStep = newVisualStep({
-            step,
-            blockTypes,
-            selected,
-            panBlock
-          });
+          if (step.insertionNodes) {
+            if (!result.insertionNodes) {
+              result.insertionNodes = [...step.insertionNodes];
+            } else {
+              result.insertionNodes = [...result.insertionNodes, ...step.insertionNodes];
+            }
+          }
 
-          assemblySteps.value.push(assemblyStep);
-        });
+          if (step.inversionNodes) {
+            if (!result.inversionNodes) {
+              result.inversionNodes = [...step.inversionNodes];
+            } else {
+              result.inversionNodes = [...result.inversionNodes, ...step.inversionNodes];
+            }
+          }
+
+          if (step.inversionChainNodes) {
+            if (!result.inversionChainNodes) {
+              result.inversionChainNodes = [...step.inversionChainNodes];
+            } else {
+              result.inversionChainNodes = [...result.inversionChainNodes, ...step.inversionChainNodes];
+            }
+          }
+
+          return {...step, ...result};
+        }, {});
+
+      const classes = [];
+      if (highlightComparisonBlock(panBlockName)) {
+        classes.push('block-selected');
       }
-    });
+      if (comparisonParent.inversion && comparisonParent.inversionNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
+        classes.push('block-inversion'); // + (typeof comparisonParent.inversion === 'string' ? '-' + comparisonParent.inversion : ''));
+      }
+      if (comparisonParent.inversionChain && comparisonParent.inversionChainNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
+        classes.push('block-inversion-chain'); // + (typeof comparisonParent.inversionChain === 'string' ? '-' + comparisonParent.inversionChain : ''));
+      }
+      if (comparisonParent.insertion && comparisonParent.insertionNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
+        classes.push('block-insertion'); // + (typeof comparisonParent.insertion === 'string' ? '-' + comparisonParent.insertion : ''));
+      }
+      if (comparisonParent.dupe && comparisonParent.dupeNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
+        classes.push('block-dupe'); // + (typeof comparisonParent.dupe === 'string' ? '-' + comparisonParent.dupe : ''));
+      }
+      if (comparisonParent.swap && comparisonParent.swapComparisonNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
+        classes.push('block-swap'); // + (typeof comparisonParent.swap === 'string' ? '-' + comparisonParent.swap : ''));
+      }
+      if (comparisonParent.deletion) {
+        classes.push('block-deletion'); // + (typeof comparisonParent.deletion === 'string' ? '-' + comparisonParent.deletion : ''));
+      }
+      return classes;
+    };
 
-    const pivotName = computed(() => selectedBlock.value.pivot);
-    const assemblyName = computed(() => selectedBlock.value.assembly);
+    const getComparisonStepStyles = (panBlockName) => {
+      const styles = [];
+      if (pangenome.value) {
+        const panBlock = pangenome.value.panSkeleton[panBlockName];
+        styles.push({ width: (panBlock.length / 4)+'px' });
+      }
+      return styles;
+    };
+
+
+    const getPivotStepClasses = (panBlockName) => {
+      const pivotParent =
+        pivots.value[selectedBlock.value.pivotName][selectedBlock.value.comparisonName].blocks[panBlockName];
+
+
+      const classes = [];
+      if (highlightPivotBlock(panBlockName)) {
+        classes.push('block-selected');
+      }
+      if (pivotParent.inversion) {
+        classes.push('block-inversion'); // + (typeof pivotParent.inversion === 'string' ? '-' + pivotParent.inversion : ''));
+      }
+      if (pivotParent.inversionChain) {
+        classes.push('block-inversion-chain'); // + (typeof pivotParent.inversionChain === 'string' ? '-' + pivotParent.inversionChain : ''));
+      }
+      // if (pivotParent.insertion) {
+      //   classes.push('block-insertion'); // + (typeof pivotParent.insertion === 'string' ? '-' + pivotParent.insertion : ''));
+      // }
+      if (pivotParent.dupe) {
+        classes.push('block-dupe'); // + (typeof pivotParent.dupe === 'string' ? '-' + pivotParent.dupe : ''));
+      }
+      if (pivotParent.swap) {
+        classes.push('block-swap'); // + (typeof pivotParent.swap === 'string' ? '-' + pivotParent.swap : ''));
+      }
+      if (pivotParent.deletion) {
+        classes.push('block-deletion'); // + (typeof pivotParent.deletion === 'string' ? '-' + pivotParent.deletion : ''));
+      }
+      return classes;
+    };
+
+    const getPivotStepStyles = (panBlockName) => {
+      const styles = [];
+      if (pangenome.value) {
+        const panBlock = pangenome.value.panSkeleton[panBlockName];
+        styles.push({ width: (panBlock.length / 4)+'px' });
+      }
+      return styles;
+    };
+
+
+    // watch(selectedBlock, () => {
+    //   pivotSteps.value = [];
+    //   comparisonSteps.value = [];
+    //   visualSteps.value = [];
+    //
+    //   const selectedBlockPivotPath = pangenome.value.paths[selectedBlock.value.pivotName];
+    //
+    //   const selectedBlockComparisonPath = pangenome.value.paths[selectedBlock.value.comparisonName];
+    //
+    //   comparisonOffset.value = 0;
+    //   pivotOffset.value = 0;
+    //   scrollOffset.value = 0;
+    //
+    //   selectedBlockPivotPath.steps.forEach(step => {
+    //
+    //     console.log("step.panBlock", step.panBlock, "step", step);
+    //
+    //     const panBlock = pangenome.value.panSkeleton[step.panBlock];
+    //
+    //     console.log("selectedBlock.value.comparisonName", selectedBlock.value.comparisonName, "panBlock.traversals", panBlock.traversals);
+    //
+    //     const otherIndex = panBlock.traversals[selectedBlock.value.comparisonName];
+    //
+    //     console.log("otherIndex", otherIndex, "selectedBlockComparisonPath", selectedBlockComparisonPath, "selectedBlockComparisonPath.steps", selectedBlockComparisonPath.steps);
+    //
+    //     const otherPanBlock = selectedBlockComparisonPath.steps[otherIndex];
+    //
+    //     const pivotPathnodes = pivots.value[selectedBlock.value.pivotName];
+    //
+    //     const pivotPathNode = pivotPathnodes[selectedBlock.value.comparisonName].blocks[step.panBlock];
+    //
+    //     const blockTypes = pivotPathNode ? Object.entries(pivotPathNode).filter(([key, value]) => value && typeof value !== "object" && key !== "insertion").map(([key]) => key) : [];
+    //
+    //     console.log("step.panBlock", step.panBlock, "otherPanBlock", otherPanBlock, "selectedBlock", selectedBlock.value);
+    //
+    //     const offsets = calculateOffset({
+    //       step,
+    //       otherPanBlock,
+    //       selectedBlock
+    //     });
+    //
+    //     console.log("OFFSETS", JSON.stringify(offsets));
+    //
+    //     if (selectedBlock.value.blockName === step.panBlock) {
+    //       comparisonOffset.value = offsets.comparisonOffset;
+    //       pivotOffset.value = offsets.pivotOffset;
+    //       scrollOffset.value = offsets.totalOffset;
+    //
+    //       if (dataBlockRowsRef.value) {
+    //         const proportions = ((dataBlockRowsRef.value.clientWidth / 3) - (panBlock.length / (4 * 3)));
+    //         console.log("scrollOffset.value", scrollOffset.value, "panBlock.length", panBlock.length, "dataBlockRowsRef.value.clientWidth", dataBlockRowsRef.value.clientWidth, "proportions", proportions);
+    //         dataBlockRowsRef.value.scrollLeft = scrollOffset.value - proportions;
+    //       } else {
+    //         setTimeout(() => {
+    //           if (dataBlockRowsRef.value) {
+    //             const proportions = ((dataBlockRowsRef.value.clientWidth / 3) - (panBlock.length / (4 * 3)));
+    //             console.log("scrollOffset.value", scrollOffset.value, "panBlock.length", panBlock.length, "dataBlockRowsRef.value.clientWidth", dataBlockRowsRef.value.clientWidth, "proportions", proportions);
+    //             dataBlockRowsRef.value.scrollLeft = scrollOffset.value - proportions;
+    //           }
+    //         }, 200);
+    //       }
+    //     }
+    //
+    //     const selected = isSelectedStep({
+    //       step,
+    //       selectedBlock,
+    //       reversePanBlock: null,
+    //       panBlock: null
+    //     });
+    //
+    //     const pivotStep = newVisualStep({
+    //       step,
+    //       blockTypes,
+    //       selected,
+    //       panBlock
+    //     });
+    //
+    //     pivotSteps.value.push(pivotStep);
+    //   });
+    //
+    //   if (selectedBlockComparisonPath) {
+    //     selectedBlockComparisonPath.steps.forEach(step => {
+    //
+    //       const panBlock = pangenome.value.panSkeleton[step.panBlock];
+    //
+    //       const otherIndex = panBlock.traversals[selectedBlock.value.pivotName];
+    //
+    //       const otherPanBlock = selectedBlockPivotPath.steps[otherIndex];
+    //
+    //       const lastStep = comparisonSteps.value[comparisonSteps.value.length - 1];
+    //
+    //       let pivotPathNode = null;
+    //       let reversePanBlock = "";
+    //
+    //       const pivotPathnodes = pivots.value[selectedBlock.value.pivotName];
+    //
+    //       if (pivotPathnodes[selectedBlock.value.comparisonName] && pivotPathnodes[selectedBlock.value.comparisonName].blocks && pivotPathnodes[selectedBlock.value.comparisonName].blocks[step.panBlock]) {
+    //
+    //         // Make it so the block that has the "insert" property on it, doesn't show up as "the" insert (the block before it should show up as the insert)
+    //         pivotPathNode = { ...pivotPathnodes[selectedBlock.value.comparisonName].blocks[step.panBlock], insertion: undefined };
+    //       } else {
+    //         // Grab all the kinds of structural variations on the pivot (They are key:value pairs, either boolean, or string (start, end, etc.))
+    //         Object.entries(pivots.value[selectedBlock.value.pivotName][selectedBlock.value.comparisonName].blocks).every(([name, block]) => {
+    //           debugger;
+    //           if (
+    //             (block.dupeNodes && block.dupeNodes.find(node => node.panBlock === selectedBlock.value.blockName)) ||
+    //             (block.swapComparisonNodes && block.swapComparisonNodes.find(node => node.panBlock === selectedBlock.value.blockName)) ||
+    //             (block.insertionNodes && block.insertionNodes.find(node => node.panBlock === selectedBlock.value.blockName))
+    //           ) {
+    //             debugger;
+    //             reversePanBlock = name;
+    //             pivotPathNode = { ...block, dupe: undefined };
+    //             return selectedBlock.value.blockName !== name;
+    //           }
+    //           return true;
+    //         });
+    //       }
+    //       const blockTypes = pivotPathNode ? Object.entries(pivotPathNode).filter(([key, value]) => value && typeof value !== "object").map(([key, value]) => key) : [];
+    //
+    //       if (panBlock.dupes.length && !blockTypes.includes("dupe")) {
+    //         blockTypes.push("dupe");
+    //       }
+    //
+    //       const selected = isSelectedStep({
+    //         step,
+    //         selectedBlock,
+    //         reversePanBlock,
+    //         panBlock
+    //       });
+    //
+    //       const comparisonStep = newVisualStep({
+    //         step,
+    //         blockTypes,
+    //         selected,
+    //         panBlock
+    //       });
+    //
+    //       comparisonSteps.value.push(comparisonStep);
+    //     });
+    //   }
+    // });
 
     return {
+      selectedPivotSteps,
+      selectedComparisonSteps,
+
       selectedBlock,
-      pivotSteps,
-      assemblySteps,
-      visualSteps,
-      pivotName,
-      assemblyName,
-      assemblyOffset,
+
+      comparisonOffset,
       pivotOffset,
       scrollOffset,
-      dataBlockRowsRef
+
+      getComparisonStepClasses,
+      getComparisonStepStyles,
+
+      getPivotStepClasses,
+      getPivotStepStyles,
+
+      dataBlockRowsRef,
     };
   }
 });
@@ -299,8 +466,8 @@ export default defineComponent({
 }
 
 .data-label {
-  height: 2rem;
-  line-height: 2rem;
+  height: 3rem;
+  line-height: 3rem;
 }
 
 .data-block-row {
@@ -309,22 +476,23 @@ export default defineComponent({
 }
 
 .data-block-row, .data-block-column {
-  height: 2rem;
+  height: 3rem;
 }
 
 .data-label {
   width: 8rem;
 }
 
-.data-block-row {
-  //line-height: 2rem;
-  height: 2rem;
+.block-wrapper {
+  //position: absolute;
+  transition: all 500ms;
+  white-space: nowrap;
 }
 
 .data-block-column {
-  //display: inline-block;
+  display: inline-block;
   //position: relative;
-  position: absolute;
+  position: relative;
   top: 1.5rem;
   height: 0.5rem;
   line-height: 1rem;
@@ -346,16 +514,18 @@ export default defineComponent({
     transition: all 100ms;
 
     position: absolute;
-    //transform: rotate(-30deg);
-    transform: rotate(-15deg);
+    transform: rotate(-45deg);
+    //transform: rotate(-15deg);
     border: inherit;
     transform-origin: 0 0;
     background: inherit;
     line-height: 1em;
     padding: 2px;
     //border-radius: 2px;
-    left: -6px;
-    top: -19px;
+    //left: -6px;
+    //top: -19px;
+    left: -13px;
+    top: -14px;
   }
 
 
@@ -399,40 +569,61 @@ export default defineComponent({
   z-index: 3;
 }
 
-.block-type-present {
+.block-present {
   background: black;
   color: white;
 }
 
-.block-type-insertion {
+.block-insertion {
   background: #81CD06 !important;
   color: black;
 }
 
-.block-type-inversion, .block-type-inversionChain {
+.block-inversion, .block-inversion-chain {
   background: #9D0D0D !important;
   color: white;
 }
 
-.block-type-dupe {
+.block-dupe {
   background: #0086CA !important;
   color: white;
 }
 
-.block-type-swap {
+.block-swap {
   background: #8148A4 !important;
   color: white;
 }
 
-.block-type-inversion.block-type-dupe, .block-type-inversionChain.block-type-dupe {
+.block-inversion.block-dupe, .block-inversion-chain.block-dupe {
   background: linear-gradient(0deg, #0086CA 50%, #9D0D0D 50%) !important;
 }
 
-.block-type-swap.block-type-dupe {
+.block-inversion.block-insertion, .block-inversion-chain.block-insertion {
+  background: linear-gradient(0deg, #81CD06 50%, #9D0D0D 50%) !important;
+}
+
+.block-inversion.block-dupe.block-insertion, .block-inversion-chain.block-dupe.block-insertion {
+  background: linear-gradient(0deg, #0086CA 33%, #9D0D0D 33%, #9D0D0D 66%, #81CD06 66%) !important;
+}
+
+
+.block-dupe.block-insertion {
+  background: linear-gradient(0deg, #0086CA 50%, #81CD06 50%) !important;
+}
+
+.block-swap.block-insertion {
+  background: linear-gradient(0deg, #8148A4 50%, #81CD06 50%) !important;
+}
+
+.block-swap.block-dupe {
   background: linear-gradient(0deg, #0086CA 50%, #8148A4 50%) !important;
 }
 
-.assembly-block.block-type.block-type-insertion {
+.block-swap.block-dupe.block-insertion {
+  background: linear-gradient(0deg, #0086CA 33%, #8148A4 33%, #8148A4 66%, #81CD06 66%) !important;
+}
+
+.comparison-block.block-type.block-insertion {
   position: absolute;
   top: 0;
   bottom: -2px;
@@ -442,7 +633,7 @@ export default defineComponent({
   //z-index: 0;
 }
 
-.visual-block.block-type.block-type-insertion {
+.visual-block.block-type.block-insertion {
   //bottom: 50%;
   //right: -0.3rem;
   width: 0;
@@ -454,7 +645,7 @@ export default defineComponent({
   //z-index: 1;
 }
 
-.assembly-block.block-type.block-type-inversion {
+.comparison-block.block-type.block-inversion {
   position: absolute;
   top: 0;
   bottom: -2px;
@@ -464,7 +655,7 @@ export default defineComponent({
   //z-index: 0;
 }
 
-.visual-block.block-type.block-type-inversion {
+.visual-block.block-type.block-inversion {
   width: 20px;
   height: 100%;
   top: 0;
@@ -473,7 +664,7 @@ export default defineComponent({
   transform: translateX(-50%);
 }
 
-.visual-block.block-type.block-type-inversion:before {
+.visual-block.block-type.block-inversion:before {
   display: block;
   content: "";
   width: 10px;
@@ -487,7 +678,7 @@ export default defineComponent({
   left: 0;
 }
 
-.visual-block.block-type.block-type-inversion:after {
+.visual-block.block-type.block-inversion:after {
   display: block;
   content: "";
   width: 10px;
@@ -501,7 +692,7 @@ export default defineComponent({
   left: 10px;
 }
 
-.visual-block.block-type.block-type-dupe {
+.visual-block.block-type.block-dupe {
   position: absolute;
   //width: 100%;
   left: -1px;
@@ -512,7 +703,7 @@ export default defineComponent({
   border-bottom: 2px solid #0086CA;
 }
 
-.pivot-block.block-type.block-type-dupe {
+.pivot-block.block-type.block-dupe {
   position: absolute;
   height: calc(50% + 1px);
   left: 50%;
@@ -521,7 +712,7 @@ export default defineComponent({
   border-left: 2px solid #0086CA;
 }
 
-.assembly-block.block-type.block-type-dupe {
+.comparison-block.block-type.block-dupe {
   position: absolute;
   height: calc(50% + 1px);
   left: 50%;
@@ -530,7 +721,7 @@ export default defineComponent({
   border-left: 2px solid #0086CA;
 }
 
-.visual-block.block-type.block-type-inversion {
+.visual-block.block-type.block-inversion {
   width: 20px;
   height: 100%;
   top: 0;
@@ -542,12 +733,12 @@ export default defineComponent({
 .block-style-fade {
   opacity: 0.5;
 
-  .visual-block.block-type.block-type-dupe {
+  .visual-block.block-type.block-dupe {
     border-bottom-style: dashed;
   }
 }
 
-.block-style-selected {
+.block-selected {
   border: 1px solid black;
   z-index: 2;
   opacity: 1;
@@ -557,12 +748,6 @@ export default defineComponent({
   border: 0 none;
   height: 100%;
   transform: translateY(-50%);
-}
-
-.block-wrapper {
-  position: absolute;
-  transition: all 500ms;
-  //white-space: nowrap;
 }
 
 </style>
