@@ -43,8 +43,14 @@ const enumeratePangenomePathsOuterLoop = ({
       let lastPresentStepBeforeMissing;
       let firstPresentStepAfterMissing;
 
-      innerLoopResult.pivot.array.forEach((pivotStep) => {
-        if (pivotStep.comparisonStepIndex !== undefined) {
+      // SECOND PASS DELETION / SWAP DETECTION
+      innerLoopResult.pivot.array.forEach((pivotStep, pivotStepIndex) => {
+        if (pivotStepIndex === innerLoopResult.pivot.array.length - 1 && pivotStep.comparisonStepIndex === undefined) {
+          // Detect if at the end of the array and there's still a swap or delete leftover
+          // (Doing this because the rest of the process expects another "present" step to close the swap or gap)
+          trackMissingComparisonSteps.push(pivotStep);
+        }
+        if (pivotStep.comparisonStepIndex !== undefined || pivotStepIndex === innerLoopResult.pivot.array.length - 1) {
           if (trackMissingComparisonSteps.length === 0) {
             lastPresentStepBeforeMissing = pivotStep;
           } else {
@@ -56,21 +62,25 @@ const enumeratePangenomePathsOuterLoop = ({
               firstPresentStepAfterMissing = null;
               trackMissingComparisonSteps = [];
             } else {
+
+              // Detect an inversion chain before or after a deletion or swap, that can confuse where the variation starts or ends
+
               let highestIndexBeforeGap = lastPresentStepBeforeMissing.comparisonStepIndex;
               let lowestIndexAfterGap = firstPresentStepAfterMissing.comparisonStepIndex;
-              // Account for inversion chains...
+
               if (lastPresentStepBeforeMissing.inversionChain) {
                 // Inversion Chain before Swap or Deletion
                 lastPresentStepBeforeMissing.inversionChainNodes.forEach(node => highestIndexBeforeGap = Math.max(highestIndexBeforeGap, node.comparisonStepIndex));
-                // debugger;
               }
+
               if (firstPresentStepAfterMissing.inversionChain) {
                 // Inversion Chain after Swap or Deletion
                 firstPresentStepAfterMissing.inversionChainNodes.forEach(node => lowestIndexAfterGap = Math.min(lowestIndexAfterGap, node.comparisonStepIndex));
-                // debugger;
               }
+
               if (highestIndexBeforeGap === lowestIndexAfterGap - 1) {
-                // Deletion
+                // SECOND PASS DELETION
+
                 const swapOrDelete = trackMissingComparisonSteps[0].swapOrDelete;
                 const swapOrDeleteNodes = trackMissingComparisonSteps[0].swapOrDeleteNodes;
                 if (swapOrDelete && swapOrDeleteNodes) {
@@ -79,8 +89,6 @@ const enumeratePangenomePathsOuterLoop = ({
                     missingStep.deleted = missingStep.swapOrDelete || true;
                     missingStep.deletedNodes = missingStep.swapOrDeleteNodes || swapOrDeleteNodes;
 
-                    // TODO: Fill in missing nodes from nodes between the start and end
-
                     if (missingStep.deletedNodes && !missingStep.deletedNodes.find(node => node.pivotStepIndex === missingStep.pivotStepIndex)) {
                       const deletedNode = {
                         pivotStepIndex: missingStep.pivotStepIndex,
@@ -88,29 +96,25 @@ const enumeratePangenomePathsOuterLoop = ({
                       };
                       missingStep.deletedNodes.push(deletedNode);
                       missingStep.deletedNodes.sort((a, b) => a.pivotStepIndex - b.pivotStepIndex);
-                      // debugger;
                     }
 
                     delete missingStep.swapOrDelete;
                     delete missingStep.swapOrDeleteNodes;
 
-                    // debugger;
-
                   });
-                  // debugger;
                   lastPresentStepBeforeMissing = pivotStep
                   firstPresentStepAfterMissing = null;
                   trackMissingComparisonSteps = [];
 
                 } else {
                   // Deletion detected on initial pass
-                  // debugger;
                   lastPresentStepBeforeMissing = pivotStep
                   firstPresentStepAfterMissing = null;
                   trackMissingComparisonSteps = [];
                 }
               } else {
-                // Swap?
+                // SECOND PASS SWAP
+
                 if (trackMissingComparisonSteps[0].swapOrDelete && trackMissingComparisonSteps[0].swapOrDeleteNodes) {
                   // Swap not detected on initial pass
                   const swapOrDelete = trackMissingComparisonSteps[0].swapOrDelete;
@@ -124,9 +128,7 @@ const enumeratePangenomePathsOuterLoop = ({
                       comparisonStepPanBlock: step.panBlock,
                     };
                     swapComparisonNodes.push(swapNode);
-                    // debugger;
                   }
-
 
                   if (swapOrDelete && swapOrDeleteNodes) {
                     // Deletion not detected on initial pass
@@ -499,12 +501,6 @@ const enumerateComparisonDataPathSteps = ({
       }
     }
 
-  } else {
-
-
-    // Detect swap and/or delete??
-
-    // console.log('\n\tpivotPathStepsIndex\t', pivotPathStepsIndex, '\n\tcomparisonPathStepsIndex\t', comparisonPathStepsIndex, '\n\tpivotStep\t', pivotStep, '\n\tlastPivotStep\t', lastPivotStep, '\n\tpivotPathStep\t', pivotPathStep, '\n\tcomparisonPathStep\t', comparisonPathStep, '\n\tlastComparisonPathStep\t', lastComparisonPathStep);
   }
 
   lastComparisonPathStep = comparisonPathStep;
