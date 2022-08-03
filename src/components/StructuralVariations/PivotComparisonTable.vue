@@ -66,7 +66,7 @@
                    }]"
                    @click="selectBlock(assembly.name, pivotStep.panBlock)"
               >
-<!--                <div class="block-count-label">{{ // getVariationLength(pivotStep.panBlock, assembly.name) }}</div>-->
+                <!--                <div class="block-count-label">{{ // getVariationLength(pivotStep.panBlock, assembly.name) }}</div>-->
                 <div v-for="blockClass in blockClasses(pivotStep.panBlock, assembly.name)"
                      :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}-block-${blockClass}`"
                      :class="[ blockClass, 'data-block-cell']"></div>
@@ -117,7 +117,7 @@
                    }]"
                    @click="selectBlock(assembly.name, pivotStep.panBlock)"
               >
-<!--                <div class="block-count-label">{{ // getVariationLength(pivotStep.panBlock, assembly.name) }}</div>-->
+                <!--                <div class="block-count-label">{{ // getVariationLength(pivotStep.panBlock, assembly.name) }}</div>-->
                 <div v-for="blockClass in blockClasses(pivotStep.panBlock, assembly.name)"
                      :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}-block-${blockClass}`"
                      :class="[ blockClass, 'data-block-cell']"></div>
@@ -206,7 +206,7 @@ export default defineComponent({
         return false;
       }
       const block = getBlock(nodeName, pathName);
-      const found = Object.entries(block).filter(([key, value]) => !!value).find(([key, value]) => selectedSVTypeNames.value.includes(key));
+      const found = Object.entries(block).filter((entry) => !!entry[1]).find((entry) => selectedSVTypeNames.value.includes(entry[0]));
       return !found;
     };
 

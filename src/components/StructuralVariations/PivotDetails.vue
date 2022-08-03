@@ -26,9 +26,9 @@
             <!--            , ...comparisonStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`), ...comparisonStep.blockTypes.map(style => `block-${style.toLowerCase()}`)-->
             <!--            :style="comparisonStep.blockStyles"-->
             <div v-for="(comparisonStep, index) in selectedComparisonSteps"
-                 :name="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlock}-${index}`"
                  :key="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlock}-${index}`"
                  :class="['data-block-column', `block-${index % 2}`, ...getComparisonStepClasses(comparisonStep.panBlock)]"
+                 :name="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlock}-${index}`"
                  :style="getComparisonStepStyles(comparisonStep.panBlock)"
             >
               <!--                  <div :class="[`comparison-block`, `block-type`, `block-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in comparisonStep.blockTypes" :key="`comparison-${comparisonName}-step-${comparisonStep.name}-block-text-${blockType}-${asIndex}-${btIndex}`">-->
@@ -61,9 +61,9 @@
             <!--            , ...pivotStep.blockClasses.map(style => `block-style-${style.toLowerCase()}`), ...pivotStep.blockTypes.map(style => `block-${style.toLowerCase()}`)-->
             <!--            :style="pivotStep.blockStyles"-->
             <div v-for="(pivotStep, index) in selectedPivotSteps"
-                 :name="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlock}-${index}`"
                  :key="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlock}-${index}`"
                  :class="['data-block-column', `block-${index % 2}`, ...getPivotStepClasses(pivotStep.panBlock)]"
+                 :name="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlock}-${index}`"
                  :style="getPivotStepStyles(pivotStep.panBlock)"
             >
               <!--                  <div :class="[`pivot-block`, `block-type`, `block-${blockType.toLowerCase()}`]" v-for="(blockType, btIndex) in pivotStep.blockTypes" :key="`pivot-${pivotName}-step-${pivotStep.name}-block-text-${blockType}-${psIndex}-${btIndex}`">-->
@@ -85,11 +85,10 @@
 
 <script>
 
-import { computed, defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
 import { reactiveVuex } from "@/store/helper";
-import { calculateOffset, isSelectedStep, newVisualStep } from "@/helpers/pivot-details";
 // import {selectedComparisonNameKeys, selectedChromosome, selectedPivotName} from '@/data/some-data-source';
 
 export default defineComponent({
@@ -132,19 +131,15 @@ export default defineComponent({
     const comparisonOffset = ref(0);
     const pivotOffset = ref(0);
     const scrollOffset = ref(0);
-
-    const colors = {};
-    const tops = {};
-
-
+    
     const highlightComparisonBlock = (panBlock) => {
       const panBlockMatch = panBlock === selectedBlock.value.blockName;
       return panBlockMatch || comparisonNodeInPivotBlock(panBlock);
-    }
+    };
 
     const highlightPivotBlock = (panBlock) => {
       return panBlock === selectedBlock.value.blockName;
-    }
+    };
 
     const comparisonNodeInPivotBlock = (comparisonPanBlockName) => {
 
@@ -208,30 +203,30 @@ export default defineComponent({
             }
           }
 
-          return {...step, ...result};
+          return { ...step, ...result };
         }, {});
 
       const classes = [];
       if (highlightComparisonBlock(panBlockName)) {
-        classes.push('block-selected');
+        classes.push("block-selected");
       }
       if (comparisonParent.inversion && comparisonParent.inversionNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
-        classes.push('block-inversion'); // + (typeof comparisonParent.inversion === 'string' ? '-' + comparisonParent.inversion : ''));
+        classes.push("block-inversion"); // + (typeof comparisonParent.inversion === 'string' ? '-' + comparisonParent.inversion : ''));
       }
       if (comparisonParent.inversionChain && comparisonParent.inversionChainNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
-        classes.push('block-inversion-chain'); // + (typeof comparisonParent.inversionChain === 'string' ? '-' + comparisonParent.inversionChain : ''));
+        classes.push("block-inversion-chain"); // + (typeof comparisonParent.inversionChain === 'string' ? '-' + comparisonParent.inversionChain : ''));
       }
       if (comparisonParent.insertion && comparisonParent.insertionNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
-        classes.push('block-insertion'); // + (typeof comparisonParent.insertion === 'string' ? '-' + comparisonParent.insertion : ''));
+        classes.push("block-insertion"); // + (typeof comparisonParent.insertion === 'string' ? '-' + comparisonParent.insertion : ''));
       }
       if (comparisonParent.dupe && comparisonParent.dupeNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
-        classes.push('block-dupe'); // + (typeof comparisonParent.dupe === 'string' ? '-' + comparisonParent.dupe : ''));
+        classes.push("block-dupe"); // + (typeof comparisonParent.dupe === 'string' ? '-' + comparisonParent.dupe : ''));
       }
       if (comparisonParent.swap && comparisonParent.swapComparisonNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
-        classes.push('block-swap'); // + (typeof comparisonParent.swap === 'string' ? '-' + comparisonParent.swap : ''));
+        classes.push("block-swap"); // + (typeof comparisonParent.swap === 'string' ? '-' + comparisonParent.swap : ''));
       }
       if (comparisonParent.deletion) {
-        classes.push('block-deletion'); // + (typeof comparisonParent.deletion === 'string' ? '-' + comparisonParent.deletion : ''));
+        classes.push("block-deletion"); // + (typeof comparisonParent.deletion === 'string' ? '-' + comparisonParent.deletion : ''));
       }
       return classes;
     };
@@ -240,7 +235,7 @@ export default defineComponent({
       const styles = [];
       if (pangenome.value) {
         const panBlock = pangenome.value.panSkeleton[panBlockName];
-        styles.push({ width: (panBlock.length / 4)+'px' });
+        styles.push({ width: (panBlock.length / 4) + "px" });
       }
       return styles;
     };
@@ -253,25 +248,25 @@ export default defineComponent({
 
       const classes = [];
       if (highlightPivotBlock(panBlockName)) {
-        classes.push('block-selected');
+        classes.push("block-selected");
       }
       if (pivotParent.inversion) {
-        classes.push('block-inversion'); // + (typeof pivotParent.inversion === 'string' ? '-' + pivotParent.inversion : ''));
+        classes.push("block-inversion"); // + (typeof pivotParent.inversion === 'string' ? '-' + pivotParent.inversion : ''));
       }
       if (pivotParent.inversionChain) {
-        classes.push('block-inversion-chain'); // + (typeof pivotParent.inversionChain === 'string' ? '-' + pivotParent.inversionChain : ''));
+        classes.push("block-inversion-chain"); // + (typeof pivotParent.inversionChain === 'string' ? '-' + pivotParent.inversionChain : ''));
       }
       // if (pivotParent.insertion) {
       //   classes.push('block-insertion'); // + (typeof pivotParent.insertion === 'string' ? '-' + pivotParent.insertion : ''));
       // }
       if (pivotParent.dupe) {
-        classes.push('block-dupe'); // + (typeof pivotParent.dupe === 'string' ? '-' + pivotParent.dupe : ''));
+        classes.push("block-dupe"); // + (typeof pivotParent.dupe === 'string' ? '-' + pivotParent.dupe : ''));
       }
       if (pivotParent.swap) {
-        classes.push('block-swap'); // + (typeof pivotParent.swap === 'string' ? '-' + pivotParent.swap : ''));
+        classes.push("block-swap"); // + (typeof pivotParent.swap === 'string' ? '-' + pivotParent.swap : ''));
       }
       if (pivotParent.deletion) {
-        classes.push('block-deletion'); // + (typeof pivotParent.deletion === 'string' ? '-' + pivotParent.deletion : ''));
+        classes.push("block-deletion"); // + (typeof pivotParent.deletion === 'string' ? '-' + pivotParent.deletion : ''));
       }
       return classes;
     };
@@ -280,7 +275,7 @@ export default defineComponent({
       const styles = [];
       if (pangenome.value) {
         const panBlock = pangenome.value.panSkeleton[panBlockName];
-        styles.push({ width: (panBlock.length / 4)+'px' });
+        styles.push({ width: (panBlock.length / 4) + "px" });
       }
       return styles;
     };
@@ -444,7 +439,7 @@ export default defineComponent({
       getPivotStepClasses,
       getPivotStepStyles,
 
-      dataBlockRowsRef,
+      dataBlockRowsRef
     };
   }
 });

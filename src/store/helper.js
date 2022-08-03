@@ -46,8 +46,6 @@ import { computed, ref, unref, watch } from "vue";
 export const reactiveVuex = (store, stateName, mutationName) => {
 
   const selectedState = computed(() => store.state[stateName]);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   const setSelectedState = (data) => store.commit(mutationName, data);
 
   const selectedLocal = ref(clone(unref(selectedState)));

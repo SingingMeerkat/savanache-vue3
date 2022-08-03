@@ -10,8 +10,6 @@
 //   const { default: pivots } = await import("../data/sample/pivots.json");
 //
 //   if (pangenome && pivots) {
-//     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//     // @ts-ignore
 //     dataCache = { pangenome, pivots };
 //     return dataCache;
 //   }
