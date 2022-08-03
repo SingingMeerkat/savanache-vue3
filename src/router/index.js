@@ -11,7 +11,7 @@ const routes = [
     path: "/pangenome_selection",
     name: "Pangenome Selection",
     component: () =>
-      import(/* webpackChunkName: "home" */ "../views/HomeView.vue")
+      import(/* webpackChunkName: "home" */ "../views/PangenomeSelection.vue")
   },
   {
     path: "/structural_variations",

@@ -48,26 +48,25 @@
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
-import { computed, watch } from "@vue/runtime-core";
+import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 export default {
   setup() {
     const store = useStore();
 
-    // var : Filtering
+    // const : Filtering
     const pangenomeSearched = ref("");
 
-    // var : Upload external file
+    // const : Upload external file
     const pangenomeFile = ref([]);
-    let fileinput = ref("");
+    const fileinput = ref("");
 
     // Table selected items
-    let selectedItems = ref([]);
+    const selectedItems = ref([]);
 
     // Submission
-    let submited = ref(false);
+    const submited = ref(false);
     const isSubmitable = computed(() => {
       if (selectedItems.value.length > 0) {
         return true;
@@ -88,16 +87,16 @@ export default {
     // File uploading
 
     const onChangeFile = e => {
-      let files = e.target.files || e.dataTransfer.files;
+      const files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       createInput(files[0]);
     };
 
     const createInput = file => {
-      let promise = new Promise(resolve => {
-        var reader = new FileReader();
+      const promise = new Promise(resolve => {
+        const reader = new FileReader();
         reader.onload = () => {
-          resolve((fileinput = reader.result));
+          resolve((fileinput.value = reader.result));
         };
         reader.readAsText(file);
       });
@@ -105,11 +104,11 @@ export default {
       promise.then(
         () => {
           /* handle a successful result */
-          let lines = fileinput.split("\n");
-          let pangenomes = lines.map(line => {
+          const lines = fileinput.value.split("\n");
+          const pangenomes = lines.map(line => {
             if (!line.startsWith("id") && line.length !== 0) {
-              let cols = line.split("\t");
-              let pangenome = {
+              const cols = line.split("\t");
+              const pangenome = {
                 id: parseInt(cols[0]),
                 name: cols[1],
                 assemblies: cols[2].split(",").map(assembly => assembly.replace(/\s/g, "")),
@@ -117,9 +116,8 @@ export default {
               };
               return pangenome;
             }
-          });
-          pangenomes = pangenomes.filter(pangenome => pangenome !== undefined);
-          let pangenomesObjects = pangenomes.map(pangenome => {
+          }).filter(pangenome => pangenome !== undefined);
+          const pangenomesObjects = pangenomes.map(pangenome => {
             pangenome["selected"] = false;
             return pangenome;
           });
@@ -149,7 +147,7 @@ export default {
 
     // Content
     // Rewrite pangenomes object with information for the table
-    let pangenomesToTable = computed(() => {
+    const pangenomesToTable = computed(() => {
       let pangenomeList = pangenomes.value.map(pangenome => {
         let percentage = 0;
         if (assembliesSelected.value.length !== 0) {
@@ -209,7 +207,7 @@ export default {
       // Set true or false to the selected pangenome or not in the store
 
       // Get pangenome table object
-      let currentClickedPangenome = pangenomesToTable.value.filter(pangenome => pangenome.panID === panID);
+      const currentClickedPangenome = pangenomesToTable.value.filter(pangenome => pangenome.panID === panID);
 
       if (pangenomesSelectedStored.value.length === 0) {
         store.dispatch("pangenomes/updateIsSelectedStateAction", currentClickedPangenome[0]);
@@ -285,7 +283,7 @@ export default {
     // On unHover
     const myUnRowHover = () => {
       const pangenomeSelected = pangenomes.value.filter(pangenome => pangenome.selected);
-      let pangenomeAssembliesSelected = pangenomeSelected.map(pangenome => pangenome.assemblies).flat();
+      const pangenomeAssembliesSelected = pangenomeSelected.map(pangenome => pangenome.assemblies).flat();
       store.state.chart.chart.instance
         .series()
         .points(p => p.selected === true)

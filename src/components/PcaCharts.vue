@@ -6,9 +6,8 @@
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
+import { onMounted, ref } from "vue";
 import JSCharting from "jscharting-vue";
-import { onMounted } from "@vue/runtime-core";
 import { useStore } from "vuex";
 
 export default {

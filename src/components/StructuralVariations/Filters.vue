@@ -153,7 +153,7 @@ export default defineComponent({
     watch(selectedPivotName, () => {
       let start;
       let end;
-      let minLength = 0;
+      const minLength = 0;
       let maxLength;
       if (data) {
         const steps = data.pangenome.paths[selectedPivotName.value].steps;

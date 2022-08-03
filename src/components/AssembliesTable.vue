@@ -99,8 +99,7 @@
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
-import { computed, watch } from "@vue/runtime-core";
+import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -108,7 +107,7 @@ export default {
     const store = useStore();
 
     // Vars Selection
-    let selectedItems = ref([]);
+    const selectedItems = ref([]);
     const selected = ref([]);
 
     // Vars Filtering
@@ -118,8 +117,8 @@ export default {
     const showModal = ref(false);
 
     // Vars Sorting
-    let directionLastSorted = ref("");
-    let sortBy = ref("");
+    const directionLastSorted = ref("");
+    const sortBy = ref("");
     const chevrons = ref({
       assemblyName: "mdi-chevron-down",
       selected: "mdi-chevron-down",

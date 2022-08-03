@@ -1,6 +1,11 @@
 import { createStore } from "vuex";
+import pangenomes from "@/store/modules/pangenomes";
+import assemblies from "@/store/modules/assemblies";
+import chart from "@/store/modules/chart";
 
 export default createStore({
+  modules: { assemblies, pangenomes, chart },
+
   state: {
     selectedAssemblyNameKeys: {},
     selectedSVTypeNames: [],
@@ -46,8 +51,7 @@ export default createStore({
       state.positionLimit = positionLimit;
     }
   },
-  actions: {},
-  modules: {}
+  actions: {}
 });
 
 // export interface selectedAssemblyNameKeys {

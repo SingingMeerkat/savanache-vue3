@@ -131,7 +131,7 @@ export default defineComponent({
     const comparisonOffset = ref(0);
     const pivotOffset = ref(0);
     const scrollOffset = ref(0);
-    
+
     const highlightComparisonBlock = (panBlock) => {
       const panBlockMatch = panBlock === selectedBlock.value.blockName;
       return panBlockMatch || comparisonNodeInPivotBlock(panBlock);
@@ -372,8 +372,8 @@ export default defineComponent({
     //
     //       const lastStep = comparisonSteps.value[comparisonSteps.value.length - 1];
     //
-    //       let pivotPathNode = null;
-    //       let reversePanBlock = "";
+    //       const pivotPathNode = null;
+    //       const reversePanBlock = "";
     //
     //       const pivotPathnodes = pivots.value[selectedBlock.value.pivotName];
     //

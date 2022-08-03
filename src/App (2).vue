@@ -27,7 +27,7 @@
 <script>
 import pangenomes from "@/data/pangenome";
 import { useStore } from "vuex";
-import { ref } from "@vue/reactivity";
+import { ref } from "vue";
 
 export default {
   name: "App",
