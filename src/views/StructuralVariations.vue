@@ -22,7 +22,7 @@
       <v-col v-show="assembliesTableCols > 0" :cols="assembliesTableCols">
         <a v-show="pivotDetailsCols > 0" class="right-arrow" @click="moveColsRight"></a>
         <a v-show="pivotDetailsCols === 0" class="right-arrow-inverted" @click="moveColsLeft"></a>
-        <v-card>
+        <v-card class="overflow-auto">
           <AssembliesTable />
 <!--          <StructuralVariationsAssembliesTable></StructuralVariationsAssembliesTable>-->
         </v-card>
@@ -56,15 +56,15 @@ export default defineComponent({
     StructuralVariationsPivotDetails
   },
   setup() {
-    const colSplit = ref(6);
+    const colSplit = ref(8);
     const assembliesTableCols = computed(() => (colSplit.value));
     const pivotDetailsCols = computed(() => (12 - colSplit.value));
 
     const hideTopRow = ref(false);
     const hideBottomRow = ref(false);
 
-    const moveColsLeft = () => (colSplit.value > 0) ? colSplit.value -= 6 : undefined;
-    const moveColsRight = () => (colSplit.value < 12) ? colSplit.value += 6 : undefined;
+    const moveColsLeft = () => (colSplit.value > 0) ? colSplit.value -= 4 : undefined;
+    const moveColsRight = () => (colSplit.value < 12) ? colSplit.value += 4 : undefined;
 
     const toggleTopRow = () => hideTopRow.value = !hideTopRow.value;
     const toggleBottomRow = () => hideBottomRow.value = !hideBottomRow.value;
@@ -139,6 +139,7 @@ export default defineComponent({
     z-index: 3;
     width: 1.5rem;
     height: 1.5rem;
+    cursor: pointer;
 
     &::after {
       content: "";
@@ -156,15 +157,15 @@ export default defineComponent({
 
 .left-arrow {
   &, &-inverted {
-    bottom: 0;
-    transform: translateY(-50%);
+    top: 0;
+    transform: translate(50%, 50%);
   }
 }
 
 .right-arrow {
   &, &-inverted {
     top: 0;
-    transform: translateY(50%);
+    transform: translate(-50%, 50%);
   }
 }
 

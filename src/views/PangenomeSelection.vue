@@ -65,18 +65,31 @@ export default defineComponent({
         () => {
           // Input Parsing
           const lines = fileinput.value.split("\n");
-          const assemblies = lines.map(line => {
-            if (!line.startsWith("id") && line.length !== 0) {
-              const cols = line.split("\t");
+          // Defaults, can be re-arranged if the headers are in the wrong order in the incoming file
+          const headers = {
+            id:0,
+            x:1,
+            y:2,
+            assembly_name:3,
+            phenotype:4,
+            pangenome:5,
+            Heterotic_group:6,
+            majore:7
+          };
+          const assemblies = lines.map((line, lineIndex) => {
+            const cols = line.split("\t");
+            if (lineIndex === 0 && line.length !== 0) {
+              cols.forEach((col, colIndex) => headers[name] = colIndex);
+            } else if (line.length !== 0) {
               const assembly = {
-                id: parseInt(cols[0]),
-                x: parseInt(cols[1]),
-                y: parseInt(cols[2]),
-                assembly_name: cols[3],
-                phenotype: cols[4],
-                pangenome: cols[5].split(", "),
-                heterotic_group: cols[6].split(", "),
-                majore: cols[7]
+                id: parseInt(cols[headers.id]),
+                x: parseInt(cols[headers.x]),
+                y: parseInt(cols[headers.y]),
+                assembly_name: cols[headers.assembly_name],
+                phenotype: cols[headers.phenotype],
+                pangenome: cols[headers.pangenome].split(", "),
+                heterotic_group: cols[headers.Heterotic_group].split(", "),
+                majore: cols[headers.majore]
               };
               return assembly;
             }

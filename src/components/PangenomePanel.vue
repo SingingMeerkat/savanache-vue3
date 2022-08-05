@@ -60,13 +60,13 @@
 </template>
 
 <script>
-import { computed, ref, watch } from "vue";
+import { computed, getCurrentInstance, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 export default {
   setup() {
     const store = useStore();
-
+    const vm = getCurrentInstance();
     // const : Filtering
     const pangenomeSearched = ref("");
 
@@ -321,6 +321,7 @@ export default {
     const submit = () => {
       submited.value = true;
       console.log(pangenomesSelectedStored.value);
+      vm.proxy.$router.push('/structural_variations');
     };
 
     return {
