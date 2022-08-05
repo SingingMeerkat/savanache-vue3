@@ -7,7 +7,7 @@ export default createStore({
   modules: { assemblies, pangenomes, chart },
 
   state: {
-    selectedAssemblyNameKeys: {},
+    selectedAssemblyNames: [],
     selectedSVTypeNames: [],
     selectedPivotName: "",
     selectedBlock: { comparisonName: undefined, pivotName: undefined, blockName: undefined },
@@ -18,16 +18,16 @@ export default createStore({
   },
   getters: {},
   mutations: {
-    setselectedAssemblyNameKeys(state, selectedAssemblyNameKeys) {
-      console.log("setselectedAssemblyNameKeys", selectedAssemblyNameKeys);
-      state.selectedAssemblyNameKeys = selectedAssemblyNameKeys;
+    setSelectedAssemblyNames(state, selectedAssemblyNames) {
+      console.log("setSelectedAssemblyNames", selectedAssemblyNames);
+      state.selectedAssemblyNames = selectedAssemblyNames;
     },
-    setselectedSVTypeNames(state, selectedSVTypeNames) {
-      console.log("setselectedSVTypeNames", selectedSVTypeNames);
+    setSelectedSVTypeNames(state, selectedSVTypeNames) {
+      console.log("setSelectedSVTypeNames", selectedSVTypeNames);
       state.selectedSVTypeNames = selectedSVTypeNames;
     },
-    setselectedPivotName(state, selectedPivotName) {
-      console.log("setselectedPivotName", selectedPivotName);
+    setSelectedPivotName(state, selectedPivotName) {
+      console.log("setSelectedPivotName", selectedPivotName);
       state.selectedPivotName = selectedPivotName;
     },
     setSelectedBlock(state, selectedBlock) {
@@ -54,7 +54,7 @@ export default createStore({
   actions: {}
 });
 
-// export interface selectedAssemblyNameKeys {
+// export interface selectedAssemblyNames {
 //   [k: string]: boolean;
 // }
 //

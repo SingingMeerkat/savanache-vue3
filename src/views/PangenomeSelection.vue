@@ -28,7 +28,7 @@ import { useStore } from "vuex";
 import PangenomePanel from "../components/PangenomePanel.vue";
 import AssembliesTable from "../components/AssembliesTable.vue";
 import PcaCharts from "../components/PcaCharts.vue";
-import pangenomes from "@/data/pangenome";
+// import pangenomes from "@/data/pangenome";
 
 export default defineComponent({
   name: "PangenomeSelection",
@@ -37,7 +37,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
     // Pangenomes default initiation
-    store.dispatch("pangenomes/updatePangenomesAction", pangenomes);
+    // store.dispatch("pangenomes/updatePangenomesAction", pangenomes);
 
     // File value
     const assembliesFile = ref([]);

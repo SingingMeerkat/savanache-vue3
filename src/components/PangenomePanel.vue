@@ -21,8 +21,20 @@
                      @mouseover="myRowHover($event)">
         <!-- Content -->
         <template #cell(selected)="data">
-          <va-checkbox v-model="selectedItems" :array-value="data.cells[3].value"
-                       @click="selectAction(data.cells[3].value)" />
+<!--          <div v-if="data">-->
+<!--            data: {{data}}<br>-->
+<!--            <div v-if="data.cells">-->
+<!--              data.cells: {{data.cells}}<br>-->
+<!--              <div v-if="data.cells[3]">-->
+<!--                data.cells[3]: {{data.cells[3]}}<br>-->
+<!--                <div v-if="data.cells[3].value">-->
+<!--                  data.cells[3].value: {{data.cells[3].value}}<br>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+                    <va-checkbox v-model="selectedItems" :array-value="data.rowData.panID"
+                                 @click="selectAction(data.rowData.panID)" />
         </template>
         <template #cell(icon)="data">
           <img :src="data.value" style="height: 40px" />
@@ -179,7 +191,7 @@ export default {
         return tableItem;
       });
       // Hide pangenomes in functions of filter below
-      if (pangenomeSearched.value != null && pangenomeList != undefined) {
+      if (pangenomeSearched.value && pangenomeList) {
         pangenomeList = pangenomeList.filter(pangenome => pangenome.panID.toLowerCase().indexOf(pangenomeSearched.value.trim().toLowerCase()) > -1);
       }
       return pangenomeList;

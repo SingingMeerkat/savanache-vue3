@@ -15,7 +15,7 @@
       <tr v-for="row in rows" :key="`row-${row.name}`" @click.stop="selectRow(row)">
         <td>
           <v-checkbox
-            :model-value="selectedAssemblyNameKeys[row.name]"
+            :model-value="selectedAssemblyKeyNames[row.name]"
             density="compact"
             hide-details
             inline
@@ -45,7 +45,7 @@ export default defineComponent({
   components: {},
   setup() {
     const store = useStore();
-    const selectedAssemblyNameKeys = reactiveVuex(store, "selectedAssemblyNameKeys", "setselectedAssemblyNameKeys");
+    const selectedAssemblyNames = reactiveVuex(store, "selectedAssemblyNames", "setSelectedAssemblyNames");
 
     const paths = ref([]);
 
@@ -61,15 +61,23 @@ export default defineComponent({
     });
 
 
-    // const selectedAssemblyNameKeys = reactiveVuexObject(store.state.selectedAssemblyNameKeys, store.commit, "setselectedAssemblyNameKeys");
+    // const selectedAssemblyNames = reactiveVuexObject(store.state.selectedAssemblyNames, store.commit, "setSelectedAssemblyNames");
+
+    const selectedAssemblyKeyNames = computed(() => {
+      return selectedAssemblyNames.value.reduce((output, input) => ({...output, [input]: true}), {});
+    });
 
     const allSelected = computed({
-      get: () => paths.value.every((path) => selectedAssemblyNameKeys.value[path.name]),
-      set: (value) => paths.value.forEach((path) => (selectedAssemblyNameKeys.value[path.name] = value))
+      get: () => paths.value.every((path) => selectedAssemblyKeyNames.value[path.name]),
+      set: (value) => paths.value.forEach((path) => (selectedAssemblyKeyNames.value[path.name] = value))
     });
 
     const selectRow = (row) => {
-      selectedAssemblyNameKeys.value[row.name] = !selectedAssemblyNameKeys.value[row.name];
+      if (!selectedAssemblyNames.value.includes(row.name)) {
+        selectedAssemblyNames.value.push(row.name);
+      } else {
+        selectedAssemblyNames.value = selectedAssemblyNames.value.filter(name => name !== row.name);
+      }
     };
 
     const columns = [
@@ -89,7 +97,8 @@ export default defineComponent({
       rows: paths,
       columns,
       allSelected,
-      selectedAssemblyNameKeys,
+      selectedAssemblyNames,
+      selectedAssemblyKeyNames,
       selectRow
     };
   }

@@ -141,20 +141,25 @@ import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
 import { reactiveVuex } from "@/store/helper";
-// import {selectedAssemblyNameKeys, selectedChromosome, selectedPivotName} from '@/data/some-data-source';
+// import {selectedAssemblyNames, selectedChromosome, selectedPivotName} from '@/data/some-data-source';
 
 export default defineComponent({
   name: "StructuralVariationsPivotComparisonTable",
   components: {},
   setup() {
     const store = useStore();
-    const selectedPivotName = reactiveVuex(store, "selectedPivotName", "setselectedPivotName");
-    const selectedAssemblyNameKeys = reactiveVuex(store, "selectedAssemblyNameKeys", "setselectedAssemblyNameKeys");
-    const selectedSVTypeNames = reactiveVuex(store, "selectedSVTypeNames", "setselectedSVTypeNames");
+    const selectedPivotName = reactiveVuex(store, "selectedPivotName", "setSelectedPivotName");
+    // const selectedAssemblyNames = reactiveVuex(store, "selectedAssemblyNames", "setSelectedAssemblyNames");
+    const selectedSVTypeNames = reactiveVuex(store, "selectedSVTypeNames", "setSelectedSVTypeNames");
     const selectedBlock = reactiveVuex(store, "selectedBlock", "setSelectedBlock");
 
     const lengthFilter = reactiveVuex(store, "lengthFilter", "setLengthFilter"); // ref((Math.round(limitLength * 0.01) / lengthStep) * lengthStep);
     const positionFilter = reactiveVuex(store, "positionFilter", "setPositionFilter"); // ref((Math.round(limitPosition * 0.01) / positionStep) * positionStep);
+
+    const assembliesSelectedStored = computed(() => {
+      // selectedItems.value = store.getters['assemblies/assembliesSelected'].map(assembly => assembly.assembly_name);
+      return store.getters["assemblies/assembliesSelected"];
+    });
 
     const paths = ref({});
     const pangenome = ref();
@@ -176,8 +181,12 @@ export default defineComponent({
 
     const pivotRowIndex = ref(1);
 
+    const selectedAssemblyKeyNames = computed(() => {
+      return assembliesSelectedStored.value.reduce((output, input) => ({...output, [input.assembly_name]: true}), {});
+    });
+
     const pivot = computed(() => ({ name: selectedPivotName.value, path: paths.value[selectedPivotName.value] }));
-    const assemblies = computed(() => Object.keys(paths.value).filter(pathName => selectedAssemblyNameKeys.value[pathName]).map(pathName => ({
+    const assemblies = computed(() => Object.keys(paths.value).filter(pathName => selectedAssemblyKeyNames.value[pathName]).map(pathName => ({
       name: pathName,
       path: paths.value[pathName]
     })));

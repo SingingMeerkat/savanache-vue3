@@ -39,6 +39,8 @@
 
 <script>
 import { defineComponent, getCurrentInstance, ref, watch } from "vue";
+import { useStore } from "vuex";
+import pangenomes from "@/data/pangenome";
 
 export default defineComponent({
   name: "App",
@@ -56,6 +58,10 @@ export default defineComponent({
 
     const drawer = ref(false);
     const selectedRoute = ref(0);
+    const store = useStore();
+    // Pangenomes default initiation
+    store.dispatch("pangenomes/updatePangenomesAction", pangenomes);
+
     // const selectedRoute = computed({
     //   get() { const index = routes.indexOf(vm.proxy.$route.path); return index >= 0 ? index : undefined; },
     //   set(val) { const route = routes[val]; if (route) vm.proxy.$router.push(routes[val]); }

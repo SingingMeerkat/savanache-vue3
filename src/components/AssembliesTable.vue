@@ -29,8 +29,8 @@
 
       <!-- Checkboxes -->
       <template #cell(selected)="data">
-        <va-checkbox v-model="selectedItems" :array-value="data.cells[2].value"
-                     @click="selectAction(data.cells[2].value)" />
+        <va-checkbox v-model="selectedItems" :array-value="data.rowData.assemblyName"
+                     @click="selectAction(data.rowData.assemblyName)" />
       </template>
 
       <!-- ID -->
@@ -260,30 +260,34 @@ export default {
       } else {
         selectedItems.value = newAssemblies.map(assembly => assembly.assembly_name);
       }
-    });
+    }, {immediate: true});
 
     const selectAction = assemblyNameSelected => {
       const assembly = assemblies.value.filter(assembly => assembly.assembly_name === assemblyNameSelected)[0];
       if (assembly.selected) {
         store.dispatch("assemblies/updateIsNotSelectedStateAction", assembly);
-        store.state.chart.chart.instance
-          .series()
-          .points(p => p.name === assembly.assembly_name)
-          .options().items[0].userOptions.marker.outline.color = "white";
-        store.state.chart.chart.instance
-          .series()
-          .points(p => p.name === assembly.assembly_name)
-          .options({ color: "black", selected: false });
+        if (store.state.chart.chart.instance) {
+          store.state.chart.chart.instance
+            .series()
+            .points(p => p.name === assembly.assembly_name)
+            .options().items[0].userOptions.marker.outline.color = "white";
+          store.state.chart.chart.instance
+            .series()
+            .points(p => p.name === assembly.assembly_name)
+            .options({ color: "black", selected: false });
+        }
       } else {
         store.dispatch("assemblies/updateIsSelectedStateAction", assembly);
-        store.state.chart.chart.instance
-          .series()
-          .points(p => p.name === assembly.assembly_name)
-          .options().items[0].userOptions.marker.outline.color = "gray";
-        store.state.chart.chart.instance
-          .series()
-          .points(p => p.name === assembly.assembly_name)
-          .options({ color: "gray", selected: true });
+        if (store.state.chart.chart.instance) {
+          store.state.chart.chart.instance
+            .series()
+            .points(p => p.name === assembly.assembly_name)
+            .options().items[0].userOptions.marker.outline.color = "gray";
+          store.state.chart.chart.instance
+            .series()
+            .points(p => p.name === assembly.assembly_name)
+            .options({ color: "gray", selected: true });
+        }
       }
     };
 
@@ -310,10 +314,12 @@ export default {
         const assemblyNameSelected = outerText.split("\t")[2];
         const assembly = assemblies.value.filter(assembly => assembly.assembly_name === assemblyNameSelected)[0];
         // e.overMoused = true;
-        store.state.chart.chart.instance
-          .series()
-          .points(p => p.name === assembly.assembly_name)
-          .options({ color: assembly.color });
+        if (store.state.chart.chart.instance) {
+          store.state.chart.chart.instance
+            .series()
+            .points(p => p.name === assembly.assembly_name)
+            .options({ color: assembly.color });
+        }
       }
     };
 
@@ -339,14 +345,16 @@ export default {
         const assemblyNameSelected = outerText.split("\t")[2];
         const assembly = assemblies.value.filter(assembly => assembly.assembly_name === assemblyNameSelected)[0];
         // e.overMoused = false;
-        store.state.chart.chart.instance
-          .series()
-          .points(p => p.name === assembly.assembly_name && !p.selected)
-          .options({ color: "black" });
-        store.state.chart.chart.instance
-          .series()
-          .points(p => p.name === assembly.assembly_name && p.selected)
-          .options({ color: "gray" });
+        if (store.state.chart.chart.instance) {
+          store.state.chart.chart.instance
+            .series()
+            .points(p => p.name === assembly.assembly_name && !p.selected)
+            .options({ color: "black" });
+          store.state.chart.chart.instance
+            .series()
+            .points(p => p.name === assembly.assembly_name && p.selected)
+            .options({ color: "gray" });
+        }
       }
     };
 

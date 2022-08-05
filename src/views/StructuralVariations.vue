@@ -23,7 +23,8 @@
         <a v-show="pivotDetailsCols > 0" class="right-arrow" @click="moveColsRight"></a>
         <a v-show="pivotDetailsCols === 0" class="right-arrow-inverted" @click="moveColsLeft"></a>
         <v-card>
-          <StructuralVariationsAssembliesTable></StructuralVariationsAssembliesTable>
+          <AssembliesTable />
+<!--          <StructuralVariationsAssembliesTable></StructuralVariationsAssembliesTable>-->
         </v-card>
       </v-col>
       <v-col v-show="pivotDetailsCols > 0" :cols="pivotDetailsCols">
@@ -39,17 +40,19 @@
 
 <script>
 import { computed, defineComponent, ref } from "vue";
-import StructuralVariationsAssembliesTable from "../components/StructuralVariations/AssembliesTable.vue";
+// import StructuralVariationsAssembliesTable from "../components/StructuralVariations/AssembliesTable.vue";
 import StructuralVariationsFilters from "../components/StructuralVariations/Filters.vue";
 import StructuralVariationsPivotComparisonTable from "../components/StructuralVariations/PivotComparisonTable.vue";
 import StructuralVariationsPivotDetails from "../components/StructuralVariations/PivotDetails.vue";
+import AssembliesTable from "@/components/AssembliesTable";
 
 export default defineComponent({
   name: "StructuralVariations",
   components: {
     StructuralVariationsFilters,
     StructuralVariationsPivotComparisonTable,
-    StructuralVariationsAssembliesTable,
+    AssembliesTable,
+    // StructuralVariationsAssembliesTable,
     StructuralVariationsPivotDetails
   },
   setup() {

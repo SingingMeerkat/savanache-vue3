@@ -4,7 +4,7 @@
       <v-col cols="6">
         <v-select
           v-model="selectedPivotName"
-          :items="pivotItems"
+          :items="assemblies"
           dense
           hide-details
           label="Selected Pivot"
@@ -116,7 +116,7 @@
 
 <script>
 
-import { defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
 import { reactiveVuex } from "@/store/helper";
@@ -126,8 +126,8 @@ export default defineComponent({
   components: {},
   setup() {
     const store = useStore();
-    const selectedPivotName = reactiveVuex(store, "selectedPivotName", "setselectedPivotName");
-    const selectedSVTypeNames = reactiveVuex(store, "selectedSVTypeNames", "setselectedSVTypeNames");
+    const selectedPivotName = reactiveVuex(store, "selectedPivotName", "setSelectedPivotName");
+    const selectedSVTypeNames = reactiveVuex(store, "selectedSVTypeNames", "setSelectedSVTypeNames");
 
     const pivotItems = ref([]);
 
@@ -184,8 +184,24 @@ export default defineComponent({
       "inversionChain"
     ];
 
+    const selected = ref([]);
+    const assemblies = computed(() => {
+      if (selected.value.length !== 0) {
+        return store.state.assemblies.assemblies.filter(assembly => {
+          return (
+            assembly.heterotic_group.filter(hg => {
+              return selected.value.includes(hg);
+            }).length !== 0
+          );
+        });
+      } else {
+        return store.state.assemblies.assemblies.map(assembly => assembly.assembly_name);
+      }
+    });
+
     return {
-      pivotItems,
+      assemblies,
+      // pivotItems,
       selectedPivotName,
       svItems,
       selectedSVTypeNames,

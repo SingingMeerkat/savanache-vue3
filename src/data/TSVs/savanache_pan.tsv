@@ -1,0 +1,19 @@
+id	x	y	assembly_name	phenotype	pangenome	Heterotic_group	majore
+0	0	1	Aphrodite	Blue	pangenome_1	Heterotic_group_1	true
+1	0	2	Ganymede	Red	pangenome_1	Heterotic_group_1	false
+2	0	3	Leonidas	Blue	pangenome_1	Heterotic_group_1	false
+3	-1	0	assembly_name_4	Red	pangenome_1	Heterotic_group_1	false
+4	-2	0	assembly_name_5	Blue	pangenome_1	Heterotic_group_1, Heterotic_group_2	false
+5	-3	0	assembly_name_6	Red	pangenome_1	Heterotic_group_2	false
+6	5	5	assembly_name_7	Blue	pangenome_2	Heterotic_group_2	false
+7	4	4	assembly_name_8	Red	pangenome_2	Heterotic_group_2	true
+8	4	3	assembly_name_9	Blue	pangenome_2	Heterotic_group_2	false
+9	3	4	assembly_name_10	Red	pangenome_2	Heterotic_group_2, Heterotic_group_3	false
+10	-1	-1	assembly_name_11	Blue	pangenome_2	Heterotic_group_2, Heterotic_group_3	false
+11	5	-1	assembly_name_12	Red	pangenome_2	Heterotic_group_2, Heterotic_group_3	false
+12	-1	5	assembly_name_13	Blue	pangenome_2	Heterotic_group_3	false
+13	0	5	assembly_name_14	Red	pangenome_2	Heterotic_group_3	false
+14	3	2	assembly_name_15	Blue	pangenome_1, pangenome_2	Heterotic_group_3	false
+15	4	-3	assembly_name_16	Red	pangenome_1, pangenome_2	Heterotic_group_3	true
+16	-3	4	assembly_name_17	Blue	pangenome_1, pangenome_2	Heterotic_group_2	false
+17	-2	-2	assembly_name_18	Red	pangenome_1, pangenome_2	Heterotic_group_2	false
