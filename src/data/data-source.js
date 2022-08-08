@@ -10,7 +10,14 @@ export const getData = () => {
   return promise;
 };
 
-//TODO Description
+//---------------- Builds SV annotations on all paths, for a given chromName
+// Loops through all paths to compare ('compared'), and builds SV annotation
+// based on their differences with a 'pivot' path, reference coordinate system.
+// It computes SV, and rerun comparison for expanding the details missed in early
+// two versus two comparison steps (e.g. Swap with more than 2 nodes involved).
+// Returns an object named 'pivots', with as many 'pivot' objects as path that
+// should be compared. A specific comparison can be accessed with pivots[pivotName][comparedPathName]
+// Cf parsePivotSteps() for more about the pivot object.
 const buildThenExpandAnnotations = ({
                                             pangenomeImport,
                                             // pivotsImport,
@@ -21,10 +28,7 @@ const buildThenExpandAnnotations = ({
 
   const pivots = {};
 
-  //---------------------------
-  //--------------------------- ForEach pathName x pathData
-  //---------------------------
-
+  // ForEach pathName x pathData...
   Object.entries(pangenomeImport.paths).forEach(([comparedPathName, comparedPathData]) => {
 
     const innerLoopResult = parsePivotSteps({
@@ -37,7 +41,6 @@ const buildThenExpandAnnotations = ({
     });
 
     if (innerLoopResult && innerLoopResult.pivot) {
-      // const pivotName = `${pivotPathName}#${comparedPathName}`;
 
       // FILL PIVOTS DICT WITH ANNOTATIONS
       if (!pivots[pivotPathName]) {
@@ -48,32 +51,27 @@ const buildThenExpandAnnotations = ({
       }
       Object.assign(pivots[pivotPathName][comparedPathName], innerLoopResult.pivot);
 
-      let trackMissingComparisonSteps = [];
+      let trackAbsentPivotSteps = [];
       let lastPresentStepBeforeMissing;
       let firstPresentStepAfterMissing;
 
       // SECOND PASS  for (trailing) DELETION / SWAP DETECTION
       innerLoopResult.pivot.array.forEach((annotPivotStep, pivotStepIndex) => {
 
-        //---------------- QUESTION: Could we do this outside of this loop? Within the innerLoop instead, once everything is parsed?
+        // REMARK: Could we do this outside of this loop? Within the innerLoop instead, once everything is parsed?
         if (pivotStepIndex === innerLoopResult.pivot.array.length - 1 && annotPivotStep.comparedPathStepIndex === undefined) {
           // Detect if at the end of the array and there's still a swap or delete leftover
           // (Doing this because the rest of the process expects another "present" step to close the swap or gap)
-          trackMissingComparisonSteps.push(annotPivotStep);
+          trackAbsentPivotSteps.push(annotPivotStep);
           // firstPresentStepAfterMissing = pivotStepIndex;
         }
 
-        //---------------- QUESTION: I am not quite sure what this part does
-        //---------------- QUESTION: does 'Missing' === 'Absent' here?
-        //---------------- ie trackAbsentPivotSteps instead of trackMissingComparisonSteps
-        //---------------- I am unsure wether it looks for comparisons that haven't been made
-        //---------------- or simply pivot steps labelled as absent (or rather not labelled as present)
         if (annotPivotStep.comparedPathStepIndex !== undefined || pivotStepIndex === innerLoopResult.pivot.array.length - 1) {
 
-          if (trackMissingComparisonSteps.length === 0) {
+          if (trackAbsentPivotSteps.length === 0) {
             lastPresentStepBeforeMissing = annotPivotStep;
 
-          // If there is 1+ missing comparison step... (absent compared step?)
+          // If there is 1+ absent pivot step...
           } else {
             firstPresentStepAfterMissing = annotPivotStep;
 
@@ -83,7 +81,7 @@ const buildThenExpandAnnotations = ({
               // debugger;
               lastPresentStepBeforeMissing = annotPivotStep;
               firstPresentStepAfterMissing = null;
-              trackMissingComparisonSteps = [];
+              trackAbsentPivotSteps = [];
 
             // With a gap opening
             } else {
@@ -106,11 +104,11 @@ const buildThenExpandAnnotations = ({
               if (highestIndexBeforeGap === lowestIndexAfterGap - 1) {
                 // SECOND PASS DELETION
 
-                const swapOrDelete = trackMissingComparisonSteps[0].swapOrDelete;
-                const swapOrDeleteNodes = trackMissingComparisonSteps[0].swapOrDeleteNodes;
+                const swapOrDelete = trackAbsentPivotSteps[0].swapOrDelete;
+                const swapOrDeleteNodes = trackAbsentPivotSteps[0].swapOrDeleteNodes;
                 if (swapOrDelete && swapOrDeleteNodes) {
                   // Deletion not detected on initial pass
-                  trackMissingComparisonSteps.forEach((missingStep) => {
+                  trackAbsentPivotSteps.forEach((missingStep) => {
                     missingStep.deleted = missingStep.swapOrDelete || true;
                     missingStep.deletedNodes = missingStep.swapOrDeleteNodes || swapOrDeleteNodes;
 
@@ -129,22 +127,22 @@ const buildThenExpandAnnotations = ({
                   });
                   lastPresentStepBeforeMissing = annotPivotStep;
                   firstPresentStepAfterMissing = null;
-                  trackMissingComparisonSteps = [];
+                  trackAbsentPivotSteps = [];
 
                 } else {
                   // Deletion detected on initial pass
                   lastPresentStepBeforeMissing = annotPivotStep;
                   firstPresentStepAfterMissing = null;
-                  trackMissingComparisonSteps = [];
+                  trackAbsentPivotSteps = [];
                 }
               } else {
                 // SECOND PASS SWAP
 
-                if (trackMissingComparisonSteps[0].swapOrDelete && trackMissingComparisonSteps[0].swapOrDeleteNodes) {
+                if (trackAbsentPivotSteps[0].swapOrDelete && trackAbsentPivotSteps[0].swapOrDeleteNodes) {
                   // Swap not detected on initial pass
-                  const swapOrDelete = trackMissingComparisonSteps[0].swapOrDelete;
-                  const swapOrDeleteNodes = trackMissingComparisonSteps[0].swapOrDeleteNodes;
-                  const swapComparisonNodes = [];
+                  const swapOrDelete = trackAbsentPivotSteps[0].swapOrDelete;
+                  const swapOrDeleteNodes = trackAbsentPivotSteps[0].swapOrDeleteNodes;
+                  const swapComparedNodes = [];
 
                   for (let i = highestIndexBeforeGap + 1; i < lowestIndexAfterGap; i++) {
                     const step = comparedPathData[chromName][i];
@@ -152,15 +150,15 @@ const buildThenExpandAnnotations = ({
                       comparedPathStepIndex: i,
                       comparedPathStepPanBlock: step.panBlock
                     };
-                    swapComparisonNodes.push(swapNode);
+                    swapComparedNodes.push(swapNode);
                   }
 
                   if (swapOrDelete && swapOrDeleteNodes) {
                     // Deletion not detected on initial pass
-                    trackMissingComparisonSteps.forEach((missingStep) => {
+                    trackAbsentPivotSteps.forEach((missingStep) => {
                       missingStep.swap = missingStep.swapOrDelete || true;
                       missingStep.swapPivotNodes = missingStep.swapOrDeleteNodes || swapOrDeleteNodes;
-                      missingStep.swapComparisonNodes = swapComparisonNodes;
+                      missingStep.swapComparedNodes = swapComparedNodes;
 
                       // TODO: Fill in missing nodes from nodes between the start and end
 
@@ -182,22 +180,22 @@ const buildThenExpandAnnotations = ({
                     // debugger;
                     lastPresentStepBeforeMissing = annotPivotStep;
                     firstPresentStepAfterMissing = null;
-                    trackMissingComparisonSteps = [];
+                    trackAbsentPivotSteps = [];
 
                   } else {
                     // Swap detected on initial pass
                     // debugger;
-                    annotPivotStep.swapComparisonNodes = swapComparisonNodes;
+                    annotPivotStep.swapComparedNodes = swapComparedNodes;
                     lastPresentStepBeforeMissing = annotPivotStep;
                     firstPresentStepAfterMissing = null;
-                    trackMissingComparisonSteps = [];
+                    trackAbsentPivotSteps = [];
                   }
                 }
               }
             }
           }
         } else {
-          trackMissingComparisonSteps.push(annotPivotStep);
+          trackAbsentPivotSteps.push(annotPivotStep);
         }
       });
     }
@@ -227,11 +225,14 @@ const parsePivotSteps = ({
                                           }) => {
 
 
-  //------------------Applied only to compared paths
-  //------------------ QUESTION: Users might want to run it on the pivot too, to see coocs within pivot
+  // Applied only to compared paths
+  // REMARK: Users might want to run it on the pivot too, to see coocs within pivot
+  // Let's comment it for now? for performance it could be a special case
+  // where only coocs are targetted, there would not be any other SV detected anyway.
   if (pivotPathName === comparedPathName) {
     return;
   }
+
 
   //The 'pivot', listing all annotated steps, is returned at the end
   const pivot = {
@@ -245,10 +246,10 @@ const parsePivotSteps = ({
   let lastAbsentPivotStep;
   let lastSwappedPivotStep;
 
-  //--------------- Parsing the pivot data
+  // Parsing the pivot data
   pivotPathData.steps.forEach((pivotStep, pivotStepIndex) => {
 
-    //------------- 'stepResult' == multiple SV annotated objects, reusable within the loop
+    // 'stepResult' == multiple SV annotated objects, reusable within the loop
     const stepResult = annotatePivotStep({
       chromName,
       comparedPathData,
@@ -270,9 +271,9 @@ const parsePivotSteps = ({
     lastSwappedPivotStep = stepResult.lastSwappedPivotStep;
     firstSwappedPivotStep = stepResult.firstSwappedPivotStep;
 
-    //-------------- QUESTION: Seems redundant, why have multiple copies of annotPivotStep? Ain't it heavy?
-    //-------------- Could we just have 'blocks', with array simply storing the panBlock IDs, so that index and annotPivotStep are still linked?
-    //-------------- QUESTION: How are cascaded the SV on previous annotPivotSteps? (ex info on end of Swap, continuity of inversionChain...)
+    // REMARK: Seems redundant, why have multiple copies of annotPivotStep? Ain't it heavy?
+    // Could we just have 'blocks', with array simply storing the panBlock IDs, so that index and annotPivotStep are still linked?
+    // REMARK: SV on previous annotPivotSteps (ex info on end of Swap, continuity of inversionChain...) are cascaded within buildThenExpandAnnotations(), through yet another loop
     pivot.array.push(annotPivotStep);
     pivot.blocks[annotPivotStep.panBlock] = annotPivotStep;
   });
@@ -286,7 +287,7 @@ const parsePivotSteps = ({
 };
 
 //---------------- Checks SV at a pivot step
-// It looks for all SVs of annotateComparisonOfTwoSteps, and looks for SWAPS
+// It looks for all SVs of annotateComparisonOfTwoSteps, and looks for Swaps
 // or DELETIONS
 // Returns an object containing the updated annotPivotStep, the previous annotPivotStep,
 // the latest Absent or latest Present annotPivotStep, and the first and last Swapped
@@ -305,10 +306,10 @@ const annotatePivotStep = ({
                                        firstSwappedPivotStep
                                      }) => {
 
-  //---------------- Node object, traversed by the current pivot step
+  // Node object, traversed by the current pivot step
   const traversedPanBlock = pangenomeImport.panSkeleton[pivotStep.panBlock];
 
-  //---------------- Stores node ID + step index
+  // Stores node ID + step index
   const annotPivotStep = {
     panBlock: pivotStep.panBlock,
     pivotStepIndex: pivotStepIndex
@@ -365,7 +366,7 @@ const annotatePivotStep = ({
     if (previousPivotStep && !previousPivotStep.present) {
 
       // ...if it is a gap closure (and not the first presence at the beginning, for example)
-      //------------ QUESTION: what if there is a swap at the very beginning ?
+      // REMARK: Swaps at the very beginning might be ignored as such, as it asks for an absence after a presence here.
       if (firstSwappedPivotStep) {
 
         lastSwappedPivotStep = previousPivotStep;
@@ -379,15 +380,14 @@ const annotatePivotStep = ({
 
         // Either stores last swapped annotPivotStep coords, or mark annotPivotStep as a solo swap
         if (firstSwappedPivotStep !== lastSwappedPivotStep) {
-          //--------------- QUESTION, is this cascaded on lastSwappedPivotStep.swapOrDeleteNodes ?
-          firstSwappedPivotStep.swapOrDeleteNodes.push(swapNode);
+          firstSwappedPivotStep.swapOrDeleteNodes.push(swapNode); // REMARK: Cascaded on lastSwappedPivotStep.swapOrDeleteNodes within buildThenExpandAnnotations()?
         } else {
           lastSwappedPivotStep.swapOrDelete = "solo";
         }
 
         // console.log('lastPresentPivotStep', lastPresentPivotStep && lastPresentPivotStep.comparedPathStepIndex, 'annotPivotStep', annotPivotStep.comparedPathStepIndex);
 
-        // There was no gap in the comparison path, so it was merely a deletion (not a swap)
+        // There was no gap in the compared path, so it was merely a deletion (not a swap)
         // DELETION, overwrites swapOrDelete
         if (lastPresentPivotStep && lastPresentPivotStep.comparedPathStepIndex === annotPivotStep.comparedPathStepIndex - 1) {
           firstSwappedPivotStep.deleted = firstSwappedPivotStep.swapOrDelete;
@@ -428,7 +428,7 @@ const annotatePivotStep = ({
     previousPivotStep,
     lastPresentPivotStep,
     lastAbsentPivotStep,
-    //----------- QUESTION: isn't the lastSwappedPivotStep always nullified?
+    // QUESTION: isn't the lastSwappedPivotStep always nullified with the current code?
     lastSwappedPivotStep,
     firstSwappedPivotStep
   };
@@ -438,7 +438,7 @@ const annotatePivotStep = ({
 //---------------- Checks local SV between pivot and path Steps
 // It compares current annotPivotStep with any comparedStep (and the direct previous steps)
 // Writes coocs, present, comparedPathStepIndex, inversion, !deletion!, insertion, inversionChain
-// and the related nodes ({index and ID in pivot, index and ID in comparison, (highestComparisonStepIndex)})
+// and the related nodes ({index and ID in pivot, index and ID in compared, (highestComparedStepIndex)})
 // into annotPivotStep as properties of an object.
 // Returns an object containing the studied comparedStep
 const annotateComparisonOfTwoSteps = ({
@@ -454,27 +454,26 @@ const annotateComparisonOfTwoSteps = ({
                                             pivotStepIndex
                                           }) => {
 
-  //--------------- Index of previous pivot Step/Node in the compared path, or highest for Inv. Chains
-  // Detect highest index if it was an inversion chain
-  let highestComparisonStepIndex = previousPivotStep ? previousPivotStep.comparedPathStepIndex : undefined;
+  // Index of previous pivot Step/Node in the compared path, or highest for Inv. Chains
+  let highestComparedStepIndex = previousPivotStep ? previousPivotStep.comparedPathStepIndex : undefined;
   if (previousPivotStep && previousPivotStep.inversionChain) {
-    //---------- QUESTION: highestComparisonStepIndex is supposed to be the same through all Steps of an invChain, why check this?
-    //---------- It is even non-existent in all Steps but the starting one!
-    previousPivotStep.inversionChainNodes.forEach(step => highestComparisonStepIndex = Math.max(highestComparisonStepIndex, step.comparedPathStepIndex));
+    // REMARK: highestComparedStepIndex is supposed to be the same through all Steps of an invChain, why check this?
+    // It is even non-existent in all Steps but the starting one, so the max would always be the same!
+    previousPivotStep.inversionChainNodes.forEach(step => highestComparedStepIndex = Math.max(highestComparedStepIndex, step.comparedPathStepIndex));
   }
 
-  //-------------- Checks if the current compared Step is a cooc of the current pivot Step
-  //-------------- QUESTION: can we call it 'cooc(s)' instead of 'cooc(s)'
-  // COOCCURRENCES
+  // Checks if the current compared Step is a cooc of the current pivot Step
+  // COOCCURRENCES ("CCOCS")
   if (traversedPanBlock.coocs.includes(comparedPathStep.panBlock)) {
     annotPivotStep.cooc = true;
     if (!annotPivotStep.coocNodes) {
       annotPivotStep.coocNodes = [];
     }
 
-    //--------------- Stores found cooc
+    // Stores found cooc
     const coocNode = {
-      //---------------- QUESTION: Why rewrite pivotStepIndex and pivotStepPanBlock?
+      // REMARK: pivotStepIndex and pivotStepPanBlock are already written on creation of annotPivotStep
+      // -> TODO: simplify objects by keeping only the first pivotStepIndex without rewriting it for every SV
       pivotStepIndex: pivotStepIndex,
       pivotStepPanBlock: pivotStep.panBlock,
       comparedPathStepIndex: comparedPathStepIndex,
@@ -486,9 +485,8 @@ const annotateComparisonOfTwoSteps = ({
   // PRESENCE, then INVERSION, INSERTION, or INVERSION CHAIN
   if (pivotStep.panBlock === comparedPathStep.panBlock) {
 
-    //----------------- QUESTION: Why not directly check and target the index
-    // with the data? panSkeleton[panBlock_ID]['traversals'][compared_ID]
-    // Looping through all compared Steps to find the good one seems unecessary
+    // TODO: Directly check and fetch the index thanks to the data format: panSkeleton[panBlock_ID]['traversals'][compared_ID][chromName]
+    // as looping through all compared Steps only to find the matching one is unecessary
     //PRESENCE
     annotPivotStep.present = true;
     annotPivotStep.comparedPathStepIndex = comparedPathStepIndex;
@@ -503,37 +501,36 @@ const annotateComparisonOfTwoSteps = ({
         pivotStepIndex: pivotStepIndex,
         pivotStepPanBlock: pivotStep.panBlock,
         comparedPathStepIndex: comparedPathStepIndex,
-    //--------------- QUESTION: supposed to be the same as pivot, why write it?
+    // REMARK: supposed to be the same as pivot, why write it?
         comparedPathStepPanBlock: comparedPathStep.panBlock
       };
       annotPivotStep.inversionNodes.push(inversionNode);
     }
 
-    //-------------- If there is a previous Step in the pivot...
+    // If there is a previous Step in the pivot...
     if (previousPivotStep) {
 
       // DELETION
-      //----------------------- CAUTION
-      //----------------------- Not working, as all pivot steps are parsed in consecutive order
-      //----------------------- Condition below can never be met
+      // CAUTION: Not working, as all pivot steps are parsed in consecutive order
+      // Condition below can never be met
       if (previousPivotStep.pivotStepIndex < annotPivotStep.pivotStepIndex - 1) {
         // Don't think I can detect deletion here
         annotPivotStep.deletion = true;
       }
 
       // INSERTION
-      //----------------- QUESTION: What happens if highestComparisonStepIndex is undefined (eg. absent from previous annotPivotStep)?
-      if (highestComparisonStepIndex < annotPivotStep.comparedPathStepIndex - 1) {
+      // QUESTION: What happens if highestComparedStepIndex is undefined (eg. absent from previous annotPivotStep)?
+      if (highestComparedStepIndex < annotPivotStep.comparedPathStepIndex - 1) {
         annotPivotStep.insertion = true;
         annotPivotStep.insertionNodes = [];
 
-        for (let insertionPathStepsIndex = highestComparisonStepIndex + 1;
+        for (let insertionPathStepsIndex = highestComparedStepIndex + 1;
           insertionPathStepsIndex < annotPivotStep.comparedPathStepIndex;
           insertionPathStepsIndex++) {
           const insertionPathStep = comparedPathData[chromName][insertionPathStepsIndex];
 
           const insertionNode = {
-            //--------------- QUESTION: Why keep pivot panBlock? It is not within the compared path.
+            // REMARK: again, info on pivotStep is redundant. TODO: Remove it from this ppty.
             pivotStepIndex: pivotStepIndex,
             pivotStepPanBlock: pivotStep.panBlock,
             comparedPathStepIndex: insertionPathStepsIndex,
@@ -546,11 +543,12 @@ const annotateComparisonOfTwoSteps = ({
       // INVERSION CHAIN
       // Check the comparison step indices, if the previous one is higher than this one,
       // they're decrementing as the pivot steps increment and probably an inversion chain
-      //-------------------- QUESTION: couldn't we just check previousPivotStep.comparedPathStepIndex?
-      if (highestComparisonStepIndex === annotPivotStep.comparedPathStepIndex + 1 || previousPivotStep.comparedPathStepIndex === annotPivotStep.comparedPathStepIndex + 1) {
+      // REMARK: We could just check previousPivotStep.comparedPathStepIndex, I think:
+      //if (previousPivotStep.comparedPathStepIndex === annotPivotStep.comparedPathStepIndex + 1) {
+      if (highestComparedStepIndex === annotPivotStep.comparedPathStepIndex + 1 || previousPivotStep.comparedPathStepIndex === annotPivotStep.comparedPathStepIndex + 1) {
 
-        //------------------ QUESTION: is it redefined with each new node within?
-        //------------------ Or does it take the end-loop value by default, since it is a const?
+        // QUESTION: is it automatically updated with each new node within, for all that are already stored?
+        // Or is it within buildThenExpandAnnotations()? if at all?
         const inversionChainNodes = previousPivotStep.inversionChainNodes || [];
 
         previousPivotStep.inversionChainNodes = inversionChainNodes;
@@ -560,7 +558,7 @@ const annotateComparisonOfTwoSteps = ({
         // annotPivotStep.inversionChain = annotPivotStep.inversionChain || "";
         annotPivotStep.inversionChain = true;
 
-        //------------ Checking if the current node is part of inv chain seems redundant as it is stated just before
+        // Checking if the current node is part of inv chain seems redundant as it is stated just before
         if (annotPivotStep.inversionChain && !previousPivotStep.inversionChain) {
           // Last step was the start of this inversion chain
           previousPivotStep.inversionChain = "start";
@@ -569,13 +567,14 @@ const annotateComparisonOfTwoSteps = ({
             pivotStepIndex: previousPivotStep.pivotStepIndex,
             pivotStepPanBlock: previousPivotStep.panBlock,
             comparedPathStepIndex: previousPivotStep.comparedPathStepIndex,
-            highestComparisonStepIndex,
+            highestComparedStepIndex,
             comparedPathStepPanBlock: previousPivotStep.panBlock
           };
           inversionChainNodes.push(inversionChainNode);
 
-        //------------- QUESTION: Seems redundant, previousPivotStep.inversionChain === tru is already implied by the condition
         } else {
+          // REMARK: Seems redundant, previousPivotStep.inversionChain === true is already implied by the loop
+          // TODO: correct
           // Last step was inside an inversion chain
           previousPivotStep.inversionChain = true;
         }
@@ -587,14 +586,15 @@ const annotateComparisonOfTwoSteps = ({
           comparedPathStepPanBlock: comparedPathStep.panBlock
         };
 
-        //---------------- QUESTION: Does the push at the end of the loop does anything?
-        //---------------- How is the previousPivotStep.inversionChainNodes updated?
+        // QUESTION: Does the push at the end of the loop does anything?
+        // How is the previousPivotStep.inversionChainNodes updated?
+        // TODO: correct logic.
         inversionChainNodes.push(inversionChainNode);
 
       }
 
       // END OF INVERSION CHAIN
-      //----------------- QUESTION: What if the final step is within an inv Chain?, no 'end' attributed?
+      // QUESTION: What if the final step is within an inv Chain?, no 'end' attributed? Done within buildThenExpandAnnotations()?
       if (previousPivotStep.inversionChain && !annotPivotStep.inversionChain) {
         // Current step is after (outside) an inversion chain, previous step was last inside the inversion chain
         previousPivotStep.inversionChain = "end";
