@@ -216,6 +216,7 @@ const buildThenExpandAnnotations = ({
 // annotated Steps, and 'blocks' containing all annotated steps as linked to keys defined
 // by the panBlock IDs
 const parsePivotSteps = ({
+                                            chromName,
                                             pangenomeImport,
                                             // pivotsImport,
                                             pivotPathName,
@@ -463,7 +464,7 @@ const annotateComparisonOfTwoSteps = ({
   }
 
   // Checks if the current compared Step is a cooc of the current pivot Step
-  // COOCCURRENCES ("CCOCS")
+  // COOCCURRENCES ("COOCS")
   if (traversedPanBlock.coocs.includes(comparedPathStep.panBlock)) {
     annotPivotStep.cooc = true;
     if (!annotPivotStep.coocNodes) {
