@@ -32,6 +32,7 @@ const buildThenExpandAnnotations = ({
   Object.entries(pangenomeImport.paths).forEach(([comparedPathName, comparedPathData]) => {
 
     const innerLoopResult = parsePivotSteps({
+      chromName,
       pangenomeImport,
       // pivotsImport,
       pivotPathName,
@@ -248,7 +249,7 @@ const parsePivotSteps = ({
   let lastSwappedPivotStep;
 
   // Parsing the pivot data
-  pivotPathData.steps.forEach((pivotStep, pivotStepIndex) => {
+  pivotPathData[chromName].forEach((pivotStep, pivotStepIndex) => {
 
     // 'stepResult' == multiple SV annotated objects, reusable within the loop
     const stepResult = annotatePivotStep({
