@@ -212,7 +212,7 @@ export default {
       } else {
         selectedItems.value = [];
       }
-    });
+    }, {immediate: true});
 
     // on Checkbox event
     const selectAction = panID => {
