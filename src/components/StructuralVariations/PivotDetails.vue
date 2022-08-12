@@ -144,12 +144,12 @@ export default defineComponent({
 
     const comparisonNodeInPivotBlock = (comparisonPanBlockName) => {
 
-      const dupeNodes = selectedPivotBlock.value.dupeNodes && selectedPivotBlock.value.dupeNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
+      const coocNodes = selectedPivotBlock.value.coocNodes && selectedPivotBlock.value.coocNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
       const swapComparisonNodes = selectedPivotBlock.value.swapComparisonNodes && selectedPivotBlock.value.swapComparisonNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
       const insertionNodes = selectedPivotBlock.value.insertionNodes && selectedPivotBlock.value.insertionNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
       const inversionChainNodes = selectedPivotBlock.value.inversionChainNodes && selectedPivotBlock.value.inversionChainNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
 
-      return dupeNodes || swapComparisonNodes || insertionNodes || inversionChainNodes;
+      return coocNodes || swapComparisonNodes || insertionNodes || inversionChainNodes;
     };
 
     const getComparisonStepClasses = (panBlockName) => {
@@ -157,18 +157,18 @@ export default defineComponent({
         pivots.value[selectedBlock.value.pivotName][selectedBlock.value.comparisonName].array.filter(
           (step) => {
             const matchNode = step.panBlock === panBlockName;
-            const dupeNodes = step.dupeNodes && step.dupeNodes.find(node => node.comparisonStepPanBlock === panBlockName);
+            const coocNodes = step.coocNodes && step.coocNodes.find(node => node.comparisonStepPanBlock === panBlockName);
             const swapComparisonNodes = step.swapComparisonNodes && step.swapComparisonNodes.find(node => node.comparisonStepPanBlock === panBlockName);
             const insertionNodes = step.insertionNodes && step.insertionNodes.find(node => node.comparisonStepPanBlock === panBlockName);
             const inversionChainNodes = step.inversionChainNodes && step.inversionChainNodes.find(node => node.comparisonStepPanBlock === panBlockName);
-            return matchNode || dupeNodes || swapComparisonNodes || insertionNodes || inversionChainNodes;
+            return matchNode || coocNodes || swapComparisonNodes || insertionNodes || inversionChainNodes;
           }).reduce((result, step) => {
 
-          if (step.dupeNodes) {
-            if (!result.dupeNodes) {
-              result.dupeNodes = [...step.dupeNodes];
+          if (step.coocNodes) {
+            if (!result.coocNodes) {
+              result.coocNodes = [...step.coocNodes];
             } else {
-              result.dupeNodes = [...result.dupeNodes, ...step.dupeNodes];
+              result.coocNodes = [...result.coocNodes, ...step.coocNodes];
             }
           }
 
@@ -220,8 +220,8 @@ export default defineComponent({
       if (comparisonParent.insertion && comparisonParent.insertionNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
         classes.push("block-insertion"); // + (typeof comparisonParent.insertion === 'string' ? '-' + comparisonParent.insertion : ''));
       }
-      if (comparisonParent.dupe && comparisonParent.dupeNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
-        classes.push("block-dupe"); // + (typeof comparisonParent.dupe === 'string' ? '-' + comparisonParent.dupe : ''));
+      if (comparisonParent.cooc && comparisonParent.coocNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
+        classes.push("block-cooc"); // + (typeof comparisonParent.cooc === 'string' ? '-' + comparisonParent.cooc : ''));
       }
       if (comparisonParent.swap && comparisonParent.swapComparisonNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
         classes.push("block-swap"); // + (typeof comparisonParent.swap === 'string' ? '-' + comparisonParent.swap : ''));
@@ -260,8 +260,8 @@ export default defineComponent({
       // if (pivotParent.insertion) {
       //   classes.push('block-insertion'); // + (typeof pivotParent.insertion === 'string' ? '-' + pivotParent.insertion : ''));
       // }
-      if (pivotParent.dupe) {
-        classes.push("block-dupe"); // + (typeof pivotParent.dupe === 'string' ? '-' + pivotParent.dupe : ''));
+      if (pivotParent.cooc) {
+        classes.push("block-cooc"); // + (typeof pivotParent.cooc === 'string' ? '-' + pivotParent.cooc : ''));
       }
       if (pivotParent.swap) {
         classes.push("block-swap"); // + (typeof pivotParent.swap === 'string' ? '-' + pivotParent.swap : ''));
@@ -387,13 +387,13 @@ export default defineComponent({
     //         Object.entries(pivots.value[selectedBlock.value.pivotName][selectedBlock.value.comparisonName].blocks).every(([name, block]) => {
     //           debugger;
     //           if (
-    //             (block.dupeNodes && block.dupeNodes.find(node => node.panBlock === selectedBlock.value.blockName)) ||
+    //             (block.coocNodes && block.coocNodes.find(node => node.panBlock === selectedBlock.value.blockName)) ||
     //             (block.swapComparisonNodes && block.swapComparisonNodes.find(node => node.panBlock === selectedBlock.value.blockName)) ||
     //             (block.insertionNodes && block.insertionNodes.find(node => node.panBlock === selectedBlock.value.blockName))
     //           ) {
     //             debugger;
     //             reversePanBlock = name;
-    //             pivotPathNode = { ...block, dupe: undefined };
+    //             pivotPathNode = { ...block, cooc: undefined };
     //             return selectedBlock.value.blockName !== name;
     //           }
     //           return true;
@@ -401,8 +401,8 @@ export default defineComponent({
     //       }
     //       const blockTypes = pivotPathNode ? Object.entries(pivotPathNode).filter(([key, value]) => value && typeof value !== "object").map(([key, value]) => key) : [];
     //
-    //       if (panBlock.dupes.length && !blockTypes.includes("dupe")) {
-    //         blockTypes.push("dupe");
+    //       if (panBlock.coocs.length && !blockTypes.includes("cooc")) {
+    //         blockTypes.push("cooc");
     //       }
     //
     //       const selected = isSelectedStep({
@@ -580,7 +580,7 @@ export default defineComponent({
   color: white;
 }
 
-.block-dupe {
+.block-cooc {
   background: #0086CA !important;
   color: white;
 }
@@ -590,7 +590,7 @@ export default defineComponent({
   color: white;
 }
 
-.block-inversion.block-dupe, .block-inversion-chain.block-dupe {
+.block-inversion.block-cooc, .block-inversion-chain.block-cooc {
   background: linear-gradient(0deg, #0086CA 50%, #9D0D0D 50%) !important;
 }
 
@@ -598,12 +598,12 @@ export default defineComponent({
   background: linear-gradient(0deg, #81CD06 50%, #9D0D0D 50%) !important;
 }
 
-.block-inversion.block-dupe.block-insertion, .block-inversion-chain.block-dupe.block-insertion {
+.block-inversion.block-cooc.block-insertion, .block-inversion-chain.block-cooc.block-insertion {
   background: linear-gradient(0deg, #0086CA 33%, #9D0D0D 33%, #9D0D0D 66%, #81CD06 66%) !important;
 }
 
 
-.block-dupe.block-insertion {
+.block-cooc.block-insertion {
   background: linear-gradient(0deg, #0086CA 50%, #81CD06 50%) !important;
 }
 
@@ -611,11 +611,11 @@ export default defineComponent({
   background: linear-gradient(0deg, #8148A4 50%, #81CD06 50%) !important;
 }
 
-.block-swap.block-dupe {
+.block-swap.block-cooc {
   background: linear-gradient(0deg, #0086CA 50%, #8148A4 50%) !important;
 }
 
-.block-swap.block-dupe.block-insertion {
+.block-swap.block-cooc.block-insertion {
   background: linear-gradient(0deg, #0086CA 33%, #8148A4 33%, #8148A4 66%, #81CD06 66%) !important;
 }
 
@@ -688,7 +688,7 @@ export default defineComponent({
   left: 10px;
 }
 
-.visual-block.block-type.block-dupe {
+.visual-block.block-type.block-cooc {
   position: absolute;
   //width: 100%;
   left: -1px;
@@ -699,7 +699,7 @@ export default defineComponent({
   border-bottom: 2px solid #0086CA;
 }
 
-.pivot-block.block-type.block-dupe {
+.pivot-block.block-type.block-cooc {
   position: absolute;
   height: calc(50% + 1px);
   left: 50%;
@@ -708,7 +708,7 @@ export default defineComponent({
   border-left: 2px solid #0086CA;
 }
 
-.comparison-block.block-type.block-dupe {
+.comparison-block.block-type.block-cooc {
   position: absolute;
   height: calc(50% + 1px);
   left: 50%;
@@ -729,7 +729,7 @@ export default defineComponent({
 .block-style-fade {
   opacity: 0.5;
 
-  .visual-block.block-type.block-dupe {
+  .visual-block.block-type.block-cooc {
     border-bottom-style: dashed;
   }
 }

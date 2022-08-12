@@ -31,7 +31,7 @@ export const isSelectedStep = ({
   if (reversePanBlock && selectedBlock && reversePanBlock === selectedBlock.value.blockName) {
     selected = true;
   }
-  if (panBlock && selectedBlock && panBlock.dupes.includes(selectedBlock.value.blockName)) {
+  if (panBlock && selectedBlock && panBlock.coocs.includes(selectedBlock.value.blockName)) {
     selected = true;
   }
   return selected;

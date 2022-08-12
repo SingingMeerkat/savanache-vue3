@@ -179,7 +179,7 @@ export default defineComponent({
     const svItems = [
       "insertion",
       "swap",
-      "dupe",
+      "cooc",
       "inversion",
       "inversionChain"
     ];

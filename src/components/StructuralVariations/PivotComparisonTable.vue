@@ -451,7 +451,7 @@ export default defineComponent({
     }
 
     &.pivot-neighbor {
-      .block-dupe {
+      .block-cooc {
         transform: scaleY(-100%);
       }
     }
@@ -470,7 +470,7 @@ export default defineComponent({
         bottom: 0;
       }
 
-      &.block-dupe {
+      &.block-cooc {
         bottom: 50%;
         background: #0086CA;
         border-radius: 1rem 1rem 0 0;
