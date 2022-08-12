@@ -156,7 +156,7 @@ export default defineComponent({
       const minLength = 0;
       let maxLength;
       if (data) {
-        const steps = data.pangenome.paths[selectedPivotName.value].steps;
+        const steps = data.pangenome.paths[selectedPivotName.value][data.chromName];
         if (steps && steps.length) {
           steps.forEach((step) => {
             const panBlock = data.pangenome.panSkeleton[step.panBlock];

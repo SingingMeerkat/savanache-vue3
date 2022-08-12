@@ -54,7 +54,8 @@ export default defineComponent({
         const pathNames = Object.keys(data.pangenome.paths);
         paths.value = pathNames.map((pathName) => ({
           name: pathName,
-          steps: data.pangenome.paths[pathName] && data.pangenome.paths[pathName]?.steps.length || 0
+          chromName: data.chromName,
+          steps: data.pangenome.paths[pathName] && data.pangenome.paths[pathName][data.chromName]?.length || 0
         }));
         allSelected.value = false;
       }

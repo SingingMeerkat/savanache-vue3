@@ -101,18 +101,19 @@ export default defineComponent({
     const selectedBlock = reactiveVuex(store, "selectedBlock", "setSelectedBlock");
 
     const pangenome = ref();
+    const chromName = ref();
     const pivots = ref();
 
     const selectedPivotSteps = computed(() => {
       if (pangenome.value && selectedBlock.value && pangenome.value.paths[selectedBlock.value.pivotName]) {
-        return pangenome.value.paths[selectedBlock.value.pivotName].steps;
+        return pangenome.value.paths[selectedBlock.value.pivotName][chromName];
       }
       return [];
     });
 
     const selectedComparisonSteps = computed(() => {
       if (pangenome.value && selectedBlock.value && pangenome.value.paths[selectedBlock.value.comparisonName]) {
-        return pangenome.value.paths[selectedBlock.value.comparisonName].steps;
+        return pangenome.value.paths[selectedBlock.value.comparisonName][chromName];
       }
       return [];
     });

@@ -12,7 +12,7 @@
     <!--    </div>-->
     <div class="table-container">
       <v-card tile>
-        <div v-if="pivot && pivot.path && pivot.path.steps" class="data-area d-flex flex-row">
+        <div v-if="pivot && pivot.path && pivot.path[chromName]" class="data-area d-flex flex-row">
 
           <!-- "Header" column -->
           <div class="data-labels col-2 d-flex flex-column pr-0 mr-n1">
@@ -46,7 +46,7 @@
                  class="data-block-row d-flex flex-row">
               <!--              , {'selected-block': isBlockSelected(block, assembly)}-->
               <!--              @click="selectBlock(block, assembly)"-->
-              <div v-for="(pivotStep, psIndex) in pivot.path.steps"
+              <div v-for="(pivotStep, psIndex) in pivot.path[chromName]"
                    :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
                    :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'above-pivot',
                    {
@@ -78,7 +78,7 @@
             </div>
 
             <div class="pivot-data-block-row d-flex flex-row">
-              <div v-for="(pivotStep, psIndex) in pivot.path.steps"
+              <div v-for="(pivotStep, psIndex) in pivot.path[chromName]"
                    :key="`pivot-row-${pivot.name}-step-${pivotStep.panBlock}`"
                    :class="[
                    'data-block-column', `pivot-block-${psIndex % 2}`, `elevation-1`,
@@ -97,7 +97,7 @@
                  class="data-block-row d-flex flex-row">
               <!--              , {'selected-block': isBlockSelected(block, assembly)}-->
               <!--              @click="selectBlock(block, assembly)"-->
-              <div v-for="(pivotStep, psIndex) in pivot.path.steps"
+              <div v-for="(pivotStep, psIndex) in pivot.path[chromName]"
                    :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
                    :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'bloe-pivot',
                    {
@@ -161,13 +161,15 @@ export default defineComponent({
       return store.getters["assemblies/assembliesSelected"];
     });
 
-    const paths = ref({});
     const pangenome = ref();
+    const chromName = ref();
     const pivots = ref();
+    const paths = ref({});
 
     getData().then((data) => {
       if (data) {
         pangenome.value = data.pangenome;
+        chromName.value = data.chromName;
         pivots.value = data.pivots;
 
         const pathNames = Object.keys(pangenome.value.paths);
@@ -283,6 +285,7 @@ export default defineComponent({
     };
 
     return {
+      chromName,
       pivot,
       assemblies,
       blockClasses,

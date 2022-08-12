@@ -626,6 +626,7 @@ const getDataInternal = async () => {
 
   const pivots = {};
   Object.entries(pangenomeImport.paths).forEach(([pivotPathName, pivotPathData]) => {
+
     const outerLoopResult = buildThenExpandAnnotations({
       pangenomeImport,
       pivotPathName,
@@ -637,12 +638,11 @@ const getDataInternal = async () => {
       Object.assign(pivots, outerLoopResult.pivots);
     }
 
-
   });
 
   console.log("pivots", pivots);
 
-  dataCache = { pangenome: pangenomeImport.default || pangenomeImport, pivots };
+  dataCache = { pangenome: pangenomeImport.default || pangenomeImport, pivots, chromName };
 
   return dataCache;
 };
