@@ -25,9 +25,9 @@ import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
 // Components
-import PangenomePanel from "../components/PangenomePanel.vue";
-import AssembliesTable from "../components/AssembliesTable.vue";
-import PcaCharts from "../components/PcaCharts.vue";
+import PangenomePanel from "../components/PangenomeSelection/PangenomePanel.vue";
+import AssembliesTable from "../components/PangenomeSelection/AssembliesTable.vue";
+import PcaCharts from "../components/PangenomeSelection/PcaCharts.vue";
 // import pangenomes from "@/data/pangenome";
 
 export default defineComponent({

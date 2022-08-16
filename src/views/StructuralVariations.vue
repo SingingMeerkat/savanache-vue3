@@ -44,7 +44,7 @@ import { computed, defineComponent, ref } from "vue";
 import StructuralVariationsFilters from "../components/StructuralVariations/Filters.vue";
 import StructuralVariationsPivotComparisonTable from "../components/StructuralVariations/PivotComparisonTable.vue";
 import StructuralVariationsPivotDetails from "../components/StructuralVariations/PivotDetails.vue";
-import AssembliesTable from "@/components/AssembliesTable";
+import AssembliesTable from "@/components/PangenomeSelection/AssembliesTable";
 
 export default defineComponent({
   name: "StructuralVariations",
