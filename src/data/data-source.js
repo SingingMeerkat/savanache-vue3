@@ -254,6 +254,7 @@ const parsePivotSteps = ({
     // 'stepResult' == multiple SV annotated objects, reusable within the loop
     const stepResult = annotatePivotStep({
       chromName,
+      comparedPathName,
       comparedPathData,
       pangenomeImport,
       pivotStep,
@@ -289,7 +290,8 @@ const parsePivotSteps = ({
 };
 
 //---------------- Checks SV at a pivot step
-// It looks for all SVs of annotateComparisonOfTwoSteps, and looks for Swaps
+// It looks for all SVs of annotateComparisonOfTwoSteps(), and looks for Swaps
+//                  or annotatePresenceInsertionAndInversion()
 // or DELETIONS
 // Returns an object containing the updated annotPivotStep, the previous annotPivotStep,
 // the latest Absent or latest Present annotPivotStep, and the first and last Swapped
@@ -297,7 +299,8 @@ const parsePivotSteps = ({
 const annotatePivotStep = ({
                                        // pivot,
                                        chromName,
-                                       comparedPathData,
+                                       comparedPathName,
+                                       //comparedPathData,
                                        pangenomeImport,
                                        pivotStep,
                                        pivotStepIndex,
@@ -309,7 +312,7 @@ const annotatePivotStep = ({
                                      }) => {
 
   // Node object, traversed by the current pivot step
-  const traversedPanBlock = pangenomeImport.panSkeleton[pivotStep.panBlock];
+  const targetNodeOfPivotStep = pangenomeImport.panSkeleton[pivotStep.panBlock];
 
   // Stores node ID + step index
   const annotPivotStep = {
@@ -317,7 +320,27 @@ const annotatePivotStep = ({
     pivotStepIndex: pivotStepIndex
   };
 
-  // Increments annotPivotStep with found SVs (Dupes, Presence, Insertion, Inversion, Deletion, InversionChain)
+  // Increments annotPivotStep with found SVs (Coocs)
+  annotateCoocs({
+    pangenomeImport,
+    annotPivotStep,
+    comparedPathName,
+    pivotStep,
+    targetNodeOfPivotStep
+  });
+  // Increments annotPivotStep with found SVs (Presence, Insertion, Inversion, InversionChain)
+  annotatePresenceInsertionAndInversion({
+    pangenomeImport,
+    chromName,
+    annotPivotStep,
+    comparedPathName,
+    previousPivotStep,
+    pivotStep,
+    targetNodeOfPivotStep
+  });
+
+  //FORMER VERSION
+  /*
   let previousComparedPathStep;
   comparedPathData[chromName].forEach((comparedPathStep, comparedPathStepIndex) => {
 
@@ -337,6 +360,7 @@ const annotatePivotStep = ({
 
     previousComparedPathStep = comparedPathStepResult.previousComparedPathStep;
   });
+  */
 
   // console.log("PRE", "\n\tpivotStep\t", annotPivotStep && annotPivotStep.panBlock, "\n\tpreviousPivotStep\t", previousPivotStep && previousPivotStep.panBlock, "\n\tlastPresentPivotStep\t", lastPresentPivotStep && lastPresentPivotStep.panBlock, "\n\tlastAbsentPivotStep\t", lastAbsentPivotStep && lastAbsentPivotStep.panBlock, "\n\tfirstSwappedPivotStep\t", firstSwappedPivotStep && firstSwappedPivotStep.panBlock, "\n\tlastSwappedPivotStep\t", lastSwappedPivotStep && lastSwappedPivotStep.panBlock);
 
@@ -437,12 +461,222 @@ const annotatePivotStep = ({
 
 };
 
-//---------------- Checks local SV between pivot and path Steps
+//---------------- Checks local SV for a given pivot Step
+// It looks for PRESENCE and potential INSERTION, INVERSION, or INVERSION CHAIN
+// of a pivot Step compared with a path (named comparedPathName).
+// Writes into annotPivotStep the following properties, when found:
+//    present
+//    comparedPathStepIndex
+//    insertion
+//    inversion
+//    inversionChain
+// and the related nodes ({index and ID in pivot, index and ID in compared, (highestComparedStepIndex)})
+// Returns nothing, all modifications are directly applied to annotPivotStep.
+const annotatePresenceInsertionAndInversion = ({
+                                                  pangenomeImport,
+                                                  chromName,
+                                                  annotPivotStep,
+                                                  comparedPathName,
+                                                  previousPivotStep,
+                                                  pivotStep,
+                                                  targetNodeOfPivotStep
+                                                }) => {
+
+  // Index of previous pivot Step/Node in the compared path, or highest for Inv. Chains
+  let highestComparedStepIndex = undefined;
+
+  // PRESENCE ------------------------------------------------------------------
+  let comparedPathStepIndex = targetNodeOfPivotStep.traversals[comparedPathName]?.[chromName];
+  let nodeIsPresent = (comparedPathStepIndex !== undefined);
+  // ---------------------------------------------------------------------------
+
+  if (nodeIsPresent) {
+
+    // Write annotation for PRESENCE
+    annotPivotStep.present = true;
+    annotPivotStep.comparedPathStepIndex = comparedPathStepIndex;
+
+    let comparedPathStep = pangenomeImport.paths[comparedPathName][chromName][comparedPathStepIndex];
+
+    // Check for SVs: INSERTION, INVERSION, INVERSION CHAIN --------------------
+    let hasInsertion;
+    let hasInversion;
+    let hasInversionChain;
+
+    hasInversion = (pivotStep.strand !== comparedPathStep.strand);
+
+    // If there is a previous Step in the pivot...
+    if (previousPivotStep) {
+
+      highestComparedStepIndex = previousPivotStep.comparedPathStepIndex;
+      if (previousPivotStep && previousPivotStep.inversionChain) {
+        // REMARK: highestComparedStepIndex is supposed to be the same through all Steps of an invChain, why check this?
+        // It is even non-existent in all Steps but the starting one, so the max would always be the same!
+        previousPivotStep.inversionChainNodes.forEach(step => highestComparedStepIndex = Math.max(highestComparedStepIndex, step.comparedPathStepIndex));
+      }
+
+      hasInsertion = (highestComparedStepIndex < comparedPathStepIndex - 1);
+      // Check the comparison step indices, if the previous one is higher than this one,
+      // they're decrementing as the pivot steps increment and probably an inversion chain
+      // REMARK: We could just check previousPivotStep.comparedPathStepIndex, I think:
+      //hasInversionChain = (previousPivotStep.comparedPathStepIndex === comparedPathStepIndex + 1);
+      hasInversionChain = (highestComparedStepIndex === comparedPathStepIndex + 1 || previousPivotStep.comparedPathStepIndex === comparedPathStepIndex + 1);
+    }
+    // -------------------------------------------------------------------------
+
+    // Write annotation for INSERTION
+    if (hasInsertion) {
+
+      annotPivotStep.insertion = true;
+      annotPivotStep.insertionNodes = [];
+
+      for (let insertionPathStepsIndex = highestComparedStepIndex + 1;
+        insertionPathStepsIndex < annotPivotStep.comparedPathStepIndex;
+        insertionPathStepsIndex++) {
+          const insertionPathStep = pangenomeImport.paths[comparedPathName][chromName][insertionPathStepsIndex];
+
+          const insertionNode = {
+            // REMARK: again, info on pivotStep is redundant. TODO: Remove it from this ppty.
+            pivotStepIndex: annotPivotStep.pivotStepIndex,
+            pivotStepPanBlock: pivotStep.panBlock,
+            comparedPathStepIndex: insertionPathStepsIndex,
+            comparedPathStepPanBlock: insertionPathStep.panBlock
+          };
+          annotPivotStep.insertionNodes.push(insertionNode);
+      }
+    }
+
+    // Write annotation for INVERSION
+    if (hasInversion) {
+
+      annotPivotStep.inversion = true;
+      if (!annotPivotStep.inversionNodes) {
+        annotPivotStep.inversionNodes = [];
+      }
+      const inversionNode = {
+        pivotStepIndex: annotPivotStep.pivotStepIndex,
+        pivotStepPanBlock: pivotStep.panBlock,
+        // REMARK: already stored for the "present" status, why write it here?
+        comparedPathStepIndex: comparedPathStepIndex,
+        // REMARK: supposed to be the same as pivot, why write it?
+        comparedPathStepPanBlock: comparedPathStep.panBlock
+      };
+      annotPivotStep.inversionNodes.push(inversionNode);
+    }
+
+    // Write annotation for INVERSION CHAIN
+    if (hasInversionChain) {
+
+      // QUESTION: is it automatically updated with each new node within, for all that are already stored?
+      // Or is it within buildThenExpandAnnotations()? if at all?
+      const inversionChainNodes = previousPivotStep.inversionChainNodes || [];
+
+      previousPivotStep.inversionChainNodes = inversionChainNodes;
+      annotPivotStep.inversionChainNodes = inversionChainNodes;
+
+      // Current step is inside an inversion chain
+      annotPivotStep.inversionChain = true;
+
+      if (!previousPivotStep.inversionChain) {
+        // Previous step was the start of this inversion chain and must be updated accordingly
+        previousPivotStep.inversionChain = "start";
+
+        const inversionChainNode = {
+          pivotStepIndex: previousPivotStep.pivotStepIndex,
+          pivotStepPanBlock: previousPivotStep.panBlock,
+          comparedPathStepIndex: previousPivotStep.comparedPathStepIndex,
+          highestComparedStepIndex,
+          comparedPathStepPanBlock: previousPivotStep.panBlock
+        };
+        inversionChainNodes.push(inversionChainNode);
+
+      } else {
+        // REMARK: Seems redundant, previousPivotStep.inversionChain === true is already implied by the loop
+        // TODO: correct
+        // Last step was inside an inversion chain
+        previousPivotStep.inversionChain = true;
+      }
+
+      const inversionChainNode = {
+        pivotStepIndex: annotPivotStep.pivotStepIndex,
+        pivotStepPanBlock: pivotStep.panBlock,
+        comparedPathStepIndex: comparedPathStepIndex,
+        comparedPathStepPanBlock: comparedPathStep.panBlock
+      };
+
+      // QUESTION: Does the push at the end of the loop does anything?
+      // How is the previousPivotStep.inversionChainNodes updated?
+      // TODO: correct logic.
+      inversionChainNodes.push(inversionChainNode);
+
+    }
+
+    // QUESTION: What if the final step is within an inv Chain?, no 'end' attributed? Done within buildThenExpandAnnotations()?
+    // END OF INVERSION CHAIN
+    // Current step is after (outside) an inversion chain, previous step was the last one within the inversion chain
+    let isInversionChainNoMore = (previousPivotStep?.inversionChain && !annotPivotStep.inversionChain);
+    if (isInversionChainNoMore) {
+      previousPivotStep.inversionChain = "end";
+    }
+
+  }
+};
+
+//---------------- Checks coocs for a given pivot Step
+// It looks for COOCCURRENCES of a pivot Step compared with a path (named
+// comparedPathName).
+// Writes into annotPivotStep the cooc property, and the related nodes
+// ({index and ID in pivot, index and ID in compared})
+// Returns nothing, all modifications are directly applied to annotPivotStep.
+const annotateCoocs = ({
+                        pangenomeImport,
+                        annotPivotStep,
+                        comparedPathName,
+                        pivotStep,
+                        targetNodeOfPivotStep
+                      }) => {
+
+  targetNodeOfPivotStep.coocs.forEach( panBlockID => {
+
+    // Check for COOCCURRENCES -------------------------------------------------
+    let targetNodeOfCooc = pangenomeImport.panSkeleton[panBlockID];
+    let comparedPathHasCooc = (comparedPathName in targetNodeOfCooc.traversals);
+    // -------------------------------------------------------------------------
+
+    if (comparedPathHasCooc) {
+
+      annotPivotStep.cooc = true;
+
+      if (!annotPivotStep.coocNodes) {
+        annotPivotStep.coocNodes = [];
+      }
+      for (let coocChromName in targetNodeOfCooc.traversals[comparedPathName]) {
+        //targetNodeOfCooc.traversals[comparedPathName].forEach( (coocIndex, coocChromName) => {
+        // Stores found cooc
+        let coocIndex = targetNodeOfCooc.traversals[comparedPathName][coocChromName];
+        const coocNode = {
+          // REMARK: pivotStepIndex and pivotStepPanBlock are already written on creation of annotPivotStep
+          // -> TODO: simplify objects by keeping only the first pivotStepIndex without rewriting it for every SV
+          pivotStepIndex: annotatePivotStep.pivotStepIndex,
+          pivotStepPanBlock: pivotStep.panBlock,
+          comparedPathChromName: coocChromName, // TODO: include this info within the detail view
+          comparedPathStepIndex: coocIndex,
+          comparedPathStepPanBlock: panBlockID
+        };
+        annotPivotStep.coocNodes.push(coocNode);
+      }
+
+    }
+  });
+};
+
+// DEPRECATED ---------------- Checks local SV between pivot and path Steps
 // It compares current annotPivotStep with any comparedStep (and the direct previous steps)
 // Writes coocs, present, comparedPathStepIndex, inversion, !deletion!, insertion, inversionChain
 // and the related nodes ({index and ID in pivot, index and ID in compared, (highestComparedStepIndex)})
 // into annotPivotStep as properties of an object.
 // Returns an object containing the studied comparedStep
+/*
 const annotateComparisonOfTwoSteps = ({
                                             chromName,
                                             traversedPanBlock,
@@ -609,6 +843,7 @@ const annotateComparisonOfTwoSteps = ({
 
   return { previousComparedPathStep };
 };
+*/
 
 
 const getDataInternal = async () => {
