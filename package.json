@@ -11,7 +11,7 @@
     "@greenelab/hclust": "0.0.1",
     "@mdi/font": "5.9.55",
     "@vue/cli": "^4.5.12",
-    "@vueform/slider": "^1.0.5",
+    "@vueform/slider": "^2.1.1",
     "@yaireo/tagify": "^4.1.1",
     "bootstrap-vue": "^2.1.0",
     "circos": "^2.1.0",

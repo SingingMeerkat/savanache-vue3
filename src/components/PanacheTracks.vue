@@ -146,7 +146,7 @@ import * as d3 from 'd3';
 import {mapState} from "vuex";
 
 export default {
-  name: 'Tracks.vue',
+  name: 'PanacheTracks',
   props: {
     chromList: {
       type: Array,

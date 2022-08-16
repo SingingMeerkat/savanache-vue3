@@ -1,14 +1,16 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+// import Vue from 'vue'
+// import Vuex from 'vuex'
 import * as d3 from 'd3'
 import {nonReactiveDataStore} from '@/store/non-reactive-data';
 
-Vue.use(Vuex)
+// Vue.use(Vuex)
 
 
 // The store gives access to some variables through the whole app^
 // Values in here are mainly default values, to update depending on user inputs
-export default new Vuex.Store({
+// export default new Vuex.Store({
+const panacheStore ={
+  namespaced: true,
   state: {
     coreThresholdSlide: 85, // Minimal presence ratio to be part of core, should be turn into a % !
 
@@ -316,19 +318,19 @@ export default new Vuex.Store({
     colorScaleMaker: (domain, range, scaleLinear = true) => {
       if (scaleLinear) {
         return d3.scaleLinear()
-            .domain(domain)
-            .interpolate(d3.interpolateHcl)
-            .range(range);
+          .domain(domain)
+          .interpolate(d3.interpolateHcl)
+          .range(range);
       } else {
-          return d3.scaleOrdinal()
-              .domain(domain)
-              .range(range);
+        return d3.scaleOrdinal()
+          .domain(domain)
+          .range(range);
       }
     },
     domainPivotsMaker: (breakpointsNb, maxValue) => {
       let breakpoints = [];
       for (var i = 0; i < breakpointsNb; ++i) {
-          breakpoints.push(Math.round( (i / (breakpointsNb - 1) ) * maxValue));
+        breakpoints.push(Math.round( (i / (breakpointsNb - 1) ) * maxValue));
       }
       return(breakpoints);
     },
@@ -376,7 +378,7 @@ export default new Vuex.Store({
       //If values are already stored, get them...
       if (state.ntWidthInPxThresholds.has(state.selectedChrom)) {
         ntCouple = state.ntWidthInPxThresholds.get(state.selectedChrom);
-      //...else compute them and store them into the map
+        //...else compute them and store them into the map
       } else {
         //Default values when no dataset is loaded
         let minNtWidth = 0.5;
@@ -667,4 +669,7 @@ export default new Vuex.Store({
       commit('SET_LOCAL_AREA_SELECTED', coordinates)
     },
   },
-})
+// })
+}
+
+export default panacheStore;

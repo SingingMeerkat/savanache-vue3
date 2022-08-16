@@ -22,7 +22,7 @@
 import * as d3 from 'd3';
 
 export default {
-  name: 'Canvas',
+  name: 'OverlayedCanvas',
   props: {
     chromosomeData: {
       type: Array,

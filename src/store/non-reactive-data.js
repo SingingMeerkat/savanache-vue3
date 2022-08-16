@@ -19,7 +19,7 @@ export const nonReactiveDataFunctions = {
 export const nonReactiveDataStore = {
     // fullChromData
     get fullChromData() { return nonReactiveDataFunctions.getData('fullChromData') },
-    set fullChromData(data) { return nonReactiveDataFunctions.setData('fullChromData', data) },
+    set fullChromData(data) { nonReactiveDataFunctions.setData('fullChromData', data) },
 }
 
 nonReactiveDataStore.fullChromData = [];

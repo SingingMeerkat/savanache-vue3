@@ -95,7 +95,7 @@ import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import OverlayedCanvas from '@/components/OverlayedCanvas.vue';
 //import PavMatrixAndTracks from '@/components/PavMatrixAndTracks.vue';
 import PavMatrix from '@/components/PavMatrix.vue';
-import Tracks from '@/components/Tracks.vue';
+import Tracks from '@/components/PanacheTracks.vue';
 import HollowAreaTrack from '@/components/HollowAreaTrack.vue';
 import AnnotationTrack from '@/components/AnnotationTrack.vue';
 import PresencePatternSelector from "@/components/PresencePatternSelector.vue";
@@ -103,7 +103,7 @@ import PresencePatternSelector from "@/components/PresencePatternSelector.vue";
 import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
-  name: 'Panache',
+  name: 'PanacheView',
   components: {
     PresencePatternSelector,
     LoadingSpinner,

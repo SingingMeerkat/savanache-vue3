@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Panache from '../views/Panache.vue'
+import Panache from '../views/PanacheView.vue'
 
 // Poke rounting system, in prevision of more views for the future
 Vue.use(VueRouter)

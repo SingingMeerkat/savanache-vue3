@@ -186,7 +186,7 @@ export default {
   },
   updated() {
   },
-  destroyed () {
+  unmounted () {
 
 
     delete this.resizeObserver
