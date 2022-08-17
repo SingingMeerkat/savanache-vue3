@@ -325,7 +325,7 @@ export default {
       // });
       return groupedData;
     },
-    ...mapActions([
+    ...mapActions('panache', [
       'updateGenomesInDisplaySave',
       'updateFileLoaded'
     ]),

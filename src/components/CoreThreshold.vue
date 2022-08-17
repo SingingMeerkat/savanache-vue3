@@ -15,7 +15,8 @@
               :height="shapeSize * 2"
               @click="selectShape('square')"
               class="float-right mr-0">
-              <title>{{ 'square' | capitalize}}</title>
+<!--              <title>{{ 'square' | capitalize}}</title>-->
+              <title>Square</title>
               <rect
                 :x="shapeSize * 0.5"
                 :y="shapeSize * 0.5"
@@ -33,7 +34,8 @@
               :height="shapeSize * 2"
               @click="selectShape('circle')"
               class="float-left ml-0">
-              <title>{{ 'circle' | capitalize}}</title>
+<!--              <title>{{ 'circle' | capitalize}}</title>-->
+              <title>Circle</title>
               <circle
                 :cx="(shapeSize * 2) * 0.5"
                 :cy="(shapeSize * 2) * 0.5"
@@ -148,7 +150,7 @@ export default {
     selectedShape() {
       return this.$store.state.displayShapeSelected;
     },
-    ...mapState({
+    ...mapState('panache', {
       isGffUploaded: 'isGffUploaded',
     }),
   },

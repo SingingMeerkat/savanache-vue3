@@ -370,7 +370,7 @@ export default {
 </script>
 
 <!--Here again are too many hardcoded values!!!/-->
-<style scoped>
+<style lang="scss" scoped>
 
 .canvas {
   position: absolute;

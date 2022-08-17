@@ -73,7 +73,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions({
+    ...mapActions('panache', {
       updateSelectedChromStore: 'updateSelectedChrom',
     }),
     updateSelectedChrom(selectedChrom) {
@@ -106,7 +106,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 .h31 {
   height: 31px;

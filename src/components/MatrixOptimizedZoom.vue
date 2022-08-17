@@ -72,7 +72,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 .row {
   justify-content: center;

@@ -36,10 +36,10 @@ export default {
     viewIsPanache() {
       return (this.$route.name === 'Panache')
     },
-    ...mapState({
+    ...mapState('panache', {
       optionPanelWidth: 'optionPanelWidth',
     }),
-    ...mapGetters({
+    ...mapGetters('panache', {
       displayWindowWidth: 'displayWindowWidth',
     })
   },

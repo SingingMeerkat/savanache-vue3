@@ -115,7 +115,7 @@ export default {
     }
   },
   computed: {
-    ...mapState({
+    ...mapState('panache', {
       annotMap: 'annotMap', //TODO change to annot in store
       genomeList: 'genomeListInDisplay',
     }),
@@ -145,7 +145,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
+    ...mapActions('panache', [
       'updateGenomesInDisplay',
     ]),
     /**
@@ -364,7 +364,7 @@ export default {
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 .width100P {
   width: 100%;

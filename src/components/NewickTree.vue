@@ -23,7 +23,7 @@ import {mapActions, mapState} from "vuex";
       }
     },
     computed: {
-      ...mapState({
+      ...mapState('panache', {
         newickTreeDataString: 'newickTreeDataString',
         genomeList: 'genomeListInDisplay',
         blockOffset: 'yOffsetOfPavBlocks',
@@ -31,7 +31,7 @@ import {mapActions, mapState} from "vuex";
       }),
     },
     methods: {
-      ...mapActions([
+      ...mapActions('panache', [
           'updateIsNewickTreeDisplayed',
       ]),
       /**
@@ -119,7 +119,7 @@ import {mapActions, mapState} from "vuex";
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 .buttonNT {
   color: #495057;

@@ -1,89 +1,103 @@
 <template>
-  <!-- The global div has to stay, it will be replaced with TheRouterView within the app -->
-  <div>
-    <LoadingSpinner class='loading-spinner' :isLoading="displayIsLoading" />
-    <!-- div id='PanacheMainView' :style="displayWrapper"-->
-    <div id='PanacheMainView' :style="mainViewWrapper">
-      <OverlayedCanvas
-        class='canvasMiniature'
-        :chromosomeData="chromData"
-        :nbOfGenomes="nbOfGenomes"
-        :coreThreshold="coreThreshold"
-        :rightmostNt="globalLastNt"
-        :miniatureWidth="displayWindowWidth"
-        :mainWindowWidth="displayWindowWidth"
-        :firstNtToDisplay="firstNt"
-        :updateFirstNt="function(payload) { updateFirstNtToDisplay(payload) }"
-        :updateLastNt="function(payload) { updateLastNtToDisplay(payload) }"
-        :ntWidthInPxInDisplayWindow="ntWidthInPx"
-        :colorScaleFunction="colorScaleFunction"
-        :colorScaleCore="colorScaleCore"
-        :colorScaleDisp="colorScaleDisp"
-        :colorScaleRainbow="colorScaleRainbow"
-        :colorScaleSimilarities="colorScaleSimilarities"
-      />
-      <AnnotationTrack v-show="isGffUploaded"
-        class='annotationTrack'
-        :annotToDisplay="filteredGffData"
-        :firstNtToDisplay="firstNt"
-        :lastNtToDisplay="lastNt"
-        :trackWidth="displayWindowWidth"
-      />
-      <PresencePatternSelector
-          v-show="selectedSortMode === 'Local presence/absence pattern'"
-          :minValue="0"
-          :maxValue="displayWindowWidth"
-      />
-      <div id='responsivePavDiv' :style="respPavDivWrapper">
-        <HollowAreaTrack
-          class='zoneHighlight'
-          :coordsStartStop="filteredHollowAreas"
-          :firstNtToDisplay="firstNt"
-          :displaySizeOfNt="ntWidthInPx"
-          :svgWidth="displayWindowWidth"
-          :trackHeight="haTrackHeight"
-          :gapHeight="gridGapSize"
-          :overlapingHeight="autoComputeMatrixHeight"
-          />
-        <!--PavMatrixAndTracks
-          class='displayMatrix'
-          :filteredData="filteredData"
-          :genomeList="genomeList"
-          :chromList="chromNames"
-          :coreThreshold="coreThreshold"
-          :blocksDimensions="blocksDimensions"
-          :displaySizeOfNt="ntWidthInPx"
-          :displayHeight="displayWindowHeight"
-          :displayWidth="displayWindowWidth"
-          :pavMatrixHeight="autoComputeMatrixHeight"
-          :firstNtToDisplay="firstNt"
-          :colorScaleFunction="colorScaleFunction"
-          :colorScaleRainbow="colorScaleRainbow"
-          :colorScaleSimilarities="colorScaleSimilarities"
-        /-->
-        <PavMatrix
-          class='displayMatrix'
-          :genomeList="genomeList"
-          :filteredData="filteredData"
-          :firstNtToDisplay="firstNt"
-          :displaySizeOfNt="ntWidthInPx"
-          :blocksDimensions="blocksDimensions"
-          :colorScaleFunction="colorScaleFunction"
-        />
+  <div id="app" class="h-100">
+    <div class="container-fluid h-100">
+      <div class="row h-100">
+        <div class="bg-white h-100 side-panel">
+<!--          <local-filter v-if="viewIsPanache"/>-->
+          <local-filter/>
+        </div>
+        <div class="content-column">
+          <!-- Router view to display -->
+          <!-- The router will determine which kind of filtershould be displayed -->
+          <!-- The global div has to stay, it will be replaced with TheRouterView within the app -->
+          <div>
+            <LoadingSpinner class='loading-spinner' :isLoading="displayIsLoading" />
+            <!-- div id='PanacheMainView' :style="displayWrapper"-->
+            <div id='PanacheMainView' :style="mainViewWrapper">
+              <OverlayedCanvas
+                class='canvasMiniature'
+                :chromosomeData="chromData"
+                :nbOfGenomes="nbOfGenomes"
+                :coreThreshold="coreThreshold"
+                :rightmostNt="globalLastNt"
+                :miniatureWidth="displayWindowWidth"
+                :mainWindowWidth="displayWindowWidth"
+                :firstNtToDisplay="firstNt"
+                :updateFirstNt="function(payload) { updateFirstNtToDisplay(payload) }"
+                :updateLastNt="function(payload) { updateLastNtToDisplay(payload) }"
+                :ntWidthInPxInDisplayWindow="ntWidthInPx"
+                :colorScaleFunction="colorScaleFunction"
+                :colorScaleCore="colorScaleCore"
+                :colorScaleDisp="colorScaleDisp"
+                :colorScaleRainbow="colorScaleRainbow"
+                :colorScaleSimilarities="colorScaleSimilarities"
+              />
+              <AnnotationTrack v-show="isGffUploaded"
+                               class='annotationTrack'
+                               :annotToDisplay="filteredGffData"
+                               :firstNtToDisplay="firstNt"
+                               :lastNtToDisplay="lastNt"
+                               :trackWidth="displayWindowWidth"
+              />
+              <PresencePatternSelector
+                v-show="selectedSortMode === 'Local presence/absence pattern'"
+                :minValue="0"
+                :maxValue="displayWindowWidth"
+              />
+              <div id='responsivePavDiv' :style="respPavDivWrapper">
+                <HollowAreaTrack
+                  class='zoneHighlight'
+                  :coordsStartStop="filteredHollowAreas"
+                  :firstNtToDisplay="firstNt"
+                  :displaySizeOfNt="ntWidthInPx"
+                  :svgWidth="displayWindowWidth"
+                  :trackHeight="haTrackHeight"
+                  :gapHeight="gridGapSize"
+                  :overlapingHeight="autoComputeMatrixHeight"
+                />
+                <!--PavMatrixAndTracks
+                  class='displayMatrix'
+                  :filteredData="filteredData"
+                  :genomeList="genomeList"
+                  :chromList="chromNames"
+                  :coreThreshold="coreThreshold"
+                  :blocksDimensions="blocksDimensions"
+                  :displaySizeOfNt="ntWidthInPx"
+                  :displayHeight="displayWindowHeight"
+                  :displayWidth="displayWindowWidth"
+                  :pavMatrixHeight="autoComputeMatrixHeight"
+                  :firstNtToDisplay="firstNt"
+                  :colorScaleFunction="colorScaleFunction"
+                  :colorScaleRainbow="colorScaleRainbow"
+                  :colorScaleSimilarities="colorScaleSimilarities"
+                /-->
+                <PavMatrix
+                  class='displayMatrix'
+                  :genomeList="genomeList"
+                  :filteredData="filteredData"
+                  :firstNtToDisplay="firstNt"
+                  :displaySizeOfNt="ntWidthInPx"
+                  :blocksDimensions="blocksDimensions"
+                  :colorScaleFunction="colorScaleFunction"
+                />
+              </div>
+              <Tracks
+                class='displayTracks'
+                :chromList="chromNames"
+                :filteredData="filteredData"
+                :firstNtToDisplay="firstNt"
+                :displaySizeOfNt="ntWidthInPx"
+                :displayWidth="displayWindowWidth"
+                :gridGapSize="gridGapSize"
+                :blocksDimensions="blocksDimensions"
+                :coreThreshold="coreThreshold"
+                :colorScaleRainbow="colorScaleRainbow"
+                :colorScaleSimilarities="colorScaleSimilarities"
+              />
+            </div>
+          </div>
+        </div>
       </div>
-      <Tracks
-        class='displayTracks'
-        :chromList="chromNames"
-        :filteredData="filteredData"
-        :firstNtToDisplay="firstNt"
-        :displaySizeOfNt="ntWidthInPx"
-        :displayWidth="displayWindowWidth"
-        :gridGapSize="gridGapSize"
-        :blocksDimensions="blocksDimensions"
-        :coreThreshold="coreThreshold"
-        :colorScaleRainbow="colorScaleRainbow"
-        :colorScaleSimilarities="colorScaleSimilarities"
-      />
     </div>
   </div>
 </template>
@@ -101,6 +115,7 @@ import AnnotationTrack from '@/components/AnnotationTrack.vue';
 import PresencePatternSelector from "@/components/PresencePatternSelector.vue";
 
 import { mapState, mapGetters, mapActions } from 'vuex';
+import LocalFilter from "@/components/LocalFilter";
 
 export default {
   name: 'PanacheView',
@@ -113,6 +128,7 @@ export default {
     Tracks,
     HollowAreaTrack,
     AnnotationTrack,
+    LocalFilter,
   },
   data() {
     return {
@@ -128,6 +144,22 @@ export default {
     }
   },
   computed: {
+    //Style object to apply to wrapper to take variable values
+    wrapperStyle() {
+      return {
+        display: 'grid',
+        'grid-template-columns': `${this.optionPanelWidth}px 1fr`,
+      }
+    },
+    viewIsPanache() {
+      return (this.$route.name === 'Panache')
+    },
+    ...mapState('panache', {
+      optionPanelWidth: 'optionPanelWidth',
+    }),
+    ...mapGetters('panache', {
+      displayWindowWidth: 'displayWindowWidth',
+    }),
     // I SHOULD MANAGE DEFAULT VALUES HERE TOO
     lastBlockStart() {
       return Math.max(...this.chromData.map(d => Number(d.FeatureStart)))
@@ -285,7 +317,7 @@ export default {
     },
 
     //Get values out of Vuex store
-    ...mapState({
+    ...mapState('panache', {
       displayIsLoading: 'displayIsLoading',
       coreValue: 'coreThresholdSlide',
       genomeList: 'genomeListInDisplay',
@@ -303,7 +335,7 @@ export default {
       currentDisplayNtWidthInPx: 'currentDisplayNtWidthInPx',
       colorScaleMaker: 'colorScaleMaker',
     }),
-    ...mapGetters({
+    ...mapGetters('panache', {
       chromData: 'chromDataInDisplay',
       gffData: 'gffDataInDisplay',
       colorScaleRainbow: 'positionRainbowColorScale',
@@ -387,7 +419,7 @@ export default {
     },
 
     //Get Actions from the store
-    ...mapActions([
+    ...mapActions('panache', [
       'updateChromDataInDisplay',
       'updateFirstNtToDisplay',
       'updateLastNtToDisplay'
@@ -397,7 +429,71 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+#app {
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  //text-align: center;
+  color: #2c3e50;
+  background-color: #F8F8FF;
+}
+
+body, html {
+  background-color: #F8F8FF;
+  height: 100% !important;
+}
+
+.whiteBlock {
+  background-color: white;
+  border-radius: 50px;
+}
+
+.whiteBgLeft {
+  background-color: white;
+  grid-column: 1;
+}
+
+.optionPanelStyle {
+  grid-column: 1;
+  text-align: center;
+}
+
+.mainDisplayStyle {
+  grid-column: 2;
+  text-align: center;
+  align-self: start;
+}
+
+.side-panel {
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  float: left;
+  display: block;
+  width: 320px;
+  padding: 0 15px;
+}
+
+.main-view {
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.content-column {
+  width: calc(100% - 360px);
+  float: left;
+  display: block;
+  margin-left: 20px;
+}
+
+#TheRouterView {
+  height: calc(100% - 30px);
+}
 
 .canvasMiniature {
   flex: 0 0 auto;

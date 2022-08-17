@@ -10,7 +10,8 @@
       Sort by local pattern
     </b-button>
     <b-popover v-if="hasSortHappened" target="localGenePatternDisplayButton" triggers="hover" placement="top">
-      <template #title class="centerT">Informations about values</template>
+<!--      <template #title class="centerT">Informations about values</template>-->
+      <template #title>Informations about values</template>
       <p>
         Left value : {{ leftValue }}
         <br>
@@ -35,7 +36,7 @@ export default {
     }
   },
   computed: {
-    ...mapState({
+    ...mapState('panache', {
       localAreaSelected: 'localAreaSelected',
       firstNtToDisplay: 'firstNtToDisplay',
       currentDisplayNtWidthInPx : 'currentDisplayNtWidthInPx',
@@ -43,12 +44,12 @@ export default {
       // fullChromData: 'fullChromData',
       genomeListInDisplay: 'genomeListInDisplay',
     }),
-    ...mapGetters({
+    ...mapGetters('panache', {
       displayWindowWidth: 'displayWindowWidth',
     }),
   },
   methods: {
-    ...mapActions([
+    ...mapActions('panache', [
       'updateGenomesInDisplay',
     ]),
     /**
@@ -138,7 +139,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 .centerT {
   text-align: center;

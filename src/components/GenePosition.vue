@@ -58,7 +58,7 @@ export default {
     }
   },
   computed: {
-    ...mapState({
+    ...mapState('panache', {
       annotMap: 'annotMap',
       annotMapNames: 'annotMapNames',
       annotMapSelectedChrom: 'annotMapChromInDisplay',
@@ -106,7 +106,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions({
+    ...mapActions('panache', {
       updateSelectedChromStore: 'updateSelectedChrom',
     }),
     pxToNt(pxAmount) {
@@ -140,7 +140,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 .h31 {
   height: 31px;

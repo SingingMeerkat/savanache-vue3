@@ -309,7 +309,7 @@ export default {
     }
   },
   computed: {
-    ...mapState({
+    ...mapState('panache', {
       genomeList: 'genomeListInDisplay',
     }),
     mainTracksTotHeight() {

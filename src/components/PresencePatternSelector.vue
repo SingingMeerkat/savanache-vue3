@@ -13,7 +13,7 @@
 
 <script>
 
-import Slider from '@vueform/slider/dist/slider.vue2.js'
+import Slider from '@vueform/slider'
 import { mapActions } from "vuex";
 
 export default {
@@ -36,7 +36,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
+    ...mapActions('panache', [
       'updateLocalAreaSelected',
     ]),
   },
@@ -63,7 +63,7 @@ export default {
 
 </style>
 
-<style scoped>
+<style lang="scss" scoped>
 
 .marTop15 {
   margin-top: 15px;

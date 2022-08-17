@@ -154,7 +154,7 @@ export default {
     return {}
   },
   computed: {
-    ...mapState({
+    ...mapState('panache', {
       chromNames: 'chromNames',
       firstNt: 'firstNtToDisplay',
       genoNames: 'genomeListInDisplay',
@@ -164,7 +164,7 @@ export default {
       isGffUploaded: 'isGffUploaded',
       fileLoaded: 'fileLoaded',
     }),
-    ...mapGetters({
+    ...mapGetters('panache', {
       currentChromData: 'chromDataInDisplay',
       currentGffData: 'gffDataInDisplay',
       displayWindowWidth: 'displayWindowWidth',
@@ -188,7 +188,7 @@ export default {
       return newickStr.match(regExNwk);
     },
     //Get Actions from the store
-    ...mapActions([
+    ...mapActions('panache', [
       'updateDisplayLoadingStatus',
       'updateChromNames',
       'updateCoordsOfHollowAreas',
@@ -261,7 +261,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
 
 .wrapper {
   display: grid;

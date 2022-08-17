@@ -381,7 +381,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 #header-title {
   flex-grow: 0;
   display: inline-flex;

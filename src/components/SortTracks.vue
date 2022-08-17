@@ -48,7 +48,7 @@ export default {
     },
   },
   computed: {
-    ...mapState({
+    ...mapState('panache', {
       selectedSortMode: 'selectedSortMode',
       genomeList: 'genomeListInDisplay',
       genomeListSave: 'genomeListInDisplaySave',
@@ -87,7 +87,7 @@ export default {
         this.updateGenomesInDisplay(this.genomeListNewickTreeUpload); // Update genomeListInDisplay with the array extracted from the Newick file uploaded.
       }
     },
-    ...mapActions([
+    ...mapActions('panache', [
       'updateGenomesInDisplay',
     ]),
   },
@@ -99,6 +99,6 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 </style>

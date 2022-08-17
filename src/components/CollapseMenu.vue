@@ -53,7 +53,7 @@ export default {
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 .buttonC {
   padding: 0px !important;

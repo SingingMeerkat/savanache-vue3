@@ -140,7 +140,7 @@ export default {
     }
   },
   computed: {
-    ...mapState({
+    ...mapState('panache', {
       blockOffset: 'yOffsetOfPavBlocks',
     }),
     heightOfTotBlocks() {

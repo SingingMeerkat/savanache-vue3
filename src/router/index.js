@@ -25,7 +25,8 @@ const routes = [
     path: "/presence_absence",
     name: "Presence Absence",
     component: () =>
-      import(/* webpackChunkName: "home" */ "../views/PanacheView.vue")
+      // import(/* webpackChunkName: "panache" */ "../views/PanacheView.vue")
+      import(/* webpackChunkName: "home" */ "../views/HomeView.vue")
   },
   {
     path: "/about",

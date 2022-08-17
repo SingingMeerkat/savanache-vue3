@@ -38,7 +38,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
+    ...mapActions('panache', [
       'updateIsGffUploadedTRUE',
       'pushSortModeInSortChoice',
     ]),
