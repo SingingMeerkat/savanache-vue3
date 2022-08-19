@@ -128,6 +128,8 @@ export default defineComponent({
     const store = useStore();
     const selectedPivotName = reactiveVuex(store, "selectedPivotName", "setSelectedPivotName");
     const selectedSVTypeNames = reactiveVuex(store, "selectedSVTypeNames", "setSelectedSVTypeNames");
+    const chromOnDisplay = reactiveVuex(store, "chromOnDisplay", "setChromOnDisplay");
+    const chromName = chromOnDisplay.value;
 
     const pivotItems = ref([]);
 
@@ -143,7 +145,7 @@ export default defineComponent({
 
     let data;
 
-    getData().then((d) => {
+    getData(chromName).then((d) => {
       data = d;
       if (data) {
         pivotItems.value = Object.keys(data.pangenome.paths);
@@ -156,7 +158,8 @@ export default defineComponent({
       const minLength = 0;
       let maxLength;
       if (data) {
-        const steps = data.pangenome.paths[selectedPivotName.value][data.chromName];
+        //const steps = data.pangenome.paths[selectedPivotName.value][data.chromName];
+        const steps = data.pangenome.paths[selectedPivotName.value][chromName];
         if (steps && steps.length) {
           steps.forEach((step) => {
             const panBlock = data.pangenome.panSkeleton[step.panBlock];

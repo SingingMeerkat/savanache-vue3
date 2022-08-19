@@ -46,16 +46,19 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const selectedAssemblyNames = reactiveVuex(store, "selectedAssemblyNames", "setSelectedAssemblyNames");
+    const chromOnDisplay = reactiveVuex(store, "chromOnDisplay", "setChromOnDisplay");
+    const chromName = chromOnDisplay.value;
 
     const paths = ref([]);
 
-    getData().then((data) => {
+    getData(chromName).then((data) => {
       if (data) {
         const pathNames = Object.keys(data.pangenome.paths);
         paths.value = pathNames.map((pathName) => ({
           name: pathName,
-          chromName: data.chromName,
-          steps: data.pangenome.paths[pathName] && data.pangenome.paths[pathName][data.chromName]?.length || 0
+          //chromName: data.chromName,
+          steps: data.pangenome.paths[pathName] && data.pangenome.paths[pathName][chromName]?.length || 0
+          //steps: data.pangenome.paths[pathName] && data.pangenome.paths[pathName]['Gm01']?.length || 0
         }));
         allSelected.value = false;
       }

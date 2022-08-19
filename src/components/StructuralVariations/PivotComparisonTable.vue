@@ -152,6 +152,7 @@ export default defineComponent({
     // const selectedAssemblyNames = reactiveVuex(store, "selectedAssemblyNames", "setSelectedAssemblyNames");
     const selectedSVTypeNames = reactiveVuex(store, "selectedSVTypeNames", "setSelectedSVTypeNames");
     const selectedBlock = reactiveVuex(store, "selectedBlock", "setSelectedBlock");
+    const chromOnDisplay = reactiveVuex(store, "chromOnDisplay", "setChromOnDisplay");
 
     const lengthFilter = reactiveVuex(store, "lengthFilter", "setLengthFilter"); // ref((Math.round(limitLength * 0.01) / lengthStep) * lengthStep);
     const positionFilter = reactiveVuex(store, "positionFilter", "setPositionFilter"); // ref((Math.round(limitPosition * 0.01) / positionStep) * positionStep);
@@ -162,14 +163,15 @@ export default defineComponent({
     });
 
     const pangenome = ref();
-    const chromName = ref();
     const pivots = ref();
     const paths = ref({});
 
-    getData().then((data) => {
+    const chromName = chromOnDisplay.value;
+
+    getData(chromName).then((data) => {
       if (data) {
         pangenome.value = data.pangenome;
-        chromName.value = data.chromName;
+        //chromName.value = data.chromName;
         pivots.value = data.pivots;
 
         const pathNames = Object.keys(pangenome.value.paths);

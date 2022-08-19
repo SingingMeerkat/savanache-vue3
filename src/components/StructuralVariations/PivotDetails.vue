@@ -100,8 +100,10 @@ export default defineComponent({
     const store = useStore();
     const selectedBlock = reactiveVuex(store, "selectedBlock", "setSelectedBlock");
 
+    const chromOnDisplay = reactiveVuex(store, "chromOnDisplay", "setChromOnDisplay");
+    const chromName = chromOnDisplay.value;
+
     const pangenome = ref();
-    const chromName = ref();
     const pivots = ref();
 
     const selectedPivotSteps = computed(() => {
@@ -122,7 +124,7 @@ export default defineComponent({
       return pivots.value[selectedBlock.value.pivotName][selectedBlock.value.comparisonName].blocks[selectedBlock.value.blockName];
     });
 
-    getData().then((data) => {
+    getData(chromName).then((data) => {
       if (data) {
         pangenome.value = data.pangenome;
         pivots.value = data.pivots;

@@ -1,10 +1,10 @@
 let dataCache;
 let promise;
 
-export const getData = () => {
+export const getData = (chromName) => {
   if (!promise) {
     promise = new Promise((resolve, reject) => {
-      getDataInternal().then(resolve).catch(reject);
+      getDataInternal(chromName).then(resolve).catch(reject);
     });
   }
   return promise;
@@ -846,16 +846,22 @@ const annotateComparisonOfTwoSteps = ({
 */
 
 
-const getDataInternal = async () => {
+const getDataInternal = async (chromName) => {
   if (dataCache) {
     return dataCache;
   }
 
+  //let startMark = "Beginning";
+  //let stopMark = "End";
+
+  //performance.mark(startMark);
+
   let pangenomeImport = await import(
-    "../data/sample/handcrafted3AssembliesPangenome.json"
+    //"../data/sample/handcrafted3AssembliesPangenome.json"
+    "../data/sample/pangenome__coordinate_SaVanache.json"
     );
 
-  const chromName = 'chrom1' // TODO: adapt it depending on user's choice within the app
+  //const chromName = 'Gm01' // TODO: adapt it depending on user's choice within the app
 
   pangenomeImport = pangenomeImport.default || pangenomeImport;
 
@@ -877,7 +883,12 @@ const getDataInternal = async () => {
 
   console.log("pivots", pivots);
 
-  dataCache = { pangenome: pangenomeImport.default || pangenomeImport, pivots, chromName };
+  //performance.mark(stopMark);
+  //performance.measure("Elapsed time for annotation", startMark, stopMark);
+  //console.log(performance.getEntriesByType("measure"));
+
+  //dataCache = { pangenome: pangenomeImport.default || pangenomeImport, pivots, chromName };
+  dataCache = { pangenome: pangenomeImport.default || pangenomeImport, pivots };
 
   return dataCache;
 };
