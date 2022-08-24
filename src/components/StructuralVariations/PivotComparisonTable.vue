@@ -137,7 +137,7 @@
 
 <script>
 
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
 import { reactiveVuex } from "@/store/helper";
@@ -152,7 +152,7 @@ export default defineComponent({
     // const selectedAssemblyNames = reactiveVuex(store, "selectedAssemblyNames", "setSelectedAssemblyNames");
     const selectedSVTypeNames = reactiveVuex(store, "selectedSVTypeNames", "setSelectedSVTypeNames");
     const selectedBlock = reactiveVuex(store, "selectedBlock", "setSelectedBlock");
-    const chromOnDisplay = reactiveVuex(store, "chromOnDisplay", "setChromOnDisplay");
+    const chromName = reactiveVuex(store, "chromOnDisplay", "setChromOnDisplay");
 
     const lengthFilter = reactiveVuex(store, "lengthFilter", "setLengthFilter"); // ref((Math.round(limitLength * 0.01) / lengthStep) * lengthStep);
     const positionFilter = reactiveVuex(store, "positionFilter", "setPositionFilter"); // ref((Math.round(limitPosition * 0.01) / positionStep) * positionStep);
@@ -166,21 +166,20 @@ export default defineComponent({
     const pivots = ref();
     const paths = ref({});
 
-    const chromName = chromOnDisplay.value;
+    watch(chromName, () => {
+      getData(chromName.value).then((data) => {
+        if (data) {
+          pangenome.value = data.pangenome;
+          pivots.value = data.pivots;
 
-    getData(chromName).then((data) => {
-      if (data) {
-        pangenome.value = data.pangenome;
-        //chromName.value = data.chromName;
-        pivots.value = data.pivots;
+          const pathNames = Object.keys(pangenome.value.paths);
 
-        const pathNames = Object.keys(pangenome.value.paths);
-
-        paths.value = pathNames.reduce((result, pathName) => ({
-          ...result,
-          [pathName]: data.pangenome.paths[pathName]
-        }), {});
-      }
+          paths.value = pathNames.reduce((result, pathName) => ({
+            ...result,
+            [pathName]: data.pangenome.paths[pathName]
+          }), {});
+        }
+      });
     });
 
     const pivotRowIndex = ref(1);

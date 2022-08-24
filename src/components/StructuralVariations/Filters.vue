@@ -134,8 +134,7 @@ export default defineComponent({
     const store = useStore();
     const selectedPivotName = reactiveVuex(store, "selectedPivotName", "setSelectedPivotName");
     const selectedSVTypeNames = reactiveVuex(store, "selectedSVTypeNames", "setSelectedSVTypeNames");
-    const chromOnDisplay = reactiveVuex(store, "chromOnDisplay", "setChromOnDisplay");
-    const chromName = chromOnDisplay.value;
+    const chromName = reactiveVuex(store, "chromOnDisplay", "setChromOnDisplay");
 
     const pivotItems = ref([]);
 
@@ -151,37 +150,38 @@ export default defineComponent({
 
     let data;
 
-    getData(chromName).then((d) => {
+    getData(chromName.value).then((d) => {
       data = d;
       if (data) {
         pivotItems.value = Object.keys(data.pangenome.paths);
       }
     });
 
-    //const chromItems = computed(() => {
-    //  console.log('Computing chromItems', {pivot: selectedPivotName.value, data: data});
-    //  if (selectedPivotName.value && data) {
-    //    return data.chromNamesPerPath[selectedPivotName.value];
-    //  } else { return [] }
-    //});
-    const chromItems = ['Gm01'];
-
-    //watch(selectedPivotName, () => {
-    //  if (!chromItems.value.includes(chromName)) {
-    //    console.log('Modyfing chrom list with following chromItems', chromItems.value);
-    //    chromName = chromItems.value[0];
-    //  }
-    //});
+    const chromItems = computed(() => {
+      console.log('Computing chromItems', {pivot: selectedPivotName.value, data: data});
+      if (selectedPivotName.value && data) {
+        return data.chromNamesPerPath[selectedPivotName.value];
+      //} else { return ['Gm01'] }
+      } else { return [] }
+    });
+    //const chromItems = ['Gm01'];
 
     watch(selectedPivotName, () => {
-    //watch(chromName, () => {
+      if (!chromItems.value.includes(chromName.value)) {
+        console.log('Modyfing chrom list with following chromItems', chromItems.value);
+        chromName.value = chromItems.value[0];
+      }
+    });
 
-      //getData(chromName).then((d) => {
-      //  data = d;
-      //  if (data) {
-      //    pivotItems.value = Object.keys(data.pangenome.paths);
-      //  }
-      //});
+    //watch(selectedPivotName, () => {
+    watch(chromName, () => {
+
+      getData(chromName.value).then((d) => {
+        data = d;
+        if (data) {
+          pivotItems.value = Object.keys(data.pangenome.paths);
+        }
+      });
 
       let start;
       let end;
@@ -189,7 +189,7 @@ export default defineComponent({
       let maxLength;
       if (data) {
         //const steps = data.pangenome.paths[selectedPivotName.value][data.chromName];
-        const steps = data.pangenome.paths[selectedPivotName.value][chromName];
+        const steps = data.pangenome.paths[selectedPivotName.value][chromName.value];
         if (steps && steps.length) {
           steps.forEach((step) => {
             const panBlock = data.pangenome.panSkeleton[step.panBlock];
