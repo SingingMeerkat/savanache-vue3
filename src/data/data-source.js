@@ -1,10 +1,11 @@
 let dataCache;
+let chromNamesPerPath;
 let promise;
 
-export const getData = (chromName) => {
+export const getData = (chromToDisplay) => {
   if (!promise) {
     promise = new Promise((resolve, reject) => {
-      getDataInternal(chromName).then(resolve).catch(reject);
+      getDataInternal(chromToDisplay).then(resolve).catch(reject);
     });
   }
   return promise;
@@ -846,8 +847,10 @@ const annotateComparisonOfTwoSteps = ({
 */
 
 
-const getDataInternal = async (chromName) => {
+const getDataInternal = async (chromToDisplay) => {
+
   if (dataCache) {
+  //if (dataCache?.pivots[chromName]) {
     return dataCache;
   }
 
@@ -859,7 +862,18 @@ const getDataInternal = async (chromName) => {
   let pangenomeImport = await import(
     //"../data/sample/handcrafted3AssembliesPangenome.json"
     "../data/sample/pangenome__coordinate_SaVanache.json"
-    );
+  );
+
+  if (!chromNamesPerPath) {
+    chromNamesPerPath = {};
+    Object.entries(pangenomeImport.paths).forEach(([pathName, pathData]) => {
+      chromNamesPerPath[pathName] = Object.getOwnPropertyNames(pathData);
+    });
+  }
+  let firstAssembly = Object.keys(chromNamesPerPath)[0];
+  let firstChromOfFirstAssembly = chromNamesPerPath[firstAssembly][0];
+  let chromName = ( chromToDisplay? chromToDisplay : firstChromOfFirstAssembly );
+  console.log("chromNamesPerPath", chromNamesPerPath);
 
   //const chromName = 'Gm01' // TODO: adapt it depending on user's choice within the app
 
@@ -888,7 +902,7 @@ const getDataInternal = async (chromName) => {
   //console.log(performance.getEntriesByType("measure"));
 
   //dataCache = { pangenome: pangenomeImport.default || pangenomeImport, pivots, chromName };
-  dataCache = { pangenome: pangenomeImport.default || pangenomeImport, pivots };
+  dataCache = { pangenome: pangenomeImport.default || pangenomeImport, pivots, chromNamesPerPath };
 
   return dataCache;
 };

@@ -15,6 +15,7 @@ export default createStore({
     lengthLimit: [0, 0],
     positionFilter: [0, 0],
     positionLimit: [0, 0],
+    //chromOnDisplay: undefined,
     chromOnDisplay: 'Gm01',
   },
   getters: {},
