@@ -9,9 +9,11 @@ export const newVisualStep = ({
     blockTypes,
     blockClasses: selected ? ["selected"] : [],
     blockStyles: {
-      width: (panBlock.length / 4) + "px",
+      // width: (panBlock.length / 4) + "px",
+      width: panBlock.length + "px",
       // left: Math.max(step.startPosition, otherPanBlock  otherPanBlock.startPosition : 0, lastStep  parseInt(lastStep.blockStyles.left) + parseInt(lastStep.blockStyles.width) : 0) / 4  + 'px',
-      left: step.startPosition / 4 + "px"
+      // left: step.startPosition / 4 + "px"
+      left: step.startPosition + "px"
       // backgroundColor: colors[step.panBlock].replace('{{alpha}}', alpha),
       // top: tops[step.panBlock],
     }
@@ -38,22 +40,24 @@ export const isSelectedStep = ({
 };
 
 export const calculateOffset = ({
-                                  otherPanBlock,
-                                  step,
-                                  selectedBlock
+                                  comparisonStepStartPosition,
+                                  pivotStepStartPosition
                                 }) => {
   let pivotOffset = 0;
-  let assemblyOffset = 0;
+  let comparisonOffset = 0;
   let totalOffset = 0;
-  if (otherPanBlock && step.panBlock === selectedBlock.value.blockName) {
-    if (otherPanBlock.startPosition >= step.startPosition) {
-      pivotOffset = (otherPanBlock.startPosition - step.startPosition) / 4;
-      assemblyOffset = 0;
+  if (comparisonStepStartPosition !== null && pivotStepStartPosition !== null) {
+    if (comparisonStepStartPosition >= pivotStepStartPosition) {
+      // pivotOffset = (comparisonStepStartPosition - pivotStepStartPosition) / 4;
+      pivotOffset = (comparisonStepStartPosition - pivotStepStartPosition);
+      comparisonOffset = 0;
     } else {
       pivotOffset = 0;
-      assemblyOffset = (step.startPosition - otherPanBlock.startPosition) / 4;
+      // comparisonOffset = (pivotStepStartPosition - comparisonStepStartPosition) / 4;
+      comparisonOffset = (pivotStepStartPosition - comparisonStepStartPosition);
     }
+    // totalOffset = (Math.min(comparisonStepStartPosition ? comparisonStepStartPosition : pivotStepStartPosition, pivotStepStartPosition) / 4) + Math.max(pivotOffset, comparisonOffset);
+    totalOffset = (Math.min(comparisonStepStartPosition ? comparisonStepStartPosition : pivotStepStartPosition, pivotStepStartPosition)) + Math.max(pivotOffset, comparisonOffset);
   }
-  totalOffset = (Math.min(otherPanBlock ? otherPanBlock.startPosition : step.startPosition, step.startPosition) / 4) + Math.max(pivotOffset, assemblyOffset);
-  return { pivotOffset, assemblyOffset, totalOffset };
+  return { pivotOffset, comparisonOffset, totalOffset };
 };
