@@ -170,7 +170,8 @@ export default defineComponent({
       getData(chromName.value).then((data) => {
         if (data) {
           pangenome.value = data.pangenome;
-          pivots.value = data.pivots;
+          pivots.value = data.pivots[chromName.value];
+          //pivots.value = data.pivots;
 
           const pathNames = Object.keys(pangenome.value.paths);
 

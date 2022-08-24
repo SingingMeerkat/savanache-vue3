@@ -1,6 +1,7 @@
 let dataCache;
 let chromNamesPerPath;
 let promise;
+let pivots;
 
 export const getData = (chromToDisplay) => {
   if (!promise) {
@@ -849,8 +850,12 @@ const annotateComparisonOfTwoSteps = ({
 
 const getDataInternal = async (chromToDisplay) => {
 
-  if (dataCache) {
-  //if (dataCache?.pivots[chromName]) {
+
+  //console.log("Is there dataCache?", (dataCache ? true : false));
+  //console.log("Is there inner key chromName?", (dataCache?.pivots[chromName] ? true : false));
+  //console.log("Is there inner key chromToDisplay?", (dataCache?.pivots[chromToDisplay] ? true : false));
+  //if (dataCache) {
+  if (dataCache?.pivots[chromToDisplay]) {
     return dataCache;
   }
 
@@ -879,7 +884,8 @@ const getDataInternal = async (chromToDisplay) => {
 
   pangenomeImport = pangenomeImport.default || pangenomeImport;
 
-  const pivots = {};
+  const pivotsPerChrom = {};
+  //const pivots = {};
   Object.entries(pangenomeImport.paths).forEach(([pivotPathName, pivotPathData]) => {
 
     const outerLoopResult = buildThenExpandAnnotations({
@@ -890,10 +896,16 @@ const getDataInternal = async (chromToDisplay) => {
     });
 
     if (outerLoopResult && outerLoopResult.pivots) {
-      Object.assign(pivots, outerLoopResult.pivots);
+      Object.assign(pivotsPerChrom, outerLoopResult.pivots);
+      //Object.assign(pivots, outerLoopResult.pivots);
     }
 
   });
+
+  if (!pivots) {
+    pivots = {};
+  }
+  pivots[chromName] = pivotsPerChrom;
 
   console.log("pivots", pivots);
 

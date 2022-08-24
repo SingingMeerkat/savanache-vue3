@@ -127,7 +127,8 @@ export default defineComponent({
     getData(chromName).then((data) => {
       if (data) {
         pangenome.value = data.pangenome;
-        pivots.value = data.pivots;
+        pivots.value = data.pivots[chromName.value];
+        //pivots.value = data.pivots;
       }
     });
 
