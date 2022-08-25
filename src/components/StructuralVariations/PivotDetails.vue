@@ -282,11 +282,12 @@ export default defineComponent({
       return styles;
     };
 
+    let animationInterval;
     watch(selectedBlock, () => {
       if (selectedBlock.value && selectedBlock.value.blockName && pangenome.value && pangenome.value.panSkeleton) {
         const pivotStep = pangenome.value.paths[selectedBlock.value.pivotName].steps.find(step => step.panBlock === selectedBlock.value.blockName);
         // const pivotBlockLength = pangenome.value.panSkeleton[selectedBlock.value.pivotName].length;
-        
+
         let pivotStepStartPosition = null;
         if (pivotStep) {
           pivotStepStartPosition = pivotStep.startPosition;
@@ -294,7 +295,7 @@ export default defineComponent({
 
         const comparisonStep = pangenome.value.paths[selectedBlock.value.comparisonName].steps.find(step => step.panBlock === selectedBlock.value.blockName);
         // const comparisonBlockLength = pangenome.value.panSkeleton[selectedBlock.value.comparisonName].length;
-        
+
         let comparisonStepStartPosition = null;
         if (comparisonStep) {
           comparisonStepStartPosition = comparisonStep.startPosition;
@@ -309,8 +310,36 @@ export default defineComponent({
         console.log('comparisonStepStartPosition', comparisonStepStartPosition, 'pivotStepStartPosition', pivotStepStartPosition, 'comparisonOffset', offsets.comparisonOffset, 'pivotOffset', offsets.pivotOffset, 'totalOffset', offsets.totalOffset);
         if (dataBlockRowsRef.value) {
           console.log('clientWidth', dataBlockRowsRef.value.clientWidth, 'offsetWidth', dataBlockRowsRef.value.offsetWidth, 'scrollWidth', dataBlockRowsRef.value.scrollWidth)
+          clearInterval(animationInterval);
+          const start = dataBlockRowsRef.value.scrollLeft;
+          const end = scrollOffset.value - (dataBlockRowsRef.value.clientWidth / 3);
+          const diff = end - start;
+          const steps = 50;
+          const step = Math.ceil(diff / steps);
+          let count = 0;
+          console.log('start', start, 'end', end, 'diff', diff, 'step', step);
+          if (Math.abs(step) >= 1) {
+            animationInterval = setInterval(() => {
+              count++;
+              if (!dataBlockRowsRef.value || dataBlockRowsRef.value.scrollLeft === undefined) {
+                clearInterval(animationInterval);
+              }
+              dataBlockRowsRef.value.scrollLeft += step;
+              if (diff >= 0 && dataBlockRowsRef.value.scrollLeft >= end) {
+                clearInterval(animationInterval);
+              } else if (diff <= 0 && dataBlockRowsRef.value.scrollLeft <= end) {
+                clearInterval(animationInterval);
+              } else if (dataBlockRowsRef.value.scrollLeft <= 0) {
+                clearInterval(animationInterval);
+              } else if (dataBlockRowsRef.value.scrollLeft >= dataBlockRowsRef.value.scrollWidth - dataBlockRowsRef.value.clientWidth) {
+                clearInterval(animationInterval);
+              } else if (count > steps) {
+                clearInterval(animationInterval);
+              }
+              console.log('count', count, 'start', start, 'end', end, 'diff', diff, 'step', step, 'dataBlockRowsRef.value.scrollLeft', dataBlockRowsRef.value.scrollLeft);
+            }, 500 / steps);
+          }
 
-          dataBlockRowsRef.value.scrollLeft = scrollOffset.value - (dataBlockRowsRef.value.clientWidth / 3);
         }
 
       }
