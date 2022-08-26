@@ -85,11 +85,11 @@
 
 <script>
 
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
 import { reactiveVuex } from "@/store/helper";
-// import {selectedComparisonNameKeys, selectedChromosome, selectedPivotName} from '@/data/some-data-source';
+import { calculateOffset } from "@/helpers/pivot-details";
 
 export default defineComponent({
   name: "StructuralVariationsPivotDetails",
@@ -239,7 +239,8 @@ export default defineComponent({
       const styles = [];
       if (pangenome.value) {
         const panBlock = pangenome.value.panSkeleton[panBlockName];
-        styles.push({ width: (panBlock.length / 4) + "px" });
+        // styles.push({ width: (panBlock.length / 4) + "px" });
+        styles.push({ width: (panBlock.length) + "px" });
       }
       return styles;
     };
@@ -279,10 +280,74 @@ export default defineComponent({
       const styles = [];
       if (pangenome.value) {
         const panBlock = pangenome.value.panSkeleton[panBlockName];
-        styles.push({ width: (panBlock.length / 4) + "px" });
+        // styles.push({ width: (panBlock.length / 4) + "px" });
+        styles.push({ width: (panBlock.length) + "px" });
       }
       return styles;
     };
+
+    let animationInterval;
+    watch(selectedBlock, () => {
+      if (selectedBlock.value && selectedBlock.value.blockName && pangenome.value && pangenome.value.panSkeleton) {
+        const pivotStep = pangenome.value.paths[selectedBlock.value.pivotName].steps.find(step => step.panBlock === selectedBlock.value.blockName);
+        // const pivotBlockLength = pangenome.value.panSkeleton[selectedBlock.value.pivotName].length;
+
+        let pivotStepStartPosition = null;
+        if (pivotStep) {
+          pivotStepStartPosition = pivotStep.startPosition;
+        }
+
+        const comparisonStep = pangenome.value.paths[selectedBlock.value.comparisonName].steps.find(step => step.panBlock === selectedBlock.value.blockName);
+        // const comparisonBlockLength = pangenome.value.panSkeleton[selectedBlock.value.comparisonName].length;
+
+        let comparisonStepStartPosition = null;
+        if (comparisonStep) {
+          comparisonStepStartPosition = comparisonStep.startPosition;
+        }
+
+        const offsets = calculateOffset({comparisonStepStartPosition, pivotStepStartPosition});
+        comparisonOffset.value = offsets.comparisonOffset || 0;
+        pivotOffset.value = offsets.pivotOffset || 0;
+        // scrollOffset.value = (pivotStepStartPosition / 4 + offsets.pivotOffset) || 0;
+        scrollOffset.value = (pivotStepStartPosition + offsets.pivotOffset) || 0;
+
+        console.log('comparisonStepStartPosition', comparisonStepStartPosition, 'pivotStepStartPosition', pivotStepStartPosition, 'comparisonOffset', offsets.comparisonOffset, 'pivotOffset', offsets.pivotOffset, 'totalOffset', offsets.totalOffset);
+        if (dataBlockRowsRef.value) {
+          console.log('clientWidth', dataBlockRowsRef.value.clientWidth, 'offsetWidth', dataBlockRowsRef.value.offsetWidth, 'scrollWidth', dataBlockRowsRef.value.scrollWidth)
+          clearInterval(animationInterval);
+          const start = dataBlockRowsRef.value.scrollLeft;
+          const end = scrollOffset.value - (dataBlockRowsRef.value.clientWidth / 3);
+          const diff = end - start;
+          const steps = 50;
+          const step = Math.ceil(diff / steps);
+          let count = 0;
+          console.log('start', start, 'end', end, 'diff', diff, 'step', step);
+          if (Math.abs(step) >= 1) {
+            animationInterval = setInterval(() => {
+              count++;
+              if (!dataBlockRowsRef.value || dataBlockRowsRef.value.scrollLeft === undefined) {
+                clearInterval(animationInterval);
+              }
+              dataBlockRowsRef.value.scrollLeft += step;
+              if (diff >= 0 && dataBlockRowsRef.value.scrollLeft >= end) {
+                clearInterval(animationInterval);
+              } else if (diff <= 0 && dataBlockRowsRef.value.scrollLeft <= end) {
+                clearInterval(animationInterval);
+              } else if (dataBlockRowsRef.value.scrollLeft <= 0) {
+                clearInterval(animationInterval);
+              } else if (dataBlockRowsRef.value.scrollLeft >= dataBlockRowsRef.value.scrollWidth - dataBlockRowsRef.value.clientWidth) {
+                clearInterval(animationInterval);
+              } else if (count > steps) {
+                clearInterval(animationInterval);
+              }
+              console.log('count', count, 'start', start, 'end', end, 'diff', diff, 'step', step, 'dataBlockRowsRef.value.scrollLeft', dataBlockRowsRef.value.scrollLeft);
+            }, 500 / steps);
+          }
+
+        }
+
+      }
+    }, { immediate: true, deep: true });
 
     return {
       selectedPivotSteps,
@@ -340,7 +405,7 @@ export default defineComponent({
 }
 
 .block-wrapper {
-  //position: absolute;
+  position: absolute;
   transition: all 500ms;
   white-space: nowrap;
 }
@@ -349,9 +414,9 @@ export default defineComponent({
   display: inline-block;
   //position: relative;
   position: relative;
-  top: 1.5rem;
-  height: 0.5rem;
-  line-height: 1rem;
+  top: 0.5rem;
+  height: 2rem;
+  line-height: 2rem;
   //text-align: center;
   //width: 6rem;
   background: lightgray;
@@ -367,21 +432,22 @@ export default defineComponent({
   }
 
   .block-label {
-    transition: all 100ms;
+    padding: 0 0.5rem;
+    //transition: all 100ms;
 
-    position: absolute;
-    transform: rotate(-45deg);
+    //position: absolute;
+    //transform: rotate(-45deg);
     //transform: rotate(-15deg);
-    border: inherit;
-    transform-origin: 0 0;
-    background: inherit;
-    line-height: 1em;
-    padding: 2px;
+    //border: inherit;
+    //transform-origin: 0 0;
+    //background: inherit;
+    //line-height: 1em;
+    //padding: 2px;
     //border-radius: 2px;
     //left: -6px;
     //top: -19px;
-    left: -13px;
-    top: -14px;
+    //left: -13px;
+    //top: -14px;
   }
 
 
