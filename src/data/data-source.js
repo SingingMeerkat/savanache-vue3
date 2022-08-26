@@ -1,10 +1,16 @@
+//const dataCache = { pivots: {} };
+//let dataCache = { pivots: {} };
 let dataCache;
 let chromNamesPerPath;
 let promise;
 let pivots;
+let chromsRanAlready = [];
 
 export const getData = (chromToDisplay) => {
-  if (!promise) {
+  //Run promise only when needed : ie not promise yet, or not for the chossen chrom
+  if (!promise || !chromsRanAlready.includes(chromToDisplay)) {
+    chromsRanAlready.push(chromToDisplay);
+    console.log("SV Annotation already built for the chosen chromosome.")
     promise = new Promise((resolve, reject) => {
       getDataInternal(chromToDisplay).then(resolve).catch(reject);
     });
@@ -850,11 +856,6 @@ const annotateComparisonOfTwoSteps = ({
 
 const getDataInternal = async (chromToDisplay) => {
 
-
-  //console.log("Is there dataCache?", (dataCache ? true : false));
-  //console.log("Is there inner key chromName?", (dataCache?.pivots[chromName] ? true : false));
-  //console.log("Is there inner key chromToDisplay?", (dataCache?.pivots[chromToDisplay] ? true : false));
-  //if (dataCache) {
   if (dataCache?.pivots[chromToDisplay]) {
     return dataCache;
   }
@@ -874,11 +875,11 @@ const getDataInternal = async (chromToDisplay) => {
     Object.entries(pangenomeImport.paths).forEach(([pathName, pathData]) => {
       chromNamesPerPath[pathName] = Object.getOwnPropertyNames(pathData);
     });
+    console.log("chromNamesPerPath", chromNamesPerPath);
   }
   let firstAssembly = Object.keys(chromNamesPerPath)[0];
   let firstChromOfFirstAssembly = chromNamesPerPath[firstAssembly][0];
   let chromName = ( chromToDisplay? chromToDisplay : firstChromOfFirstAssembly );
-  console.log("chromNamesPerPath", chromNamesPerPath);
 
   //const chromName = 'Gm01' // TODO: adapt it depending on user's choice within the app
 
