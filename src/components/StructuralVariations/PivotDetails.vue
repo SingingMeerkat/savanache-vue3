@@ -100,19 +100,22 @@ export default defineComponent({
     const store = useStore();
     const selectedBlock = reactiveVuex(store, "selectedBlock", "setSelectedBlock");
 
+    const chromName = reactiveVuex(store, "chromOnDisplay", "setChromOnDisplay");
+    //const chromName = chromOnDisplay.value;
+
     const pangenome = ref();
     const pivots = ref();
 
     const selectedPivotSteps = computed(() => {
       if (pangenome.value && selectedBlock.value && pangenome.value.paths[selectedBlock.value.pivotName]) {
-        return pangenome.value.paths[selectedBlock.value.pivotName].steps;
+        return pangenome.value.paths[selectedBlock.value.pivotName][chromName.value];
       }
       return [];
     });
 
     const selectedComparisonSteps = computed(() => {
       if (pangenome.value && selectedBlock.value && pangenome.value.paths[selectedBlock.value.comparisonName]) {
-        return pangenome.value.paths[selectedBlock.value.comparisonName].steps;
+        return pangenome.value.paths[selectedBlock.value.comparisonName][chromName.value];
       }
       return [];
     });
@@ -121,11 +124,14 @@ export default defineComponent({
       return pivots.value[selectedBlock.value.pivotName][selectedBlock.value.comparisonName].blocks[selectedBlock.value.blockName];
     });
 
-    getData().then((data) => {
-      if (data) {
-        pangenome.value = data.pangenome;
-        pivots.value = data.pivots;
-      }
+    watch(chromName, () => {
+      getData(chromName.value).then((data) => {
+        if (data) {
+          pangenome.value = data.pangenome;
+          pivots.value = data.pivots[chromName.value];
+          //pivots.value = data.pivots;
+        }
+      });
     });
 
     const comparisonOffset = ref(0);
@@ -143,12 +149,12 @@ export default defineComponent({
 
     const comparisonNodeInPivotBlock = (comparisonPanBlockName) => {
 
-      const dupeNodes = selectedPivotBlock.value.dupeNodes && selectedPivotBlock.value.dupeNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
+      const coocNodes = selectedPivotBlock.value.coocNodes && selectedPivotBlock.value.coocNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
       const swapComparisonNodes = selectedPivotBlock.value.swapComparisonNodes && selectedPivotBlock.value.swapComparisonNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
       const insertionNodes = selectedPivotBlock.value.insertionNodes && selectedPivotBlock.value.insertionNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
       const inversionChainNodes = selectedPivotBlock.value.inversionChainNodes && selectedPivotBlock.value.inversionChainNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
 
-      return dupeNodes || swapComparisonNodes || insertionNodes || inversionChainNodes;
+      return coocNodes || swapComparisonNodes || insertionNodes || inversionChainNodes;
     };
 
     const getComparisonStepClasses = (panBlockName) => {
@@ -156,18 +162,18 @@ export default defineComponent({
         pivots.value[selectedBlock.value.pivotName][selectedBlock.value.comparisonName].array.filter(
           (step) => {
             const matchNode = step.panBlock === panBlockName;
-            const dupeNodes = step.dupeNodes && step.dupeNodes.find(node => node.comparisonStepPanBlock === panBlockName);
+            const coocNodes = step.coocNodes && step.coocNodes.find(node => node.comparisonStepPanBlock === panBlockName);
             const swapComparisonNodes = step.swapComparisonNodes && step.swapComparisonNodes.find(node => node.comparisonStepPanBlock === panBlockName);
             const insertionNodes = step.insertionNodes && step.insertionNodes.find(node => node.comparisonStepPanBlock === panBlockName);
             const inversionChainNodes = step.inversionChainNodes && step.inversionChainNodes.find(node => node.comparisonStepPanBlock === panBlockName);
-            return matchNode || dupeNodes || swapComparisonNodes || insertionNodes || inversionChainNodes;
+            return matchNode || coocNodes || swapComparisonNodes || insertionNodes || inversionChainNodes;
           }).reduce((result, step) => {
 
-          if (step.dupeNodes) {
-            if (!result.dupeNodes) {
-              result.dupeNodes = [...step.dupeNodes];
+          if (step.coocNodes) {
+            if (!result.coocNodes) {
+              result.coocNodes = [...step.coocNodes];
             } else {
-              result.dupeNodes = [...result.dupeNodes, ...step.dupeNodes];
+              result.coocNodes = [...result.coocNodes, ...step.coocNodes];
             }
           }
 
@@ -219,8 +225,8 @@ export default defineComponent({
       if (comparisonParent.insertion && comparisonParent.insertionNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
         classes.push("block-insertion"); // + (typeof comparisonParent.insertion === 'string' ? '-' + comparisonParent.insertion : ''));
       }
-      if (comparisonParent.dupe && comparisonParent.dupeNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
-        classes.push("block-dupe"); // + (typeof comparisonParent.dupe === 'string' ? '-' + comparisonParent.dupe : ''));
+      if (comparisonParent.cooc && comparisonParent.coocNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
+        classes.push("block-cooc"); // + (typeof comparisonParent.cooc === 'string' ? '-' + comparisonParent.cooc : ''));
       }
       if (comparisonParent.swap && comparisonParent.swapComparisonNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
         classes.push("block-swap"); // + (typeof comparisonParent.swap === 'string' ? '-' + comparisonParent.swap : ''));
@@ -260,8 +266,8 @@ export default defineComponent({
       // if (pivotParent.insertion) {
       //   classes.push('block-insertion'); // + (typeof pivotParent.insertion === 'string' ? '-' + pivotParent.insertion : ''));
       // }
-      if (pivotParent.dupe) {
-        classes.push("block-dupe"); // + (typeof pivotParent.dupe === 'string' ? '-' + pivotParent.dupe : ''));
+      if (pivotParent.cooc) {
+        classes.push("block-cooc"); // + (typeof pivotParent.cooc === 'string' ? '-' + pivotParent.cooc : ''));
       }
       if (pivotParent.swap) {
         classes.push("block-swap"); // + (typeof pivotParent.swap === 'string' ? '-' + pivotParent.swap : ''));
@@ -285,7 +291,9 @@ export default defineComponent({
     let animationInterval;
     watch(selectedBlock, () => {
       if (selectedBlock.value && selectedBlock.value.blockName && pangenome.value && pangenome.value.panSkeleton) {
-        const pivotStep = pangenome.value.paths[selectedBlock.value.pivotName].steps.find(step => step.panBlock === selectedBlock.value.blockName);
+        console.log(pangenome.value.paths[selectedBlock.value.pivotName], chromName.value);
+        const pivotStep = pangenome.value.paths[selectedBlock.value.pivotName][chromName.value].find(step => step.panBlock === selectedBlock.value.blockName);
+        //const pivotStep = pangenome.value.paths[selectedBlock.value.pivotName].steps.find(step => step.panBlock === selectedBlock.value.blockName);
         // const pivotBlockLength = pangenome.value.panSkeleton[selectedBlock.value.pivotName].length;
 
         let pivotStepStartPosition = null;
@@ -293,7 +301,8 @@ export default defineComponent({
           pivotStepStartPosition = pivotStep.startPosition;
         }
 
-        const comparisonStep = pangenome.value.paths[selectedBlock.value.comparisonName].steps.find(step => step.panBlock === selectedBlock.value.blockName);
+        const comparisonStep = pangenome.value.paths[selectedBlock.value.comparisonName][chromName.value].find(step => step.panBlock === selectedBlock.value.blockName);
+        //const comparisonStep = pangenome.value.paths[selectedBlock.value.comparisonName].steps.find(step => step.panBlock === selectedBlock.value.blockName);
         // const comparisonBlockLength = pangenome.value.panSkeleton[selectedBlock.value.comparisonName].length;
 
         let comparisonStepStartPosition = null;
@@ -344,7 +353,6 @@ export default defineComponent({
 
       }
     }, { immediate: true, deep: true });
-
 
     return {
       selectedPivotSteps,
@@ -503,7 +511,7 @@ export default defineComponent({
   color: white;
 }
 
-.block-dupe {
+.block-cooc {
   background: #0086CA !important;
   color: white;
 }
@@ -513,7 +521,7 @@ export default defineComponent({
   color: white;
 }
 
-.block-inversion.block-dupe, .block-inversion-chain.block-dupe {
+.block-inversion.block-cooc, .block-inversion-chain.block-cooc {
   background: linear-gradient(0deg, #0086CA 50%, #9D0D0D 50%) !important;
 }
 
@@ -521,12 +529,12 @@ export default defineComponent({
   background: linear-gradient(0deg, #81CD06 50%, #9D0D0D 50%) !important;
 }
 
-.block-inversion.block-dupe.block-insertion, .block-inversion-chain.block-dupe.block-insertion {
+.block-inversion.block-cooc.block-insertion, .block-inversion-chain.block-cooc.block-insertion {
   background: linear-gradient(0deg, #0086CA 33%, #9D0D0D 33%, #9D0D0D 66%, #81CD06 66%) !important;
 }
 
 
-.block-dupe.block-insertion {
+.block-cooc.block-insertion {
   background: linear-gradient(0deg, #0086CA 50%, #81CD06 50%) !important;
 }
 
@@ -534,11 +542,11 @@ export default defineComponent({
   background: linear-gradient(0deg, #8148A4 50%, #81CD06 50%) !important;
 }
 
-.block-swap.block-dupe {
+.block-swap.block-cooc {
   background: linear-gradient(0deg, #0086CA 50%, #8148A4 50%) !important;
 }
 
-.block-swap.block-dupe.block-insertion {
+.block-swap.block-cooc.block-insertion {
   background: linear-gradient(0deg, #0086CA 33%, #8148A4 33%, #8148A4 66%, #81CD06 66%) !important;
 }
 
@@ -611,7 +619,7 @@ export default defineComponent({
   left: 10px;
 }
 
-.visual-block.block-type.block-dupe {
+.visual-block.block-type.block-cooc {
   position: absolute;
   //width: 100%;
   left: -1px;
@@ -622,7 +630,7 @@ export default defineComponent({
   border-bottom: 2px solid #0086CA;
 }
 
-.pivot-block.block-type.block-dupe {
+.pivot-block.block-type.block-cooc {
   position: absolute;
   height: calc(50% + 1px);
   left: 50%;
@@ -631,7 +639,7 @@ export default defineComponent({
   border-left: 2px solid #0086CA;
 }
 
-.comparison-block.block-type.block-dupe {
+.comparison-block.block-type.block-cooc {
   position: absolute;
   height: calc(50% + 1px);
   left: 50%;
@@ -652,7 +660,7 @@ export default defineComponent({
 .block-style-fade {
   opacity: 0.5;
 
-  .visual-block.block-type.block-dupe {
+  .visual-block.block-type.block-cooc {
     border-bottom-style: dashed;
   }
 }

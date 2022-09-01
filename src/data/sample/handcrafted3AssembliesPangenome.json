@@ -3,9 +3,11 @@
     "Node_A_0": {
       "length": 111,
       "traversals": {
-        "Aphrodite": 0
+        "Aphrodite": {
+          "chrom1": 0
+        }
       },
-      "dupes": [
+      "coocs": [
         "Node_A_1",
         "Node_A_2",
         "Node_A_3",
@@ -22,9 +24,11 @@
     "Node_A_1": {
       "length": 111,
       "traversals": {
-        "Aphrodite": 1
+        "Aphrodite": {
+          "chrom1": 1
+        }
       },
-      "dupes": [
+      "coocs": [
         "Node_A_0",
         "Node_A_2",
         "Node_A_3",
@@ -43,10 +47,14 @@
     "Node_A_2": {
       "length": 111,
       "traversals": {
-        "Aphrodite": 11,
-        "Leonidas": 10
+        "Aphrodite": {
+          "chrom1": 11
+        },
+        "Leonidas": {
+          "chrom1": 10
+        }
       },
-      "dupes": [
+      "coocs": [
         "Node_A_0",
         "Node_A_1",
         "Node_A_3",
@@ -67,9 +75,11 @@
     "Node_A_3": {
       "length": 111,
       "traversals": {
-        "Leonidas": 11
+        "Leonidas": {
+          "chrom1": 11
+        }
       },
-      "dupes": [
+      "coocs": [
         "Node_A_0",
         "Node_A_1",
         "Node_A_2",
@@ -88,10 +98,14 @@
     "Node_A_4": {
       "length": 111,
       "traversals": {
-        "Ganymede": 15,
-        "Leonidas": 18
+        "Ganymede": {
+          "chrom1": 15
+        },
+        "Leonidas": {
+          "chrom1": 18
+        }
       },
-      "dupes": [
+      "coocs": [
         "Node_A_0",
         "Node_A_1",
         "Node_A_2",
@@ -110,9 +124,11 @@
     "Node_A_5": {
       "length": 111,
       "traversals": {
-        "Ganymede": 16
+        "Ganymede": {
+          "chrom1": 16
+        }
       },
-      "dupes": [
+      "coocs": [
         "Node_A_0",
         "Node_A_1",
         "Node_A_2",
@@ -129,11 +145,17 @@
     "Node_B": {
       "length": 456,
       "traversals": {
-        "Aphrodite": 2,
-        "Ganymede": 0,
-        "Leonidas": 0
+        "Aphrodite": {
+          "chrom1": 2
+        },
+        "Ganymede": {
+          "chrom1": 0
+        },
+        "Leonidas": {
+          "chrom1": 0
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_A_1"
@@ -148,9 +170,11 @@
     "Node_C": {
       "length": 404,
       "traversals": {
-        "Ganymede": 1
+        "Ganymede": {
+          "chrom1": 1
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_B"
@@ -163,10 +187,14 @@
     "Node_D": {
       "length": 87,
       "traversals": {
-        "Aphrodite": 3,
-        "Ganymede": 2
+        "Aphrodite": {
+          "chrom1": 3
+        },
+        "Ganymede": {
+          "chrom1": 2
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_B",
@@ -180,11 +208,17 @@
     "Node_E": {
       "length": 255,
       "traversals": {
-        "Aphrodite": 4,
-        "Ganymede": 3,
-        "Leonidas": 3
+        "Aphrodite": {
+          "chrom1": 4
+        },
+        "Ganymede": {
+          "chrom1": 3
+        },
+        "Leonidas": {
+          "chrom1": 3
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_D",
@@ -199,11 +233,17 @@
     "Node_F": {
       "length": 569,
       "traversals": {
-        "Aphrodite": 5,
-        "Ganymede": 4,
-        "Leonidas": 2
+        "Aphrodite": {
+          "chrom1": 5
+        },
+        "Ganymede": {
+          "chrom1": 4
+        },
+        "Leonidas": {
+          "chrom1": 2
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_E",
@@ -218,11 +258,17 @@
     "Node_G": {
       "length": 455,
       "traversals": {
-        "Aphrodite": 6,
-        "Ganymede": 5,
-        "Leonidas": 1
+        "Aphrodite": {
+          "chrom1": 6
+        },
+        "Ganymede": {
+          "chrom1": 5
+        },
+        "Leonidas": {
+          "chrom1": 1
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_B",
@@ -237,11 +283,17 @@
     "Node_H_0": {
       "length": 222,
       "traversals": {
-        "Aphrodite": 7,
-        "Ganymede": 6,
-        "Leonidas": 4
+        "Aphrodite": {
+          "chrom1": 7
+        },
+        "Ganymede": {
+          "chrom1": 6
+        },
+        "Leonidas": {
+          "chrom1": 4
+        }
       },
-      "dupes": [
+      "coocs": [
         "Node_H_1"
       ],
       "neighbors": {
@@ -258,10 +310,14 @@
     "Node_H_1": {
       "length": 222,
       "traversals": {
-        "Aphrodite": 8,
-        "Leonidas": 5
+        "Aphrodite": {
+          "chrom1": 8
+        },
+        "Leonidas": {
+          "chrom1": 5
+        }
       },
-      "dupes": [
+      "coocs": [
         "Node_H_0"
       ],
       "neighbors": {
@@ -276,10 +332,14 @@
     "Node_I": {
       "length": 58,
       "traversals": {
-        "Aphrodite": 9,
-        "Leonidas": 6
+        "Aphrodite": {
+          "chrom1": 9
+        },
+        "Leonidas": {
+          "chrom1": 6
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_H_1"
@@ -292,10 +352,14 @@
     "Node_J": {
       "length": 276,
       "traversals": {
-        "Aphrodite": 10,
-        "Leonidas": 7
+        "Aphrodite": {
+          "chrom1": 10
+        },
+        "Leonidas": {
+          "chrom1": 7
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_I"
@@ -309,9 +373,11 @@
     "Node_K": {
       "length": 320,
       "traversals": {
-        "Leonidas": 8
+        "Leonidas": {
+          "chrom1": 8
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_J"
@@ -324,10 +390,14 @@
     "Node_L": {
       "length": 466,
       "traversals": {
-        "Ganymede": 7,
-        "Leonidas": 9
+        "Ganymede": {
+          "chrom1": 7
+        },
+        "Leonidas": {
+          "chrom1": 9
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_H",
@@ -342,11 +412,17 @@
     "Node_M": {
       "length": 168,
       "traversals": {
-        "Aphrodite": 13,
-        "Ganymede": 9,
-        "Leonidas": 12
+        "Aphrodite": {
+          "chrom1": 13
+        },
+        "Ganymede": {
+          "chrom1": 9
+        },
+        "Leonidas": {
+          "chrom1": 12
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_A_3",
@@ -361,11 +437,17 @@
     "Node_N": {
       "length": 545,
       "traversals": {
-        "Aphrodite": 12,
-        "Ganymede": 8,
-        "Leonidas": 13
+        "Aphrodite": {
+          "chrom1": 12
+        },
+        "Ganymede": {
+          "chrom1": 8
+        },
+        "Leonidas": {
+          "chrom1": 13
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_A_2",
@@ -381,11 +463,17 @@
     "Node_O": {
       "length": 740,
       "traversals": {
-        "Aphrodite": 14,
-        "Ganymede": 10,
-        "Leonidas": 14
+        "Aphrodite": {
+          "chrom1": 14
+        },
+        "Ganymede": {
+          "chrom1": 10
+        },
+        "Leonidas": {
+          "chrom1": 14
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_M",
@@ -400,10 +488,14 @@
     "Node_P": {
       "length": 487,
       "traversals": {
-        "Aphrodite": 15,
-        "Ganymede": 11
+        "Aphrodite": {
+          "chrom1": 15
+        },
+        "Ganymede": {
+          "chrom1": 11
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [],
         "after": []
@@ -412,10 +504,14 @@
     "Node_Q": {
       "length": 255,
       "traversals": {
-        "Aphrodite": 16,
-        "Ganymede": 12
+        "Aphrodite": {
+          "chrom1": 16
+        },
+        "Ganymede": {
+          "chrom1": 12
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_P"
@@ -428,10 +524,14 @@
     "Node_R": {
       "length": 121,
       "traversals": {
-        "Aphrodite": 17,
-        "Ganymede": 13
+        "Aphrodite": {
+          "chrom1": 17
+        },
+        "Ganymede": {
+          "chrom1": 13
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_Q"
@@ -444,9 +544,11 @@
     "Node_S": {
       "length": 354,
       "traversals": {
-        "Leonidas": 15
+        "Leonidas": {
+          "chrom1": 15
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_O"
@@ -459,9 +561,11 @@
     "Node_T": {
       "length": 452,
       "traversals": {
-        "Leonidas": 16
+        "Leonidas": {
+          "chrom1": 16
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_S"
@@ -474,11 +578,17 @@
     "Node_U": {
       "length": 648,
       "traversals": {
-        "Aphrodite": 18,
-        "Ganymede": 14,
-        "Leonidas": 17
+        "Aphrodite": {
+          "chrom1": 18
+        },
+        "Ganymede": {
+          "chrom1": 14
+        },
+        "Leonidas": {
+          "chrom1": 17
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_R",
@@ -492,9 +602,11 @@
     "Node_V": {
       "length": 345,
       "traversals": {
-        "Aphrodite": 19
+        "Aphrodite": {
+          "chrom1": 19
+        }
       },
-      "dupes": [],
+      "coocs": [],
       "neighbors": {
         "before": [
           "Node_U"
@@ -505,293 +617,349 @@
   },
   "paths": {
     "Aphrodite": {
-      "steps": [
+      "chrom1": [
         {
           "panBlock": "Node_A_0",
           "startPosition": 0,
+          "endPosition": 111,
           "strand": 1
         },
         {
           "panBlock": "Node_A_1",
           "startPosition": 111,
+          "endPosition": 222,
           "strand": 1
         },
         {
           "panBlock": "Node_B",
           "startPosition": 222,
+          "endPosition": 678,
           "strand": 1
         },
         {
           "panBlock": "Node_D",
           "startPosition": 678,
+          "endPosition": 765,
           "strand": 1
         },
         {
           "panBlock": "Node_E",
           "startPosition": 765,
+          "endPosition": 1020,
           "strand": 1
         },
         {
           "panBlock": "Node_F",
           "startPosition": 1020,
+          "endPosition": 1589,
           "strand": 1
         },
         {
           "panBlock": "Node_G",
           "startPosition": 1589,
+          "endPosition": 2044,
           "strand": 1
         },
         {
           "panBlock": "Node_H_0",
           "startPosition": 2044,
+          "endPosition": 2266,
           "strand": -1
         },
         {
           "panBlock": "Node_H_1",
           "startPosition": 2266,
+          "endPosition": 2488,
           "strand": -1
         },
         {
           "panBlock": "Node_I",
           "startPosition": 2488,
+          "endPosition": 2546,
           "strand": 1
         },
         {
           "panBlock": "Node_J",
           "startPosition": 2546,
+          "endPosition": 2822,
           "strand": 1
         },
         {
           "panBlock": "Node_A_2",
           "startPosition": 2822,
+          "endPosition": 2933,
           "strand": 1
         },
         {
           "panBlock": "Node_N",
           "startPosition": 2933,
+          "endPosition": 3478,
           "strand": -1
         },
         {
           "panBlock": "Node_M",
           "startPosition": 3478,
+          "endPosition": 3646,
           "strand": -1
         },
         {
           "panBlock": "Node_O",
           "startPosition": 3646,
+          "endPosition": 4386,
           "strand": 1
         },
         {
           "panBlock": "Node_P",
           "startPosition": 4386,
+          "endPosition": 4873,
           "strand": 1
         },
         {
           "panBlock": "Node_Q",
           "startPosition": 4873,
+          "endPosition": 5128,
           "strand": -1
         },
         {
           "panBlock": "Node_R",
           "startPosition": 5128,
+          "endPosition": 5249,
           "strand": 1
         },
         {
           "panBlock": "Node_U",
           "startPosition": 5249,
+          "endPosition": 5897,
           "strand": 1
         },
         {
           "panBlock": "Node_V",
           "startPosition": 5897,
+          "endPosition": 6242,
           "strand": 1
         }
       ]
     },
     "Ganymede": {
-      "steps": [
+      "chrom1": [
         {
           "panBlock": "Node_B",
           "startPosition": 0,
+          "endPosition": 456,
           "strand": 1
         },
         {
           "panBlock": "Node_C",
           "startPosition": 456,
+          "endPosition": 860,
           "strand": 1
         },
         {
           "panBlock": "Node_D",
           "startPosition": 860,
+          "endPosition": 947,
           "strand": 1
         },
         {
           "panBlock": "Node_E",
           "startPosition": 947,
+          "endPosition": 1202,
           "strand": 1
         },
         {
           "panBlock": "Node_F",
           "startPosition": 1202,
+          "endPosition": 1771,
           "strand": 1
         },
         {
           "panBlock": "Node_G",
           "startPosition": 1771,
+          "endPosition": 2226,
           "strand": 1
         },
         {
           "panBlock": "Node_H_0",
           "startPosition": 2226,
+          "endPosition": 2448,
           "strand": -1
         },
         {
           "panBlock": "Node_L",
           "startPosition": 2448,
+          "endPosition": 2914,
           "strand": 1
         },
         {
           "panBlock": "Node_N",
           "startPosition": 2914,
+          "endPosition": 3459,
           "strand": -1
         },
         {
           "panBlock": "Node_M",
           "startPosition": 3459,
+          "endPosition": 3627,
           "strand": -1
         },
         {
           "panBlock": "Node_O",
           "startPosition": 3627,
+          "endPosition": 4367,
           "strand": 1
         },
         {
           "panBlock": "Node_P",
           "startPosition": 4367,
+          "endPosition": 4854,
           "strand": 1
         },
         {
           "panBlock": "Node_Q",
           "startPosition": 4854,
+          "endPosition": 5109,
           "strand": 1
         },
         {
           "panBlock": "Node_R",
           "startPosition": 5109,
+          "endPosition": 5230,
           "strand": 1
         },
         {
           "panBlock": "Node_U",
           "startPosition": 5230,
+          "endPosition": 5878,
           "strand": 1
         },
         {
           "panBlock": "Node_A_4",
-          "startPosition": 11108,
+          "startPosition": 5878,
+          "endPosition": 5989,
           "strand": 1
         },
         {
           "panBlock": "Node_A_5",
-          "startPosition": 11219,
+          "startPosition": 5989,
+          "endPosition": 6100,
           "strand": 1
         }
       ]
     },
     "Leonidas": {
-      "steps": [
+      "chrom1": [
         {
           "panBlock": "Node_B",
           "startPosition": 0,
+          "endPosition": 456,
           "strand": 1
         },
         {
           "panBlock": "Node_G",
           "startPosition": 456,
+          "endPosition": 911,
           "strand": -1
         },
         {
           "panBlock": "Node_F",
           "startPosition": 911,
+          "endPosition": 1480,
           "strand": -1
         },
         {
           "panBlock": "Node_E",
           "startPosition": 1480,
+          "endPosition": 1735,
           "strand": -1
         },
         {
           "panBlock": "Node_H_0",
           "startPosition": 1735,
+          "endPosition": 1957,
           "strand": -1
         },
         {
           "panBlock": "Node_H_1",
           "startPosition": 1957,
+          "endPosition": 2179,
           "strand": 1
         },
         {
           "panBlock": "Node_I",
           "startPosition": 2179,
+          "endPosition": 2237,
           "strand": 1
         },
         {
           "panBlock": "Node_J",
           "startPosition": 2237,
+          "endPosition": 2513,
           "strand": 1
         },
         {
           "panBlock": "Node_K",
           "startPosition": 2513,
+          "endPosition": 2833,
           "strand": 1
         },
         {
           "panBlock": "Node_L",
           "startPosition": 2833,
+          "endPosition": 3299,
           "strand": 1
         },
         {
           "panBlock": "Node_A_2",
           "startPosition": 3299,
+          "endPosition": 3410,
           "strand": 1
         },
         {
           "panBlock": "Node_A_3",
           "startPosition": 3410,
+          "endPosition": 3521,
           "strand": 1
         },
         {
           "panBlock": "Node_M",
           "startPosition": 3521,
+          "endPosition": 3689,
           "strand": 1
         },
         {
           "panBlock": "Node_N",
           "startPosition": 3689,
+          "endPosition": 4234,
           "strand": 1
         },
         {
           "panBlock": "Node_O",
           "startPosition": 4234,
+          "endPosition": 4974,
           "strand": 1
         },
         {
           "panBlock": "Node_S",
           "startPosition": 4974,
+          "endPosition": 5328,
           "strand": 1
         },
         {
           "panBlock": "Node_T",
           "startPosition": 5328,
+          "endPosition": 5780,
           "strand": -1
         },
         {
           "panBlock": "Node_U",
           "startPosition": 5780,
+          "endPosition": 6428,
           "strand": 1
         },
         {
           "panBlock": "Node_A_4",
           "startPosition": 6428,
+          "endPosition": 6539,
           "strand": 1
         }
       ]

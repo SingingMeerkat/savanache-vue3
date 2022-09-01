@@ -12,7 +12,7 @@
     <!--    </div>-->
     <div class="table-container">
       <v-card tile>
-        <div v-if="pivot && pivot.path && pivot.path.steps" class="data-area d-flex flex-row">
+        <div v-if="pivot && pivot.path && pivot.path[chromName]" class="data-area d-flex flex-row">
 
           <!-- "Header" column -->
           <div class="data-labels col-2 d-flex flex-column pr-0 mr-n1">
@@ -46,7 +46,7 @@
                  class="data-block-row d-flex flex-row">
               <!--              , {'selected-block': isBlockSelected(block, assembly)}-->
               <!--              @click="selectBlock(block, assembly)"-->
-              <div v-for="(pivotStep, psIndex) in pivot.path.steps"
+              <div v-for="(pivotStep, psIndex) in pivot.path[chromName]"
                    :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
                    :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'above-pivot',
                    {
@@ -78,7 +78,7 @@
             </div>
 
             <div class="pivot-data-block-row d-flex flex-row">
-              <div v-for="(pivotStep, psIndex) in pivot.path.steps"
+              <div v-for="(pivotStep, psIndex) in pivot.path[chromName]"
                    :key="`pivot-row-${pivot.name}-step-${pivotStep.panBlock}`"
                    :class="[
                    'data-block-column', `pivot-block-${psIndex % 2}`, `elevation-1`,
@@ -97,7 +97,7 @@
                  class="data-block-row d-flex flex-row">
               <!--              , {'selected-block': isBlockSelected(block, assembly)}-->
               <!--              @click="selectBlock(block, assembly)"-->
-              <div v-for="(pivotStep, psIndex) in pivot.path.steps"
+              <div v-for="(pivotStep, psIndex) in pivot.path[chromName]"
                    :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
                    :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'bloe-pivot',
                    {
@@ -137,7 +137,7 @@
 
 <script>
 
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
 import { reactiveVuex } from "@/store/helper";
@@ -152,6 +152,7 @@ export default defineComponent({
     // const selectedAssemblyNames = reactiveVuex(store, "selectedAssemblyNames", "setSelectedAssemblyNames");
     const selectedSVTypeNames = reactiveVuex(store, "selectedSVTypeNames", "setSelectedSVTypeNames");
     const selectedBlock = reactiveVuex(store, "selectedBlock", "setSelectedBlock");
+    const chromName = reactiveVuex(store, "chromOnDisplay", "setChromOnDisplay");
 
     const lengthFilter = reactiveVuex(store, "lengthFilter", "setLengthFilter"); // ref((Math.round(limitLength * 0.01) / lengthStep) * lengthStep);
     const positionFilter = reactiveVuex(store, "positionFilter", "setPositionFilter"); // ref((Math.round(limitPosition * 0.01) / positionStep) * positionStep);
@@ -161,22 +162,25 @@ export default defineComponent({
       return store.getters["assemblies/assembliesSelected"];
     });
 
-    const paths = ref({});
     const pangenome = ref();
     const pivots = ref();
+    const paths = ref({});
 
-    getData().then((data) => {
-      if (data) {
-        pangenome.value = data.pangenome;
-        pivots.value = data.pivots;
+    watch(chromName, () => {
+      getData(chromName.value).then((data) => {
+        if (data) {
+          pangenome.value = data.pangenome;
+          pivots.value = data.pivots[chromName.value];
+          //pivots.value = data.pivots;
 
-        const pathNames = Object.keys(pangenome.value.paths);
+          const pathNames = Object.keys(pangenome.value.paths);
 
-        paths.value = pathNames.reduce((result, pathName) => ({
-          ...result,
-          [pathName]: data.pangenome.paths[pathName]
-        }), {});
-      }
+          paths.value = pathNames.reduce((result, pathName) => ({
+            ...result,
+            [pathName]: data.pangenome.paths[pathName]
+          }), {});
+        }
+      });
     });
 
     const pivotRowIndex = ref(1);
@@ -283,6 +287,7 @@ export default defineComponent({
     };
 
     return {
+      chromName,
       pivot,
       assemblies,
       blockClasses,
@@ -448,7 +453,7 @@ export default defineComponent({
     }
 
     &.pivot-neighbor {
-      .block-dupe {
+      .block-cooc {
         transform: scaleY(-100%);
       }
     }
@@ -467,7 +472,7 @@ export default defineComponent({
         bottom: 0;
       }
 
-      &.block-dupe {
+      &.block-cooc {
         bottom: 50%;
         background: #0086CA;
         border-radius: 1rem 1rem 0 0;

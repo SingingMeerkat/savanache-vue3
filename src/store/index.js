@@ -15,7 +15,9 @@ export default createStore({
     lengthFilter: [0, 0],
     lengthLimit: [0, 0],
     positionFilter: [0, 0],
-    positionLimit: [0, 0]
+    positionLimit: [0, 0],
+    chromOnDisplay: "",
+    //chromOnDisplay: 'Gm01',
   },
   getters: {},
   mutations: {
@@ -50,6 +52,10 @@ export default createStore({
     setPositionLimit(state, positionLimit) {
       console.log("setPositionLimit", positionLimit);
       state.positionLimit = positionLimit;
+    },
+    setChromOnDisplay(state, chromOnDisplay) {
+      console.log("setChromOnDisplay", chromOnDisplay);
+      state.chromOnDisplay = chromOnDisplay;
     }
   },
   actions: {}
