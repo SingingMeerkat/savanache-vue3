@@ -100,22 +100,22 @@ export default defineComponent({
     const store = useStore();
     const selectedBlock = reactiveVuex(store, "selectedBlock", "setSelectedBlock");
 
-    const chromOnDisplay = reactiveVuex(store, "chromOnDisplay", "setChromOnDisplay");
-    const chromName = chromOnDisplay.value;
+    const chromName = reactiveVuex(store, "chromOnDisplay", "setChromOnDisplay");
+    //const chromName = chromOnDisplay.value;
 
     const pangenome = ref();
     const pivots = ref();
 
     const selectedPivotSteps = computed(() => {
       if (pangenome.value && selectedBlock.value && pangenome.value.paths[selectedBlock.value.pivotName]) {
-        return pangenome.value.paths[selectedBlock.value.pivotName][chromName];
+        return pangenome.value.paths[selectedBlock.value.pivotName][chromName.value];
       }
       return [];
     });
 
     const selectedComparisonSteps = computed(() => {
       if (pangenome.value && selectedBlock.value && pangenome.value.paths[selectedBlock.value.comparisonName]) {
-        return pangenome.value.paths[selectedBlock.value.comparisonName][chromName];
+        return pangenome.value.paths[selectedBlock.value.comparisonName][chromName.value];
       }
       return [];
     });
@@ -124,12 +124,14 @@ export default defineComponent({
       return pivots.value[selectedBlock.value.pivotName][selectedBlock.value.comparisonName].blocks[selectedBlock.value.blockName];
     });
 
-    getData(chromName).then((data) => {
-      if (data) {
-        pangenome.value = data.pangenome;
-        pivots.value = data.pivots[chromName.value];
-        //pivots.value = data.pivots;
-      }
+    watch(chromName, () => {
+      getData(chromName.value).then((data) => {
+        if (data) {
+          pangenome.value = data.pangenome;
+          pivots.value = data.pivots[chromName.value];
+          //pivots.value = data.pivots;
+        }
+      });
     });
 
     const comparisonOffset = ref(0);
@@ -289,7 +291,9 @@ export default defineComponent({
     let animationInterval;
     watch(selectedBlock, () => {
       if (selectedBlock.value && selectedBlock.value.blockName && pangenome.value && pangenome.value.panSkeleton) {
-        const pivotStep = pangenome.value.paths[selectedBlock.value.pivotName].steps.find(step => step.panBlock === selectedBlock.value.blockName);
+        console.log(pangenome.value.paths[selectedBlock.value.pivotName], chromName.value);
+        const pivotStep = pangenome.value.paths[selectedBlock.value.pivotName][chromName.value].find(step => step.panBlock === selectedBlock.value.blockName);
+        //const pivotStep = pangenome.value.paths[selectedBlock.value.pivotName].steps.find(step => step.panBlock === selectedBlock.value.blockName);
         // const pivotBlockLength = pangenome.value.panSkeleton[selectedBlock.value.pivotName].length;
 
         let pivotStepStartPosition = null;
@@ -297,7 +301,8 @@ export default defineComponent({
           pivotStepStartPosition = pivotStep.startPosition;
         }
 
-        const comparisonStep = pangenome.value.paths[selectedBlock.value.comparisonName].steps.find(step => step.panBlock === selectedBlock.value.blockName);
+        const comparisonStep = pangenome.value.paths[selectedBlock.value.comparisonName][chromName.value].find(step => step.panBlock === selectedBlock.value.blockName);
+        //const comparisonStep = pangenome.value.paths[selectedBlock.value.comparisonName].steps.find(step => step.panBlock === selectedBlock.value.blockName);
         // const comparisonBlockLength = pangenome.value.panSkeleton[selectedBlock.value.comparisonName].length;
 
         let comparisonStepStartPosition = null;
