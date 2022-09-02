@@ -867,7 +867,7 @@ const getDataInternal = async (chromToDisplay) => {
 
   let pangenomeImport = await import(
     //"../data/sample/handcrafted3AssembliesPangenome.json"
-    "../data/sample/pangenome__coordinate_SaVanache.json"
+    "../data/real-data/pangenome__coordinate_SaVanache_Unfolded.json"
   );
 
   if (!chromNamesPerPath) {
