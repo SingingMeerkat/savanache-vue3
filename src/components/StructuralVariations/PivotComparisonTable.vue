@@ -391,6 +391,8 @@ export default defineComponent({
   background: #eee;
   border: 1px solid transparent;
 
+  flex-grow: 0;
+  flex-shrink: 0;
 
   &.block-1 {
     background: white;

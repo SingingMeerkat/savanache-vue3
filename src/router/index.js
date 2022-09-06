@@ -5,20 +5,21 @@ const routes = [
     path: "/",
     name: "Home",
     component: () =>
-      import(/* webpackChunkName: "home" */ "../views/HomeView.vue")
+      // import(/* webpackChunkName: "home" */ "../views/HomeView.vue")
+      import(/* webpackChunkName: "PangenomeSelection" */ "../views/PangenomeSelection.vue")
   },
   {
     path: "/pangenome_selection",
     name: "Pangenome Selection",
     component: () =>
-      import(/* webpackChunkName: "home" */ "../views/PangenomeSelection.vue")
+      import(/* webpackChunkName: "PangenomeSelection" */ "../views/PangenomeSelection.vue")
   },
   {
     path: "/structural_variations",
     name: "Structural Variations",
     component: () =>
       import(
-        /* webpackChunkName: "structural_variations" */ "../views/StructuralVariations.vue"
+        /* webpackChunkName: "StructuralVariations" */ "../views/StructuralVariations.vue"
         )
   },
   {
@@ -26,7 +27,7 @@ const routes = [
     name: "Presence Absence",
     component: () =>
       // import(/* webpackChunkName: "panache" */ "../views/PanacheView.vue")
-      import(/* webpackChunkName: "home" */ "../views/HomeView.vue")
+      import(/* webpackChunkName: "HomeView" */ "../views/HomeView.vue")
   },
   {
     path: "/about",
@@ -35,7 +36,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue")
+      import(/* webpackChunkName: "AboutView" */ "../views/AboutView.vue")
   }
 ];
 
