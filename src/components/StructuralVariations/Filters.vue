@@ -218,18 +218,34 @@ export default defineComponent({
     ];
 
     const selected = ref([]);
+    const pangenomesSelectedStored = computed(() => {
+      return store.getters["pangenomes/pangenomesSelected"];
+    });
+
+
+    // assemblies stored and filtered on Heterotic group
     const assemblies = computed(() => {
-      if (selected.value.length !== 0) {
-        return store.state.assemblies.assemblies.filter(assembly => {
-          return (
-            assembly.heterotic_group.filter(hg => {
-              return selected.value.includes(hg);
-            }).length !== 0
-          );
+      let storeAssemblies = store.state.assemblies.assemblies;
+
+      if (selected.value && selected.value.length) {
+        storeAssemblies = storeAssemblies.filter(assembly => {
+          return assembly.heterotic_group.filter(hg => {
+            return selected.value.includes(hg);
+          }).length !== 0;
         });
-      } else {
-        return store.state.assemblies.assemblies.map(assembly => assembly.assembly_name);
       }
+
+      if (pangenomesSelectedStored.value && pangenomesSelectedStored.value.length) {
+        storeAssemblies = storeAssemblies.filter(assembly => {
+          return assembly.pangenome.filter(pangenome => {
+            return pangenomesSelectedStored.value.filter(p => {
+              return p.name === pangenome && p.selected;
+            }).length !== 0;
+          }).length !== 0;
+        });
+      }
+
+      return storeAssemblies.map(assembly => assembly.assembly_name);
     });
 
     return {

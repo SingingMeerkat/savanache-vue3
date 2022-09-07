@@ -108,14 +108,20 @@ export default defineComponent({
 
     const selectedPivotSteps = computed(() => {
       if (pangenome.value && selectedBlock.value && pangenome.value.paths[selectedBlock.value.pivotName]) {
-        return pangenome.value.paths[selectedBlock.value.pivotName][chromName.value];
+        const path = pangenome.value.paths[selectedBlock.value.pivotName][chromName.value];
+        const index = path.findIndex(p => p.panBlock === selectedBlock.value.blockName);
+        const section = path.slice(Math.max(index - 5, 0), Math.min(index + 5, path.length));
+        return section;
       }
       return [];
     });
 
     const selectedComparisonSteps = computed(() => {
       if (pangenome.value && selectedBlock.value && pangenome.value.paths[selectedBlock.value.comparisonName]) {
-        return pangenome.value.paths[selectedBlock.value.comparisonName][chromName.value];
+        const path = pangenome.value.paths[selectedBlock.value.comparisonName][chromName.value];
+        const index = path.findIndex(p => p.panBlock === selectedBlock.value.blockName);
+        const section = path.slice(Math.max(index - 5, 0), Math.min(index + 5, path.length));
+        return section;
       }
       return [];
     });
@@ -137,6 +143,7 @@ export default defineComponent({
     const comparisonOffset = ref(0);
     const pivotOffset = ref(0);
     const scrollOffset = ref(0);
+    const widthScale = ref(1);
 
     const highlightComparisonBlock = (panBlock) => {
       const panBlockMatch = panBlock === selectedBlock.value.blockName;
@@ -242,7 +249,7 @@ export default defineComponent({
       if (pangenome.value) {
         const panBlock = pangenome.value.panSkeleton[panBlockName];
         // styles.push({ width: (panBlock.length / 4) + "px" });
-        styles.push({ width: (panBlock.length) + "px" });
+        styles.push({ width: (panBlock.length / widthScale.value) + "px" });
       }
       return styles;
     };
@@ -283,7 +290,7 @@ export default defineComponent({
       if (pangenome.value) {
         const panBlock = pangenome.value.panSkeleton[panBlockName];
         // styles.push({ width: (panBlock.length / 4) + "px" });
-        styles.push({ width: (panBlock.length) + "px" });
+        styles.push({ width: (panBlock.length / widthScale.value) + "px" });
       }
       return styles;
     };
@@ -311,10 +318,10 @@ export default defineComponent({
         }
 
         const offsets = calculateOffset({comparisonStepStartPosition, pivotStepStartPosition});
-        comparisonOffset.value = offsets.comparisonOffset || 0;
-        pivotOffset.value = offsets.pivotOffset || 0;
+        comparisonOffset.value = (offsets.comparisonOffset || 0) / widthScale.value;
+        pivotOffset.value = (offsets.pivotOffset || 0) / widthScale.value;
         // scrollOffset.value = (pivotStepStartPosition / 4 + offsets.pivotOffset) || 0;
-        scrollOffset.value = (pivotStepStartPosition + offsets.pivotOffset) || 0;
+        scrollOffset.value = ((pivotStepStartPosition + offsets.pivotOffset) || 0) / widthScale.value;
 
         console.log('comparisonStepStartPosition', comparisonStepStartPosition, 'pivotStepStartPosition', pivotStepStartPosition, 'comparisonOffset', offsets.comparisonOffset, 'pivotOffset', offsets.pivotOffset, 'totalOffset', offsets.totalOffset);
         if (dataBlockRowsRef.value) {
@@ -406,7 +413,10 @@ export default defineComponent({
 }
 
 .data-label {
-  width: 8rem;
+  //width: 8rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .block-wrapper {

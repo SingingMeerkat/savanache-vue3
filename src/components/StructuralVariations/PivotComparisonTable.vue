@@ -376,6 +376,9 @@ export default defineComponent({
 
 .data-label {
   line-height: 3rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .data-block-rows {
