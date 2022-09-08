@@ -614,8 +614,8 @@ export default defineComponent({
 }
 
 .outside-range {
-  opacity: 0.1;
-  //display: none;
+  //opacity: 0.1;
+  display: none;
 }
 
 .block-count-label {
