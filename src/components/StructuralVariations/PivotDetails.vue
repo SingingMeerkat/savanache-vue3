@@ -89,7 +89,6 @@ import { computed, defineComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { getData } from "@/data/data-source";
 import { reactiveVuex } from "@/store/helper";
-import { calculateOffset } from "@/helpers/pivot-details";
 
 export default defineComponent({
   name: "StructuralVariationsPivotDetails",
@@ -110,20 +109,95 @@ export default defineComponent({
       if (pangenome.value && selectedBlock.value && pangenome.value.paths[selectedBlock.value.pivotName]) {
         const path = pangenome.value.paths[selectedBlock.value.pivotName][chromName.value];
         const index = path.findIndex(p => p.panBlock === selectedBlock.value.blockName);
-        const section = path.slice(Math.max(index - 5, 0), Math.min(index + 5, path.length));
+        // const section = path.slice(Math.max(index - 1, 0), Math.min(index + 1, path.length));
+        const section = path.slice(index, index + 1);
         return section;
       }
       return [];
     });
 
     const selectedComparisonSteps = computed(() => {
-      if (pangenome.value && selectedBlock.value && pangenome.value.paths[selectedBlock.value.comparisonName]) {
-        const path = pangenome.value.paths[selectedBlock.value.comparisonName][chromName.value];
-        const index = path.findIndex(p => p.panBlock === selectedBlock.value.blockName);
-        const section = path.slice(Math.max(index - 5, 0), Math.min(index + 5, path.length));
+
+      if (pangenome.value && selectedBlock.value && pangenome.value.paths[selectedBlock.value.pivotName]) {
+        const pivotThing = pivots.value[selectedBlock.value.pivotName][selectedBlock.value.comparisonName];
+        const pivotBlock = pivotThing.blocks[selectedBlock.value.blockName];
+        const comparisonPath = pangenome.value.paths[selectedBlock.value.comparisonName][chromName.value];
+
+        const comparisonIndices = [];
+
+
+
+        if (pivotBlock.swapComparedNodes && pivotBlock.swapComparedNodes.length) {
+          pivotBlock.swapComparedNodes.forEach(swapComparedNode => {
+            comparisonIndices.push(swapComparedNode.comparedPathStepIndex);
+          });
+        } else if (pivotBlock.inversionChainNodes && pivotBlock.inversionChainNodes.length) {
+          pivotBlock.inversionChainNodes.forEach(inversionChainNode => {
+            comparisonIndices.push(inversionChainNode.comparedPathStepIndex);
+          });
+        } else if (pivotBlock.insertionNodes && pivotBlock.insertionNodes.length) {
+          pivotBlock.insertionNodes.forEach(insertionNode => {
+            comparisonIndices.push(insertionNode.comparedPathStepIndex);
+          });
+        }
+
+        if (pivotBlock.comparedPathStepIndex !== undefined && !comparisonIndices.includes(pivotBlock.comparedPathStepIndex)) {
+          comparisonIndices.push(pivotBlock.comparedPathStepIndex);
+        }
+        // grab all the compare path indices from the comparison arrays, if they exist
+        // Consider order, or if there are multiple arrays, especially if they have similar indices in them
+
+        const section = [];
+        comparisonIndices.forEach(comparisonIndex => {
+          section.push(comparisonPath[comparisonIndex]);
+        });
+        // const index = path.findIndex(p => p.panBlock === selectedBlock.value.blockName);
+        // const section = path.slice(Math.max(index - 1, 0), Math.min(index + 1, path.length));
+        // const section = path.slice(index, index + 1);
         return section;
       }
       return [];
+
+
+      // if (pangenome.value && selectedBlock.value && pangenome.value.paths[selectedBlock.value.comparisonName]) {
+      //   const path = pangenome.value.paths[selectedBlock.value.comparisonName][chromName.value];
+      //   let index = path.findIndex(p => p.panBlock === selectedBlock.value.blockName);
+      //   if (index !== -1) {
+      //     // const section = path.slice(Math.max(index - 5, 0), Math.min(index + 5, path.length));
+      //     const section = path.slice(index, index + 1);
+      //     return section;
+      //   } else {
+      //     const pivotThing = pivots.value[selectedBlock.value.pivotName][selectedBlock.value.comparisonName];
+      //
+      //     const pivotPath = pangenome.value.paths[selectedBlock.value.pivotName][chromName.value];
+      //     const pivotIndex = pivotPath.findIndex(p => p.panBlock === selectedBlock.value.blockName);
+      //
+      //     let minIndex, maxIndex;
+      //
+      //     for (let i = pivotIndex; i >= 0; i--) {
+      //       const item = pivotThing.array[i];
+      //       if (item.comparedPathStepIndex !== undefined) {
+      //         minIndex = item.comparedPathStepIndex;
+      //         break;
+      //       }
+      //     }
+      //
+      //     for (let i = pivotIndex; i < pivotThing.array.length; i++) {
+      //       const item = pivotThing.array[i];
+      //       if (item.comparedPathStepIndex !== undefined) {
+      //         maxIndex = item.comparedPathStepIndex;
+      //         break;
+      //       }
+      //     }
+      //
+      //     console.log('minIndex', minIndex, 'maxIndex', maxIndex);
+      //
+      //     // const section = path.slice(Math.max(minIndex - 5, 0), Math.min(maxIndex + 5, path.length));
+      //     const section = path.slice(minIndex, maxIndex + 1);
+      //     return section;
+      //   }
+      // }
+      // return [];
     });
 
     const selectedPivotBlock = computed(() => {
@@ -143,7 +217,9 @@ export default defineComponent({
     const comparisonOffset = ref(0);
     const pivotOffset = ref(0);
     const scrollOffset = ref(0);
-    const widthScale = ref(1);
+    const widthScale = ref(100);
+    const minWidth = ref(50);
+    const maxWidth = ref(250);
 
     const highlightComparisonBlock = (panBlock) => {
       const panBlockMatch = panBlock === selectedBlock.value.blockName;
@@ -157,11 +233,11 @@ export default defineComponent({
     const comparisonNodeInPivotBlock = (comparisonPanBlockName) => {
 
       const coocNodes = selectedPivotBlock.value.coocNodes && selectedPivotBlock.value.coocNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
-      const swapComparisonNodes = selectedPivotBlock.value.swapComparisonNodes && selectedPivotBlock.value.swapComparisonNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
+      const swapComparedNodes = selectedPivotBlock.value.swapComparedNodes && selectedPivotBlock.value.swapComparedNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
       const insertionNodes = selectedPivotBlock.value.insertionNodes && selectedPivotBlock.value.insertionNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
       const inversionChainNodes = selectedPivotBlock.value.inversionChainNodes && selectedPivotBlock.value.inversionChainNodes.find(node => node.comparisonStepPanBlock === comparisonPanBlockName);
 
-      return coocNodes || swapComparisonNodes || insertionNodes || inversionChainNodes;
+      return coocNodes || swapComparedNodes || insertionNodes || inversionChainNodes;
     };
 
     const getComparisonStepClasses = (panBlockName) => {
@@ -170,10 +246,10 @@ export default defineComponent({
           (step) => {
             const matchNode = step.panBlock === panBlockName;
             const coocNodes = step.coocNodes && step.coocNodes.find(node => node.comparisonStepPanBlock === panBlockName);
-            const swapComparisonNodes = step.swapComparisonNodes && step.swapComparisonNodes.find(node => node.comparisonStepPanBlock === panBlockName);
+            const swapComparedNodes = step.swapComparedNodes && step.swapComparedNodes.find(node => node.comparisonStepPanBlock === panBlockName);
             const insertionNodes = step.insertionNodes && step.insertionNodes.find(node => node.comparisonStepPanBlock === panBlockName);
             const inversionChainNodes = step.inversionChainNodes && step.inversionChainNodes.find(node => node.comparisonStepPanBlock === panBlockName);
-            return matchNode || coocNodes || swapComparisonNodes || insertionNodes || inversionChainNodes;
+            return matchNode || coocNodes || swapComparedNodes || insertionNodes || inversionChainNodes;
           }).reduce((result, step) => {
 
           if (step.coocNodes) {
@@ -184,11 +260,11 @@ export default defineComponent({
             }
           }
 
-          if (step.swapComparisonNodes) {
-            if (!result.swapComparisonNodes) {
-              result.swapComparisonNodes = [...step.swapComparisonNodes];
+          if (step.swapComparedNodes) {
+            if (!result.swapComparedNodes) {
+              result.swapComparedNodes = [...step.swapComparedNodes];
             } else {
-              result.swapComparisonNodes = [...result.swapComparisonNodes, ...step.swapComparisonNodes];
+              result.swapComparedNodes = [...result.swapComparedNodes, ...step.swapComparedNodes];
             }
           }
 
@@ -235,7 +311,7 @@ export default defineComponent({
       if (comparisonParent.cooc && comparisonParent.coocNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
         classes.push("block-cooc"); // + (typeof comparisonParent.cooc === 'string' ? '-' + comparisonParent.cooc : ''));
       }
-      if (comparisonParent.swap && comparisonParent.swapComparisonNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
+      if (comparisonParent.swap && comparisonParent.swapComparedNodes.find(node => node.comparisonStepPanBlock === panBlockName)) {
         classes.push("block-swap"); // + (typeof comparisonParent.swap === 'string' ? '-' + comparisonParent.swap : ''));
       }
       if (comparisonParent.deletion) {
@@ -249,7 +325,7 @@ export default defineComponent({
       if (pangenome.value) {
         const panBlock = pangenome.value.panSkeleton[panBlockName];
         // styles.push({ width: (panBlock.length / 4) + "px" });
-        styles.push({ width: (panBlock.length / widthScale.value) + "px" });
+        styles.push({ width: Math.max(Math.min(panBlock.length / widthScale.value, maxWidth.value), minWidth.value) + "px" });
       }
       return styles;
     };
@@ -290,76 +366,76 @@ export default defineComponent({
       if (pangenome.value) {
         const panBlock = pangenome.value.panSkeleton[panBlockName];
         // styles.push({ width: (panBlock.length / 4) + "px" });
-        styles.push({ width: (panBlock.length / widthScale.value) + "px" });
+        styles.push({ width: Math.max(Math.min(panBlock.length / widthScale.value, maxWidth.value), minWidth.value) + "px" });
       }
       return styles;
     };
 
-    let animationInterval;
-    watch(selectedBlock, () => {
-      if (selectedBlock.value && selectedBlock.value.blockName && pangenome.value && pangenome.value.panSkeleton) {
-        console.log(pangenome.value.paths[selectedBlock.value.pivotName], chromName.value);
-        const pivotStep = pangenome.value.paths[selectedBlock.value.pivotName][chromName.value].find(step => step.panBlock === selectedBlock.value.blockName);
-        //const pivotStep = pangenome.value.paths[selectedBlock.value.pivotName].steps.find(step => step.panBlock === selectedBlock.value.blockName);
-        // const pivotBlockLength = pangenome.value.panSkeleton[selectedBlock.value.pivotName].length;
-
-        let pivotStepStartPosition = null;
-        if (pivotStep) {
-          pivotStepStartPosition = pivotStep.startPosition;
-        }
-
-        const comparisonStep = pangenome.value.paths[selectedBlock.value.comparisonName][chromName.value].find(step => step.panBlock === selectedBlock.value.blockName);
-        //const comparisonStep = pangenome.value.paths[selectedBlock.value.comparisonName].steps.find(step => step.panBlock === selectedBlock.value.blockName);
-        // const comparisonBlockLength = pangenome.value.panSkeleton[selectedBlock.value.comparisonName].length;
-
-        let comparisonStepStartPosition = null;
-        if (comparisonStep) {
-          comparisonStepStartPosition = comparisonStep.startPosition;
-        }
-
-        const offsets = calculateOffset({comparisonStepStartPosition, pivotStepStartPosition});
-        comparisonOffset.value = (offsets.comparisonOffset || 0) / widthScale.value;
-        pivotOffset.value = (offsets.pivotOffset || 0) / widthScale.value;
-        // scrollOffset.value = (pivotStepStartPosition / 4 + offsets.pivotOffset) || 0;
-        scrollOffset.value = ((pivotStepStartPosition + offsets.pivotOffset) || 0) / widthScale.value;
-
-        console.log('comparisonStepStartPosition', comparisonStepStartPosition, 'pivotStepStartPosition', pivotStepStartPosition, 'comparisonOffset', offsets.comparisonOffset, 'pivotOffset', offsets.pivotOffset, 'totalOffset', offsets.totalOffset);
-        if (dataBlockRowsRef.value) {
-          console.log('clientWidth', dataBlockRowsRef.value.clientWidth, 'offsetWidth', dataBlockRowsRef.value.offsetWidth, 'scrollWidth', dataBlockRowsRef.value.scrollWidth)
-          clearInterval(animationInterval);
-          const start = dataBlockRowsRef.value.scrollLeft;
-          const end = scrollOffset.value - (dataBlockRowsRef.value.clientWidth / 3);
-          const diff = end - start;
-          const steps = 50;
-          const step = Math.ceil(diff / steps);
-          let count = 0;
-          console.log('start', start, 'end', end, 'diff', diff, 'step', step);
-          if (Math.abs(step) >= 1) {
-            animationInterval = setInterval(() => {
-              count++;
-              if (!dataBlockRowsRef.value || dataBlockRowsRef.value.scrollLeft === undefined) {
-                clearInterval(animationInterval);
-              }
-              dataBlockRowsRef.value.scrollLeft += step;
-              if (diff >= 0 && dataBlockRowsRef.value.scrollLeft >= end) {
-                clearInterval(animationInterval);
-              } else if (diff <= 0 && dataBlockRowsRef.value.scrollLeft <= end) {
-                clearInterval(animationInterval);
-              } else if (dataBlockRowsRef.value.scrollLeft <= 0) {
-                clearInterval(animationInterval);
-              } else if (dataBlockRowsRef.value.scrollLeft >= dataBlockRowsRef.value.scrollWidth - dataBlockRowsRef.value.clientWidth) {
-                clearInterval(animationInterval);
-              } else if (count > steps) {
-                clearInterval(animationInterval);
-              }
-              console.log('count', count, 'start', start, 'end', end, 'diff', diff, 'step', step, 'dataBlockRowsRef.value.scrollLeft', dataBlockRowsRef.value.scrollLeft);
-            }, 500 / steps);
-          }
-
-        }
-
-      }
-    }, { immediate: true, deep: true });
+    // let animationInterval;
+    // watch(selectedBlock, () => {
+    //   if (selectedBlock.value && selectedBlock.value.blockName && pangenome.value && pangenome.value.panSkeleton) {
+    //     console.log(pangenome.value.paths[selectedBlock.value.pivotName], chromName.value);
+    //     const pivotStep = pangenome.value.paths[selectedBlock.value.pivotName][chromName.value].find(step => step.panBlock === selectedBlock.value.blockName);
+    //     //const pivotStep = pangenome.value.paths[selectedBlock.value.pivotName].steps.find(step => step.panBlock === selectedBlock.value.blockName);
+    //     // const pivotBlockLength = pangenome.value.panSkeleton[selectedBlock.value.pivotName].length;
+    //
+    //     let pivotStepStartPosition = null;
+    //     if (pivotStep) {
+    //       pivotStepStartPosition = pivotStep.startPosition;
+    //     }
+    //
+    //     const comparisonStep = pangenome.value.paths[selectedBlock.value.comparisonName][chromName.value].find(step => step.panBlock === selectedBlock.value.blockName);
+    //     //const comparisonStep = pangenome.value.paths[selectedBlock.value.comparisonName].steps.find(step => step.panBlock === selectedBlock.value.blockName);
+    //     // const comparisonBlockLength = pangenome.value.panSkeleton[selectedBlock.value.comparisonName].length;
+    //
+    //     let comparisonStepStartPosition = null;
+    //     if (comparisonStep) {
+    //       comparisonStepStartPosition = comparisonStep.startPosition;
+    //     }
+    //
+    //     const offsets = calculateOffset({comparisonStepStartPosition, pivotStepStartPosition});
+    //     comparisonOffset.value = (offsets.comparisonOffset || 0) / widthScale.value;
+    //     pivotOffset.value = (offsets.pivotOffset || 0) / widthScale.value;
+    //     // scrollOffset.value = (pivotStepStartPosition / 4 + offsets.pivotOffset) || 0;
+    //     scrollOffset.value = ((pivotStepStartPosition + offsets.pivotOffset) || 0) / widthScale.value;
+    //
+    //     console.log('comparisonStepStartPosition', comparisonStepStartPosition, 'pivotStepStartPosition', pivotStepStartPosition, 'comparisonOffset', offsets.comparisonOffset, 'pivotOffset', offsets.pivotOffset, 'totalOffset', offsets.totalOffset);
+    //     if (dataBlockRowsRef.value) {
+    //       console.log('clientWidth', dataBlockRowsRef.value.clientWidth, 'offsetWidth', dataBlockRowsRef.value.offsetWidth, 'scrollWidth', dataBlockRowsRef.value.scrollWidth)
+    //       clearInterval(animationInterval);
+    //       const start = dataBlockRowsRef.value.scrollLeft;
+    //       const end = scrollOffset.value - (dataBlockRowsRef.value.clientWidth / 3);
+    //       const diff = end - start;
+    //       const steps = 50;
+    //       const step = Math.ceil(diff / steps);
+    //       let count = 0;
+    //       console.log('start', start, 'end', end, 'diff', diff, 'step', step);
+    //       if (Math.abs(step) >= 1) {
+    //         animationInterval = setInterval(() => {
+    //           count++;
+    //           if (!dataBlockRowsRef.value || dataBlockRowsRef.value.scrollLeft === undefined) {
+    //             clearInterval(animationInterval);
+    //           }
+    //           dataBlockRowsRef.value.scrollLeft += step;
+    //           if (diff >= 0 && dataBlockRowsRef.value.scrollLeft >= end) {
+    //             clearInterval(animationInterval);
+    //           } else if (diff <= 0 && dataBlockRowsRef.value.scrollLeft <= end) {
+    //             clearInterval(animationInterval);
+    //           } else if (dataBlockRowsRef.value.scrollLeft <= 0) {
+    //             clearInterval(animationInterval);
+    //           } else if (dataBlockRowsRef.value.scrollLeft >= dataBlockRowsRef.value.scrollWidth - dataBlockRowsRef.value.clientWidth) {
+    //             clearInterval(animationInterval);
+    //           } else if (count > steps) {
+    //             clearInterval(animationInterval);
+    //           }
+    //           console.log('count', count, 'start', start, 'end', end, 'diff', diff, 'step', step, 'dataBlockRowsRef.value.scrollLeft', dataBlockRowsRef.value.scrollLeft);
+    //         }, 500 / steps);
+    //       }
+    //
+    //     }
+    //
+    //   }
+    // }, { immediate: true, deep: true });
 
     return {
       selectedPivotSteps,
