@@ -1,16 +1,18 @@
 <template>
-  <div class="canvasSvg" :style="containerDiv">
+  <div :style="containerDiv" class="canvasSvg">
 
-    <canvas class="canvas" ref="CanvasMiniature" :width="miniatureWidth" :height="canvasHeight"></canvas>
+    <canvas ref="CanvasMiniature" :height="canvasHeight" :width="miniatureWidth" class="canvas"></canvas>
 
-    <svg class="superimposedSvg" :width="miniatureWidth" :height="canvasHeight">
+    <svg :height="canvasHeight" :width="miniatureWidth" class="superimposedSvg">
       <g :transform="writeTranslate(svgPadding, 0)">
         <!-- Following translation should be dynamic instead -->
-        <g ref='ticksForMiniature' id='miniatureTicks' style='10px sans-serif' transform='translate(0,65)'>
+        <g id="miniatureTicks" ref="ticksForMiniature" style="10px sans-serif" transform="translate(0,65)">
         </g>
         <g>
-          <rect class="handle" :x="ntToDrawingPxPos(firstNtToDisplay)" y=1 :width="widthOfHandle" :height="5*blockHeight +9" style="stroke: rgb(59, 59, 59); fill-opacity: 0;" />
-          <rect class="track-overlay" ref="overlayOfCanvas" :y="2*blockHeight-12" :width="drawingWidth" :height="handleHeight" style="fill-opacity: 0;" cursor="ew-resize" />
+          <rect :height="5*blockHeight +9" :width="widthOfHandle" :x="ntToDrawingPxPos(firstNtToDisplay)" class="handle"
+                style="stroke: rgb(59, 59, 59); fill-opacity: 0;" y="1" />
+          <rect ref="overlayOfCanvas" :height="handleHeight" :width="drawingWidth" :y="2*blockHeight-12"
+                class="track-overlay" cursor="ew-resize" style="fill-opacity: 0;" />
         </g>
       </g>
     </svg>
@@ -19,10 +21,10 @@
 </template>
 
 <script>
-import * as d3 from 'd3';
+import * as d3 from "d3";
 
 export default {
-  name: 'OverlayedCanvas',
+  name: "OverlayedCanvas",
   props: {
     chromosomeData: {
       type: Array,
@@ -99,14 +101,14 @@ export default {
       handleHeight: 50, //This should not be hard coded but based on track sizes
       correspondancePosColor() {
         let map = new Map();
-        this.chromosomeData.forEach( function(d, i) {
+        this.chromosomeData.forEach(function(d, i) {
           map.set(d.FeatureStart, i);
         });
 
         return map;
       },
-      svgPadding: 10,
-    }
+      svgPadding: 10
+    };
   },
   mounted() {
     this.drawCanvas();
@@ -124,22 +126,22 @@ export default {
   },
   computed: {
     amountOfNtToDisplay() {
-      return this.mainWindowWidth / this.ntWidthInPxInDisplayWindow
+      return this.mainWindowWidth / this.ntWidthInPxInDisplayWindow;
     },
     lastNtToDisplay() {
-      return Math.min(this.firstNtToDisplay + this.amountOfNtToDisplay, this.rightmostNt)
+      return Math.min(this.firstNtToDisplay + this.amountOfNtToDisplay, this.rightmostNt);
     },
     widthOfHandle() {
-      return this.ntToDrawingPxPos(this.lastNtToDisplay) - this.ntToDrawingPxPos(this.firstNtToDisplay)
+      return this.ntToDrawingPxPos(this.lastNtToDisplay) - this.ntToDrawingPxPos(this.firstNtToDisplay);
     },
     drawingWidth() {
-      return this.miniatureWidth - 2 * this.svgPadding
+      return this.miniatureWidth - 2 * this.svgPadding;
     },
     miniatureTicksScale() {
       let scale = d3.scaleLinear()
-                    .domain([0, this.rightmostNt]) //from nt space
-                    .range([0, this.drawingWidth]) //to px space of drawn canvas
-                    .clamp(true); //borders cannot be exceeded
+        .domain([0, this.rightmostNt]) //from nt space
+        .range([0, this.drawingWidth]) //to px space of drawn canvas
+        .clamp(true); //borders cannot be exceeded
 
       return scale;
     },
@@ -147,10 +149,10 @@ export default {
     //Style object to apply on upper div for a correct display
     containerDiv() {
       return {
-        display: 'inline-block',
+        display: "inline-block",
         width: `${this.miniatureWidth}px`,
-        height: `${this.canvasHeight}px`,
-      }
+        height: `${this.canvasHeight}px`
+      };
     }
   },
   watch: {
@@ -158,7 +160,7 @@ export default {
     lastNtToDisplay: {
       immediate: true,
       handler: function() {
-        this.updateLastNt(this.lastNtToDisplay)
+        this.updateLastNt(this.lastNtToDisplay);
       }
     },
     //amount changes => either lastNt changes, then see prevous watch, or firstNt has to change instead
@@ -184,11 +186,11 @@ export default {
         let blockWidth = Math.max(trueWidth, 1);
         let trackHeight = this.blockHeight;
 
-        let histHeight = 2*trackHeight;
+        let histHeight = 2 * trackHeight;
         let offset = histHeight + 6;
 
         this.drawCanvasRectForCoreTrack(d, context, xPos, offset, blockWidth, trackHeight);
-      })
+      });
     },
     //Ticks scale should be redrawn only when maxPosInNt changes
     rightmostNt: function() {
@@ -197,12 +199,12 @@ export default {
     }
   },
   methods: {
-    writeTranslate: function(x=0, y=0) {
-      return `translate(${x},${y})`
+    writeTranslate: function(x = 0, y = 0) {
+      return `translate(${x},${y})`;
     },
     drawCanvasRect: function(ctx, x, y, width, height) {
       //fillRect(x, y, width, height)
-      ctx.fillRect(x, y, width, height)
+      ctx.fillRect(x, y, width, height);
     },
     drawCanvasRectForHist: function(d, ctx, x, offset, width, globalHeight) {
       //Clean edge for previous block in loop:
@@ -221,7 +223,7 @@ export default {
         //percent of the chosen colorNumber compared to the full set of colors
         let colorRatio = colorNumber / nbOfColors;
         //Apply associated color
-        ctx.fillStyle = d3.interpolateRainbow( colorRatio );
+        ctx.fillStyle = d3.interpolateRainbow(colorRatio);
       } else {
         ctx.fillStyle = this.colorScaleFunction(d);
       }
@@ -236,12 +238,12 @@ export default {
     drawCanvasRectForCoreTrack: function(d, ctx, x, offset, width, height) {
       //Here we chose a yes/no colorScale instead of the one used in the display, for a better readibility
       if (Number(d.presenceCounter) === 0) {
-          ctx.fillStyle = "#fff";
-        } else if (Number(d.presenceCounter) >= this.coreThreshold) {
-          ctx.fillStyle = this.colorScaleCore.range()[1];
-        } else {
-          ctx.fillStyle = this.colorScaleDisp.range()[1];
-        }
+        ctx.fillStyle = "#fff";
+      } else if (Number(d.presenceCounter) >= this.coreThreshold) {
+        ctx.fillStyle = this.colorScaleCore.range()[1];
+      } else {
+        ctx.fillStyle = this.colorScaleDisp.range()[1];
+      }
 
       this.drawCanvasRect(ctx, x, offset, width, height);
     },
@@ -257,7 +259,7 @@ export default {
     },
     drawCanvas: function() {
       //Set canvas context
-      let canvas = d3.select(this.$refs.CanvasMiniature)
+      let canvas = d3.select(this.$refs.CanvasMiniature);
       let context = canvas.node().getContext("2d");
 
       //Clear all previous drawing in case there was already one
@@ -277,26 +279,26 @@ export default {
         let offset;
 
         //Drawing a histogram of PAV matrix
-        this.drawCanvasRectForHist(d, context, xPos, 0, blockWidth, 2*trackHeight);
-        offset = 2*trackHeight;
+        this.drawCanvasRectForHist(d, context, xPos, 0, blockWidth, 2 * trackHeight);
+        offset = 2 * trackHeight;
 
         //Drawing the core/disp miniature
         offset += 6;
         this.drawCanvasRectForCoreTrack(d, context, xPos, offset, blockWidth, trackHeight);
 
         //Drawing the rainbow miniature
-        offset += trackHeight+1;
+        offset += trackHeight + 1;
         this.drawCanvasRectForPosTrack(d, context, xPos, offset, blockWidth, trackHeight);
 
         //Drawing the similarity miniature
-        offset += trackHeight+1;
+        offset += trackHeight + 1;
         this.drawCanvasRectForSimilTrack(d, context, xPos, offset, blockWidth, trackHeight);
 
       });
     },
     /**
      * Draws the SVG ticks for the miniature in the dedicated g element
-    */
+     */
     drawSvg: function() {
       d3.select(this.$refs.ticksForMiniature)
         .call(d3.axisBottom(this.miniatureTicksScale)
@@ -309,8 +311,8 @@ export default {
 
       //Borders for the accepted/available values of mouse_xPos
       //calculated for a centered handle
-      let leftPxBorder = 0 + this.widthOfHandle/2;
-      let rightPxBorder = this.drawingWidth - this.widthOfHandle/2;
+      let leftPxBorder = 0 + this.widthOfHandle / 2;
+      let rightPxBorder = this.drawingWidth - this.widthOfHandle / 2;
       let desiredPxLeftPos;
 
       //we change the value of the first nt to dsplay only if it is a valid one
@@ -320,11 +322,11 @@ export default {
         //so we cannot change its store state in here, else the value would be wrong!!!
         //cf watch on lastNtToDisplay based on firstNtToDisplay instead
 
-      //When mouse is on the far left, stores min value instead
+        //When mouse is on the far left, stores min value instead
       } else if (mouse_xPos < leftPxBorder) {
         desiredPxLeftPos = 0;
 
-      //When mouse is on the far right, stores max value instead
+        //When mouse is on the far right, stores max value instead
       } else if (mouse_xPos > rightPxBorder) {
         desiredPxLeftPos = this.drawingWidth - this.widthOfHandle;
       }
@@ -336,7 +338,7 @@ export default {
     ntToDrawingPxPos: function(ntIndex) {
       //Checking if we can do the division
       if (this.rightmostNt === 0) {
-        console.error('ERROR: rightmostNt should not be 0');
+        console.error("ERROR: rightmostNt should not be 0");
         return;
       }
 
@@ -358,7 +360,7 @@ export default {
     drawingPxPosToNt: function(pxPos) {
       //Checking if we can do the division
       if (this.drawingWidth === 0) {
-        console.error('ERROR: drawingWidth should not be 0');
+        console.error("ERROR: drawingWidth should not be 0");
         return;
       }
 
@@ -366,7 +368,7 @@ export default {
       return ntIndex;
     }
   }
-}
+};
 </script>
 
 <!--Here again are too many hardcoded values!!!/-->
@@ -377,6 +379,7 @@ export default {
   display: block;
   z-index: 0;
 }
+
 .superimposedSvg {
   position: absolute;
   display: block;

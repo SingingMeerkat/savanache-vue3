@@ -158,17 +158,19 @@ export default defineComponent({
     });
 
     const chromItems = computed(() => {
-      console.log('Computing chromItems', {pivot: selectedPivotName.value, data: data});
+      console.log("Computing chromItems", { pivot: selectedPivotName.value, data: data });
       if (selectedPivotName.value && data) {
         return data.chromNamesPerPath[selectedPivotName.value];
-      //} else { return ['Gm01'] }
-      } else { return [] }
+        //} else { return ['Gm01'] }
+      } else {
+        return [];
+      }
     });
     //const chromItems = ['Gm01'];
 
     watch(selectedPivotName, () => {
       if (!chromItems.value.includes(chromName.value)) {
-        console.log('Modyfing chrom list with following chromItems', chromItems.value);
+        console.log("Modyfing chrom list with following chromItems", chromItems.value);
         chromName.value = chromItems.value[0];
       }
     });

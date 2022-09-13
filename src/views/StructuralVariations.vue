@@ -24,7 +24,7 @@
         <a v-show="pivotDetailsCols === 0" class="right-arrow-inverted" @click="moveColsLeft"></a>
         <v-card class="overflow-auto">
           <AssembliesTable />
-<!--          <StructuralVariationsAssembliesTable></StructuralVariationsAssembliesTable>-->
+          <!--          <StructuralVariationsAssembliesTable></StructuralVariationsAssembliesTable>-->
         </v-card>
       </v-col>
       <v-col v-show="pivotDetailsCols > 0" :cols="pivotDetailsCols">

@@ -1,38 +1,39 @@
 <template>
   <div>
-<!--    <b-form-group label="Tagged input using dropdown" label-for="tags-with-dropdown">-->
+    <!--    <b-form-group label="Tagged input using dropdown" label-for="tags-with-dropdown">-->
     <b-form-group class="noMarginBottom">
-      <b-form-tags id="tags-with-dropdown" v-model="tagNames" no-outer-focus class="revokeBootstrapCSS">
+      <b-form-tags id="tags-with-dropdown" v-model="tagNames" class="revokeBootstrapCSS" no-outer-focus>
         <template v-slot="{ tags, disabled, addTag, removeTag }">
           <!-- SEARCH BAR -->
-          <b-dropdown size="sm" variant="outline-secondary" class="mb-2" block menu-class="w-100">
+          <b-dropdown block class="mb-2" menu-class="w-100" size="sm" variant="outline-secondary">
             <template #button-content>
-              <b-icon icon="tag-fill"></b-icon> Select annotation(s)
+              <b-icon icon="tag-fill"></b-icon>
+              Select annotation(s)
             </template>
             <b-dropdown-form @submit.stop.prevent="() => {}">
               <b-form-group
-                  label="Search annotations"
-                  label-for="tag-search-input"
-                  label-cols-md="auto"
-                  class="mb-2 displayBlock"
-                  label-size="sm"
-                  :disabled="disabled"
+                :disabled="disabled"
+                class="mb-2 displayBlock"
+                label="Search annotations"
+                label-cols-md="auto"
+                label-for="tag-search-input"
+                label-size="sm"
               >
                 <b-form-input
-                    v-model="search"
-                    id="tag-search-input"
-                    type="search"
-                    size="sm"
-                    autocomplete="off"
+                  id="tag-search-input"
+                  v-model="search"
+                  autocomplete="off"
+                  size="sm"
+                  type="search"
                 ></b-form-input>
               </b-form-group>
             </b-dropdown-form>
             <b-dropdown-divider></b-dropdown-divider>
             <!-- AVAILABLE OPTIONS IN SEARCH BAR -->
             <b-dropdown-item-button
-                v-for="option in matchingAnnotNames"
-                :key="option"
-                @click="onOptionClick({ option, addTag })"
+              v-for="option in matchingAnnotNames"
+              :key="option"
+              @click="onOptionClick({ option, addTag })"
             >
               <div class="ellipsis">{{ option }}</div>
             </b-dropdown-item-button>
@@ -57,13 +58,13 @@
           <!-- POPUP OF INFORMATIONS ABOUT THE GENOMES -->
           <div v-show="hasSearchHappened">
             <b-button
-                class="mb-2 buttonPanache"
-                size="sm"
-                block
-                id="popover-target-1">
+              id="popover-target-1"
+              block
+              class="mb-2 buttonPanache"
+              size="sm">
               Informations about search
             </b-button>
-            <b-popover target="popover-target-1" triggers="hover" placement="top">
+            <b-popover placement="top" target="popover-target-1" triggers="hover">
               <template #title>Search criteria percentages</template>
               <div v-for="genomeInfo in popupDiv" :key="genomeInfo">
                 {{ genomeInfo }}
@@ -73,21 +74,23 @@
 
           <!-- LIST OF THE ANNOT TAGS THAT ARE SELECTED AS FILTER(S) -->
           <div :key="componentKey">
-            <b-input-group v-for="tag in tags" :key="tag" size="sm" v-show="mapOfPresenceStatus.has(tag)" :prepend="mapOfPresenceStatus.get(tag) ? 'Presence' : 'Absence'" class="mb-2 tagCustomCSS">
+            <b-input-group v-for="tag in tags" v-show="mapOfPresenceStatus.has(tag)" :key="tag" :prepend="mapOfPresenceStatus.get(tag) ? 'Presence' : 'Absence'"
+                           class="mb-2 tagCustomCSS" size="sm">
               <b-input-group-prepend is-text>
                 <!-- CHECKBOX TO CHANGE THE DESIRED PRESENCE STATUS OF THE ANNOT -->
                 <b-form-checkbox
-                    switch
-                    class="mr-n2 noBorderLeft"
-                    :class="'noBorderLeft'"
-                    :checked="mapOfPresenceStatus.get(tag)"
-                    @change="updateStatus(tag)"
-                    :id="'switch_' + tag">
+                  :id="'switch_' + tag"
+                  :checked="mapOfPresenceStatus.get(tag)"
+                  :class="'noBorderLeft'"
+                  class="mr-n2 noBorderLeft"
+                  switch
+                  @change="updateStatus(tag)">
                 </b-form-checkbox>
               </b-input-group-prepend>
-              <b-form-input class="inputTag" disabled aria-label="Large text input with switch" :placeholder="tag"></b-form-input>
+              <b-form-input :placeholder="tag" aria-label="Large text input with switch" class="inputTag"
+                            disabled></b-form-input>
               <b-input-group-append is-text>
-                <b-icon icon="x" @click="removeTag(tag)" class="cursorP"/>
+                <b-icon class="cursorP" icon="x" @click="removeTag(tag)" />
               </b-input-group-append>
             </b-input-group>
           </div>
@@ -98,26 +101,26 @@
 </template>
 
 <script>
-import {mapActions, mapState} from "vuex";
-import {nonReactiveDataStore} from '@/store/non-reactive-data';
+import { mapActions, mapState } from "vuex";
+import { nonReactiveDataStore } from "@/store/non-reactive-data";
 
 export default {
   name: "SortOption_GffPresenceStatus",
   data() {
     return {
-      search: '',
+      search: "",
       tagNames: [], //TODO Rename, is it the possible names for annots? Name from bootstrap tags?
       searchMinChar: 3,
       mapOfPresenceStatus: new Map(),
       hasSearchHappened: false,
       popupDiv: [],
-      componentKey: 0,
-    }
+      componentKey: 0
+    };
   },
   computed: {
-    ...mapState('panache', {
-      annotMap: 'annotMap', //TODO change to annot in store
-      genomeList: 'genomeListInDisplay',
+    ...mapState("panache", {
+      annotMap: "annotMap", //TODO change to annot in store
+      genomeList: "genomeListInDisplay"
     }),
     /**
      * Function that returns the research criteria.
@@ -141,12 +144,14 @@ export default {
         // Filter out already selected options
         return matchingNames.filter(opt => this.tagNames.indexOf(opt) === -1);
 
-      } else { return [] }
-    },
+      } else {
+        return [];
+      }
+    }
   },
   methods: {
-    ...mapActions('panache', [
-      'updateGenomesInDisplay',
+    ...mapActions("panache", [
+      "updateGenomesInDisplay"
     ]),
     /**
      * Add a named annot to tags (a Bootstrap.Vue list).
@@ -155,7 +160,7 @@ export default {
      */
     onOptionClick({ option, addTag }) {
       addTag(option); // Add the annot to the tag list
-      this.search = ''; // Empty the search bar
+      this.search = ""; // Empty the search bar
     },
     /**
      * Sort the genomes based on their scores.
@@ -164,12 +169,12 @@ export default {
 
       let scorePerGenome = this.applyScoresToGenomes();
 
-       // Sort the ranking Map in function of their number of points.
+      // Sort the ranking Map in function of their number of points.
       let rankGenomes = new Map([...scorePerGenome.entries()].sort((a, b) => b[1] - a[1]));
 
       // Update the popup displaying the scores
       this.popupDiv = []; // Clear previous info
-      this.genomeList.forEach( genome => {
+      this.genomeList.forEach(genome => {
         this.popupDiv.push(genome + " (" + Math.round(rankGenomes.get(genome) / this.mapOfPresenceStatus.size * 100) + "%)");
       });
 
@@ -182,7 +187,7 @@ export default {
      * @param annot = The annot to which you want to update the status
      */
     updateStatus(annot) {
-      this.mapOfPresenceStatus.set(annot, !this.mapOfPresenceStatus.get(annot))
+      this.mapOfPresenceStatus.set(annot, !this.mapOfPresenceStatus.get(annot));
       this.hasSearchHappened = false; // Turn hasSearchHappened to false to not misinform the user and hide the popup
       this.forceRerender();
     },
@@ -206,11 +211,11 @@ export default {
 
       // Initializing at 0
       for (let i = 0; i < this.genomeList.length; i++) {
-        mapOfScores.set(this.genomeList[i], 0)
+        mapOfScores.set(this.genomeList[i], 0);
       }
 
       // Ranks genomes according to their matching score with the choosen tags
-      this.mapOfPresenceStatus.forEach( (shouldBePresent, annotName) => {
+      this.mapOfPresenceStatus.forEach((shouldBePresent, annotName) => {
 
         let annotStartStopChrom = this.annotMap.get(annotName);
         let annotStart = annotStartStopChrom[0];
@@ -222,11 +227,11 @@ export default {
         // Here the condition is that at least a part of the block(s) should
         // overlap the annotation
         let setOfBreakpoints = new Set([annotStart]);
-        let spannedBlocks = chromPavBlocks.filter( block => {
+        let spannedBlocks = chromPavBlocks.filter(block => {
 
-          let blockStartIsInAnnot = ( annotStart <= parseInt(block.FeatureStart) ) && ( parseInt(block.FeatureStart) <= annotStop );
-          let blockStopIsInAnnot = ( annotStart <= parseInt(block.FeatureStop) ) && ( parseInt(block.FeatureStop) <= annotStop );
-          let blockContainsAnnot = ( parseInt(block.FeatureStart) <= annotStart) && ( annotStop <= parseInt(block.FeatureStart) );
+          let blockStartIsInAnnot = (annotStart <= parseInt(block.FeatureStart)) && (parseInt(block.FeatureStart) <= annotStop);
+          let blockStopIsInAnnot = (annotStart <= parseInt(block.FeatureStop)) && (parseInt(block.FeatureStop) <= annotStop);
+          let blockContainsAnnot = (parseInt(block.FeatureStart) <= annotStart) && (annotStop <= parseInt(block.FeatureStart));
 
           let isMatching = (blockStartIsInAnnot || blockStopIsInAnnot || blockContainsAnnot);
 
@@ -235,7 +240,7 @@ export default {
             setOfBreakpoints.add(Math.max(block.FeatureStop, annotStop));
           }
 
-          return isMatching
+          return isMatching;
         });
 
         // Build mapOfBlocksPerBreakpoint that lists, for all breakpoints, which
@@ -262,41 +267,41 @@ export default {
         arrayOfBreakpoints.reverse(); // Will be parsed from end to start later
 
         // For each breakpoint, stores the blocks present in the following interval
-        arrayOfBreakpoints.forEach( bkpt => {
+        arrayOfBreakpoints.forEach(bkpt => {
           mapOfBlocksPerBreakpoint.set(bkpt, []);
           spannedBlocks.forEach(block => {
             // Does the [breakpoint+, nextBreakpoint[ interval has the block?
-            if ( (block.FeatureStart <= bkpt) || (bkpt < block.FeatureStop ) ) {
-              mapOfBlocksPerBreakpoint.get(bkpt).push(block)
+            if ((block.FeatureStart <= bkpt) || (bkpt < block.FeatureStop)) {
+              mapOfBlocksPerBreakpoint.get(bkpt).push(block);
             }
           });
         });
 
         // Compute matching score for each genome
-        this.genomeList.forEach( geno => {
+        this.genomeList.forEach(geno => {
 
           let cumulLenScore = 0;
           let nextBreakpoint = annotStop;
           let annotLength = annotStop - annotStart;
 
           // Parsing the breakpoints from right to left
-          arrayOfBreakpoints.forEach( bkpt => {
+          arrayOfBreakpoints.forEach(bkpt => {
 
             let intervalLength = nextBreakpoint - bkpt;
             let intervalScore = 0;
             let nbOfMatchingBlocks = 0;
 
             // Check PAV status of all candidate blocks
-            mapOfBlocksPerBreakpoint.get(bkpt).forEach( block => {
+            mapOfBlocksPerBreakpoint.get(bkpt).forEach(block => {
               let pavStatus = parseInt(block[geno]);
 
               //Check if there is a match between desired and block presence/absence statuses
-              let queryDoesMatch = (shouldBePresent && pavStatus > 0) || (!shouldBePresent && pavStatus === 0) ;
+              let queryDoesMatch = (shouldBePresent && pavStatus > 0) || (!shouldBePresent && pavStatus === 0);
 
               if (queryDoesMatch) {
                 nbOfMatchingBlocks += 1;
               }
-            })
+            });
 
             let nbBlockInInter = mapOfBlocksPerBreakpoint.get(bkpt).length;
             if (nbBlockInInter > 0) {
@@ -305,7 +310,7 @@ export default {
 
             cumulLenScore += intervalScore;
             nextBreakpoint = bkpt;
-          })
+          });
 
           /*// Check PAV status of all candidate blocks
           spannedBlocks.forEach(block => {
@@ -333,8 +338,8 @@ export default {
 
       });
 
-      return mapOfScores
-    },
+      return mapOfScores;
+    }
   },
   watch: {
     tagNames() {
@@ -342,7 +347,7 @@ export default {
       let currentTags = [...this.tagNames];
 
       // In Map, remove keys from deleted tags
-      this.mapOfPresenceStatus.forEach( (val, key) => {
+      this.mapOfPresenceStatus.forEach((val, key) => {
 
         if (currentTags.includes(key)) {
           let idxToDel = currentTags.indexOf(key);
@@ -355,12 +360,12 @@ export default {
       });
 
       // Add new (key, value) according to new tag
-      currentTags.forEach( (annotName) => {
+      currentTags.forEach((annotName) => {
         this.mapOfPresenceStatus.set(annotName, true);
       });
     }
   }
-}
+};
 
 </script>
 
@@ -388,7 +393,7 @@ export default {
   overflow: hidden;
 }
 
-.noBordeRight{
+.noBordeRight {
   border-right: none;
 }
 

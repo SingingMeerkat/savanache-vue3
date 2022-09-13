@@ -139,8 +139,8 @@ export default {
       if (selected.value && selected.value.length) {
         storeAssemblies = storeAssemblies.filter(assembly => {
           return assembly.heterotic_group.filter(hg => {
-              return selected.value.includes(hg);
-            }).length !== 0;
+            return selected.value.includes(hg);
+          }).length !== 0;
         });
       }
 
@@ -153,7 +153,7 @@ export default {
           }).length !== 0;
         });
       }
-      
+
       return storeAssemblies;
     });
 
@@ -275,7 +275,7 @@ export default {
       } else {
         selectedItems.value = newAssemblies.map(assembly => assembly.assembly_name);
       }
-    }, {immediate: true});
+    }, { immediate: true });
 
     const selectAction = assemblyNameSelected => {
       const assembly = assemblies.value.filter(assembly => assembly.assembly_name === assemblyNameSelected)[0];

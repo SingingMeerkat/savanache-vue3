@@ -1,16 +1,16 @@
 <template>
   <div>
     <b-button
-        id="localGenePatternDisplayButton"
-        @click="sortBetweenValues"
-        size="sm"
-        class="buttonPanache"
-        block
-        variant="light">
+      id="localGenePatternDisplayButton"
+      block
+      class="buttonPanache"
+      size="sm"
+      variant="light"
+      @click="sortBetweenValues">
       Sort by local pattern
     </b-button>
-    <b-popover v-if="hasSortHappened" target="localGenePatternDisplayButton" triggers="hover" placement="top">
-<!--      <template #title class="centerT">Informations about values</template>-->
+    <b-popover v-if="hasSortHappened" placement="top" target="localGenePatternDisplayButton" triggers="hover">
+      <!--      <template #title class="centerT">Informations about values</template>-->
       <template #title>Informations about values</template>
       <p>
         Left value : {{ leftValue }}
@@ -22,9 +22,9 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapState} from "vuex";
-import {clusterData} from "@greenelab/hclust";
-import {nonReactiveDataStore} from '@/store/non-reactive-data';
+import { mapActions, mapGetters, mapState } from "vuex";
+import { clusterData } from "@greenelab/hclust";
+import { nonReactiveDataStore } from "@/store/non-reactive-data";
 
 export default {
   name: "LocalGenePattern",
@@ -32,25 +32,25 @@ export default {
     return {
       hasSortHappened: false,
       rightValue: 0,
-      leftValue: 0,
-    }
+      leftValue: 0
+    };
   },
   computed: {
-    ...mapState('panache', {
-      localAreaSelected: 'localAreaSelected',
-      firstNtToDisplay: 'firstNtToDisplay',
-      currentDisplayNtWidthInPx : 'currentDisplayNtWidthInPx',
-      selectedChrom: 'selectedChrom',
+    ...mapState("panache", {
+      localAreaSelected: "localAreaSelected",
+      firstNtToDisplay: "firstNtToDisplay",
+      currentDisplayNtWidthInPx: "currentDisplayNtWidthInPx",
+      selectedChrom: "selectedChrom",
       // fullChromData: 'fullChromData',
-      genomeListInDisplay: 'genomeListInDisplay',
+      genomeListInDisplay: "genomeListInDisplay"
     }),
-    ...mapGetters('panache', {
-      displayWindowWidth: 'displayWindowWidth',
-    }),
+    ...mapGetters("panache", {
+      displayWindowWidth: "displayWindowWidth"
+    })
   },
   methods: {
-    ...mapActions('panache', [
-      'updateGenomesInDisplay',
+    ...mapActions("panache", [
+      "updateGenomesInDisplay"
     ]),
     /**
      * Transform the value in pixel to a value in nucleotide
@@ -82,7 +82,7 @@ export default {
       this.rightValue = Math.round(this.pxToNt(this.localAreaSelected[1]));
       for (let i = 0; i < selectedChromData.length; i++) { // Check every gene of the chromosome
         if (selectedChromData[i].FeatureStart >= this.leftValue &&
-            selectedChromData[i].FeatureStop <= this.rightValue) {
+          selectedChromData[i].FeatureStop <= this.rightValue) {
           geneBetweenValues.push(selectedChromData[i]); // Add the gene to list if its in the selected area
         }
       }
@@ -105,10 +105,14 @@ export default {
       }
 
       // Usage of the hclust library to create a cluster and order the genome by local phylogeny with the gene in geneBetweenValues
-      let clusterOrder = clusterData({ data: presencePatternList, distance: this.simpleMatching, onProgress: this.displayNothing}).order;
+      let clusterOrder = clusterData({
+        data: presencePatternList,
+        distance: this.simpleMatching,
+        onProgress: this.displayNothing
+      }).order;
       let genomeListSorted = []; // Create a list that will contain the genomes newly sorted
       for (let i = 0; i < clusterOrder.length; i++) {
-        genomeListSorted.push(this.genomeListInDisplay[clusterOrder[i]]) // Fill the list with the genome by their order in clusterOrder
+        genomeListSorted.push(this.genomeListInDisplay[clusterOrder[i]]); // Fill the list with the genome by their order in clusterOrder
       }
       this.updateGenomesInDisplay(genomeListSorted); // Update the genomes in display with he sorted list
     }
@@ -125,7 +129,7 @@ export default {
 
       for (let index = 0; index < size; index++) { // For each value in the arrays
         if ((a[index] === 1 && b[index] === 1) ||
-            (a[index] === 0 && b[index] === 0)) {
+          (a[index] === 0 && b[index] === 0)) {
           nbExactMatch++; // If the array both contains an 0 or an 1, increase the counter
         }
       }
@@ -136,7 +140,7 @@ export default {
       // Do nothing
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

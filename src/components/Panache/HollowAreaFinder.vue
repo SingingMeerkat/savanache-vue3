@@ -9,13 +9,13 @@
             </label>
             <div class="col-4 input-group-sm">
               <input
-                  class="form-control"
-                  v-model.number="paramAbsenceRate"
-                  type="number"
-                  id="HA_pavRate"
-                  min="0"
-                  max="1"
-                  step="0.01">
+                id="HA_pavRate"
+                v-model.number="paramAbsenceRate"
+                class="form-control"
+                max="1"
+                min="0"
+                step="0.01"
+                type="number">
             </div>
           </div>
           <div class="form-group row">
@@ -24,12 +24,12 @@
             </label>
             <div class="col-4 input-group-sm">
               <input
-                  class="form-control"
-                  v-model.number="paramConsecutiveBlock"
-                  type="number"
-                  id="HA_consBlocks"
-                  min="1"
-                  step="1">
+                id="HA_consBlocks"
+                v-model.number="paramConsecutiveBlock"
+                class="form-control"
+                min="1"
+                step="1"
+                type="number">
             </div>
           </div>
         </form>
@@ -68,9 +68,9 @@
           <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
               <button
-                  :class="{'btn btn-secondary btn-sm': true, 'not-allowed': leftmostAreaIsReached}"
-                  @click="skipBackward"
-                  :disabled="leftmostAreaIsReached">
+                :class="{'btn btn-secondary btn-sm': true, 'not-allowed': leftmostAreaIsReached}"
+                :disabled="leftmostAreaIsReached"
+                @click="skipBackward">
                 <b-icon icon="skip-backward-fill"></b-icon>
               </button>
             </div>
@@ -79,9 +79,9 @@
             </div>
             <div class="input-group-prepend">
               <button
-                  :class="{'btn btn-secondary btn-sm': true, 'not-allowed': leftmostAreaIsReached}"
-                  @click="goBackward"
-                  :disabled="leftmostAreaIsReached">
+                :class="{'btn btn-secondary btn-sm': true, 'not-allowed': leftmostAreaIsReached}"
+                :disabled="leftmostAreaIsReached"
+                @click="goBackward">
                 <b-icon icon="play-fill" rotate="180"></b-icon>
               </button>
             </div>
@@ -91,10 +91,10 @@
           <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
               <button
-                  :class="{'btn btn-secondary btn-sm': true, 'not-allowed': rightmostAreaIsReached}"
-                  class="noBorderRadius"
-                  @click="goForward"
-                  :disabled="rightmostAreaIsReached">
+                :class="{'btn btn-secondary btn-sm': true, 'not-allowed': rightmostAreaIsReached}"
+                :disabled="rightmostAreaIsReached"
+                class="noBorderRadius"
+                @click="goForward">
                 <b-icon icon="play-fill"></b-icon>
               </button>
             </div>
@@ -103,10 +103,10 @@
             </div>
             <div class="input-group-prepend">
               <button
-                  :class="{'btn btn-secondary btn-sm': true, 'not-allowed': rightmostAreaIsReached}"
-                  class="borderRadius-right"
-                  @click="skipForward"
-                  :disabled="rightmostAreaIsReached">
+                :class="{'btn btn-secondary btn-sm': true, 'not-allowed': rightmostAreaIsReached}"
+                :disabled="rightmostAreaIsReached"
+                class="borderRadius-right"
+                @click="skipForward">
                 <b-icon icon="skip-forward-fill"></b-icon>
               </button>
             </div>
@@ -140,7 +140,7 @@
 
 <script>
 export default {
-  name: 'HollowAreaFinder',
+  name: "HollowAreaFinder",
   props: {
     arrayOfPanFeatures: {
       type: Array,
@@ -184,7 +184,7 @@ export default {
     },
     visibleStatus: {
       type: Boolean,
-      default: false,
+      default: false
     }
   },
   data() {
@@ -194,13 +194,13 @@ export default {
       targetedPosNt: Number(), //Linked to center of screen if possible,
       targetIsChangedInternally: false,
       sparseArrayOfNext: [],
-      sparseArrayOfPrevious: [],
-    }
+      sparseArrayOfPrevious: []
+    };
   },
   computed: {
     //Array with same indices as original dataset, for count of consecutive absent blocks
     arrayOfConsecutivenessOfAbs() {
-      let genoNames = this.genoNames
+      let genoNames = this.genoNames;
 
 
       //arrayOfConsecutivenessPerGeno is an array as long as the original dataset
@@ -209,12 +209,12 @@ export default {
       let arrayOfConsecutivenessPerGeno = new Array(this.arrayOfPanFeatures.length);
 
       //Explore dataset to find matching hollow areas
-      this.arrayOfPanFeatures.forEach( (d, i) => {
+      this.arrayOfPanFeatures.forEach((d, i) => {
 
         let mapFromGenoToConsec = new Map();
 
         //Map a consecTracer to every genome
-        genoNames.forEach( (name) => {
+        genoNames.forEach((name) => {
 
           let previousCount;
           let oldStartPos;
@@ -242,21 +242,21 @@ export default {
 
           //Store new startPos only when no consecutiveness is detected
           if (newCount <= 1) {
-            newStartPos = Number(d.index) //Should be FeatureStart?
+            newStartPos = Number(d.index); //Should be FeatureStart?
           } else {
-            newStartPos = oldStartPos
+            newStartPos = oldStartPos;
           }
 
           let consecTracer = {
             nbOfConsecutiveAbsentBlocks: newCount,
-            startPosOfConsecutiveness: newStartPos,
+            startPosOfConsecutiveness: newStartPos
           };
 
           mapFromGenoToConsec.set(name, consecTracer);
         });
 
         arrayOfConsecutivenessPerGeno[i] = mapFromGenoToConsec;
-      })
+      });
 
       //console.log({consecutivenessArray: arrayOfConsecutivenessPerGeno});
       return arrayOfConsecutivenessPerGeno;
@@ -273,13 +273,13 @@ export default {
       let continuityProfilesThatEnd = new Map();
       let mapOfHollowCoordinates = new Map();
 
-      this.arrayOfPanFeatures.forEach(function (d, i) {
+      this.arrayOfPanFeatures.forEach(function(d, i) {
 
         //Build the consecutiveness profile for each block
         let consecProfile = new Map();
 
-        self.genoNames.forEach(function (name) {
-          let genoToConsider = arrayOfConsecutivenessOfAbs[i].get(name)
+        self.genoNames.forEach(function(name) {
+          let genoToConsider = arrayOfConsecutivenessOfAbs[i].get(name);
 
           //Tag genomes which validate the min consecutive number of absent blocks
           if (genoToConsider.nbOfConsecutiveAbsentBlocks >= paramConsecutiveBlock) {
@@ -291,18 +291,18 @@ export default {
         //If the consecProfile does not match the absence rate, all continuity
         //profiles must be registered as 'ending'
         if (consecProfile.size / self.nbOfGenomes < paramAbsenceRate) {
-          continuityStore.forEach(function (value, key) {
+          continuityStore.forEach(function(value, key) {
             continuityProfilesThatEnd.set(key, value);
-          })
+          });
           //Else the valid consecutiveness profile mark the beginning of a
           //potential hollow area. It can also mark the end of previous areas.
         } else {
 
           //Update continuities when possible...
-          continuityStore.forEach(function (value, key) {
+          continuityStore.forEach(function(value, key) {
             let continuityProfile = value;
             let removedContinuities = [];
-            continuityProfile.forEach(function (startPos, genoName) {
+            continuityProfile.forEach(function(startPos, genoName) {
               if (!consecProfile.has(genoName)) {
                 removedContinuities.push(genoName);
               }
@@ -315,9 +315,9 @@ export default {
               continuityProfilesThatEnd.set(key, value);
               //...Else update continuity profiles without the useless entries
             } else {
-              removedContinuities.forEach(function (genoName) {
+              removedContinuities.forEach(function(genoName) {
                 continuityProfile.delete(genoName);
-              })
+              });
             }
           });
 
@@ -342,7 +342,7 @@ export default {
         }
 
         //...Finally remove continuity profiles that won't be used anymore
-        continuityProfilesThatEnd.forEach(function (value, key) {
+        continuityProfilesThatEnd.forEach(function(value, key) {
           let keyOfProfileToDelete = key;
           continuityStore.delete(keyOfProfileToDelete);
         });
@@ -369,7 +369,7 @@ export default {
 
     },
     emptySparseArrayOfPos() {
-      return new Array(this.lastNt + 1)
+      return new Array(this.lastNt + 1);
     },
     sparseArrayOfMatChingIndices() {
 
@@ -377,9 +377,9 @@ export default {
       let sparseArray = this.emptySparseArrayOfPos.slice();
 
       //Assign starting index of hollow areas in the sparse array
-      [...this.hollowAreasCoordinates.keys()].forEach(function (startingIdx) {
+      [...this.hollowAreasCoordinates.keys()].forEach(function(startingIdx) {
         sparseArray[startingIdx] = startingIdx;
-      })
+      });
 
       return sparseArray;
     },
@@ -389,103 +389,103 @@ export default {
       return shallowCopy;
     },
     minDesiredNbOfAbsentBlock() {
-      return this.paramAbsenceRate * this.nbOfGenomes
+      return this.paramAbsenceRate * this.nbOfGenomes;
     },
     maxDesiredNbOfPresentBlock() {
-      return this.nbOfGenomes - this.minDesiredNbOfAbsentBlock
+      return this.nbOfGenomes - this.minDesiredNbOfAbsentBlock;
     },
     maxFirstNt() {
-      return this.lastNt - this.pxToNt(this.displayWindowWidth)
+      return this.lastNt - this.pxToNt(this.displayWindowWidth);
     },
     amountOfNtInHalfScreen() {
-      return this.pxToNt(this.displayWindowWidth / 2)
+      return this.pxToNt(this.displayWindowWidth / 2);
     },
     desiredFirstNt() { //Maybe there the half screen should be rounded?
-      return this.targetedPosNt - this.amountOfNtInHalfScreen
+      return this.targetedPosNt - this.amountOfNtInHalfScreen;
     },
     reachableFirstNt() {
       if (0 <= this.desiredFirstNt && this.desiredFirstNt <= this.maxFirstNt) {
-        return this.desiredFirstNt
+        return this.desiredFirstNt;
       } else if (this.desiredFirstNt < 0) {
-        return 0
+        return 0;
       } else {
-        return this.maxFirstNt
+        return this.maxFirstNt;
       }
     },
     nbOfRegionsFound() {
-      return this.lengthOfSparse(this.sparseArrayOfMatChingIndices)
+      return this.lengthOfSparse(this.sparseArrayOfMatChingIndices);
     },
     nbOfRegionsAfter() {
-      return this.lengthOfSparse(this.sparseArrayOfNext.slice(1)) //targetedPos excepted
+      return this.lengthOfSparse(this.sparseArrayOfNext.slice(1)); //targetedPos excepted
     },
     nextAreaPosNt() {
-      return this.targetAPosition({})
+      return this.targetAPosition({});
     },
     distanceToNextArea() {
       if (this.nextAreaPosNt != undefined) {
-        return this.nextAreaPosNt - this.targetedPosNt
+        return this.nextAreaPosNt - this.targetedPosNt;
       } else {
-        return undefined
+        return undefined;
       }
     },
     rightmostAreaIsReached() {
-      return (this.distanceToNextArea === 0 || this.distanceToNextArea == undefined)
+      return (this.distanceToNextArea === 0 || this.distanceToNextArea == undefined);
     },
     distanceToNextAreaMsg() {
       if (this.rightmostAreaIsReached) {
-        return 'None'
+        return "None";
       } else {
-        return `+${this.distanceToNextArea}`
+        return `+${this.distanceToNextArea}`;
       }
     },
     nbOfRegionsBefore() {
-      return this.lengthOfSparse(this.sparseArrayOfPrevious_reversed.slice(1)) //targetedPos excepted
+      return this.lengthOfSparse(this.sparseArrayOfPrevious_reversed.slice(1)); //targetedPos excepted
     },
     previousAreaPosNt() {
-      return this.targetAPosition({jumpForward: false})
+      return this.targetAPosition({ jumpForward: false });
     },
     distanceToPreviousArea() {
       if (this.previousAreaPosNt != undefined) {
-        return this.targetedPosNt - this.previousAreaPosNt
+        return this.targetedPosNt - this.previousAreaPosNt;
       } else {
-        return undefined
+        return undefined;
       }
     },
     leftmostAreaIsReached() {
-      return (this.distanceToPreviousArea === 0 || this.distanceToPreviousArea == undefined)
+      return (this.distanceToPreviousArea === 0 || this.distanceToPreviousArea == undefined);
     },
     distanceToPreviousAreaMsg() {
       if (this.leftmostAreaIsReached) {
-        return 'None'
+        return "None";
       } else {
-        return `-${this.distanceToPreviousArea}`
+        return `-${this.distanceToPreviousArea}`;
       }
-    },
+    }
   },
   watch: {
-    reachableFirstNt: function () {
+    reachableFirstNt: function() {
       if (this.targetIsChangedInternally) {
         this.updateGlobalFirstNt(this.reachableFirstNt);
       }
     },
-    currentFirstNt: function () {
+    currentFirstNt: function() {
 
       //If window is moved through jump buttons
       if (this.targetIsChangedInternally) {
-        this.targetIsChangedInternally = false
+        this.targetIsChangedInternally = false;
 
         //If window is moved through other outside process
       } else {
-        this.targetedPosNt = Math.round(this.currentFirstNt + this.amountOfNtInHalfScreen)
+        this.targetedPosNt = Math.round(this.currentFirstNt + this.amountOfNtInHalfScreen);
       }
     },
-    hollowAreasCoordinates: function () {
+    hollowAreasCoordinates: function() {
       this.updateGlobalCoordOfHollowAreas(this.hollowAreasCoordinates);
     },
-    ntWidthInPixel: function () {
+    ntWidthInPixel: function() {
       //The change is external so this.targetIsChangedInternally is false
       //I can change targetedPos freely
-      console.log('TargetedPos changed as the size of nt to display changed');
+      console.log("TargetedPos changed as the size of nt to display changed");
       let floatTarget = (2 * this.currentFirstNt + this.pxToNt(this.displayWindowWidth)) / 2;
       this.targetedPosNt = Math.floor(floatTarget);
     },
@@ -504,13 +504,13 @@ export default {
   },
   methods: {
     ntToPx(ntAmount) {
-      return ntAmount * this.ntWidthInPixel
+      return ntAmount * this.ntWidthInPixel;
     },
     pxToNt(pxAmount) {
-      return pxAmount / this.ntWidthInPixel
+      return pxAmount / this.ntWidthInPixel;
     },
     lengthOfSparse(sparseArray) {
-      return sparseArray.reduce(c => c + 1, 0)
+      return sparseArray.reduce(c => c + 1, 0);
     },
     findNextFilledInSparse(sparseArray) {
       //Returns the value for the next non-empty idx of sparseArray
@@ -523,34 +523,34 @@ export default {
 
       //Get first filled value which is not that of the very first index
       //'some' stops at first 'true' encountered, here it is whenever the index is not the first one
-      sparseArray.some(function (d, i) {
+      sparseArray.some(function(d, i) {
         let isNotBeginning = (i != 0);
         if (isNotBeginning) {
-          startPosNt = d
+          startPosNt = d;
         }
         return (i != 0);
-      })
+      });
 
       //Will return undefined if no next position is found
       return startPosNt;
     },
-    targetAPosition({nbOfJumps = 1, jumpForward = true}) {
+    targetAPosition({ nbOfJumps = 1, jumpForward = true }) {
 
       let sparseToParse;
       let destinationToReach;
 
       if (!jumpForward) {
-        sparseToParse = this.sparseArrayOfPrevious_reversed
+        sparseToParse = this.sparseArrayOfPrevious_reversed;
       } else {
-        sparseToParse = this.sparseArrayOfNext
+        sparseToParse = this.sparseArrayOfNext;
       }
 
       for (let n = 1; n <= nbOfJumps; n++) {
-        let nextPosition = this.findNextFilledInSparse(sparseToParse)
+        let nextPosition = this.findNextFilledInSparse(sparseToParse);
 
         if (nextPosition != undefined) {
-          destinationToReach = nextPosition
-          sparseToParse = sparseToParse.slice(sparseToParse.indexOf(destinationToReach))
+          destinationToReach = nextPosition;
+          sparseToParse = sparseToParse.slice(sparseToParse.indexOf(destinationToReach));
         } else { //Whenever undefined is encountered, no need to check the 'rest'
           break;
         }
@@ -560,8 +560,8 @@ export default {
     },
     jumpToPosition(destinationToReach) {
       if (destinationToReach != undefined) {
-        this.targetedPosNt = destinationToReach
-        this.targetIsChangedInternally = true
+        this.targetedPosNt = destinationToReach;
+        this.targetIsChangedInternally = true;
       }
       //console.log({destinationToReach: destinationToReach});
     },
@@ -570,20 +570,20 @@ export default {
       this.jumpToPosition(destinationToReach);
     },
     skipForward() {
-      let destinationToReach = this.targetAPosition({nbOfJumps: this.nbOfAreasToSkip});
+      let destinationToReach = this.targetAPosition({ nbOfJumps: this.nbOfAreasToSkip });
       this.jumpToPosition(destinationToReach);
     },
     goBackward() {
-      let destinationToReach = this.targetAPosition({jumpForward: false});
+      let destinationToReach = this.targetAPosition({ jumpForward: false });
       this.jumpToPosition(destinationToReach);
     },
     skipBackward() {
-      let destinationToReach = this.targetAPosition({nbOfJumps: this.nbOfAreasToSkip, jumpForward: false});
+      let destinationToReach = this.targetAPosition({ nbOfJumps: this.nbOfAreasToSkip, jumpForward: false });
       this.jumpToPosition(destinationToReach);
-    },
+    }
 
   }
-}
+};
 </script>
 
 

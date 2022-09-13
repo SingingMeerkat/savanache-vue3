@@ -2,50 +2,50 @@
   <div class="marTop15">
     <!--  Component Slider used  -->
     <Slider
-        v-model="value"
-        :min="minValue"
-        :max="maxValue"
-        :merge="isToolTipDisplayed ? 100000000 : -1"
-        :tooltips="isToolTipDisplayed"
+      v-model="value"
+      :max="maxValue"
+      :merge="isToolTipDisplayed ? 100000000 : -1"
+      :min="minValue"
+      :tooltips="isToolTipDisplayed"
     />
   </div>
 </template>
 
 <script>
 
-import Slider from '@vueform/slider'
+import Slider from "@vueform/slider";
 import { mapActions } from "vuex";
 
 export default {
   name: "PresencePatternSelector",
   components: {
-    Slider,
+    Slider
   },
   props: {
     minValue: {
-      require: true,
+      require: true
     },
     maxValue: {
-      require: true,
-    },
+      require: true
+    }
   },
   data() {
     return {
       value: [0, 10000],
-      isToolTipDisplayed: false,
-    }
+      isToolTipDisplayed: false
+    };
   },
   methods: {
-    ...mapActions('panache', [
-      'updateLocalAreaSelected',
-    ]),
+    ...mapActions("panache", [
+      "updateLocalAreaSelected"
+    ])
   },
   watch: {
     value() {
       this.updateLocalAreaSelected(this.value);
-    },
+    }
   }
-}
+};
 </script>
 
 <style src="../../../node_modules/@vueform/slider/themes/default.css"></style>

@@ -68,7 +68,7 @@ export default defineComponent({
     // const selectedAssemblyNames = reactiveVuexObject(store.state.selectedAssemblyNames, store.commit, "setSelectedAssemblyNames");
 
     const selectedAssemblyKeyNames = computed(() => {
-      return selectedAssemblyNames.value.reduce((output, input) => ({...output, [input]: true}), {});
+      return selectedAssemblyNames.value.reduce((output, input) => ({ ...output, [input]: true }), {});
     });
 
     const allSelected = computed({

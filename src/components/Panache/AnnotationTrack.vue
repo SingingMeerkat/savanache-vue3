@@ -1,20 +1,22 @@
 <template>
   <div id="swarm_container" :style="swarmContainerStyle">
-    <svg :width="trackWidth" :height="swarm.height + swarm.marginTop">
+    <svg :height="swarm.height + swarm.marginTop" :width="trackWidth">
       <g>
         <rect
           v-for="(geneAnnot, rectIdx) in squares"
           :key="geneAnnot.data.geneName"
           :ref="`annotRect_${rectIdx}`"
-          :x="geneAnnot.x"
-          :y="(geneAnnot.y + swarm.height - swarm.marginTop) * -1"
+          :fill="geneAnnot.color"
+          :height="squareSize"
           :rx="selectedShape === 'circle' ? 20 : 0"
           :ry="selectedShape === 'circle' ? 20 : 0"
+          :transform="writeTranslate(0, (swarm.height - squareSize) * 2)"
           :width="squareSize"
-          :height="squareSize"
+          :x="geneAnnot.x"
+          :y="(geneAnnot.y + swarm.height - swarm.marginTop) * -1"
           stroke="white"
           stroke-width="1"
-          :fill="geneAnnot.color"
+          @mouseout="hideAnnot"
           @mouseover="
             showAnnot(
               geneAnnot.data,
@@ -22,34 +24,32 @@
               ntToPx(middlePosAnnot(geneAnnot.data)),
               (geneAnnot.y + swarm.height - 40) * -1,
             )"
-          @mouseout="hideAnnot"
-          :transform="writeTranslate(0, (swarm.height - squareSize) * 2)"
         />
       </g>
     </svg>
     <AnnotationCard
-      ref='AnnotationCard'
-      :style="tooltipStyle"
+      ref="AnnotationCard"
+      :exonList="annotCurrentContent.exons"
       :geneName="annotCurrentContent.geneName"
       :geneStartPos="annotCurrentContent.geneStart"
       :geneStopPos="annotCurrentContent.geneStop"
       :geneStrand="annotCurrentContent.geneStrand"
       :leftOverlaps="annotCurrentContent.leftOverlaps"
       :rightOverlaps="annotCurrentContent.rightOverlaps"
-      :exonList="annotCurrentContent.exons"
+      :style="tooltipStyle"
       :writtenAnnot="annotCurrentContent.annotation"
     />
   </div>
 </template>
 
 <script>
-import * as d3 from 'd3';
-import AnnotationCard from '@/components/AnnotationCard.vue';
+import * as d3 from "d3";
+import AnnotationCard from "@/components/AnnotationCard.vue";
 
 export default {
-  name: 'AnnotationTrack',
+  name: "AnnotationTrack",
   components: {
-    AnnotationCard,
+    AnnotationCard
   },
   props: {
     annotToDisplay: {
@@ -71,7 +71,7 @@ export default {
     trackHeight: {
       type: Number,
       default: 20 //should be an even number
-    },
+    }
   },
   data() {
     return {
@@ -80,40 +80,40 @@ export default {
       swarm: {
         marginTop: 30,
         height: 0,
-        radius: 13,
+        radius: 13
       },
       //set default values for current annotation to display
       annotCurrentContent: {
-        geneName: 'FakeGene',
+        geneName: "FakeGene",
         geneStrand: +1,
         geneStart: 0,
         geneStop: 30,
         exons: [{
-            start: 0,
-            stop: 13,
-          }, {
-            start: 23,
-            stop: 30,
-          },
+          start: 0,
+          stop: 13
+        }, {
+          start: 23,
+          stop: 30
+        }
         ],
-        exonColor: 'crimson',
-        annotation: '',
+        exonColor: "crimson",
+        annotation: "",
         leftOverlaps: [],
-        rightOverlaps: [],
+        rightOverlaps: []
       },
       //Style object to apply on upper div for a correct display
       tooltipStyle: {
-        left: '0px',
-        top: '0px',
-        visibility: 'hidden',
-        position: 'absolute',
+        left: "0px",
+        top: "0px",
+        visibility: "hidden",
+        position: "absolute",
         opacity: 0,
-        transition: 'opacity 0.1.',
-        'z-index': 333,
+        transition: "opacity 0.1.",
+        "z-index": 333
         //'pointer-events': 'none'; //let mouse events pass through
       },
-      annotCardWidth: 0,
-    }
+      annotCardWidth: 0
+    };
   },
   watch: {
     annotToDisplay(data) {
@@ -135,18 +135,18 @@ export default {
     },
     swarmContainerStyle() {
       return {
-        background: '#2125290a',
-        width: this.trackWidth + 'px',
+        background: "#2125290a",
+        width: this.trackWidth + "px",
         //height: '100%',
-        'max-height': '80px',
-        'overflow-x': 'hidden',
-        'overflow-y': 'auto'
+        "max-height": "80px",
+        "overflow-x": "hidden",
+        "overflow-y": "auto"
       };
     },
     ntToPx() {
       return d3.scaleLinear()
         .domain([this.firstNtToDisplay, this.lastNtToDisplay])
-        .range([0, this.trackWidth])
+        .range([0, this.trackWidth]);
     }
   },
   methods: {
@@ -163,7 +163,7 @@ export default {
         return {
           x: this.ntToPx(this.middlePosAnnot(d)) - this.squareSize * 0.5,
           data: d
-        }
+        };
       }).sort((a, b) => a.x - b.x);
 
       let head = null, tail = null;
@@ -177,7 +177,7 @@ export default {
 
           a = a.next;
         }
-      }
+      };
 
       for (let b of squares) {
         while (head && head.x < b.x - radius)
@@ -212,17 +212,17 @@ export default {
 
       return squares;
     },
-    middlePosAnnot: function (annotation) {
+    middlePosAnnot: function(annotation) {
       return (annotation.geneStart + annotation.geneStop) / 2;
     },
-    writeTranslate: function (x = 0, y = 0) {
-      return `translate(${x},${y})`
+    writeTranslate: function(x = 0, y = 0) {
+      return `translate(${x},${y})`;
     },
-    showAnnot: function (geneAnnot, svgIdx, xPos, yPos) {
+    showAnnot: function(geneAnnot, svgIdx, xPos, yPos) {
       this.updateCurrentAnnot(geneAnnot);
       this.displayAnnot(svgIdx, xPos, yPos);
     },
-    updateCurrentAnnot: function (geneAnnot) {
+    updateCurrentAnnot: function(geneAnnot) {
       //A deep copy is needed since there are inner Object / Array elements to copy
       //Following answer might not work with special cases (see https://medium.com/javascript-in-plain-english/how-to-deep-copy-objects-and-arrays-in-javascript-7c911359b089)
       //"If you do not use Dates, functions, undefined, Infinity, [NaN],
@@ -231,7 +231,7 @@ export default {
       //one liner to deep clone an object is: JSON.parse(JSON.stringify(object))”
       this.annotCurrentContent = JSON.parse(JSON.stringify(geneAnnot));
     },
-    displayAnnot: function (svgIdx, xPos, yPos) {
+    displayAnnot: function(svgIdx, xPos, yPos) {
       let coordConvMatrix = this.$refs[`annotRect_${svgIdx}`][0]
         .getScreenCTM()
         .translate(+xPos, +yPos);
@@ -244,14 +244,14 @@ export default {
 
       this.tooltipStyle.left = `${leftPos}px`;
       this.tooltipStyle.top = `${idealTopPos}px`;
-      this.tooltipStyle.visibility = 'visible';
-      this.tooltipStyle.transition = 'visibility 0.15s linear,opacity 0.15s linear';
+      this.tooltipStyle.visibility = "visible";
+      this.tooltipStyle.transition = "visibility 0.15s linear,opacity 0.15s linear";
       this.tooltipStyle.opacity = 1;
     },
     hideAnnot() {
       this.tooltipStyle.opacity = 0;
-      this.tooltipStyle.visibility = 'hidden';
+      this.tooltipStyle.visibility = "hidden";
     }
   }
-}
+};
 </script>

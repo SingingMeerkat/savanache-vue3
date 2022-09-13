@@ -1,7 +1,8 @@
 <template>
   <div>
-    <b-input-group size="sm" prepend="–" append="+" class="mb-2 noBorder">
-      <b-form-input class="noBorder" type="range" :id="id" :min="smallestNtWidthInPx" :max="largestNtWidthInPx" :step="stepBetweenNtWidthInPx" v-model="ntWidthInPixel"></b-form-input>
+    <b-input-group append="+" class="mb-2 noBorder" prepend="–" size="sm">
+      <b-form-input :id="id" v-model="ntWidthInPixel" :max="largestNtWidthInPx" :min="smallestNtWidthInPx" :step="stepBetweenNtWidthInPx"
+                    class="noBorder" type="range"></b-form-input>
     </b-input-group>
   </div>
 </template>
@@ -9,21 +10,21 @@
 <script>
 
 export default {
-  name: 'MatrixOptimizedZoom',
+  name: "MatrixOptimizedZoom",
   props: {
     id: {
       type: String,
-      default: 'zoomLegend'
+      default: "zoomLegend"
     },
     //nt width for panning
     smallestNtWidthInPx: {
       type: Number,
-      required: true,
+      required: true
     },
     //nt width for details
     largestNtWidthInPx: {
       type: Number,
-      required: true,
+      required: true
     },
     updateGlobalZoom: {
       type: Function,
@@ -33,8 +34,8 @@ export default {
 
   data() {
     return {
-      ntWidthInPixel: this.largestNtWidthInPx,
-    }
+      ntWidthInPixel: this.largestNtWidthInPx
+    };
   },
   computed: {
     defaultNtWidthInPx() {
@@ -64,12 +65,11 @@ export default {
       handler: function() {
         this.updateGlobalZoom(this.numericalNtWidthToStore);
       }
-    },
+    }
 
   },
-  methods: {
-  },
-}
+  methods: {}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -82,7 +82,7 @@ export default {
 
 <style>
 
-.noBorder  {
+.noBorder {
   border: none !important;
 }
 

@@ -1,22 +1,24 @@
 <template>
   <div class="col-12 mb-1 grid">
     <div>
-      <h6 class="mt-3 floatL"><slot name="title"></slot></h6>
-      <b-button class="buttonC"
-                v-show="conditionShowPlus"
-                :size="'md'"
-                :class="visible ? null : 'collapsed'"
+      <h6 class="mt-3 floatL">
+        <slot name="title"></slot>
+      </h6>
+      <b-button v-show="conditionShowPlus"
                 :aria-expanded="visible ? 'true' : 'false'"
-                variant="light"
+                :class="visible ? null : 'collapsed'"
+                :size="'md'"
+                class="buttonC"
                 v-bind:aria-controls="idCollapse"
+                variant="light"
                 @click="switchVisible"
       >
-        {{ visible ? "–" : '+' }}
+        {{ visible ? "–" : "+" }}
       </b-button>
     </div>
     <slot name="outside"></slot>
     <b-collapse v-bind:id="idCollapse" v-model="visible">
-      <slot name="inside" :visible="visible"></slot>
+      <slot :visible="visible" name="inside"></slot>
     </b-collapse>
   </div>
 </template>
@@ -28,28 +30,28 @@ export default {
   props: {
     buttonText: {
       type: String,
-      default: "+",
+      default: "+"
     },
     idCollapse: {
       type: String,
-      required: true,
+      required: true
     },
     conditionShowPlus: {
-      default: true,
+      default: true
     }
   },
   data() {
     return {
-      visible: false,
-    }
+      visible: false
+    };
   },
   methods: {
     switchVisible() {
       this.visible = !this.visible;
       this.$emit("visibleStatus", this.visible);
-    },
-  },
-}
+    }
+  }
+};
 
 </script>
 

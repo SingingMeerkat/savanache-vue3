@@ -21,20 +21,20 @@
                      @mouseover="myRowHover($event)">
         <!-- Content -->
         <template #cell(selected)="data">
-<!--          <div v-if="data">-->
-<!--            data: {{data}}<br>-->
-<!--            <div v-if="data.cells">-->
-<!--              data.cells: {{data.cells}}<br>-->
-<!--              <div v-if="data.cells[3]">-->
-<!--                data.cells[3]: {{data.cells[3]}}<br>-->
-<!--                <div v-if="data.cells[3].value">-->
-<!--                  data.cells[3].value: {{data.cells[3].value}}<br>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-                    <va-checkbox v-model="selectedItems" :array-value="data.rowData.panID"
-                                 @click="selectAction(data.rowData.panID)" />
+          <!--          <div v-if="data">-->
+          <!--            data: {{data}}<br>-->
+          <!--            <div v-if="data.cells">-->
+          <!--              data.cells: {{data.cells}}<br>-->
+          <!--              <div v-if="data.cells[3]">-->
+          <!--                data.cells[3]: {{data.cells[3]}}<br>-->
+          <!--                <div v-if="data.cells[3].value">-->
+          <!--                  data.cells[3].value: {{data.cells[3].value}}<br>-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--            </div>-->
+          <!--          </div>-->
+          <va-checkbox v-model="selectedItems" :array-value="data.rowData.panID"
+                       @click="selectAction(data.rowData.panID)" />
         </template>
         <template #cell(icon)="data">
           <img :src="data.value" style="height: 40px" />
@@ -212,7 +212,7 @@ export default {
       } else {
         selectedItems.value = [];
       }
-    }, {immediate: true});
+    }, { immediate: true });
 
     // on Checkbox event
     const selectAction = panID => {
@@ -321,7 +321,7 @@ export default {
     const submit = () => {
       submited.value = true;
       console.log(pangenomesSelectedStored.value);
-      vm.proxy.$router.push('/structural_variations');
+      vm.proxy.$router.push("/structural_variations");
     };
 
     return {

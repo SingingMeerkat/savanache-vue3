@@ -186,7 +186,7 @@ export default defineComponent({
     const pivotRowIndex = ref(1);
 
     const selectedAssemblyKeyNames = computed(() => {
-      return assembliesSelectedStored.value.reduce((output, input) => ({...output, [input.assembly_name]: true}), {});
+      return assembliesSelectedStored.value.reduce((output, input) => ({ ...output, [input.assembly_name]: true }), {});
     });
 
     const pivot = computed(() => ({ name: selectedPivotName.value, path: paths.value[selectedPivotName.value] }));

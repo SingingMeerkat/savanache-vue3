@@ -2,12 +2,13 @@
   <div class="row">
     <div class="col-12">
       <h6 class="mt-3">
-        <label :for="`dropDownButton_${idBonus}`" class="m-0">{{msg}}</label>
+        <label :for="`dropDownButton_${idBonus}`" class="m-0">{{ msg }}</label>
       </h6>
     </div>
 
     <div class="mb-1 col-12">
-      <select :id="`dropDownButton_${idBonus}`" :disabled="isNewickTreeDisplayed" :ref="`dropDownButton`" @change="sort" class="form-control form-control-sm">
+      <select :id="`dropDownButton_${idBonus}`" :ref="`dropDownButton`" :disabled="isNewickTreeDisplayed" class="form-control form-control-sm"
+              @change="sort">
         <option v-for="choice in sortChoice" :key="choice" :value="choice">{{ choice }}</option>
       </select>
     </div>
@@ -25,36 +26,36 @@
 
 <script>
 import * as d3 from "d3";
-import {mapActions, mapState} from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "SortTracks",
   props: {
     msg: {
       type: String,
-      default: 'Sort the tracks',
+      default: "Sort the tracks"
     },
     sortChoice: {
       type: Array,
-      required: true,
+      required: true
     },
     updateCurrentSortMode: {
       type: Function,
-      required: true,
+      required: true
     },
     idBonus: {
       type: String,
-      default: ''
-    },
+      default: ""
+    }
   },
   computed: {
-    ...mapState('panache', {
-      selectedSortMode: 'selectedSortMode',
-      genomeList: 'genomeListInDisplay',
-      genomeListSave: 'genomeListInDisplaySave',
-      genomeListNewickTreeUpload: 'newickTreeData',
-      isNewickTreeDisplayed: 'isNewickTreeDisplayed',
-    }),
+    ...mapState("panache", {
+      selectedSortMode: "selectedSortMode",
+      genomeList: "genomeListInDisplay",
+      genomeListSave: "genomeListInDisplaySave",
+      genomeListNewickTreeUpload: "newickTreeData",
+      isNewickTreeDisplayed: "isNewickTreeDisplayed"
+    })
   },
   methods: {
     /**
@@ -67,36 +68,36 @@ export default {
      *  The others sort choices only modify the selected value in store to be used by other components.
      */
     sort() {
-      let value = d3.select(this.$refs['dropDownButton']).node().value; // Get the value chosen by the user
+      let value = d3.select(this.$refs["dropDownButton"]).node().value; // Get the value chosen by the user
       this.updateCurrentSortMode(value); // Update the sorting type
-      if (this.selectedSortMode === 'None') { // If the choice of sort is "None"
+      if (this.selectedSortMode === "None") { // If the choice of sort is "None"
         this.updateGenomesInDisplay(this.genomeListSave); // Use the save to reload the initial order
-      } else if (this.selectedSortMode === 'Alphanumeric' ||
-                 this.selectedSortMode === 'Reverse alphanumeric') { // If the choice of sort is "Alphanumerically" or "Reverse alphanumerically"
+      } else if (this.selectedSortMode === "Alphanumeric" ||
+        this.selectedSortMode === "Reverse alphanumeric") { // If the choice of sort is "Alphanumerically" or "Reverse alphanumerically"
         let genomeListSorted = [];
         genomeListSorted = this.genomeList; // We make a copy of this list to avoid any issue
-        genomeListSorted.sort(function (a,b) {
-          return a.localeCompare(b, 'en', { numeric: true }); // We compare the letters and numbers (uppercase are treated as lowercase )
+        genomeListSorted.sort(function(a, b) {
+          return a.localeCompare(b, "en", { numeric: true }); // We compare the letters and numbers (uppercase are treated as lowercase )
         });
-        if (this.selectedSortMode === 'Reverse alphanumeric') { // If the choice of sort is "Reverse alphanumerically"
+        if (this.selectedSortMode === "Reverse alphanumeric") { // If the choice of sort is "Reverse alphanumerically"
           this.updateGenomesInDisplay(genomeListSorted.reverse()); // Reverse the array previously made and update genomeListInDisplay with it
         } else {
           this.updateGenomesInDisplay(genomeListSorted); // Update genomeListInDisplay with array sort by alphanumerically
         }
-      } else if (this.selectedSortMode === 'Phylogenetic tree') {
+      } else if (this.selectedSortMode === "Phylogenetic tree") {
         this.updateGenomesInDisplay(this.genomeListNewickTreeUpload); // Update genomeListInDisplay with the array extracted from the Newick file uploaded.
       }
     },
-    ...mapActions('panache', [
-      'updateGenomesInDisplay',
-    ]),
+    ...mapActions("panache", [
+      "updateGenomesInDisplay"
+    ])
   },
   watch: {
     chosen: function() {
       console.log(this.chosen);
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

@@ -10,7 +10,7 @@ export const getData = (chromToDisplay) => {
   //Run promise only when needed : ie not promise yet, or not for the chossen chrom
   if (!promise || !chromsRanAlready.includes(chromToDisplay)) {
     chromsRanAlready.push(chromToDisplay);
-    console.log("SV Annotation already built for the chosen chromosome.")
+    console.log("SV Annotation already built for the chosen chromosome.");
     promise = new Promise((resolve, reject) => {
       getDataInternal(chromToDisplay).then(resolve).catch(reject);
     });
@@ -27,12 +27,12 @@ export const getData = (chromToDisplay) => {
 // should be compared. A specific comparison can be accessed with pivots[pivotName][comparedPathName]
 // Cf parsePivotSteps() for more about the pivot object.
 const buildThenExpandAnnotations = ({
-                                            pangenomeImport,
-                                            // pivotsImport,
-                                            pivotPathName,
-                                            pivotPathData,
-                                            chromName
-                                          }) => {
+                                      pangenomeImport,
+                                      // pivotsImport,
+                                      pivotPathName,
+                                      pivotPathData,
+                                      chromName
+                                    }) => {
 
   const pivots = {};
 
@@ -80,7 +80,7 @@ const buildThenExpandAnnotations = ({
           if (trackAbsentPivotSteps.length === 0) {
             lastPresentStepBeforeMissing = annotPivotStep;
 
-          // If there is 1+ absent pivot step...
+            // If there is 1+ absent pivot step...
           } else {
             firstPresentStepAfterMissing = annotPivotStep;
 
@@ -92,7 +92,7 @@ const buildThenExpandAnnotations = ({
               firstPresentStepAfterMissing = null;
               trackAbsentPivotSteps = [];
 
-            // With a gap opening
+              // With a gap opening
             } else {
 
               // Detect an inversion chain before or after a deletion or swap, that can confuse where the variation starts or ends
@@ -225,14 +225,14 @@ const buildThenExpandAnnotations = ({
 // annotated Steps, and 'blocks' containing all annotated steps as linked to keys defined
 // by the panBlock IDs
 const parsePivotSteps = ({
-                                            chromName,
-                                            pangenomeImport,
-                                            // pivotsImport,
-                                            pivotPathName,
-                                            pivotPathData,
-                                            comparedPathName,
-                                            comparedPathData
-                                          }) => {
+                           chromName,
+                           pangenomeImport,
+                           // pivotsImport,
+                           pivotPathName,
+                           pivotPathData,
+                           comparedPathName,
+                           comparedPathData
+                         }) => {
 
 
   // Applied only to compared paths
@@ -305,19 +305,19 @@ const parsePivotSteps = ({
 // the latest Absent or latest Present annotPivotStep, and the first and last Swapped
 // annotPivotStep, which could be objects or null
 const annotatePivotStep = ({
-                                       // pivot,
-                                       chromName,
-                                       comparedPathName,
-                                       //comparedPathData,
-                                       pangenomeImport,
-                                       pivotStep,
-                                       pivotStepIndex,
-                                       previousPivotStep,
-                                       lastPresentPivotStep,
-                                       lastAbsentPivotStep,
-                                       lastSwappedPivotStep,
-                                       firstSwappedPivotStep
-                                     }) => {
+                             // pivot,
+                             chromName,
+                             comparedPathName,
+                             //comparedPathData,
+                             pangenomeImport,
+                             pivotStep,
+                             pivotStepIndex,
+                             previousPivotStep,
+                             lastPresentPivotStep,
+                             lastAbsentPivotStep,
+                             lastSwappedPivotStep,
+                             firstSwappedPivotStep
+                           }) => {
 
   // Node object, traversed by the current pivot step
   const targetNodeOfPivotStep = pangenomeImport.panSkeleton[pivotStep.panBlock];
@@ -481,14 +481,14 @@ const annotatePivotStep = ({
 // and the related nodes ({index and ID in pivot, index and ID in compared, (highestComparedStepIndex)})
 // Returns nothing, all modifications are directly applied to annotPivotStep.
 const annotatePresenceInsertionAndInversion = ({
-                                                  pangenomeImport,
-                                                  chromName,
-                                                  annotPivotStep,
-                                                  comparedPathName,
-                                                  previousPivotStep,
-                                                  pivotStep,
-                                                  targetNodeOfPivotStep
-                                                }) => {
+                                                 pangenomeImport,
+                                                 chromName,
+                                                 annotPivotStep,
+                                                 comparedPathName,
+                                                 previousPivotStep,
+                                                 pivotStep,
+                                                 targetNodeOfPivotStep
+                                               }) => {
 
   // Index of previous pivot Step/Node in the compared path, or highest for Inv. Chains
   let highestComparedStepIndex = undefined;
@@ -539,18 +539,18 @@ const annotatePresenceInsertionAndInversion = ({
       annotPivotStep.insertionNodes = [];
 
       for (let insertionPathStepsIndex = highestComparedStepIndex + 1;
-        insertionPathStepsIndex < annotPivotStep.comparedPathStepIndex;
-        insertionPathStepsIndex++) {
-          const insertionPathStep = pangenomeImport.paths[comparedPathName][chromName][insertionPathStepsIndex];
+           insertionPathStepsIndex < annotPivotStep.comparedPathStepIndex;
+           insertionPathStepsIndex++) {
+        const insertionPathStep = pangenomeImport.paths[comparedPathName][chromName][insertionPathStepsIndex];
 
-          const insertionNode = {
-            // REMARK: again, info on pivotStep is redundant. TODO: Remove it from this ppty.
-            pivotStepIndex: annotPivotStep.pivotStepIndex,
-            pivotStepPanBlock: pivotStep.panBlock,
-            comparedPathStepIndex: insertionPathStepsIndex,
-            comparedPathStepPanBlock: insertionPathStep.panBlock
-          };
-          annotPivotStep.insertionNodes.push(insertionNode);
+        const insertionNode = {
+          // REMARK: again, info on pivotStep is redundant. TODO: Remove it from this ppty.
+          pivotStepIndex: annotPivotStep.pivotStepIndex,
+          pivotStepPanBlock: pivotStep.panBlock,
+          comparedPathStepIndex: insertionPathStepsIndex,
+          comparedPathStepPanBlock: insertionPathStep.panBlock
+        };
+        annotPivotStep.insertionNodes.push(insertionNode);
       }
     }
 
@@ -637,14 +637,14 @@ const annotatePresenceInsertionAndInversion = ({
 // ({index and ID in pivot, index and ID in compared})
 // Returns nothing, all modifications are directly applied to annotPivotStep.
 const annotateCoocs = ({
-                        pangenomeImport,
-                        annotPivotStep,
-                        comparedPathName,
-                        pivotStep,
-                        targetNodeOfPivotStep
-                      }) => {
+                         pangenomeImport,
+                         annotPivotStep,
+                         comparedPathName,
+                         pivotStep,
+                         targetNodeOfPivotStep
+                       }) => {
 
-  targetNodeOfPivotStep.coocs.forEach( panBlockID => {
+  targetNodeOfPivotStep.coocs.forEach(panBlockID => {
 
     // Check for COOCCURRENCES -------------------------------------------------
     let targetNodeOfCooc = pangenomeImport.panSkeleton[panBlockID];
@@ -866,9 +866,9 @@ const getDataInternal = async (chromToDisplay) => {
   //performance.mark(startMark);
 
   let pangenomeImport = await import(
-    //"../data/sample/handcrafted3AssembliesPangenome.json"
-    "../data/real-data/pangenome__coordinate_SaVanache.json"
-  );
+    "../data/sample/handcrafted3AssembliesPangenome_withSequenceOrigin.json"
+    // "../data/real-data/pangenome__coordinate_SaVanache.json"
+    );
 
   if (!chromNamesPerPath) {
     chromNamesPerPath = {};
@@ -879,7 +879,7 @@ const getDataInternal = async (chromToDisplay) => {
   }
   let firstAssembly = Object.keys(chromNamesPerPath)[0];
   let firstChromOfFirstAssembly = chromNamesPerPath[firstAssembly][0];
-  let chromName = ( chromToDisplay? chromToDisplay : firstChromOfFirstAssembly );
+  let chromName = (chromToDisplay ? chromToDisplay : firstChromOfFirstAssembly);
 
   //const chromName = 'Gm01' // TODO: adapt it depending on user's choice within the app
 

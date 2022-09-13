@@ -20,8 +20,7 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import { computed, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 
 // Components
@@ -67,14 +66,14 @@ export default defineComponent({
           const lines = fileinput.value.split("\n");
           // Defaults, can be re-arranged if the headers are in the wrong order in the incoming file
           const headers = {
-            id:0,
-            x:1,
-            y:2,
-            assembly_name:3,
-            phenotype:4,
-            pangenome:5,
-            Heterotic_group:6,
-            majore:7
+            id: 0,
+            x: 1,
+            y: 2,
+            assembly_name: 3,
+            phenotype: 4,
+            pangenome: 5,
+            Heterotic_group: 6,
+            majore: 7
           };
           const assemblies = lines.map((line, lineIndex) => {
             const cols = line.split("\t");

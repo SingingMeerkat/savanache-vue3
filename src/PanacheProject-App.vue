@@ -3,12 +3,12 @@
     <div class="container-fluid h-100">
       <div class="row h-100">
         <div class="bg-white h-100 side-panel">
-          <local-filter v-if="viewIsPanache"/>
+          <local-filter v-if="viewIsPanache" />
         </div>
         <div class="content-column">
           <!-- Router view to display -->
           <!-- The router will determine which kind of filtershould be displayed -->
-          <router-view class='bg-white main-view' id='TheRouterView'/>
+          <router-view id="TheRouterView" class="bg-white main-view" />
         </div>
       </div>
     </div>
@@ -17,33 +17,33 @@
 
 <script>
 
-import LocalFilter from '@/components/LocalFilter.vue';
-import {mapState, mapGetters} from 'vuex';
+import LocalFilter from "@/components/LocalFilter.vue";
+import { mapGetters, mapState } from "vuex";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    LocalFilter,
+    LocalFilter
   },
   computed: {
     //Style object to apply to wrapper to take variable values
     wrapperStyle() {
       return {
-        display: 'grid',
-        'grid-template-columns': `${this.optionPanelWidth}px 1fr`,
-      }
+        display: "grid",
+        "grid-template-columns": `${this.optionPanelWidth}px 1fr`
+      };
     },
     viewIsPanache() {
-      return (this.$route.name === 'Panache')
+      return (this.$route.name === "Panache");
     },
-    ...mapState('panache', {
-      optionPanelWidth: 'optionPanelWidth',
+    ...mapState("panache", {
+      optionPanelWidth: "optionPanelWidth"
     }),
-    ...mapGetters('panache', {
-      displayWindowWidth: 'displayWindowWidth',
+    ...mapGetters("panache", {
+      displayWindowWidth: "displayWindowWidth"
     })
-  },
-}
+  }
+};
 
 </script>
 <style lang="scss">

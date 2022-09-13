@@ -1,25 +1,25 @@
 <template>
   <div class="geneP">
     <vue-bootstrap-typeahead
-        size="sm"
-        v-model="selectedGene"
-        :data="annotMapNames"
-        :minMatchingChars="3"
-        :maxMatches="50"
-        placeholder="Search a gene name ..."
-        @hit="jumpToPosition(selectedGene)"
+      v-model="selectedGene"
+      :data="annotMapNames"
+      :maxMatches="50"
+      :minMatchingChars="3"
+      placeholder="Search a gene name ..."
+      size="sm"
+      @hit="jumpToPosition(selectedGene)"
     />
   </div>
 </template>
 
 <script>
-import {mapActions, mapState} from "vuex";
-import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
+import { mapActions, mapState } from "vuex";
+import VueBootstrapTypeahead from "vue-bootstrap-typeahead";
 
 export default {
   name: "GenePosition",
   components: {
-    VueBootstrapTypeahead,
+    VueBootstrapTypeahead
   },
   props: {
     lastNt: {
@@ -45,24 +45,24 @@ export default {
     chromList: {
       type: Array,
       required: true
-    },
+    }
   },
   data() {
     return {
       targetedPosNt: Number(),
-      selectedGene: 'GeneName',
+      selectedGene: "GeneName",
       annotMapChrom: Array,
-      search: '',
+      search: "",
       value: [],
-      searchMinChar: 3,
-    }
+      searchMinChar: 3
+    };
   },
   computed: {
-    ...mapState('panache', {
-      annotMap: 'annotMap',
-      annotMapNames: 'annotMapNames',
-      annotMapSelectedChrom: 'annotMapChromInDisplay',
-      selectedChrom: 'selectedChrom',
+    ...mapState("panache", {
+      annotMap: "annotMap",
+      annotMapNames: "annotMapNames",
+      annotMapSelectedChrom: "annotMapChromInDisplay",
+      selectedChrom: "selectedChrom"
     }),
     maxFirstNt() {
       return this.lastNt - this.pxToNt(this.displayWindowWidth);
@@ -101,13 +101,13 @@ export default {
         const options = [...this.annotMapSelectedChrom].filter(opt => this.value.indexOf(opt) === -1); // Get the genes that correspond to the criteria
         return options.filter(opt => opt.toLowerCase().indexOf(criteria) > -1);  // Return the options available
       } else {
-        return '';
+        return "";
       }
-    },
+    }
   },
   methods: {
-    ...mapActions('panache', {
-      updateSelectedChromStore: 'updateSelectedChrom',
+    ...mapActions("panache", {
+      updateSelectedChromStore: "updateSelectedChrom"
     }),
     pxToNt(pxAmount) {
       return pxAmount / this.ntWidthInPixel;
@@ -123,21 +123,21 @@ export default {
           this.updateSelectedChromStore(geneChrom);
         }
       }
-    },
+    }
   },
   watch: {
-    reachableFirstNt: function () {
+    reachableFirstNt: function() {
       this.updateGlobalFirstNt(this.reachableFirstNt);
     },
-    currentFirstNt: function () {
+    currentFirstNt: function() {
       this.targetedPosNt = Math.round(this.currentFirstNt + this.amountOfNtInHalfScreen);
     },
-    ntWidthInPixel: function () {
+    ntWidthInPixel: function() {
       let floatTarget = (2 * this.currentFirstNt + this.pxToNt(this.displayWindowWidth)) / 2;
       this.targetedPosNt = Math.floor(floatTarget);
-    },
-  },
-}
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>

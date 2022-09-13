@@ -1,24 +1,24 @@
 <template>
 
   <FileLoader
-      :labelToDisplay="'Optional gff'"
-      :allowedExtensions="['gff']"
-      :idBonus="'GffFile'"
-      @file-loaded="parseGffToAnnotationObjects"
+    :allowedExtensions="['gff']"
+    :idBonus="'GffFile'"
+    :labelToDisplay="'Optional gff'"
+    @file-loaded="parseGffToAnnotationObjects"
   />
 
 </template>
 
 <script>
-import FileLoader from '@/components/FileLoader.vue';
+import FileLoader from "@/components/FileLoader.vue";
 
 import * as d3 from "d3";
-import {mapActions} from "vuex";
+import { mapActions } from "vuex";
 
 export default {
-  name: 'GffFileParser',
+  name: "GffFileParser",
   components: {
-    FileLoader,
+    FileLoader
   },
   props: {
     chromList: {
@@ -28,19 +28,19 @@ export default {
     updateAnnotationData: {
       type: Function,
       required: true
-    },
+    }
   },
   data() {
     return {
-      titleOfID: 'ID',
-      titleOfGeneName: 'Name',
-      titleOfAnnotation: 'Note',
-    }
+      titleOfID: "ID",
+      titleOfGeneName: "Name",
+      titleOfAnnotation: "Note"
+    };
   },
   methods: {
-    ...mapActions('panache', [
-      'updateIsGffUploadedTRUE',
-      'pushSortModeInSortChoice',
+    ...mapActions("panache", [
+      "updateIsGffUploadedTRUE",
+      "pushSortModeInSortChoice"
     ]),
     parseGffToAnnotationObjects: async function(gffFile) {
 
@@ -87,7 +87,7 @@ export default {
           this.clearMapOfOverlaps(annotData, mapOfOverlaps);
 
           //Resets variables
-          currentChrom = lineObj.seqname
+          currentChrom = lineObj.seqname;
           currentAnnotation = undefined;
         }
 
@@ -97,7 +97,7 @@ export default {
 
         switch (lineObj.feature) {
 
-          case 'gene':
+          case "gene":
 
             //Stores info of previous annot once everything is recorded
             if (currentAnnotation !== undefined) {
@@ -115,7 +115,7 @@ export default {
             }
 
             //Instanciates new annotation
-            addInfo = this.extractNameAndNote(lineObj)
+            addInfo = this.extractNameAndNote(lineObj);
 
             currentAnnotation = {
               chrom: lineObj.seqname,
@@ -123,19 +123,19 @@ export default {
               geneStart: lineObj.start,
               geneStop: lineObj.end,
               geneStrand: lineObj.strand,
-              annotation: addInfo.annotation,
+              annotation: addInfo.annotation
             };
 
             currentGeneExons = [];
             break;
 
-          case 'exon':
+          case "exon":
             //Registers exon for current gene Annotation
             exon = {
               start: lineObj.start,
               stop: lineObj.end
             };
-            currentGeneExons.push(exon)
+            currentGeneExons.push(exon);
             break;
 
           default:
@@ -160,17 +160,17 @@ export default {
       //console.log({annotData});
 
       //Group data according to chromosomes
-      let groupedAnnot = this.groupDataPerKey_inHouse(annotData, 'chrom');
+      let groupedAnnot = this.groupDataPerKey_inHouse(annotData, "chrom");
 
       //Stores annotation Array within the App
       //console.log({groupedAnnot});
       this.updateAnnotationData(groupedAnnot);
       this.updateIsGffUploadedTRUE();
-      this.pushSortModeInSortChoice('Gene presence status'); // Add the choice to sort by gene presence status with a search bar
+      this.pushSortModeInSortChoice("Gene presence status"); // Add the choice to sort by gene presence status with a search bar
     },
     //Turns gffFile to array of objects
     readTsv: async function(gffFile) {
-      console.log('Converting Gff file to usable data');
+      console.log("Converting Gff file to usable data");
 
       let dataURL = window.URL.createObjectURL(gffFile);
 
@@ -188,18 +188,20 @@ export default {
       //Removes first line (not useful if chrom filtering is applied)
       //data.shift();
 
-      console.log('Gff data available');
+      console.log("Gff data available");
 
       return data;
     },
     //Converts start pos of 1-based file into a 0-based start pos
-    startPos_oneBasedToZeroBased: function(oneBasedStartPos) {return oneBasedStartPos - 1},
+    startPos_oneBasedToZeroBased: function(oneBasedStartPos) {
+      return oneBasedStartPos - 1;
+    },
     //Only keeps gff lines that matches loaded chromosomes, therefore being displayable
     returnDisplayableGffObject: function(gffArray) {
       let chromName = gffArray[0];
 
       if (this.chromList.includes(chromName)) {
-        return this.turnLineIntoObject(gffArray)
+        return this.turnLineIntoObject(gffArray);
       } else {
         //Nothing
       }
@@ -215,22 +217,22 @@ export default {
         score: gffArray[5],
         strand: +`${gffArray[6]}1`,
         frame: gffArray[7],
-        attribute: gffArray[8],
-      }
+        attribute: gffArray[8]
+      };
     },
     //Returns a {geneName, annotation} object out of a gff Object
     extractNameAndNote: function(lineObj) {
-      return this.findNameAndNote(lineObj.attribute)
+      return this.findNameAndNote(lineObj.attribute);
     },
     //Returns a {geneName, annotation} object out of an attribute column
     findNameAndNote: function(attribute) {
       let geneName;
-      let annotation = '';
+      let annotation = "";
       let addInfoList;
 
-      addInfoList = attribute.split(';');
+      addInfoList = attribute.split(";");
       addInfoList.forEach((addInfo) => {
-        let keyValue = addInfo.split('=');
+        let keyValue = addInfo.split("=");
 
         switch (keyValue[0]) {
 
@@ -239,17 +241,17 @@ export default {
             break;
 
           case this.titleOfAnnotation:
-            annotation = keyValue[1]
+            annotation = keyValue[1];
             break;
 
           default:
             break;
         }
-      })
-      return {geneName, annotation};
+      });
+      return { geneName, annotation };
     },
     //Checks whether annots from a Map overlap a given annot and replace its info
-    checkAnnotsForOverlaps: function({mapOfOverlaps, annotToCompare, annotIdx, annotArray}) {
+    checkAnnotsForOverlaps: function({ mapOfOverlaps, annotToCompare, annotIdx, annotArray }) {
       let currentStart = annotToCompare.geneStart;
       let currentStop = annotToCompare.geneStop;
       let currentName = annotToCompare.geneName;
@@ -262,10 +264,10 @@ export default {
         keysToRemove,
         currentLeftOverlaps,
         currentRightOverlaps
-      } = this.linkOverlaps({mapOfOverlaps, annotToCompare}));
+      } = this.linkOverlaps({ mapOfOverlaps, annotToCompare }));
 
       //Adds overlaps info within annotArray and cleans mapOfOverlaps
-      this.writeAndStoreOverlaps({keysToRemove, mapOfOverlaps, annotArray});
+      this.writeAndStoreOverlaps({ keysToRemove, mapOfOverlaps, annotArray });
 
       //Add current annotation to list of potentially overlapped segments
       mapOfOverlaps.set(currentName, {
@@ -273,15 +275,15 @@ export default {
         start: currentStart,
         stop: currentStop,
         listOfOverLeft: currentLeftOverlaps, //we assume all previous overlaps are already registered
-        listOfOverRight: currentRightOverlaps,
+        listOfOverRight: currentRightOverlaps
       });
     },
     //Finds what the overlaps for the current annotation are...
-    linkOverlaps: function({mapOfOverlaps, annotToCompare}) {
-      return this.linkOverlaps_centerPosBased({mapOfOverlaps, annotToCompare});
+    linkOverlaps: function({ mapOfOverlaps, annotToCompare }) {
+      return this.linkOverlaps_centerPosBased({ mapOfOverlaps, annotToCompare });
     },
     //...in case marks are placed based on center positions
-    linkOverlaps_centerPosBased: function({mapOfOverlaps, annotToCompare}) {
+    linkOverlaps_centerPosBased: function({ mapOfOverlaps, annotToCompare }) {
 
       let currentName = annotToCompare.geneName;
 
@@ -309,13 +311,15 @@ export default {
           }
         }
         //When no overlap is detected...
-        else { keysToRemove.push(geneName) }
+        else {
+          keysToRemove.push(geneName);
+        }
       });
 
       return { keysToRemove, currentLeftOverlaps, currentRightOverlaps };
     },
     //...in case we want the real order of overlaps, not the displayed one
-    linkOverlaps_blindMethod: function({mapOfOverlaps, annotToCompare}) {
+    linkOverlaps_blindMethod: function({ mapOfOverlaps, annotToCompare }) {
       let currentStart = annotToCompare.geneStart;
       let currentName = annotToCompare.geneName;
       let currentLeftOverlaps = [];
@@ -329,52 +333,55 @@ export default {
           currentLeftOverlaps.push(geneName);
         }
         //When no overlap is detected...
-        else { keysToRemove.push(geneName) }
+        else {
+          keysToRemove.push(geneName);
+        }
       });
 
       return { keysToRemove, currentLeftOverlaps, currentRightOverlaps };
     },
     //Parses list of keys from Map to add their info into annotArray, then cleans Map
-    writeAndStoreOverlaps: function({keysToRemove, mapOfOverlaps, annotArray}) {
+    writeAndStoreOverlaps: function({ keysToRemove, mapOfOverlaps, annotArray }) {
 
-      keysToRemove.forEach( function(geneName) {
+      keysToRemove.forEach(function(geneName) {
 
         //Affectating idx, listOf... etc by destructuring, () are required
         //For more, see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Object_destructuring
         let idx, listOfOverLeft, listOfOverRight;
-        ({idx, listOfOverLeft, listOfOverRight} = mapOfOverlaps.get(geneName));
+        ({ idx, listOfOverLeft, listOfOverRight } = mapOfOverlaps.get(geneName));
 
         //Updates overlaps data within annotArray
-        annotArray[idx]['leftOverlaps'] = listOfOverLeft;
-        annotArray[idx]['rightOverlaps'] = listOfOverRight;
+        annotArray[idx]["leftOverlaps"] = listOfOverLeft;
+        annotArray[idx]["rightOverlaps"] = listOfOverRight;
 
         //Deletes gene from map
         mapOfOverlaps.delete(geneName);
       });
     },
     //Stores annotation Object into annotations Array
-    storeAnnotation: function({mapOfOverlaps, annotObj, idx, annotArray, exons}) {
+    storeAnnotation: function({ mapOfOverlaps, annotObj, idx, annotArray, exons }) {
       //Looks through stored annot to find overlaps with previous annot and write them
       this.checkAnnotsForOverlaps({
-                mapOfOverlaps,
-                annotToCompare: annotObj,
-                annotIdx: idx,
-                annotArray: annotArray});
+        mapOfOverlaps,
+        annotToCompare: annotObj,
+        annotIdx: idx,
+        annotArray: annotArray
+      });
 
       //Stores previous annotation
-      annotObj['exons'] = exons;
+      annotObj["exons"] = exons;
       annotArray.push(annotObj);
     },
     //Parse what remains in mapOfOverlaps and stores it into annotArray
     clearMapOfOverlaps: function(annotArray, mapOfOverlaps) {
 
-      let remainingOverlaps = [...mapOfOverlaps.keys()]
+      let remainingOverlaps = [...mapOfOverlaps.keys()];
 
       this.writeAndStoreOverlaps({
-          keysToRemove: remainingOverlaps,
-          mapOfOverlaps: mapOfOverlaps,
-          annotArray: annotArray
-      })
+        keysToRemove: remainingOverlaps,
+        mapOfOverlaps: mapOfOverlaps,
+        annotArray: annotArray
+      });
 
     },
     //Groups data under a given key
@@ -384,7 +391,7 @@ export default {
       // "key2":[{...}, {...}, ...]},
       //  ...}
 
-      let setOfKey = [...new Set(iterable.map( d => d[keyToNest]))];
+      let setOfKey = [...new Set(iterable.map(d => d[keyToNest]))];
 
       let dataGroupedPerKey = {};
       // .map() must not be used here as we do not want an array as output
@@ -422,11 +429,11 @@ export default {
       //  "key2" => [{...}, {...}, ...]
       //  ...
       //}
-      return d3.group(iterable, d => d[keyToNest])
-    },
+      return d3.group(iterable, d => d[keyToNest]);
+    }
 
-  },
-}
+  }
+};
 </script>
 
 <style>

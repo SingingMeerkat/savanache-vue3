@@ -2,12 +2,13 @@
   <div class="row">
     <div class="col-12">
       <h6 class="mt-3">
-        <label :for="`dropDownButton_${idBonus}`" class="m-0">{{msg}}</label>
+        <label :for="`dropDownButton_${idBonus}`" class="m-0">{{ msg }}</label>
       </h6>
     </div>
 
     <div class="col-12">
-      <select :id="`dropDownButton_${idBonus}`" :ref="`dropDownButton`" @change="setChosen" class="form-control form-control-sm">
+      <select :id="`dropDownButton_${idBonus}`" :ref="`dropDownButton`" class="form-control form-control-sm"
+              @change="setChosen">
         <option v-for="choice in choices" :key="choice" :value="choice">{{ choice }}</option>
       </select>
     </div>
@@ -16,40 +17,39 @@
 
 <script>
 import * as d3 from "d3";
-import {mapState} from "vuex";
+import { mapState } from "vuex";
 
 export default {
-  name: 'DropDownChoice',
+  name: "DropDownChoice",
   props: {
     msg: {
-      type: String,
+      type: String
     },
     choices: {
       type: Array,
-      default: () => ['']
+      default: () => [""]
     },
     updateCurrentChrom: {
       type: Function,
-      required: true,
+      required: true
     },
     idBonus: {
       type: String,
-      default: ''
-    },
+      default: ""
+    }
   },
   computed: {
-    ...mapState('panache', {
-      selectedChrom: 'selectedChrom',
-      chromList: 'chromNames',
-    }),
+    ...mapState("panache", {
+      selectedChrom: "selectedChrom",
+      chromList: "chromNames"
+    })
   },
   data() {
-    return {
-    }
+    return {};
   },
   methods: {
     setChosen() {
-      let value = d3.select(this.$refs['dropDownButton']).node().value;
+      let value = d3.select(this.$refs["dropDownButton"]).node().value;
       this.updateCurrentChrom(value);
       //this.$store.state.chromSelected = value;
     }
@@ -66,7 +66,7 @@ export default {
       }
     }
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

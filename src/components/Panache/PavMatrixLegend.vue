@@ -2,16 +2,16 @@
   <div>
     <small>One column represents one panBlock</small>
     <div class="pavLegendWrapper">
-      <svg id="svgContainer_pavLegends" class="pavSchema" height=42 width=80>
+      <svg id="svgContainer_pavLegends" class="pavSchema" height="42" width="80">
         <g>
           <text v-for="gName in genomeLabels"
                 :key="gName.text"
-                x='0'
                 :y="gName.yPos"
-                font-family='sans-serif'
-                font-size='10px'
-                dominant-baseline='middle'>
-            {{gName.text}}
+                dominant-baseline="middle"
+                font-family="sans-serif"
+                font-size="10px"
+                x="0">
+            {{ gName.text }}
           </text>
         </g>
         <g transform="translate(10,0)">
@@ -26,7 +26,7 @@
       <div v-for="label in meaningLabels"
            :key="label.text.split(' ')[0]"
            :class="label.class">
-        <small>{{label.text}}</small>
+        <small>{{ label.text }}</small>
       </div>
     </div>
   </div>
@@ -35,7 +35,7 @@
 <script>
 
 export default {
-  name: 'PavMatrixLegend',
+  name: "PavMatrixLegend",
   props: {
     width: {
       type: Number,
@@ -51,68 +51,68 @@ export default {
       genomeLabels: [
         {
           yPos: 7,
-          text: 'A'
+          text: "A"
         },
         {
           yPos: 21,
-          text: 'B'
+          text: "B"
         },
         {
           yPos: 35,
-          text: 'C'
+          text: "C"
         }
       ],
       meaningLabels: [
         {
-          class: 'filledMeaning',
-          text: 'Filled : Presence'
+          class: "filledMeaning",
+          text: "Filled : Presence"
         },
         {
-          class: 'emptyMeaning',
-          text: 'Empty : Absence'
+          class: "emptyMeaning",
+          text: "Empty : Absence"
         },
         {
-          class: 'colorMeaning',
-          text: 'Color => Pan-Block'
+          class: "colorMeaning",
+          text: "Color => Pan-Block"
         }
       ],
       pavPaths: [
         {
-          index:0,
-          directions: 'M 0 0 H 14 V 14 H 0 Z M 0 14 H 14 V 28 H 0 Z M 0 28 H 14 V 42 H 0 Z',
-          colour: 'rgb(131, 245, 87)'
+          index: 0,
+          directions: "M 0 0 H 14 V 14 H 0 Z M 0 14 H 14 V 28 H 0 Z M 0 28 H 14 V 42 H 0 Z",
+          colour: "rgb(131, 245, 87)"
         },
         {
-          index:1,
-          directions: 'M 0 28 H 14 V 42 H 0 Z',
-          colour: 'rgb(80, 105, 217)'
+          index: 1,
+          directions: "M 0 28 H 14 V 42 H 0 Z",
+          colour: "rgb(80, 105, 217)"
         },
         {
-          index:2,
-          directions: 'M 0 14 H 14 V 28 H 0 Z M 0 28 H 14 V 42 H 0 Z',
-          colour: 'rgb(184, 60, 176)'
+          index: 2,
+          directions: "M 0 14 H 14 V 28 H 0 Z M 0 28 H 14 V 42 H 0 Z",
+          colour: "rgb(184, 60, 176)"
         },
         {
-          index:3,
-          directions: 'M 0 0 H 14 V 14 H 0 Z M 0 14 H 14 V 28 H 0 Z',
-          colour: 'rgb(56, 241, 122)'
+          index: 3,
+          directions: "M 0 0 H 14 V 14 H 0 Z M 0 14 H 14 V 28 H 0 Z",
+          colour: "rgb(56, 241, 122)"
         },
         {
-          index:4,
-          directions: 'M 0 28 H 14 V 42 H 0 Z',
-          colour: 'rgb(110, 64, 170)'
+          index: 4,
+          directions: "M 0 28 H 14 V 42 H 0 Z",
+          colour: "rgb(110, 64, 170)"
         }
       ]
-    }
+    };
   },
   mounted() {
   },
   methods: {
-    writeTranslate(x=0,y=0) {
-      return `translate(${x},${y})`
-    },
+    writeTranslate(x = 0, y = 0) {
+      return `translate(${x},${y})`;
+    }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
