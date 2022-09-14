@@ -193,7 +193,9 @@ export default defineComponent({
       const pivotSection = pivotPath.slice(Math.max(selectedPivotStepIndex - preNodes, 0), Math.min(selectedPivotStepIndex + postNodes + 1, pivotPath.length));
 
 
-      pivotSection.forEach(pivotNode => {
+      // pivotSection.forEach(pivotNode => {
+      for (let pivotSectionIndex = 0; pivotSectionIndex < pivotSection.length; pivotSectionIndex++) {
+        const pivotNode = pivotSection[pivotSectionIndex];
         /*
         pivotNode:
         {
@@ -238,6 +240,9 @@ export default defineComponent({
           }]
         }
         */
+        if (!pivotNode || !pivotNode.panBlock) {
+          debugger;
+        }
         const pivotBlock = pivotDefinition.blocks[pivotNode.panBlock];
 
         const currentPivotStep = {
@@ -263,31 +268,97 @@ export default defineComponent({
         // Deleted
         if (pivotBlock.deletedNodes && pivotBlock.deletedNodes.length) {
           makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.deletedNodes, comparisonPath, pivotBlock, type: 'deleted'});
+          pivotBlock.deletedNodes.forEach(node => {
+            // const linkedPivotBlock = pivotDefinition.blocks[node.pivotStepPanBlock];
+            const linkedPivotStepNode = pivotPath[node.pivotStepIndex];
+            if (linkedPivotStepNode && !pivotSection.includes(linkedPivotStepNode)) {
+              pivotSection.push(linkedPivotStepNode);
+            } else {
+              // debugger;
+            }
+          });
         }
 
         // Inversion
         if (pivotBlock.inversionNodes && pivotBlock.inversionNodes.length) {
           makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.inversionNodes, comparisonPath, pivotBlock, type: 'inversion'});
+          pivotBlock.inversionNodes.forEach(node => {
+            // const linkedPivotBlock = pivotDefinition.blocks[node.pivotStepPanBlock];
+            const linkedPivotStepNode = pivotPath[node.pivotStepIndex];
+            if (linkedPivotStepNode && !pivotSection.includes(linkedPivotStepNode)) {
+              pivotSection.push(linkedPivotStepNode);
+            } else {
+              // debugger;
+            }
+          });
         }
 
         // Swap
         if (pivotBlock.swapComparedNodes && pivotBlock.swapComparedNodes.length) {
           makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.swapComparedNodes, comparisonPath, pivotBlock, type: 'swap'});
+          pivotBlock.swapComparedNodes.forEach(node => {
+            // const linkedPivotBlock = pivotDefinition.blocks[node.pivotStepPanBlock];
+            const linkedPivotStepNode = pivotPath[node.pivotStepIndex];
+            if (linkedPivotStepNode && !pivotSection.includes(linkedPivotStepNode)) {
+              pivotSection.push(linkedPivotStepNode);
+            } else {
+              // debugger;
+            }
+          });
+        }
+
+        if (pivotBlock.swapPivotNodes && pivotBlock.swapPivotNodes.length) {
+          pivotBlock.swapPivotNodes.forEach(node => {
+            // const linkedPivotBlock = pivotDefinition.blocks[node.pivotStepPanBlock];
+            const linkedPivotStepNode = pivotPath[node.pivotStepIndex];
+            if (linkedPivotStepNode && !pivotSection.includes(linkedPivotStepNode)) {
+              pivotSection.push(linkedPivotStepNode);
+            } else {
+              // debugger;
+            }
+          });
         }
 
         // Insertion
         if (pivotBlock.insertionNodes && pivotBlock.insertionNodes.length) {
           makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.insertionNodes, comparisonPath, pivotBlock, type: 'insertion'});
+          pivotBlock.insertionNodes.forEach(node => {
+            // const linkedPivotBlock = pivotDefinition.blocks[node.pivotStepPanBlock];
+            const linkedPivotStepNode = pivotPath[node.pivotStepIndex];
+            if (linkedPivotStepNode && !pivotSection.includes(linkedPivotStepNode)) {
+              pivotSection.push(linkedPivotStepNode);
+            } else {
+              // debugger;
+            }
+          });
         }
 
         // InversionChain
         if (pivotBlock.inversionChainNodes && pivotBlock.inversionChainNodes.length) {
           makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.inversionChainNodes, comparisonPath, pivotBlock, type: 'inversion-chain'});
+          pivotBlock.inversionChainNodes.forEach(node => {
+            // const linkedPivotBlock = pivotDefinition.blocks[node.pivotStepPanBlock];
+            const linkedPivotStepNode = pivotPath[node.pivotStepIndex];
+            if (linkedPivotStepNode && !pivotSection.includes(linkedPivotStepNode)) {
+              pivotSection.push(linkedPivotStepNode);
+            } else {
+              // debugger;
+            }
+          });
         }
 
         // Cooc
         if (pivotBlock.coocNodes && pivotBlock.coocNodes.length) {
           makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.coocNodes, comparisonPath, pivotBlock, type: 'cooc'});
+          pivotBlock.coocNodes.forEach(node => {
+            // const linkedPivotBlock = pivotDefinition.blocks[node.pivotStepPanBlock];
+            const linkedPivotStepNode = pivotPath[node.pivotStepIndex];
+            if (linkedPivotStepNode && !pivotSection.includes(linkedPivotStepNode)) {
+              pivotSection.push(linkedPivotStepNode);
+            } else {
+              // debugger;
+            }
+          });
         }
 
         currentPivotStep.nodeTypeClasses = currentPivotStep.nodeTypeClasses.sort((a, b) => a > b ? 1 : a < b ? -1 : 0);
@@ -295,7 +366,8 @@ export default defineComponent({
           currentPivotStep.nodeTypeClasses = currentPivotStep.nodeTypeClasses.filter(c => c !== 'inversion');
         }
 
-      });
+      // });
+      }
 
       // let selectedPivotStepsOffset = 0;
       // let selectedComparisonStepsOffset = 0;
@@ -303,6 +375,7 @@ export default defineComponent({
       let selectedPivotStepsStart = null;
       let selectedComparisonStepsStart = null;
 
+      selectedPivotSteps.value = selectedPivotSteps.value.sort((a, b) => a.pivotStepIndex - b.pivotStepIndex);
       selectedComparisonSteps.value = selectedComparisonSteps.value.sort((a, b) => a.comparedPathStepIndex - b.comparedPathStepIndex);
 
       if (selectedComparisonSteps.value[0]) {
