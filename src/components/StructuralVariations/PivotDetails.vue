@@ -25,10 +25,9 @@
           <div :style="{ left: comparisonOffset+'px' }" class="block-wrapper">
             <div v-for="(comparisonStep, index) in selectedComparisonSteps"
                  :key="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlockName}`"
-                 :class="['data-block-column', `block-${index % 2}`]"
+                 :class="['data-block-column', `block-${index % 2}`, ...comparisonStep.nodeTypeClasses.map(cls => `block-${cls}`)]"
                  :style="{width: comparisonStep.length + 'px'}"
             >
-              <!--              :class="['data-block-column', `block-${index % 2}`, ...comparisonStep.nodeTypeClasses.map(cls => `block-${cls}`)]"-->
               <div class="block-label">{{ comparisonStep.panBlockName }}</div>
               <div v-for="nodeTypeClass in comparisonStep.nodeTypeClasses" :key="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlockName}-${nodeTypeClass}`" :class="['block-type', `block-${nodeTypeClass}`]"></div>
             </div>
@@ -39,10 +38,9 @@
           <div :style="{ left: pivotOffset+'px' }" class="block-wrapper">
             <div v-for="(pivotStep, index) in selectedPivotSteps"
                  :key="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlockName}`"
-                 :class="['data-block-column', `block-${index % 2}`]"
+                 :class="['data-block-column', `block-${index % 2}`, ...pivotStep.nodeTypeClasses.map(cls => `block-${cls}`)]"
                  :style="{width: pivotStep.length + 'px'}"
             >
-              <!--              :class="['data-block-column', `block-${index % 2}`, ...pivotStep.nodeTypeClasses.map(cls => `block-${cls}`)]"-->
               <div class="block-label">{{ pivotStep.panBlockName }}</div>
               <div v-for="nodeTypeClass in pivotStep.nodeTypeClasses" :key="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlockName}-${nodeTypeClass}`" :class="['block-type', `block-${nodeTypeClass}`]"></div>
             </div>
@@ -75,8 +73,8 @@ export default defineComponent({
     const pangenome = ref();
     const pivots = ref();
 
-    const preNodes = 2;
-    const postNodes = 2;
+    const preNodes = 1;
+    const postNodes = 1;
 
     const selectedPivotSteps = ref([]);
     const selectedComparisonSteps = ref([]);
@@ -84,15 +82,13 @@ export default defineComponent({
     let comparisonStepKeys = {};
 
     const makeComparisonNode = ({currentPivotStep, block, comparisonPath, pivotBlock, type}) => {
-      if (!currentPivotStep.nodeTypeClasses.includes(type)) {
+      if (currentPivotStep && currentPivotStep.nodeTypeClasses && !currentPivotStep.nodeTypeClasses.includes(type)) {
         currentPivotStep.nodeTypeClasses.push(type);
       }
       const compareNode = comparisonPath[block.comparedPathStepIndex];
       if (compareNode) {
         const comparisonStep = comparisonStepKeys[compareNode.panBlock] || {
-          pivotStepIndex: pivotBlock.pivotStepIndex,
           comparedPathStepIndex: block.comparedPathStepIndex,
-          pivotPanBlockName: pivotBlock.panBlock,
           panBlockName: compareNode.panBlock,
           comparisonName: selectedBlock.value.comparisonName,
           start: compareNode.startPosition,
@@ -107,11 +103,19 @@ export default defineComponent({
         if (!comparisonStep.nodeTypeClasses.includes(type)) {
           comparisonStep.nodeTypeClasses.push(type);
         }
-        if (pivotBlock.panBlock === selectedBlock.value.blockName && !comparisonStep.nodeTypeClasses.includes('selected')) {
-          comparisonStep.nodeTypeClasses.push('selected');
+        if (pivotBlock) {
+          comparisonStep.pivotStepIndex = pivotBlock.pivotStepIndex;
+          comparisonStep.pivotPanBlockName = pivotBlock.panBlock;
+          if (pivotBlock.panBlock === selectedBlock.value.blockName && !comparisonStep.nodeTypeClasses.includes('selected')) {
+            comparisonStep.nodeTypeClasses.push('selected');
+          }
+          if (pivotBlock.panBlock === selectedBlock.value.blockName && !comparisonStep.nodeTypeClasses.includes('selected-' + type)) {
+            comparisonStep.nodeTypeClasses.push('selected-' + type);
+          }
         }
-        if (pivotBlock.panBlock === selectedBlock.value.blockName && !comparisonStep.nodeTypeClasses.includes('selected-' + type)) {
-          comparisonStep.nodeTypeClasses.push('selected-' + type);
+        comparisonStep.nodeTypeClasses = comparisonStep.nodeTypeClasses.sort((a, b) => a > b ? 1 : a < b ? -1 : 0);
+        if (comparisonStep.nodeTypeClasses.includes('inversion') && comparisonStep.nodeTypeClasses.includes('inversion-chain')) {
+          comparisonStep.nodeTypeClasses = comparisonStep.nodeTypeClasses.filter(c => c !== 'inversion');
         }
       }
     };
@@ -127,6 +131,7 @@ export default defineComponent({
       selectedPivotSteps.value = [];
       selectedComparisonSteps.value = [];
       comparisonStepKeys = {};
+
       /*
       pivotDefinition:
       {
@@ -236,6 +241,7 @@ export default defineComponent({
         const pivotBlock = pivotDefinition.blocks[pivotNode.panBlock];
 
         const currentPivotStep = {
+          comparedPathStepIndex: pivotBlock.comparedPathStepIndex,
           pivotStepIndex: pivotBlock.pivotStepIndex,
           panBlockName: pivotBlock.panBlock,
           pivotName: selectedBlock.value.pivotName,
@@ -284,9 +290,66 @@ export default defineComponent({
           makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.coocNodes, comparisonPath, pivotBlock, type: 'cooc'});
         }
 
+        currentPivotStep.nodeTypeClasses = currentPivotStep.nodeTypeClasses.sort((a, b) => a > b ? 1 : a < b ? -1 : 0);
+        if (currentPivotStep.nodeTypeClasses.includes('inversion') && currentPivotStep.nodeTypeClasses.includes('inversion-chain')) {
+          currentPivotStep.nodeTypeClasses = currentPivotStep.nodeTypeClasses.filter(c => c !== 'inversion');
+        }
+
       });
 
+      // let selectedPivotStepsOffset = 0;
+      // let selectedComparisonStepsOffset = 0;
+
+      let selectedPivotStepsStart = null;
+      let selectedComparisonStepsStart = null;
+
       selectedComparisonSteps.value = selectedComparisonSteps.value.sort((a, b) => a.comparedPathStepIndex - b.comparedPathStepIndex);
+
+      if (selectedComparisonSteps.value[0]) {
+        let lastStepEnd = 0;
+        for (let i = 0; i < selectedComparisonSteps.value.length; i++) {
+          const step = selectedComparisonSteps.value[i];
+          step.vizStart = lastStepEnd;
+          step.vizEnd = step.vizStart + step.length;
+          lastStepEnd = step.vizEnd;
+          if (selectedComparisonStepsStart === null && step.nodeTypeClasses.includes('selected')) {
+            selectedComparisonStepsStart = step.vizStart;
+          } else if (step.nodeTypeClasses.includes('selected') && step.panBlockName === selectedBlock.value.blockName) {
+            selectedComparisonStepsStart = step.vizStart;
+          }
+        }
+      }
+
+      if (selectedPivotSteps.value[0]) {
+        let lastStepEnd = 0;
+        for (let i = 0; i < selectedPivotSteps.value.length; i++) {
+          const step = selectedPivotSteps.value[i];
+          step.vizStart = lastStepEnd;
+          step.vizEnd = step.vizStart + step.length;
+          lastStepEnd = step.vizEnd;
+          if (selectedPivotStepsStart === null && step.nodeTypeClasses.includes('selected')) {
+            selectedPivotStepsStart = step.vizStart;
+          } else if (step.nodeTypeClasses.includes('selected') && step.panBlockName === selectedBlock.value.blockName) {
+            selectedPivotStepsStart = step.vizStart;
+          }
+        }
+      }
+
+      if (selectedPivotStepsStart !== null && selectedComparisonStepsStart !== null) {
+        const diff = selectedPivotStepsStart - selectedComparisonStepsStart;
+
+        if (diff > 0) {
+          comparisonOffset.value = diff;
+          pivotOffset.value = 0;
+        } else {
+          comparisonOffset.value = 0;
+          pivotOffset.value = diff * -1;
+        }
+      } else {
+        comparisonOffset.value = 0;
+        pivotOffset.value = 0;
+      }
+      // console.log('selectedPivotStepsOffset', selectedPivotStepsOffset, 'selectedComparisonStepsOffset', selectedComparisonStepsOffset);
     };
 
     watch(chromName, () => {
@@ -337,12 +400,19 @@ export default defineComponent({
     .data-block-rows {
       overflow: auto;
       width: 100%;
+
       .data-block-row {
         position: relative;
         margin: 0 0.5rem;
-        height: 3rem;
-        line-height: 3rem;
+        height: 2rem;
+        line-height: 2rem;
 
+        &:first-of-type {
+          margin-bottom: 1rem;
+        }
+        &:last-of-type {
+          margin-top: 1rem;
+        }
         .block-wrapper {
           position: relative;
           transition: all 500ms;
@@ -352,7 +422,9 @@ export default defineComponent({
 
           .data-block-column {
             //height: 3rem;
+            color: white;
             display: flex;
+            flex-direction: column;
             flex-grow: 0;
             flex-shrink: 0;
             position: relative;
@@ -361,16 +433,32 @@ export default defineComponent({
             //text-align: center;
             //width: 6rem;
             background: lightgray;
-            //opacity: 0.25;
+            opacity: 0.25;
             //background: rgba(127, 127, 127, 0.5);
             border: 1px solid white;
             transition: all 100ms;
             z-index: 1;
+            //margin: 1px;
+            color: black;
 
-            //&:hover:not(.block-style-selected) {
-            //  z-index: 3;
-            //  //opacity: 0.75;
-            //}
+            &:hover:not(.block-selected) {
+              z-index: 3;
+              opacity: 0.75;
+            }
+
+            &.block-present, &.block-insertion, &.block-inversion, &.block-inversion-chain, &.block-swap, &.block-cooc {
+              color: white;
+            }
+
+            &.block-present {
+              background: black;
+            }
+
+            &.block-selected {
+              opacity: 1;
+              border: 1px solid black;
+              z-index: 2;
+            }
 
             .block-label {
               position: absolute;
@@ -384,85 +472,109 @@ export default defineComponent({
             }
 
             .block-type {
-              //position: absolute;
+              display: none;
               z-index: 1;
               flex-grow: 1;
               flex-shrink: 1;
               width: 100%;
               height: 100%;
-              opacity: 0.25;
 
               &.block- {
 
-                &selected {
-                  position: absolute;
-                  left: 0;
-                  top: 0;
-                  border: 1px solid black;
-                  z-index: 2;
-                  opacity: 1;
-                }
+                //&selected {
+                //  display: none;
+                //}
 
                 &present {
-                  position: absolute;
-                  left: 0;
-                  top: 0;
+                  display: block;
                   background: black;
-                  color: white;
                 }
 
                 &insertion {
+                  display: block;
                   background: #81CD06;
-                  color: black;
                 }
 
                 &inversion, &inversion-chain {
+                  display: block;
                   background: #9D0D0D;
-                  color: white;
                 }
 
                 &cooc {
+                  display: block;
                   background: #0086CA;
-                  color: white;
                 }
 
                 &swap {
+                  display: block;
                   background: #8148A4;
-                  color: white;
                 }
+
+                //&selected- {
+                //  &present {
+                //    position: absolute;
+                //    left: 0;
+                //    top: 0;
+                //    width: 100%;
+                //    height: 100%;
+                //
+                //    display: block;
+                //    background: black;
+                //    color: white;
+                //  }
+                //
+                //  &insertion {
+                //    position: absolute;
+                //    left: 0;
+                //    top: 0;
+                //    width: 100%;
+                //    height: 100%;
+                //
+                //    display: block;
+                //    background: #81CD06;
+                //    color: black;
+                //  }
+                //
+                //  &inversion, &inversion-chain {
+                //    position: absolute;
+                //    left: 0;
+                //    top: 0;
+                //    width: 100%;
+                //    height: 100%;
+                //
+                //    display: block;
+                //    background: #9D0D0D;
+                //    color: white;
+                //  }
+                //
+                //  &cooc {
+                //    position: absolute;
+                //    left: 0;
+                //    top: 0;
+                //    width: 100%;
+                //    height: 100%;
+                //
+                //    display: block;
+                //    background: #0086CA;
+                //    color: white;
+                //  }
+                //
+                //  &swap {
+                //    position: absolute;
+                //    left: 0;
+                //    top: 0;
+                //    width: 100%;
+                //    height: 100%;
+                //
+                //    display: block;
+                //    background: #8148A4;
+                //    color: white;
+                //  }
+                //}
+
               }
 
-              &selected- {
-                &present {
-                  background: black;
-                  color: white;
-                  opacity: 1;
-                }
 
-                &insertion {
-                  background: #81CD06;
-                  color: black;
-                  opacity: 1;
-                }
-
-                &inversion, &inversion-chain {
-                  background: #9D0D0D;
-                  color: white;
-                  opacity: 1;
-                }
-
-                &cooc {
-                  background: #0086CA;
-                  color: white;
-                  opacity: 1;
-                }
-
-                &swap {
-                  background: #8148A4;
-                  color: white;
-                  opacity: 1;
-                }
-              }
 
             }
           }
