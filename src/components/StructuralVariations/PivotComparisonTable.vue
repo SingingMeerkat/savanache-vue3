@@ -62,7 +62,7 @@
                      'selected': selectedBlock && selectedBlock.comparisonName === assembly.name && selectedBlock.blockName === pivotStep.panBlock,
                      'outside-range':
                      pivotStep.startPosition < positionFilter[0] ||
-                     pivotStep.startPosition > positionFilter[1] ||
+                     pivotStep.startPosition > positionFilter[1] // ||
                      // (
                      //
                      //   (
@@ -70,7 +70,7 @@
                      //     getVariationLength(pivotStep.panBlock, assembly.name) > lengthFilter[1]
                      //     )
                      // ) ||
-                     isNotInSVSelection(pivotStep.panBlock, assembly.name),
+                     // isNotInSVSelection(pivotStep.panBlock, assembly.name),
                    }]"
                    @click="selectBlock(assembly.name, pivotStep.panBlock)"
                    @mouseover="selectThing(`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`, assembly.name, pivotStep.panBlock)"
@@ -110,13 +110,13 @@
               <div v-for="(pivotStep, psIndex) in pivot.path[chromName]"
                    :id="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
                    :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
-                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'bloe-pivot',
+                   :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'below-pivot',
                    {
                      'pivot-neighbor': aIndex === 0,
                      'selected': selectedBlock && selectedBlock.comparisonName === assembly.name && selectedBlock.blockName === pivotStep.panBlock,
                      'outside-range':
                      pivotStep.startPosition < positionFilter[0] ||
-                     pivotStep.startPosition > positionFilter[1] ||
+                     pivotStep.startPosition > positionFilter[1]//  ||
                      // (
                      //
                      //   (
@@ -124,7 +124,7 @@
                      //     getVariationLength(pivotStep.panBlock, assembly.name) > lengthFilter[1]
                      //     )
                      // ) ||
-                     isNotInSVSelection(pivotStep.panBlock, assembly.name),
+                     // isNotInSVSelection(pivotStep.panBlock, assembly.name),
                    }]"
                    @click="selectBlock(assembly.name, pivotStep.panBlock)"
                    @mouseover="selectThing(`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`, assembly.name, pivotStep.panBlock)"
@@ -324,16 +324,32 @@ export default defineComponent({
       const pathBlock = getBlock(nodeName, pathName);
       const cssClasses = [`block-${nodeName}`];
       if (pathBlock) {
-        const props = Object.keys(pathBlock);
-
-        cssClasses.push(...props.map((prop) => {
-          const value = pathBlock[prop];
-          if (value === true) {
-            return `block-${prop}`;
-          } else if (typeof value === "string") {
-            return `block-${prop}-${value}`;
+        if (pathBlock.present) {
+          cssClasses.push(`block-present`);
+        }
+        if (pathBlock.cooc && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes('cooc'))) {
+          cssClasses.push(`block-cooc`);
+        }
+        if (pathBlock.swap && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes('swap'))) {
+          if (typeof pathBlock.swap === 'string') {
+            cssClasses.push(`block-swap-${pathBlock.swap}`);
+          } else {
+            cssClasses.push(`block-swap`);
           }
-        }).filter((value) => !!value));
+        }
+        if (pathBlock.insertion && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes('insertion'))) {
+          cssClasses.push(`block-insertion`);
+        }
+        if (pathBlock.inversion && !pathBlock.inversionChain && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes('inversion'))) {
+          cssClasses.push(`block-inversion`);
+        }
+        if (pathBlock.inversionChain && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes('inversionChain'))) {
+          if (typeof pathBlock.inversionChain === 'string') {
+            cssClasses.push(`block-inversionChain-${pathBlock.inversionChain}`);
+          } else {
+            cssClasses.push(`block-inversionChain`);
+          }
+        }
       }
       return cssClasses;
     };
