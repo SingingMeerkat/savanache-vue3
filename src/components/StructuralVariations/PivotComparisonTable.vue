@@ -1,5 +1,12 @@
 <template>
   <div class="structural-variations-table">
+    <va-popover :anchor-selector="thingSelector" v-model="thing" :auto-hide="false" color="light">
+      <template #body>
+        <div v-html="thingMessage"></div>
+      </template>
+    </va-popover>
+<!--    <div id="poop" :style="{ position: 'absolute', left: '100px', top: '100px' }" @mouseover="selectThing('poop')" @mouseleave="selectThing()">SOMETHING</div>-->
+<!--    <div id="poop2" :style="{ position: 'absolute', left: '200px', top: '200px' }" @mouseover="selectThing('poop2')" @mouseleave="selectThing()">SOMETHING ELSE</div>-->
     <!--    <div class="table-tabs-container">-->
     <!--      <v-tabs v-model="selectedTab" class="table-tabs d-flex">-->
     <!--        <v-tab class="elevation-2 ml-5">-->
@@ -47,6 +54,7 @@
               <!--              , {'selected-block': isBlockSelected(block, assembly)}-->
               <!--              @click="selectBlock(block, assembly)"-->
               <div v-for="(pivotStep, psIndex) in pivot.path[chromName]"
+                   :id="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
                    :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
                    :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'above-pivot',
                    {
@@ -65,6 +73,8 @@
                      isNotInSVSelection(pivotStep.panBlock, assembly.name),
                    }]"
                    @click="selectBlock(assembly.name, pivotStep.panBlock)"
+                   @mouseover="selectThing(`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`, assembly.name, pivotStep.panBlock)"
+                   @mouseleave="selectThing()"
               >
                 <!--                <div class="block-count-label">{{ // getVariationLength(pivotStep.panBlock, assembly.name) }}</div>-->
                 <div v-for="blockClass in blockClasses(pivotStep.panBlock, assembly.name)"
@@ -98,6 +108,7 @@
               <!--              , {'selected-block': isBlockSelected(block, assembly)}-->
               <!--              @click="selectBlock(block, assembly)"-->
               <div v-for="(pivotStep, psIndex) in pivot.path[chromName]"
+                   :id="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
                    :key="`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`"
                    :class="['data-block-column', `block-${psIndex % 2}`, `elevation-1`, 'bloe-pivot',
                    {
@@ -116,6 +127,9 @@
                      isNotInSVSelection(pivotStep.panBlock, assembly.name),
                    }]"
                    @click="selectBlock(assembly.name, pivotStep.panBlock)"
+                   @mouseover="selectThing(`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`, assembly.name, pivotStep.panBlock)"
+                   @mouseleave="selectThing()"
+
               >
                 <!--                <div class="block-count-label">{{ // getVariationLength(pivotStep.panBlock, assembly.name) }}</div>-->
                 <div v-for="blockClass in blockClasses(pivotStep.panBlock, assembly.name)"
@@ -161,6 +175,55 @@ export default defineComponent({
       // selectedItems.value = store.getters['assemblies/assembliesSelected'].map(assembly => assembly.assembly_name);
       return store.getters["assemblies/assembliesSelected"];
     });
+
+    const thing = ref(false);
+    const thingSelector = ref('');
+    const thingMessage = ref('');
+    const selectThing = (id, assemblyName, panBlock) => {
+      console.log('id', id);
+      if (!id || !assemblyName || !panBlock) {
+        thing.value = false;
+      } else {
+        const block = pivots.value[selectedPivotName.value][assemblyName].blocks[panBlock];
+        // eslint-disable-next-line no-unused-vars
+        const pivotStart = block.pivotStepIndex !== undefined ? pangenome.value.paths[selectedPivotName.value][chromName.value][block.pivotStepIndex].startPosition : undefined;
+        // eslint-disable-next-line no-unused-vars
+        const comparisonStart = block.comparedPathStepIndex !== undefined ? pangenome.value.paths[selectedPivotName.value][chromName.value][block.comparedPathStepIndex].startPosition : undefined;
+        // eslint-disable-next-line no-unused-vars
+        const blockLength = pangenome.value.panSkeleton[panBlock].length;
+        thingMessage.value = `${panBlock}`;
+
+        if (block.present) {
+          thingMessage.value += `<br>Present`;
+        } else {
+          thingMessage.value += `<br>Absent`;
+        }
+        if (block.inversion && !block.inversionChain) {
+          thingMessage.value += `<br>Inversion`;
+        } else if (block.inversionChain) {
+          thingMessage.value += `<br>Inversion chain: ${block.inversionChainNodes.map(n => n.comparedPathStepPanBlock).join(', ')}`;
+        }
+        if (block.insertion) {
+          thingMessage.value += `<br>Insertion${block.insertionNodes.length > 1 ? 's' : ''}: ${block.insertionNodes.map(n => n.comparedPathStepPanBlock).join(', ')}`;
+        }
+        if (block.swap) {
+          thingMessage.value += `<br>${selectedPivotName.value} swap: ${block.swapPivotNodes.map(n => n.pivotStepPanBlock).join(', ')}`;
+          thingMessage.value += `<br>${assemblyName} swap: ${block.swapComparedNodes.map(n => n.comparedPathStepPanBlock).join(', ')}`;
+        }
+        if (block.cooc) {
+          thingMessage.value += `<br>Co-occurrence${block.coocNodes.length > 1 ? 's' : ''}: ${block.coocNodes.map(n => n.comparedPathStepPanBlock).join(', ')}`;
+        }
+        if (pivotStart !== undefined) {
+          thingMessage.value += `<br>${selectedPivotName.value} start: ${pivotStart}`;
+        }
+        if (comparisonStart !== undefined) {
+          thingMessage.value += `<br>${assemblyName} start: ${comparisonStart}`;
+        }
+        thingMessage.value += `<br>Length: ${blockLength}`;
+        thingSelector.value = '#' + id;
+        thing.value = true;
+      }
+    }
 
     const pangenome = ref();
     const pivots = ref();
@@ -308,7 +371,12 @@ export default defineComponent({
 
       getVariationLength,
 
-      isNotInSVSelection
+      isNotInSVSelection,
+
+      thing,
+      thingSelector,
+      thingMessage,
+      selectThing,
     };
   }
 });
