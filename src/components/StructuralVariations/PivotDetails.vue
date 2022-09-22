@@ -34,6 +34,16 @@
           </div>
         </div>
 
+<!--        <svg width="100%" height="36" class="svg-visualization" style="position: absolute; bottom: 2.25rem;">-->
+<!--          <template v-for="visualStep in selectedVisualSteps"-->
+<!--               :key="`visual-row-${selectedBlock.visualName}-step-${visualStep.panBlockName}`"-->
+<!--          >-->
+<!--            <polygon v-if="visualStep.type === 'insertion'" :points="visualStep.points" style="fill:lime;stroke:purple;stroke-width:1" />-->
+<!--          </template>-->
+
+<!--&lt;!&ndash;          <line x1="0" y1="18" x2="100" y2="18" stroke="#0086CA" stroke-width="8" />&ndash;&gt;-->
+<!--        </svg>-->
+
         <div class="data-block-row d-flex flex-row">
           <div :style="{ left: pivotOffset+'px' }" class="block-wrapper">
             <div v-for="(pivotStep, index) in selectedPivotSteps"
@@ -62,6 +72,7 @@ export default defineComponent({
   name: "StructuralVariationsPivotDetails",
   components: {},
   setup() {
+
     const dataBlockRowsRef = ref(null);
 
     const store = useStore();
@@ -78,6 +89,7 @@ export default defineComponent({
 
     const selectedPivotSteps = ref([]);
     const selectedComparisonSteps = ref([]);
+    // const selectedVisualSteps = ref([]);
 
     let comparisonStepKeys = {};
 
@@ -451,7 +463,9 @@ export default defineComponent({
       pivotOffset,
       scrollOffset,
 
-      dataBlockRowsRef
+      dataBlockRowsRef,
+
+
     };
   }
 });
@@ -471,12 +485,13 @@ export default defineComponent({
       }
     }
     .data-block-rows {
+      position: relative;
       overflow: auto;
       width: 100%;
 
       .data-block-row {
         position: relative;
-        margin: 0 0.5rem;
+        //margin: 0 0.5rem;
         height: 2rem;
         line-height: 2rem;
 
