@@ -1,14 +1,15 @@
 <template>
   <div class="structural-variations-details">
-    <v-slider
-      label="Scale"
-      v-model="scaleValue"
-      :ticks="scaleTicksLabels"
-      :max="3"
-      step="1"
-      show-ticks="always"
-      tick-size="4"
-    ></v-slider>
+<!--    <v-slider-->
+<!--      label="Scale"-->
+<!--      v-model="scaleExp"-->
+<!--      :ticks="scaleTicksLabels"-->
+<!--      :max="scaleMaxExp"-->
+<!--      step="1"-->
+<!--      show-ticks="always"-->
+<!--      tick-size="4"-->
+<!--      :disabled="!(selectedBlock.pivotName && selectedBlock.comparisonName && selectedBlock.blockName)"-->
+<!--    ></v-slider>-->
 
     <div v-if="selectedBlock.pivotName && selectedBlock.comparisonName && selectedBlock.blockName"
          class="data-area d-flex flex-row">
@@ -31,12 +32,12 @@
       <!-- "Data" column rows -->
       <div ref="dataBlockRowsRef" class="data-block-rows col-10 d-flex flex-column pb-1">
 
-        <div class="data-block-row d-flex flex-row">
-          <div :style="{ left: comparisonOffset / Math.pow(10, scaleValue) + 'px' }" class="block-wrapper">
+        <div class="data-block-row data-comparison-row d-flex flex-row">
+          <div :style="{ left: comparisonOffset + 'px' }" class="block-wrapper">
             <div v-for="(comparisonStep, index) in selectedComparisonSteps"
                  :key="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlockName}`"
                  :class="['data-block-column', `block-${index % 2}`, ...comparisonStep.nodeTypeClasses.map(cls => `block-${cls}`)]"
-                 :style="{width: comparisonStep.length / Math.pow(10, scaleValue) + 'px'}"
+                 :style="{width: comparisonStep.displayLength + 'px'}"
             >
               <div class="block-label">{{ comparisonStep.panBlockName }}</div>
 <!--              <div v-for="nodeTypeClass in comparisonStep.nodeTypeClasses" :key="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlockName}-${nodeTypeClass}`" :class="['block-type', `block-${nodeTypeClass}`]"></div>-->
@@ -54,12 +55,12 @@
 <!--&lt;!&ndash;          <line x1="0" y1="18" x2="100" y2="18" stroke="#0086CA" stroke-width="8" />&ndash;&gt;-->
 <!--        </svg>-->
 
-        <div class="data-block-row d-flex flex-row">
-          <div :style="{ left: pivotOffset / Math.pow(10, scaleValue) + 'px' }" class="block-wrapper">
+        <div class="data-block-row data-pivot-row d-flex flex-row">
+          <div :style="{ left: pivotOffset + 'px' }" class="block-wrapper">
             <div v-for="(pivotStep, index) in selectedPivotSteps"
                  :key="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlockName}`"
                  :class="['data-block-column', `block-${index % 2}`, ...pivotStep.nodeTypeClasses.map(cls => `block-${cls}`)]"
-                 :style="{width: pivotStep.length / Math.pow(10, scaleValue) + 'px'}"
+                 :style="{width: pivotStep.displayLength + 'px'}"
             >
               <div class="block-label">{{ pivotStep.panBlockName }}</div>
 <!--              <div v-for="nodeTypeClass in pivotStep.nodeTypeClasses" :key="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlockName}-${nodeTypeClass}`" :class="['block-type', `block-${nodeTypeClass}`]"></div>-->
@@ -94,20 +95,19 @@ export default defineComponent({
     const pangenome = ref();
     const pivots = ref();
 
-    const preNodes = 1;
-    const postNodes = 1;
+    const preNodes = 2;
+    const postNodes = 2;
 
     const selectedPivotSteps = ref([]);
     const selectedComparisonSteps = ref([]);
     // const selectedVisualSteps = ref([]);
-
-    const scaleTicksLabels = {
-      0: '1/1',
-      1: '1/10',
-      2: '1/100',
-      3: '1/1000',
-    };
-    const scaleValue = ref(0);
+    const scaleBase = 4;
+    const scaleMaxExp = 5;
+    const scaleTicksLabels = {};
+    for (let i = 0; i <= scaleMaxExp; i++) {
+      scaleTicksLabels[i] = `1/${Math.pow(scaleBase, i)}`
+    }
+    const scaleExp = ref(0);
 
     let comparisonStepKeys = {};
 
@@ -124,6 +124,11 @@ export default defineComponent({
           start: compareNode.startPosition,
           end: compareNode.endPosition,
           length: compareNode.endPosition - compareNode.startPosition,
+
+          displayStart: Math.log2(compareNode.startPosition) * 10,
+          displayEnd: Math.log2(compareNode.endPosition) * 10,
+          displayLength: (Math.log2(compareNode.endPosition - compareNode.startPosition)) * 10,
+
           nodeTypeClasses: [type],
         };
         comparisonStepKeys[compareNode.panBlock] = comparisonStep;
@@ -283,6 +288,11 @@ export default defineComponent({
           start: pivotNode.startPosition,
           end: pivotNode.endPosition,
           length: pivotNode.endPosition - pivotNode.startPosition,
+
+          displayStart: Math.log2(pivotNode.startPosition) * 10,
+          displayEnd: Math.log2(pivotNode.endPosition) * 10,
+          displayLength: (Math.log2(pivotNode.endPosition - pivotNode.startPosition)) * 10,
+
           nodeTypeClasses: [],
         };
         selectedPivotSteps.value.push(currentPivotStep);
@@ -414,7 +424,7 @@ export default defineComponent({
         for (let i = 0; i < selectedComparisonSteps.value.length; i++) {
           const step = selectedComparisonSteps.value[i];
           step.vizStart = lastStepEnd;
-          step.vizEnd = step.vizStart + step.length;
+          step.vizEnd = step.vizStart + step.displayLength;
           lastStepEnd = step.vizEnd;
           if (selectedComparisonStepsStart === null && step.nodeTypeClasses.includes('selected')) {
             selectedComparisonStepsStart = step.vizStart;
@@ -429,7 +439,7 @@ export default defineComponent({
         for (let i = 0; i < selectedPivotSteps.value.length; i++) {
           const step = selectedPivotSteps.value[i];
           step.vizStart = lastStepEnd;
-          step.vizEnd = step.vizStart + step.length;
+          step.vizEnd = step.vizStart + step.displayLength;
           lastStepEnd = step.vizEnd;
           if (selectedPivotStepsStart === null && step.nodeTypeClasses.includes('selected')) {
             selectedPivotStepsStart = step.vizStart;
@@ -453,7 +463,7 @@ export default defineComponent({
         comparisonOffset.value = 0;
         pivotOffset.value = 0;
       }
-      // console.log('selectedPivotStepsOffset', selectedPivotStepsOffset, 'selectedComparisonStepsOffset', selectedComparisonStepsOffset);
+      // console.log2('selectedPivotStepsOffset', selectedPivotStepsOffset, 'selectedComparisonStepsOffset', selectedComparisonStepsOffset);
     };
 
     watch(chromName, () => {
@@ -481,9 +491,11 @@ export default defineComponent({
       pivotOffset,
 
       dataBlockRowsRef,
-      scaleTicksLabels,
-      scaleValue,
 
+      scaleBase,
+      scaleTicksLabels,
+      scaleExp,
+      scaleMaxExp,
     };
   }
 });
@@ -556,14 +568,30 @@ export default defineComponent({
               color: white;
             }
 
-            &.block-present {
-              background: black;
-            }
-
             &.block-selected {
               opacity: 1;
               border: 1px solid black;
               z-index: 2;
+            }
+
+            &.block-present {
+              background: black;
+              display: block;
+            }
+
+            &.block-inversion, &.block-inversion-chain {
+              display: block;
+              background: #9D0D0D;
+            }
+
+            &.block-cooc {
+              display: block;
+              background: #0086CA;
+            }
+
+            &.block-swap {
+              display: block;
+              background: #8148A4;
             }
 
             .block-label {
@@ -575,114 +603,22 @@ export default defineComponent({
               padding: 0 0.5rem;
               font-size: 0.75rem;
               z-index: 2;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
 
-            //.block-type {
-            //  display: none;
-            //  z-index: 1;
-            //  flex-grow: 1;
-            //  flex-shrink: 1;
-            //  width: 100%;
-            //  height: 100%;
+          }
+        }
 
-              &.block- {
-
-                //&selected {
-                //  display: none;
-                //}
-
-                &present {
-                  display: block;
-                  background: black;
-                }
-
-                &insertion {
-                  display: block;
-                  background: #81CD06;
-                }
-
-                &inversion, &inversion-chain {
-                  display: block;
-                  background: #9D0D0D;
-                }
-
-                &cooc {
-                  display: block;
-                  background: #0086CA;
-                }
-
-                &swap {
-                  display: block;
-                  background: #8148A4;
-                }
-
-                //&selected- {
-                //  &present {
-                //    position: absolute;
-                //    left: 0;
-                //    top: 0;
-                //    width: 100%;
-                //    height: 100%;
-                //
-                //    display: block;
-                //    background: black;
-                //    color: white;
-                //  }
-                //
-                //  &insertion {
-                //    position: absolute;
-                //    left: 0;
-                //    top: 0;
-                //    width: 100%;
-                //    height: 100%;
-                //
-                //    display: block;
-                //    background: #81CD06;
-                //    color: black;
-                //  }
-                //
-                //  &inversion, &inversion-chain {
-                //    position: absolute;
-                //    left: 0;
-                //    top: 0;
-                //    width: 100%;
-                //    height: 100%;
-                //
-                //    display: block;
-                //    background: #9D0D0D;
-                //    color: white;
-                //  }
-                //
-                //  &cooc {
-                //    position: absolute;
-                //    left: 0;
-                //    top: 0;
-                //    width: 100%;
-                //    height: 100%;
-                //
-                //    display: block;
-                //    background: #0086CA;
-                //    color: white;
-                //  }
-                //
-                //  &swap {
-                //    position: absolute;
-                //    left: 0;
-                //    top: 0;
-                //    width: 100%;
-                //    height: 100%;
-                //
-                //    display: block;
-                //    background: #8148A4;
-                //    color: white;
-                //  }
-                //}
-
+        &.data-comparison-row {
+          .block-wrapper {
+            .data-block-column {
+              &.block-insertion {
+                display: block;
+                background: #81CD06;
               }
-
-
-
-            //}
+            }
           }
         }
       }
