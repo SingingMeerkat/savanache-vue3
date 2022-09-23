@@ -321,12 +321,14 @@ export default defineComponent({
     const blockClasses = (nodeName, pathName) => {
       const pathBlock = getBlock(nodeName, pathName);
       const cssClasses = [`block-${nodeName}`];
+      let hasMatchingSV = false;
       if (pathBlock) {
         if (pathBlock.present) {
           cssClasses.push(`block-present`);
         }
         if (pathBlock.cooc && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes('cooc'))) {
           cssClasses.push(`block-cooc`);
+          hasMatchingSV = true;
         }
         if (pathBlock.swap && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes('swap'))) {
           if (typeof pathBlock.swap === 'string') {
@@ -334,12 +336,15 @@ export default defineComponent({
           } else {
             cssClasses.push(`block-swap`);
           }
+          hasMatchingSV = true;
         }
         if (pathBlock.insertion && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes('insertion'))) {
           cssClasses.push(`block-insertion`);
+          hasMatchingSV = true;
         }
         if (pathBlock.inversion && !pathBlock.inversionChain && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes('inversion'))) {
           cssClasses.push(`block-inversion`);
+          hasMatchingSV = true;
         }
         if (pathBlock.inversionChain && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes('inversionChain'))) {
           if (typeof pathBlock.inversionChain === 'string') {
@@ -347,6 +352,10 @@ export default defineComponent({
           } else {
             cssClasses.push(`block-inversionChain`);
           }
+          hasMatchingSV = true;
+        }
+        if (selectedSVTypeNames.value.length > 0 && !hasMatchingSV){
+          cssClasses.push(`block-nomatch`);
         }
       }
       return cssClasses;
@@ -687,6 +696,18 @@ export default defineComponent({
         border-right: 0.5rem solid transparent;
 
         border-bottom: 0.5rem solid #9D0D0D;
+      }
+
+      &.block-nomatch {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.9;
+        background: white;
+
       }
 
     }
