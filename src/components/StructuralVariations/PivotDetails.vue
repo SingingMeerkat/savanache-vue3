@@ -1,10 +1,20 @@
 <template>
   <div class="structural-variations-details">
+    <v-slider
+      label="Scale"
+      v-model="scaleValue"
+      :ticks="scaleTicksLabels"
+      :max="3"
+      step="1"
+      show-ticks="always"
+      tick-size="4"
+    ></v-slider>
+
     <div v-if="selectedBlock.pivotName && selectedBlock.comparisonName && selectedBlock.blockName"
          class="data-area d-flex flex-row">
 
       <!-- "Header" column -->
-      <div class="data-labels col-2 d-flex flex-column pt-5 pb-1">
+      <div class="data-labels col-2 d-flex flex-column pb-1">
 
         <div class="data-label elevation-1 px-3">
           {{ selectedBlock.comparisonName }}
@@ -19,14 +29,14 @@
 
       </div>
       <!-- "Data" column rows -->
-      <div ref="dataBlockRowsRef" class="data-block-rows col-10 d-flex flex-column pt-5 pb-1">
+      <div ref="dataBlockRowsRef" class="data-block-rows col-10 d-flex flex-column pb-1">
 
         <div class="data-block-row d-flex flex-row">
-          <div :style="{ left: comparisonOffset+'px' }" class="block-wrapper">
+          <div :style="{ left: comparisonOffset / Math.pow(10, scaleValue) + 'px' }" class="block-wrapper">
             <div v-for="(comparisonStep, index) in selectedComparisonSteps"
                  :key="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlockName}`"
                  :class="['data-block-column', `block-${index % 2}`, ...comparisonStep.nodeTypeClasses.map(cls => `block-${cls}`)]"
-                 :style="{width: comparisonStep.length + 'px'}"
+                 :style="{width: comparisonStep.length / Math.pow(10, scaleValue) + 'px'}"
             >
               <div class="block-label">{{ comparisonStep.panBlockName }}</div>
 <!--              <div v-for="nodeTypeClass in comparisonStep.nodeTypeClasses" :key="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlockName}-${nodeTypeClass}`" :class="['block-type', `block-${nodeTypeClass}`]"></div>-->
@@ -45,11 +55,11 @@
 <!--        </svg>-->
 
         <div class="data-block-row d-flex flex-row">
-          <div :style="{ left: pivotOffset+'px' }" class="block-wrapper">
+          <div :style="{ left: pivotOffset / Math.pow(10, scaleValue) + 'px' }" class="block-wrapper">
             <div v-for="(pivotStep, index) in selectedPivotSteps"
                  :key="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlockName}`"
                  :class="['data-block-column', `block-${index % 2}`, ...pivotStep.nodeTypeClasses.map(cls => `block-${cls}`)]"
-                 :style="{width: pivotStep.length + 'px'}"
+                 :style="{width: pivotStep.length / Math.pow(10, scaleValue) + 'px'}"
             >
               <div class="block-label">{{ pivotStep.panBlockName }}</div>
 <!--              <div v-for="nodeTypeClass in pivotStep.nodeTypeClasses" :key="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlockName}-${nodeTypeClass}`" :class="['block-type', `block-${nodeTypeClass}`]"></div>-->
@@ -90,6 +100,14 @@ export default defineComponent({
     const selectedPivotSteps = ref([]);
     const selectedComparisonSteps = ref([]);
     // const selectedVisualSteps = ref([]);
+
+    const scaleTicksLabels = {
+      0: '1/1',
+      1: '1/10',
+      2: '1/100',
+      3: '1/1000',
+    };
+    const scaleValue = ref(0);
 
     let comparisonStepKeys = {};
 
@@ -452,7 +470,6 @@ export default defineComponent({
 
     const comparisonOffset = ref(0);
     const pivotOffset = ref(0);
-    const scrollOffset = ref(0);
 
     return {
       selectedPivotSteps,
@@ -462,10 +479,10 @@ export default defineComponent({
 
       comparisonOffset,
       pivotOffset,
-      scrollOffset,
 
       dataBlockRowsRef,
-
+      scaleTicksLabels,
+      scaleValue,
 
     };
   }
