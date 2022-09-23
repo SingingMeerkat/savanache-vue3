@@ -1,7 +1,7 @@
 <template>
   <div class="structural-variations-filters">
     <v-row>
-      <v-col cols="6">
+      <v-col cols="4">
         <v-select
           v-model="selectedPivotName"
           :items="assemblies"
@@ -19,7 +19,7 @@
           label="Select chrom"
         ></v-select>
       </v-col>
-      <v-col class="d-flex" cols="4">
+      <v-col class="d-flex" cols="6">
 
         <v-range-slider
           v-model="positionFilter"
@@ -62,7 +62,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="6">
+      <v-col cols="4">
 
       </v-col>
       <v-col cols="2">
@@ -75,7 +75,7 @@
           multiple
         ></v-select>
       </v-col>
-      <v-col class="d-flex" cols="4">
+      <v-col class="d-flex" cols="6">
 
         <v-range-slider
           v-model="lengthFilter"
