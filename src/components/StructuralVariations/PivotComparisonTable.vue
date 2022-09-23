@@ -178,7 +178,6 @@ export default defineComponent({
     const blockInfoSelector = ref('');
     const blockInfoMessage = ref('');
     const selectBlockInfo = (id, assemblyName, panBlock) => {
-      console.log('id', id);
       if (!id || !assemblyName || !panBlock) {
         showBlockInfo.value = false;
       } else {

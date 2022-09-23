@@ -29,7 +29,7 @@
                  :style="{width: comparisonStep.length + 'px'}"
             >
               <div class="block-label">{{ comparisonStep.panBlockName }}</div>
-              <div v-for="nodeTypeClass in comparisonStep.nodeTypeClasses" :key="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlockName}-${nodeTypeClass}`" :class="['block-type', `block-${nodeTypeClass}`]"></div>
+<!--              <div v-for="nodeTypeClass in comparisonStep.nodeTypeClasses" :key="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlockName}-${nodeTypeClass}`" :class="['block-type', `block-${nodeTypeClass}`]"></div>-->
             </div>
           </div>
         </div>
@@ -52,7 +52,7 @@
                  :style="{width: pivotStep.length + 'px'}"
             >
               <div class="block-label">{{ pivotStep.panBlockName }}</div>
-              <div v-for="nodeTypeClass in pivotStep.nodeTypeClasses" :key="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlockName}-${nodeTypeClass}`" :class="['block-type', `block-${nodeTypeClass}`]"></div>
+<!--              <div v-for="nodeTypeClass in pivotStep.nodeTypeClasses" :key="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlockName}-${nodeTypeClass}`" :class="['block-type', `block-${nodeTypeClass}`]"></div>-->
             </div>
           </div>
         </div>
@@ -272,11 +272,6 @@ export default defineComponent({
           currentPivotStep.nodeTypeClasses.push('selected');
         }
 
-        // Present
-        if (pivotBlock.comparedPathStepIndex !== undefined) {
-          makeComparisonNode({currentPivotStep, block: pivotBlock, comparisonPath, pivotBlock, type: 'present'});
-        }
-
         // Deleted
         if (pivotBlock.deletedNodes && pivotBlock.deletedNodes.length) {
           makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.deletedNodes, comparisonPath, pivotBlock, type: 'deleted'});
@@ -305,7 +300,21 @@ export default defineComponent({
           });
         }
 
-        // Swap
+        // InversionChain
+        if (pivotBlock.inversionChainNodes && pivotBlock.inversionChainNodes.length) {
+          makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.inversionChainNodes, comparisonPath, pivotBlock, type: 'inversion-chain'});
+          pivotBlock.inversionChainNodes.forEach(node => {
+            // const linkedPivotBlock = pivotDefinition.blocks[node.pivotStepPanBlock];
+            const linkedPivotStepNode = pivotPath[node.pivotStepIndex];
+            if (linkedPivotStepNode && !pivotSection.includes(linkedPivotStepNode)) {
+              pivotSection.push(linkedPivotStepNode);
+            } else {
+              // debugger;
+            }
+          });
+        }
+
+        // Swap (Compared nodes)
         if (pivotBlock.swapComparedNodes && pivotBlock.swapComparedNodes.length) {
           makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.swapComparedNodes, comparisonPath, pivotBlock, type: 'swap'});
           pivotBlock.swapComparedNodes.forEach(node => {
@@ -319,6 +328,7 @@ export default defineComponent({
           });
         }
 
+        // Swap (Pivot nodes)
         if (pivotBlock.swapPivotNodes && pivotBlock.swapPivotNodes.length) {
           pivotBlock.swapPivotNodes.forEach(node => {
             // const linkedPivotBlock = pivotDefinition.blocks[node.pivotStepPanBlock];
@@ -345,20 +355,6 @@ export default defineComponent({
           });
         }
 
-        // InversionChain
-        if (pivotBlock.inversionChainNodes && pivotBlock.inversionChainNodes.length) {
-          makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.inversionChainNodes, comparisonPath, pivotBlock, type: 'inversion-chain'});
-          pivotBlock.inversionChainNodes.forEach(node => {
-            // const linkedPivotBlock = pivotDefinition.blocks[node.pivotStepPanBlock];
-            const linkedPivotStepNode = pivotPath[node.pivotStepIndex];
-            if (linkedPivotStepNode && !pivotSection.includes(linkedPivotStepNode)) {
-              pivotSection.push(linkedPivotStepNode);
-            } else {
-              // debugger;
-            }
-          });
-        }
-
         // Cooc
         if (pivotBlock.coocNodes && pivotBlock.coocNodes.length) {
           makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.coocNodes, comparisonPath, pivotBlock, type: 'cooc'});
@@ -373,10 +369,15 @@ export default defineComponent({
           });
         }
 
-        currentPivotStep.nodeTypeClasses = currentPivotStep.nodeTypeClasses.sort((a, b) => a > b ? 1 : a < b ? -1 : 0);
-        if (currentPivotStep.nodeTypeClasses.includes('inversion') && currentPivotStep.nodeTypeClasses.includes('inversion-chain')) {
-          currentPivotStep.nodeTypeClasses = currentPivotStep.nodeTypeClasses.filter(c => c !== 'inversion');
+        // Present
+        if (pivotBlock.comparedPathStepIndex !== undefined) {
+          makeComparisonNode({currentPivotStep, block: pivotBlock, comparisonPath, pivotBlock, type: 'present'});
         }
+
+        // currentPivotStep.nodeTypeClasses = currentPivotStep.nodeTypeClasses.sort((a, b) => a > b ? 1 : a < b ? -1 : 0);
+        // if (currentPivotStep.nodeTypeClasses.includes('inversion') && currentPivotStep.nodeTypeClasses.includes('inversion-chain')) {
+        //   currentPivotStep.nodeTypeClasses = currentPivotStep.nodeTypeClasses.filter(c => c !== 'inversion');
+        // }
 
       // });
       }
@@ -559,13 +560,13 @@ export default defineComponent({
               z-index: 2;
             }
 
-            .block-type {
-              display: none;
-              z-index: 1;
-              flex-grow: 1;
-              flex-shrink: 1;
-              width: 100%;
-              height: 100%;
+            //.block-type {
+            //  display: none;
+            //  z-index: 1;
+            //  flex-grow: 1;
+            //  flex-shrink: 1;
+            //  width: 100%;
+            //  height: 100%;
 
               &.block- {
 
@@ -664,7 +665,7 @@ export default defineComponent({
 
 
 
-            }
+            //}
           }
         }
       }
