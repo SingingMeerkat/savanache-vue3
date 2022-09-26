@@ -182,11 +182,17 @@ export default defineComponent({
         showBlockInfo.value = false;
       } else {
         const block = pivots.value[selectedPivotName.value][assemblyName].blocks[panBlock];
-        // eslint-disable-next-line no-unused-vars
-        const pivotStart = block.pivotStepIndex !== undefined ? pangenome.value.paths[selectedPivotName.value][chromName.value][block.pivotStepIndex].startPosition : undefined;
-        // eslint-disable-next-line no-unused-vars
-        const comparisonStart = block.comparedPathStepIndex !== undefined ? pangenome.value.paths[selectedPivotName.value][chromName.value][block.comparedPathStepIndex].startPosition : undefined;
-        // eslint-disable-next-line no-unused-vars
+
+        const pivotStep = block.pivotStepIndex !== undefined ? pangenome.value.paths[selectedPivotName.value][chromName.value][block.pivotStepIndex] : undefined;
+        const pivotStart = pivotStep ? pivotStep.startPosition : undefined;
+        const pivotEnd = pivotStep ? pivotStep.endPosition : undefined;
+        const pivotLength = pivotStep ? pivotStep.endPosition - pivotStep.startPosition : undefined;
+
+        const comparisonStep = block.comparedPathStepIndex !== undefined ? pangenome.value.paths[selectedPivotName.value][chromName.value][block.comparedPathStepIndex] : undefined;
+        const comparisonStart = comparisonStep ? comparisonStep.startPosition : undefined;
+        const comparisonEnd = comparisonStep ? comparisonStep.endPosition : undefined;
+        const comparisonLength = comparisonStep ? comparisonStep.endPosition - comparisonStep.startPosition : undefined;
+
         const blockLength = pangenome.value.panSkeleton[panBlock].length;
         blockInfoMessage.value = `${panBlock}`;
 
@@ -195,28 +201,39 @@ export default defineComponent({
         } else {
           blockInfoMessage.value += `<br>Absent`;
         }
+
         if (block.inversion && !block.inversionChain) {
           blockInfoMessage.value += `<br>Inversion`;
         } else if (block.inversionChain) {
           blockInfoMessage.value += `<br>Inversion chain: ${block.inversionChainNodes.map(n => n.comparedPathStepPanBlock).join(', ')}`;
         }
+
         if (block.insertion) {
           blockInfoMessage.value += `<br>Insertion${block.insertionNodes.length > 1 ? 's' : ''}: ${block.insertionNodes.map(n => n.comparedPathStepPanBlock).join(', ')}`;
         }
+
         if (block.swap) {
           blockInfoMessage.value += `<br>${selectedPivotName.value} swap: ${block.swapPivotNodes.map(n => n.pivotStepPanBlock).join(', ')}`;
           blockInfoMessage.value += `<br>${assemblyName} swap: ${block.swapComparedNodes.map(n => n.comparedPathStepPanBlock).join(', ')}`;
         }
+
         if (block.cooc) {
           blockInfoMessage.value += `<br>Co-occurrence${block.coocNodes.length > 1 ? 's' : ''}: ${block.coocNodes.map(n => n.comparedPathStepPanBlock).join(', ')}`;
         }
+
         if (pivotStart !== undefined) {
           blockInfoMessage.value += `<br>${selectedPivotName.value} start: ${pivotStart.toLocaleString()}`;
+          blockInfoMessage.value += `<br>${selectedPivotName.value} end: ${pivotEnd.toLocaleString()}`;
+          blockInfoMessage.value += `<br>${selectedPivotName.value} length: ${pivotLength.toLocaleString()}`;
         }
+
         if (comparisonStart !== undefined) {
           blockInfoMessage.value += `<br>${assemblyName} start: ${comparisonStart.toLocaleString()}`;
+          blockInfoMessage.value += `<br>${assemblyName} end: ${comparisonEnd.toLocaleString()}`;
+          blockInfoMessage.value += `<br>${assemblyName} length: ${comparisonLength.toLocaleString()}`;
         }
-        blockInfoMessage.value += `<br>Length: ${blockLength.toLocaleString()}`;
+
+        blockInfoMessage.value += `<br>${panBlock} Length: ${blockLength.toLocaleString()}`;
         blockInfoSelector.value = '#' + id;
         showBlockInfo.value = true;
       }

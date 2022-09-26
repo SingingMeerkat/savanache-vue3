@@ -118,8 +118,10 @@ export default defineComponent({
         currentPivotStep.nodeTypeClasses.push(type);
       }
       const compareNode = comparisonPath[block.comparedPathStepIndex];
+
       if (compareNode) {
         const comparisonStep = comparisonStepKeys[compareNode.panBlock] || {
+        // const comparisonStep = {
           comparedPathStepIndex: block.comparedPathStepIndex,
           panBlockName: compareNode.panBlock,
           comparisonName: selectedBlock.value.comparisonName,
@@ -466,6 +468,11 @@ export default defineComponent({
         pivotOffset.value = 0;
       }
       // console.log2('selectedPivotStepsOffset', selectedPivotStepsOffset, 'selectedComparisonStepsOffset', selectedComparisonStepsOffset);
+      setTimeout(() => {
+        if (dataBlockRowsRef.value) {
+          dataBlockRowsRef.value.scrollLeft = (pivotOffset.value + selectedPivotStepsStart) / Math.pow(scaleBase, scaleExp.value);
+        }
+      }, 1000/3);
     };
 
     watch(chromName, () => {
