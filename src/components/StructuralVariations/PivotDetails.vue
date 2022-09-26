@@ -1,15 +1,16 @@
 <template>
   <div class="structural-variations-details">
-<!--    <v-slider-->
-<!--      label="Scale"-->
-<!--      v-model="scaleExp"-->
-<!--      :ticks="scaleTicksLabels"-->
-<!--      :max="scaleMaxExp"-->
-<!--      step="1"-->
-<!--      show-ticks="always"-->
-<!--      tick-size="4"-->
-<!--      :disabled="!(selectedBlock.pivotName && selectedBlock.comparisonName && selectedBlock.blockName)"-->
-<!--    ></v-slider>-->
+    <v-slider
+      label="Scale"
+      v-model="scaleExp"
+      :ticks="scaleTicksLabels"
+      :min="scaleMinExp"
+      :max="scaleMaxExp"
+      step="1"
+      show-ticks="always"
+      tick-size="4"
+      :disabled="!(selectedBlock.pivotName && selectedBlock.comparisonName && selectedBlock.blockName)"
+    ></v-slider>
 
     <div v-if="selectedBlock.pivotName && selectedBlock.comparisonName && selectedBlock.blockName"
          class="data-area d-flex flex-row">
@@ -33,37 +34,37 @@
       <div ref="dataBlockRowsRef" class="data-block-rows col-10 d-flex flex-column pb-1">
 
         <div class="data-block-row data-comparison-row d-flex flex-row">
-          <div :style="{ left: comparisonOffset + 'px' }" class="block-wrapper">
+          <div :style="{ left: comparisonOffset / Math.pow(scaleBase, scaleExp) + 'px' }" class="block-wrapper">
             <div v-for="(comparisonStep, index) in selectedComparisonSteps"
                  :key="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlockName}`"
                  :class="['data-block-column', `block-${index % 2}`, ...comparisonStep.nodeTypeClasses.map(cls => `block-${cls}`)]"
-                 :style="{width: comparisonStep.displayLength + 'px'}"
+                 :style="{width: comparisonStep.displayLength / Math.pow(scaleBase, scaleExp) + 'px'}"
             >
               <div class="block-label">{{ comparisonStep.panBlockName }}</div>
-<!--              <div v-for="nodeTypeClass in comparisonStep.nodeTypeClasses" :key="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlockName}-${nodeTypeClass}`" :class="['block-type', `block-${nodeTypeClass}`]"></div>-->
+              <!--              <div v-for="nodeTypeClass in comparisonStep.nodeTypeClasses" :key="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlockName}-${nodeTypeClass}`" :class="['block-type', `block-${nodeTypeClass}`]"></div>-->
             </div>
           </div>
         </div>
 
-<!--        <svg width="100%" height="36" class="svg-visualization" style="position: absolute; bottom: 2.25rem;">-->
-<!--          <template v-for="visualStep in selectedVisualSteps"-->
-<!--               :key="`visual-row-${selectedBlock.visualName}-step-${visualStep.panBlockName}`"-->
-<!--          >-->
-<!--            <polygon v-if="visualStep.type === 'insertion'" :points="visualStep.points" style="fill:lime;stroke:purple;stroke-width:1" />-->
-<!--          </template>-->
+        <!--        <svg width="100%" height="36" class="svg-visualization" style="position: absolute; bottom: 2.25rem;">-->
+        <!--          <template v-for="visualStep in selectedVisualSteps"-->
+        <!--               :key="`visual-row-${selectedBlock.visualName}-step-${visualStep.panBlockName}`"-->
+        <!--          >-->
+        <!--            <polygon v-if="visualStep.type === 'insertion'" :points="visualStep.points" style="fill:lime;stroke:purple;stroke-width:1" />-->
+        <!--          </template>-->
 
-<!--&lt;!&ndash;          <line x1="0" y1="18" x2="100" y2="18" stroke="#0086CA" stroke-width="8" />&ndash;&gt;-->
-<!--        </svg>-->
+        <!--&lt;!&ndash;          <line x1="0" y1="18" x2="100" y2="18" stroke="#0086CA" stroke-width="8" />&ndash;&gt;-->
+        <!--        </svg>-->
 
         <div class="data-block-row data-pivot-row d-flex flex-row">
-          <div :style="{ left: pivotOffset + 'px' }" class="block-wrapper">
+          <div :style="{ left: pivotOffset / Math.pow(scaleBase, scaleExp) + 'px' }" class="block-wrapper">
             <div v-for="(pivotStep, index) in selectedPivotSteps"
                  :key="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlockName}`"
                  :class="['data-block-column', `block-${index % 2}`, ...pivotStep.nodeTypeClasses.map(cls => `block-${cls}`)]"
-                 :style="{width: pivotStep.displayLength + 'px'}"
+                 :style="{width: pivotStep.displayLength / Math.pow(scaleBase, scaleExp) + 'px'}"
             >
               <div class="block-label">{{ pivotStep.panBlockName }}</div>
-<!--              <div v-for="nodeTypeClass in pivotStep.nodeTypeClasses" :key="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlockName}-${nodeTypeClass}`" :class="['block-type', `block-${nodeTypeClass}`]"></div>-->
+              <!--              <div v-for="nodeTypeClass in pivotStep.nodeTypeClasses" :key="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlockName}-${nodeTypeClass}`" :class="['block-type', `block-${nodeTypeClass}`]"></div>-->
             </div>
           </div>
         </div>
@@ -101,11 +102,12 @@ export default defineComponent({
     const selectedPivotSteps = ref([]);
     const selectedComparisonSteps = ref([]);
     // const selectedVisualSteps = ref([]);
-    const scaleBase = 4;
-    const scaleMaxExp = 5;
+    const scaleBase = 2;
+    const scaleMinExp = 0;
+    const scaleMaxExp = 10;
     const scaleTicksLabels = {};
-    for (let i = 0; i <= scaleMaxExp; i++) {
-      scaleTicksLabels[i] = `1/${Math.pow(scaleBase, i)}`
+    for (let i = scaleMinExp; i <= scaleMaxExp; i++) {
+      scaleTicksLabels[i] = `1/${Math.pow(scaleBase, i)}x`
     }
     const scaleExp = ref(0);
 
@@ -125,9 +127,9 @@ export default defineComponent({
           end: compareNode.endPosition,
           length: compareNode.endPosition - compareNode.startPosition,
 
-          displayStart: Math.log2(compareNode.startPosition) * 10,
-          displayEnd: Math.log2(compareNode.endPosition) * 10,
-          displayLength: (Math.log2(compareNode.endPosition - compareNode.startPosition)) * 10,
+          displayStart: compareNode.startPosition,
+          displayEnd: compareNode.endPosition,
+          displayLength: compareNode.endPosition - compareNode.startPosition,
 
           nodeTypeClasses: [type],
         };
@@ -289,9 +291,9 @@ export default defineComponent({
           end: pivotNode.endPosition,
           length: pivotNode.endPosition - pivotNode.startPosition,
 
-          displayStart: Math.log2(pivotNode.startPosition) * 10,
-          displayEnd: Math.log2(pivotNode.endPosition) * 10,
-          displayLength: (Math.log2(pivotNode.endPosition - pivotNode.startPosition)) * 10,
+          displayStart: pivotNode.startPosition,
+          displayEnd: pivotNode.endPosition,
+          displayLength: pivotNode.endPosition - pivotNode.startPosition,
 
           nodeTypeClasses: [],
         };
@@ -407,7 +409,7 @@ export default defineComponent({
         //   currentPivotStep.nodeTypeClasses = currentPivotStep.nodeTypeClasses.filter(c => c !== 'inversion');
         // }
 
-      // });
+        // });
       }
 
       // let selectedPivotStepsOffset = 0;
@@ -495,6 +497,7 @@ export default defineComponent({
       scaleBase,
       scaleTicksLabels,
       scaleExp,
+      scaleMinExp,
       scaleMaxExp,
     };
   }
