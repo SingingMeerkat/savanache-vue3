@@ -917,11 +917,5 @@ const getDataInternal = async (chromToDisplay) => {
   //dataCache = { pangenome: pangenomeImport.default || pangenomeImport, pivots, chromName };
   dataCache = { pangenome: pangenomeImport.default || pangenomeImport, pivots, chromNamesPerPath };
 
-  console.log("dataCache");
-  console.log(dataCache);
-  console.log("dataCache JSON");
-  console.log(JSON.stringify(dataCache));
-  debugger;
-
   return dataCache;
 };
