@@ -6,8 +6,9 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { ref } from "@vue/reactivity";
 import JSCharting from "jscharting-vue";
+import { onMounted } from "@vue/runtime-core";
 import { useStore } from "vuex";
 
 export default {
@@ -25,12 +26,15 @@ export default {
       legend: { template: "", visible: false },
       series: []
     });
+
     onMounted(() => {
+      // Save chart when app mounted
       store.dispatch("chart/updateChartAction", chart.value);
     });
+
     return { options, chart };
   }
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

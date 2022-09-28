@@ -3,8 +3,9 @@
     <h2 class="mb-4">Pangenome Panel</h2>
 
     <!-- file upload -->
-    <v-file-input v-model="pangenomeFile" accept=".csv, .tsv" class="mb-5" counter
-                  label="Choose a file or drop it here..." show-size @change="onChangeFile"></v-file-input>
+    <!-- <v-file-input class="mb-5" v-model="pangenomeFile" accept=".csv, .tsv" label="Choose a file or drop it here..." show-size counter @change="onChangeFile"></v-file-input> -->
+    <va-file-upload v-model="pangenomeFile" class="mb-5" dropzone file-types=".csv, .tsv" type="single"
+                    @input="onFileChange"></va-file-upload>
 
     <div class="mb-5">
       <h4>Chose Pangenomes</h4>
@@ -17,24 +18,12 @@
       <h4>List of Pangenome</h4>
 
       <!-- Table -->
-      <va-data-table :columns="headers" :items="pangenomesToTable" @mouseout="myUnRowHover($event)"
+      <va-data-table :columns="headers" :hoverable="true" :items="pangenomesToTable" @mouseout="myUnRowHover($event)"
                      @mouseover="myRowHover($event)">
         <!-- Content -->
         <template #cell(selected)="data">
-          <!--          <div v-if="data">-->
-          <!--            data: {{data}}<br>-->
-          <!--            <div v-if="data.cells">-->
-          <!--              data.cells: {{data.cells}}<br>-->
-          <!--              <div v-if="data.cells[3]">-->
-          <!--                data.cells[3]: {{data.cells[3]}}<br>-->
-          <!--                <div v-if="data.cells[3].value">-->
-          <!--                  data.cells[3].value: {{data.cells[3].value}}<br>-->
-          <!--                </div>-->
-          <!--              </div>-->
-          <!--            </div>-->
-          <!--          </div>-->
-          <va-checkbox v-model="selectedItems" :array-value="data.rowData.panID"
-                       @click="selectAction(data.rowData.panID)" />
+          <va-checkbox v-model="selectedItems" :array-value="data.cells[3].value"
+                       @click="selectAction(data.cells[3].value)" />
         </template>
         <template #cell(icon)="data">
           <img :src="data.value" style="height: 40px" />
@@ -60,25 +49,26 @@
 </template>
 
 <script>
-import { computed, getCurrentInstance, ref, watch } from "vue";
+import { ref } from "@vue/reactivity";
+import { computed, watch } from "@vue/runtime-core";
 import { useStore } from "vuex";
 
 export default {
   setup() {
     const store = useStore();
-    const vm = getCurrentInstance();
-    // const : Filtering
+
+    // var : Filtering
     const pangenomeSearched = ref("");
 
-    // const : Upload external file
+    // var : Upload external file
     const pangenomeFile = ref([]);
-    const fileinput = ref("");
+    let fileinput = ref("");
 
     // Table selected items
-    const selectedItems = ref([]);
+    let selectedItems = ref([]);
 
     // Submission
-    const submited = ref(false);
+    let submited = ref(false);
     const isSubmitable = computed(() => {
       if (selectedItems.value.length > 0) {
         return true;
@@ -91,6 +81,7 @@ export default {
     const assemblies = computed(() => {
       return store.state.assemblies.assemblies;
     });
+
     const assembliesSelected = computed(() => store.getters["assemblies/assembliesSelected"]);
 
     // Load pangenomes
@@ -99,16 +90,16 @@ export default {
     // File uploading
 
     const onChangeFile = e => {
-      const files = e.target.files || e.dataTransfer.files;
+      let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       createInput(files[0]);
     };
 
     const createInput = file => {
-      const promise = new Promise(resolve => {
-        const reader = new FileReader();
+      let promise = new Promise(resolve => {
+        var reader = new FileReader();
         reader.onload = () => {
-          resolve((fileinput.value = reader.result));
+          resolve((fileinput = reader.result));
         };
         reader.readAsText(file);
       });
@@ -116,11 +107,11 @@ export default {
       promise.then(
         () => {
           /* handle a successful result */
-          const lines = fileinput.value.split("\n");
-          const pangenomes = lines.map(line => {
+          let lines = fileinput.split("\n");
+          let pangenomes = lines.map(line => {
             if (!line.startsWith("id") && line.length !== 0) {
-              const cols = line.split("\t");
-              const pangenome = {
+              let cols = line.split("\t");
+              let pangenome = {
                 id: parseInt(cols[0]),
                 name: cols[1],
                 assemblies: cols[2].split(",").map(assembly => assembly.replace(/\s/g, "")),
@@ -128,8 +119,9 @@ export default {
               };
               return pangenome;
             }
-          }).filter(pangenome => pangenome !== undefined);
-          const pangenomesObjects = pangenomes.map(pangenome => {
+          });
+          pangenomes = pangenomes.filter(pangenome => pangenome !== undefined);
+          let pangenomesObjects = pangenomes.map(pangenome => {
             pangenome["selected"] = false;
             return pangenome;
           });
@@ -159,7 +151,7 @@ export default {
 
     // Content
     // Rewrite pangenomes object with information for the table
-    const pangenomesToTable = computed(() => {
+    let pangenomesToTable = computed(() => {
       let pangenomeList = pangenomes.value.map(pangenome => {
         let percentage = 0;
         if (assembliesSelected.value.length !== 0) {
@@ -191,7 +183,7 @@ export default {
         return tableItem;
       });
       // Hide pangenomes in functions of filter below
-      if (pangenomeSearched.value && pangenomeList) {
+      if (pangenomeSearched.value != null && pangenomeList != undefined) {
         pangenomeList = pangenomeList.filter(pangenome => pangenome.panID.toLowerCase().indexOf(pangenomeSearched.value.trim().toLowerCase()) > -1);
       }
       return pangenomeList;
@@ -212,14 +204,14 @@ export default {
       } else {
         selectedItems.value = [];
       }
-    }, { immediate: true });
+    });
 
     // on Checkbox event
     const selectAction = panID => {
       // Set true or false to the selected pangenome or not in the store
 
       // Get pangenome table object
-      const currentClickedPangenome = pangenomesToTable.value.filter(pangenome => pangenome.panID === panID);
+      let currentClickedPangenome = pangenomesToTable.value.filter(pangenome => pangenome.panID === panID);
 
       if (pangenomesSelectedStored.value.length === 0) {
         store.dispatch("pangenomes/updateIsSelectedStateAction", currentClickedPangenome[0]);
@@ -230,6 +222,7 @@ export default {
           store.dispatch("pangenomes/updateIsNotSelectedStateAction", currentClickedPangenome[0]);
         }
       }
+      myUnRowHover();
     };
 
     // Interactions with Graph
@@ -262,32 +255,46 @@ export default {
             .series()
             .points(p => !assemblies_names.includes(p.name) && p.selected === true)
             .options({ color: "#c95e00" });
+          // orange
           store.state.chart.chart.instance
             .series()
             .points(p => !assemblies_names.includes(p.name) && p.selected === false)
-            .options({ color: "gray" });
+            .options({ color: "#cad2e0" });
+          store.state.chart.chart.instance
+            .series()
+            .points(p => assemblies_names.includes(p.name) && p.selected === true)
+            .options({ color: "#29b0ff" });
+          // blue
+          store.state.chart.chart.instance
+            .series()
+            .points(p => assemblies_names.includes(p.name) && p.selected === false)
+            .options({ color: "blue" });
+          // darkblue
         } else {
-          const assembliesSelected = pangenomeSelected.map(pangenome => pangenome.assemblies).flat();
-          store.state.chart.chart.instance
-            .series()
-            .points(p => assemblies_names.includes(p.name) && assembliesSelected.includes(p.name))
-            .options({ color: "black" });
-          store.state.chart.chart.instance
-            .series()
-            .points(p => assemblies_names.includes(p.name) && p.selected === true && !assembliesSelected.includes(p.name))
-            .options({ color: "blue" });
-          store.state.chart.chart.instance
-            .series()
-            .points(p => !assemblies_names.includes(p.name) && p.selected === true && assembliesSelected.includes(p.name))
-            .options({ color: "#c95e00" });
-          store.state.chart.chart.instance
-            .series()
-            .points(p => assemblies_names.includes(p.name) && p.selected === false && !assembliesSelected.includes(p.name))
-            .options({ color: "blue" });
-          store.state.chart.chart.instance
-            .series()
-            .points(p => !assemblies_names.includes(p.name) && p.selected === false && assembliesSelected.includes(p.name))
-            .options({ color: "#ffda8f" });
+          if (pangenomeSelected[0].name !== panID) {
+            store.state.chart.chart.instance
+              .series()
+              .points(p => !assemblies_names.includes(p.name) && p.selected === true)
+              .options({ color: "#c95e00" });
+            // orange
+            store.state.chart.chart.instance
+              .series()
+              .points(p => !assemblies_names.includes(p.name) && p.selected === false)
+              .options({ color: "#cad2e0" });
+            store.state.chart.chart.instance
+              .series()
+              .points(p => assemblies_names.includes(p.name) && p.selected === true)
+              .options({ color: "#29b0ff" });
+            // blue
+            // store.state.chart.chart.instance
+            //     .series()
+            //     .points(p => assemblies_names.includes(p.name) && p.selected === false)
+            //     .options({ color: 'blue' });
+            store.state.chart.chart.instance
+              .series()
+              .points(p => assemblies_names.includes(p.name) && p.selected === false && !pangenomeSelected[0].assemblies.includes(p.name))
+              .options({ color: "blue" });
+          }
         }
       }
     };
@@ -295,11 +302,11 @@ export default {
     // On unHover
     const myUnRowHover = () => {
       const pangenomeSelected = pangenomes.value.filter(pangenome => pangenome.selected);
-      const pangenomeAssembliesSelected = pangenomeSelected.map(pangenome => pangenome.assemblies).flat();
+      let pangenomeAssembliesSelected = pangenomeSelected.map(pangenome => pangenome.assemblies).flat();
       store.state.chart.chart.instance
         .series()
         .points(p => p.selected === true)
-        .options({ color: "gray" });
+        .options({ color: "#c95e00" });
       if (pangenomeAssembliesSelected.length > 0) {
         store.state.chart.chart.instance
           .series()
@@ -309,11 +316,19 @@ export default {
           .series()
           .points(p => p.selected === false && !pangenomeAssembliesSelected.includes(p.name))
           .options({ color: "#cad2e0" });
+        store.state.chart.chart.instance
+          .series()
+          .points(p => p.selected === true && pangenomeAssembliesSelected.includes(p.name))
+          .options({ color: "black" });
+        store.state.chart.chart.instance
+          .series()
+          .points(p => p.selected === true && !pangenomeAssembliesSelected.includes(p.name))
+          .options({ color: "#c95e00" });
       } else {
         store.state.chart.chart.instance
           .series()
           .points(p => p.selected === false)
-          .options({ color: "black" });
+          .options({ color: "#cad2e0" });
       }
     };
 
@@ -321,7 +336,6 @@ export default {
     const submit = () => {
       submited.value = true;
       console.log(pangenomesSelectedStored.value);
-      vm.proxy.$router.push("/structural_variations");
     };
 
     return {
@@ -347,4 +361,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

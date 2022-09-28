@@ -3,8 +3,9 @@
   <div class="Home">
     <h1>Pangenome Selector</h1>
     <!-- Assemblies Input File -->
-    <v-file-input v-model="assembliesFile" accept=".csv, .tsv" class="mb-5" counter
-                  label="Choose a file or drop it here..." show-size @change="onFileChange"></v-file-input>
+    <!-- <v-file-input class="mb-5" v-model="assembliesFile" accept=".csv, .tsv" label="Choose a file or drop it here..." show-size counter @change="onFileChange"></v-file-input> -->
+    <va-file-upload v-model="assembliesFile" class="mb-5" dropzone file-types=".csv, .tsv"
+                    type="single" upload-button-text="Upload 2 file" @input="onFileChange"></va-file-upload>
     <v-row>
       <!-- Chart and Assemblies Table -->
       <v-col>
@@ -20,14 +21,15 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
+import { ref } from "@vue/reactivity";
+import { computed } from "@vue/runtime-core";
 import { useStore } from "vuex";
 
 // Components
-import PangenomePanel from "../components/PangenomeSelection/PangenomePanel.vue";
-import AssembliesTable from "../components/PangenomeSelection/AssembliesTable.vue";
-import PcaCharts from "../components/PangenomeSelection/PcaCharts.vue";
-// import pangenomes from "@/data/pangenome";
+import PangenomePanel from "../components/PangenomePanel.vue";
+import AssembliesTable from "../components/AssembliesTable.vue";
+import PcaCharts from "../components/PcaCharts.vue";
 
 export default defineComponent({
   name: "PangenomeSelection",
@@ -35,27 +37,24 @@ export default defineComponent({
   components: { AssembliesTable, PangenomePanel, PcaCharts },
   setup() {
     const store = useStore();
-    // Pangenomes default initiation
-    // store.dispatch("pangenomes/updatePangenomesAction", pangenomes);
-
     // File value
     const assembliesFile = ref([]);
-    const fileinput = ref("");
+    let fileinput = ref("");
 
     // Assemblies File upload
     const onFileChange = e => {
       // Get file by events
-      const files = e.target.files || e.dataTransfer.files;
+      var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       createInput(files[0]);
     };
 
     const createInput = file => {
       // Input reading
-      const promise = new Promise(resolve => {
-        const reader = new FileReader();
+      let promise = new Promise(resolve => {
+        var reader = new FileReader();
         reader.onload = () => {
-          resolve((fileinput.value = reader.result));
+          resolve((fileinput = reader.result));
         };
         reader.readAsText(file);
       });
@@ -63,39 +62,27 @@ export default defineComponent({
       promise.then(
         () => {
           // Input Parsing
-          const lines = fileinput.value.split("\n");
-          // Defaults, can be re-arranged if the headers are in the wrong order in the incoming file
-          const headers = {
-            id: 0,
-            x: 1,
-            y: 2,
-            assembly_name: 3,
-            phenotype: 4,
-            pangenome: 5,
-            Heterotic_group: 6,
-            majore: 7
-          };
-          const assemblies = lines.map((line, lineIndex) => {
-            const cols = line.split("\t");
-            if (lineIndex === 0 && line.length !== 0) {
-              cols.forEach((col, colIndex) => headers[name] = colIndex);
-            } else if (line.length !== 0) {
-              const assembly = {
-                id: parseInt(cols[headers.id]),
-                x: parseInt(cols[headers.x]),
-                y: parseInt(cols[headers.y]),
-                assembly_name: cols[headers.assembly_name],
-                phenotype: cols[headers.phenotype],
-                pangenome: cols[headers.pangenome].split(", "),
-                heterotic_group: cols[headers.Heterotic_group].split(", "),
-                majore: cols[headers.majore]
+          let lines = fileinput.split("\n");
+          let assemblies = lines.map(line => {
+            if (!line.startsWith("id") && line.length !== 0) {
+              let cols = line.split("\t");
+              let assembly = {
+                id: parseInt(cols[0]),
+                x: parseFloat(cols[1]),
+                y: parseFloat(cols[2]), // Float to include values between 0 to 1
+                assembly_name: cols[3],
+                phenotype: cols[4],
+                pangenome: cols[5].split(", "),
+                heterotic_group: cols[6].split(", "),
+                majore: cols[7]
               };
               return assembly;
             }
-            // Filter assemblies badly loaded
-          }).filter(assembly => assembly !== undefined);
-          const colors = [];
-          const assembliesObjects = assemblies.map(assembly => {
+          });
+          // Filter assemblies badly loaded
+          assemblies = assemblies.filter(assembly => assembly !== undefined);
+          let colors = [];
+          let assembliesObjects = assemblies.map(assembly => {
             // Add metadata
             assembly["color"] = "black";
             assembly["metadata"] = "heterotic_group";
@@ -113,7 +100,7 @@ export default defineComponent({
             return assembly;
           });
           // Get all heterotic group
-          const heterotic_group = [...new Set(assembliesObjects.map(assembly => String(...assembly.heterotic_group)))];
+          let heterotic_group = [...new Set(assembliesObjects.map(assembly => String(...assembly.heterotic_group)))];
 
           // Get color by hetoric group
           new Set(heterotic_group.map(() => colors.push(generateColor())));
@@ -128,7 +115,9 @@ export default defineComponent({
           const assembliesStored = computed(() => store.state.assemblies.assemblies);
 
           // add Assemblies to chart
-          const series = addSeries(assembliesStored.value);
+          // Serie creation
+          let series = addSeries(assembliesStored.value);
+          // Add serie into instance
           series.forEach(serie => store.state.chart.chart.instance.series.add(serie));
         },
         error => {
@@ -138,20 +127,25 @@ export default defineComponent({
       );
     };
 
+    const pangenomesSelectedStored = computed(() => {
+      return store.getters["pangenomes/pangenomesSelected"];
+    });
+
     // Color Generator
     const generateColor = () => {
-      const newColor = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
+      let newColor = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
       return newColor;
     };
 
     // Set series for chart
     const addSeries = newAssemblies => {
       // Serie is an object with a list of points
-      const assembliesByMetadata = [];
+      let lastOvered = undefined;
+      let assembliesByMetadata = [];
       let metadatas = [];
 
       // Chart stored and initiated in PcaChart component
-      const chart = store.state.chart.chart;
+      let chart = store.state.chart.chart;
 
       if (newAssemblies !== undefined) {
         newAssemblies.forEach(assembly => {
@@ -173,26 +167,26 @@ export default defineComponent({
           assemblies: newAssemblies.filter(assembly => assembly[assembly.metadata].includes(metadata))
         }));
 
-        const series = [];
+        let series = [];
         assembliesByMetadata.forEach(metadata => {
           // Each metadata (each serie)
-          const pointsAdded = [];
+          let pointsAdded = [];
           metadata.assemblies.forEach(assembly => {
             // Points setting
 
             let markerType = "circle";
             let pointLabel = "";
-            let defaultColor = "black";
+            let defaultColor = "#cad2e0";
             if (assembly.selected) {
-              defaultColor = "gray";
+              defaultColor = "#cad2e0";
             }
             if (assembly.majore === true) {
               markerType = "square";
               pointLabel = assembly.assembly_name;
             }
             // Get point if the current assembly is already set in another serie
-            const assemblyTreated = series.map(serie => {
-              const currentSerie = serie.points.map(point => {
+            let assemblyTreated = series.map(serie => {
+              let currentSerie = serie.points.map(point => {
                 if (point !== undefined) {
                   return point.name;
                 }
@@ -202,7 +196,7 @@ export default defineComponent({
               }
             });
 
-            const PointObj = {
+            let PointObj = {
               // Point himself
               // Point arguments
               x: assembly.x,
@@ -215,7 +209,7 @@ export default defineComponent({
               label: {
                 text: pointLabel,
                 align: "center",
-                color: "black"
+                color: "#cad2e0"
               },
               selected: assembly.selected,
               events: {
@@ -223,15 +217,17 @@ export default defineComponent({
                 // "this" is particular, it don't refered to the website, but the "this" keyword refers to the clicked/hovered/... point object.
                 // !!!! function have to be defined in this space not outside like a methods !!!!
                 mouseOver: function() {
+                  console.log("ok");
                   // changing hovered state in to store for the current assembly
                   store.dispatch("assemblies/updateOverMousedStateAction", assembly);
 
-                  // Set color for the current point
                   this.series.currentOptions.color = assembly.color;
 
                   // Set color for all points with the same metadata
+                  lastOvered = this.currentOptions.name;
+
                   chart.instance
-                    .series(s => assembly[assembly.metadata].includes(s.name))
+                    .series()
                     .points()
                     .items.forEach(point => {
                     chart.instance
@@ -239,55 +235,132 @@ export default defineComponent({
                       .points(allPoint => allPoint.name === point.name)
                       .options({ color: point.currentOptions.metadata });
                   });
+                  chart.instance
+                    .series()
+                    .points()
+                    .items.forEach(point => {
+                    chart.instance
+                      .series(s => !assembly[assembly.metadata].includes(s.name))
+                      .points(allPoint => allPoint.name === point.name)
+                      .options({ color: "#cad2e0" });
+                  });
+                  // Set color for the current point
                 },
                 mouseOut: function() {
                   // Redo all colors
+                  if (lastOvered === this.currentOptions.name) {
+                    this.currentOptions.marker.outline.color = "gray";
 
-                  this.currentOptions.marker.outline.color = "gray";
-
-                  // For all points with the same metadata
-                  chart.instance
-                    .series(s => assembly[assembly.metadata].includes(s.name))
-                    .points()
-                    .items.forEach(point => {
-                    if (point.selected) {
-                      // Gray if it's selected
-                      chart.instance
-                        .series(s => assembly[assembly.metadata].includes(s.name))
-                        .points(allPoint => allPoint.name === point.name)
-                        .options({ color: "gray" });
-                    } else {
-                      // Else Black
-                      chart.instance
-                        .series(s => assembly[assembly.metadata].includes(s.name))
-                        .points(allPoint => allPoint.name === point.name)
-                        .options({ color: "black" });
-                    }
-                  });
-
-                  if (this.series.points(p => p.name === assembly.assembly_name)) {
-                    // for the current point only
-                    this.series
-                      .points(p => p.name === assembly.assembly_name)
+                    // For all points with the same metadata
+                    chart.instance
+                      .series()
+                      .points()
                       .items.forEach(point => {
-                      store.dispatch("assemblies/updateNoMoreOverMousedStateAction", assembly);
-                      if (point.selected) {
-                        this.series.points(allPoint => allPoint.name === point.name).options({ color: "gray" });
+                      if (pangenomesSelectedStored.value.length === 0) {
+                        if (point.selected) {
+                          // Orange if it's selected
+                          chart.instance
+                            .series()
+                            .points(allPoint => allPoint.name === point.name)
+                            .options({ color: "#c95e00" });
+                        } else {
+                          // Else Black
+                          chart.instance
+                            .series()
+                            .points(allPoint => allPoint.name === point.name)
+                            .options({ color: "#cad2e0" });
+                        }
                       } else {
-                        this.series.points(allPoint => allPoint.name === point.name).options({ color: "black" });
+                        chart.instance
+                          .series()
+                          .points(allPoint => pangenomesSelectedStored.value[0].assemblies.includes(allPoint.name))
+                          .options({ color: "black" });
+
+                        if (point.selected) {
+                          // Gray if it's selected
+                          chart.instance
+                            .series(s => assembly[assembly.metadata].includes(s.name))
+                            .points(allPoint => allPoint.name === point.name && !pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                            .options({ color: "#c95e00" });
+                          chart.instance
+                            .series(s => assembly[assembly.metadata].includes(s.name))
+                            .points(allPoint => allPoint.name === point.name && pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                            .options({ color: "black" });
+                        } else {
+                          // Else Black
+                          chart.instance
+                            .series(s => assembly[assembly.metadata].includes(s.name))
+                            .points(allPoint => allPoint.name === point.name && !pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                            .options({ color: "#cad2e0" });
+                          chart.instance
+                            .series(s => assembly[assembly.metadata].includes(s.name))
+                            .points(allPoint => allPoint.name === point.name && pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                            .options({ color: "black" });
+                        }
                       }
                     });
-                  }
-                  // for all other points
-                  this.series
-                    .points(p => p.name !== assembly.assembly_name)
-                    .items.forEach(point => {
-                    if (point.selected) {
-                      this.series.points(allPoint => allPoint.name === point.name).options({ color: "gray" });
-                    } else {
-                      this.series.points(allPoint => allPoint.name === point.name).options({ color: "black" });
+
+                    if (this.series.points(p => p.name === assembly.assembly_name)) {
+                      // for the current point only
+                      this.series
+                        .points(p => p.name === assembly.assembly_name)
+                        .items.forEach(point => {
+                        store.dispatch("assemblies/updateNoMoreOverMousedStateAction", assembly);
+                        if (pangenomesSelectedStored.value.length === 0) {
+                          if (point.selected) {
+                            this.series.points(allPoint => allPoint.name === point.name).options({ color: "#c95e00" });
+                          } else {
+                            this.series.points(allPoint => allPoint.name === point.name).options({ color: "#cad2e0" });
+                          }
+                        } else {
+                          if (point.selected) {
+                            this.series
+                              .points(allPoint => allPoint.name === point.name && !pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                              .options({ color: "#c95e00" });
+                            this.series
+                              .points(allPoint => allPoint.name === point.name && pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                              .options({ color: "black" });
+                          } else {
+                            this.series
+                              .points(allPoint => allPoint.name === point.name && !pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                              .options({ color: "#cad2e0" });
+                            this.series
+                              .points(allPoint => allPoint.name === point.name && pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                              .options({ color: "black" });
+                          }
+                        }
+                      });
                     }
-                  });
+                  }
+
+                  // for all other points
+                  // this.series
+                  //     .points(p => p.name !== assembly.assembly_name)
+                  //     .items.forEach(point => {
+                  //         if (pangenomesSelectedStored.value.length === 0) {
+                  //             if (point.selected) {
+                  //                 this.series.points(allPoint => allPoint.name === point.name).options({ color: '#c95e00' });
+                  //             } else {
+                  //                 this.series.points(allPoint => allPoint.name === point.name).options({ color: '#cad2e0' });
+                  //             }
+                  //         } else {
+                  //             if (point.selected) {
+                  //                 this.series
+                  //                     .points(allPoint => allPoint.name === point.name && !pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                  //                     .options({ color: '#c95e00' });
+                  //                 this.series
+                  //                     .points(allPoint => allPoint.name === point.name && pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                  //                     .options({ color: 'black' });
+                  //             } else {
+                  //                 this.series
+                  //                     .points(allPoint => allPoint.name === point.name && !pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                  //                     .options({ color: '#cad2e0' });
+                  //                 this.series
+                  //                     .points(allPoint => allPoint.name === point.name && pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                  //                     .options({ color: 'black' });
+                  //             }
+                  //         }
+                  //     });
                 },
                 click: function() {
                   // On clicked point
@@ -295,24 +368,58 @@ export default defineComponent({
                   this.series
                     .points(p => p.name === assembly.assembly_name)
                     .items.forEach(point => {
-                    if (point.selected) {
-                      store.dispatch("assemblies/updateIsNotSelectedStateAction", assembly);
-                      // If it was selected -> unselect this point
-                      point.series.currentOptions.color = "black";
-                      this.series.points(allPoint => allPoint.name === point.name).options({
-                        color: "black",
-                        selected: assembly.selected
-                      });
-                      this.userOptions.marker.outline.color = "white";
+                    if (pangenomesSelectedStored.value.length === 0) {
+                      if (point.selected) {
+                        store.dispatch("assemblies/updateIsNotSelectedStateAction", assembly);
+                        // If it was selected -> unselect this point
+                        point.series.currentOptions.color = "#cad2e0";
+                        this.series.points(allPoint => allPoint.name === point.name).options({
+                          color: "#cad2e0",
+                          selected: assembly.selected
+                        });
+                        this.userOptions.marker.outline.color = "white";
+                      } else {
+                        // If it was unselect -> select
+                        store.dispatch("assemblies/updateIsSelectedStateAction", assembly);
+                        point.series.currentOptions.color = "#c95e00";
+                        this.series.points(allPoint => allPoint.name === point.name).options({
+                          color: "#c95e00",
+                          selected: assembly.selected
+                        });
+                        this.userOptions.marker.outline.color = "gray";
+                      }
                     } else {
-                      // If it was unselect -> select
-                      store.dispatch("assemblies/updateIsSelectedStateAction", assembly);
-                      point.series.currentOptions.color = "gray";
-                      this.series.points(allPoint => allPoint.name === point.name).options({
-                        color: "gray",
-                        selected: assembly.selected
-                      });
-                      this.userOptions.marker.outline.color = "gray";
+                      if (point.selected) {
+                        store.dispatch("assemblies/updateIsNotSelectedStateAction", assembly);
+                        // If it was selected -> unselect this point
+                        if (!pangenomesSelectedStored.value[0].assemblies.includes(point.name)) {
+                          point.series.currentOptions.color = "#c95e00";
+                        } else {
+                          point.series.currentOptions.color = "black";
+                        }
+                        this.series
+                          .points(allPoint => allPoint.name === point.name && !pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                          .options({ color: "#cad2e0", selected: assembly.selected });
+                        this.series
+                          .points(allPoint => allPoint.name === point.name && pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                          .options({ color: "black", selected: assembly.selected });
+                        this.userOptions.marker.outline.color = "white";
+                      } else {
+                        // If it was unselect -> select
+                        store.dispatch("assemblies/updateIsSelectedStateAction", assembly);
+                        if (!pangenomesSelectedStored.value[0].assemblies.includes(point.name)) {
+                          point.series.currentOptions.color = "#c95e00";
+                        } else {
+                          point.series.currentOptions.color = "black";
+                        }
+                        this.series
+                          .points(allPoint => allPoint.name === point.name && !pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                          .options({ color: "#c95e00", selected: assembly.selected });
+                        this.series
+                          .points(allPoint => allPoint.name === point.name && pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                          .options({ color: "black", selected: assembly.selected });
+                        this.userOptions.marker.outline.color = "gray";
+                      }
                     }
                   });
                   // For other points
@@ -320,12 +427,40 @@ export default defineComponent({
                     .points(p => p.name !== assembly.assembly_name)
                     .items.forEach(point => {
                     // Keep colors
-                    if (point.selected) {
-                      this.series.currentOptions.color = "gray";
-                      this.series.points(allPoint => allPoint.name === point.name).options({ color: "gray" });
+                    if (pangenomesSelectedStored.value.length === 0) {
+                      if (point.selected) {
+                        this.series.currentOptions.color = "#c95e00";
+                        this.series.points(allPoint => allPoint.name === point.name).options({ color: "#c95e00" });
+                      } else {
+                        this.series.currentOptions.color = "#cad2e0";
+                        this.series.points(allPoint => allPoint.name === point.name).options({ color: "#cad2e0" });
+                      }
                     } else {
-                      this.series.currentOptions.color = "black";
-                      this.series.points(allPoint => allPoint.name === point.name).options({ color: "black" });
+                      if (point.selected) {
+                        if (!pangenomesSelectedStored.value[0].assemblies.includes(point.name)) {
+                          point.series.currentOptions.color = "#c95e00";
+                        } else {
+                          point.series.currentOptions.color = "black";
+                        }
+                        this.series
+                          .points(allPoint => allPoint.name === point.name && !pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                          .options({ color: "#c95e00" });
+                        this.series
+                          .points(allPoint => allPoint.name === point.name && pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                          .options({ color: "black" });
+                      } else {
+                        if (!pangenomesSelectedStored.value[0].assemblies.includes(point.name)) {
+                          point.series.currentOptions.color = "#cad2e0";
+                        } else {
+                          point.series.currentOptions.color = "black";
+                        }
+                        this.series
+                          .points(allPoint => allPoint.name === point.name && !pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                          .options({ color: "#cad2e0" });
+                        this.series
+                          .points(allPoint => allPoint.name === point.name && pangenomesSelectedStored.value[0].assemblies.includes(point.name))
+                          .options({ color: "black" });
+                      }
                     }
                   });
                 }
@@ -363,4 +498,13 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style>
+div.va-file-upload__field__text {
+  visibility: hidden;
+}
+
+div.va-file-upload__field__text:after {
+  visibility: visible;
+  content: 'Choose a file or drop it here...';
+}
+</style>

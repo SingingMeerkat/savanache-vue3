@@ -19,6 +19,7 @@
       </div>
     </v-app-bar>
     <v-main>
+      <!-- Content -->
       <router-view />
     </v-main>
   </v-app>
@@ -27,7 +28,7 @@
 <script>
 import pangenomes from "@/data/pangenome";
 import { useStore } from "vuex";
-import { ref } from "vue";
+import { ref } from "@vue/reactivity";
 
 export default {
   name: "App",
