@@ -33,7 +33,8 @@
            ref="genomeLegend"
            @mouseout="function() {eventFadeInRef('genomeLegend')}"
            @mouseover="function() {eventFadeOutRef('genomeLegend')}">
-          <rect :fill="`url(#repeatsBgLabelGradient_left)`" :height="autoComputeMatrixHeight+1" :width="genoLegendPanelWidth" x="0"
+          <rect :fill="`url(#repeatsBgLabelGradient_left)`" :height="autoComputeMatrixHeight+1"
+                :width="genoLegendPanelWidth" x="0"
                 y="0" />
           <text v-for="(genome, index) in genomeList"
                 :key="`genomeLabel_${genome}`"
@@ -51,9 +52,11 @@
         <!-- IMPORTANT The position of the handle does not seem to work properly, to investigate!-->
         <!-- It is surely a pbl of 'blockOffset' being based on a wrong mouse position, cf y pos of line?-->
         <!-- VERTICAL SLIDER FOR THE PAV MATRIX -->
-        <g v-show="totBlockIsHigherThanMatrixheight" id="fadingScrollbar" ref="pavConditionalSlider" :transform="writeTranslate(displayWidth-10, 0)"
+        <g v-show="totBlockIsHigherThanMatrixheight" id="fadingScrollbar" ref="pavConditionalSlider"
+           :transform="writeTranslate(displayWidth-10, 0)"
            opacity="0">
-          <line :stroke="hclToRgb(0,0,25)" :y2="autoComputeMatrixHeight - 10" stroke-linecap="round" stroke-opacity="0.3"
+          <line :stroke="hclToRgb(0,0,25)" :y2="autoComputeMatrixHeight - 10" stroke-linecap="round"
+                stroke-opacity="0.3"
                 stroke-width="10px" y1="10" />
           <line :stroke="hclToRgb(0,0,95)" :y2="autoComputeMatrixHeight - 10" stroke-linecap="round" stroke-width="8px"
                 y1="10" />
@@ -89,7 +92,8 @@
                :id="`duplicationBoxes_${chromName}`"
                :key="`chrom_${chromName}`"
                :transform="writeTranslate(0, index * blocksDimensions.height)">
-              <line :x2="displayWidth" :y1="0.5*blocksDimensions.height" :y2="0.5*blocksDimensions.height" class="bgLine"
+              <line :x2="displayWidth" :y1="0.5*blocksDimensions.height" :y2="0.5*blocksDimensions.height"
+                    class="bgLine"
                     stroke="#eeeeee" stroke-width="6px" x1="0" />
               <!-- similarity boxes are translated in order to be centered-->
               <rect v-for="(block, idxInArray) in filteredData"
@@ -116,7 +120,8 @@
              :transform="panel.translation"
              @mouseout="function() {eventFadeInRef(`panChromLegend_${panel.side}`)}"
              @mouseover="function() {eventFadeOutRef(`panChromLegend_${panel.side}`)}">
-            <rect :fill="`url(#repeatsBgLabelGradient_${panel.side})`" :height="chromList.length * blocksDimensions.height" :width="chromLegendPanelWidth" :x="panel.x"
+            <rect :fill="`url(#repeatsBgLabelGradient_${panel.side})`"
+                  :height="chromList.length * blocksDimensions.height" :width="chromLegendPanelWidth" :x="panel.x"
                   y="0" />
             <text v-for="(chromName, index) in chromList"
                   :key="`duplicationBoxes_${chromName}`"

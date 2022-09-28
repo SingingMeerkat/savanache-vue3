@@ -99,7 +99,8 @@
         </g>
 
         <!-- VERTICAL SLIDER FOR THE SIMILARITIES ON OTHER CHROMS -->
-        <g v-show="totSimChromIsHigherThanSvgheight" ref="simBoxesConditionalSlider" :transform="writeTranslate(displayWidth-10, 0)"
+        <g v-show="totSimChromIsHigherThanSvgheight" ref="simBoxesConditionalSlider"
+           :transform="writeTranslate(displayWidth-10, 0)"
            opacity="0">
           <line :stroke="hclToRgb(0,0,25)" :y2="simBoxesSvgHeight - 10" stroke-linecap="round" stroke-opacity="0.3"
                 stroke-width="10px" y1="10" />

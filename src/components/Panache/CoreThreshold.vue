@@ -67,7 +67,8 @@
             </linearGradient>
           </defs>
 
-          <text ref="coreSliderLegend" :transform="`translate(${width/2}, 0)`" dominant-baseline="hanging" font-family="sans-serif"
+          <text ref="coreSliderLegend" :transform="`translate(${width/2}, 0)`" dominant-baseline="hanging"
+                font-family="sans-serif"
                 font-size="10px" text-anchor="middle">
             <!--            <tspan>Minimal Presence ratio </tspan>-->
             <!--            <tspan x=0 dy='1.2em'>to be part of </tspan>-->

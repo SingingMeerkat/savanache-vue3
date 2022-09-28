@@ -1,0 +1,5481 @@
+{
+  "pangenome": {
+    "panSkeleton": {
+      "Node_A_0": {
+        "length": 111,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 0
+          }
+        },
+        "coocs": [
+          "Node_A_1",
+          "Node_A_2",
+          "Node_A_3",
+          "Node_A_4",
+          "Node_A_5"
+        ],
+        "neighborNodes": {
+          "before": [],
+          "after": [
+            "Node_A_1"
+          ]
+        }
+      },
+      "Node_A_1": {
+        "length": 111,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 1
+          }
+        },
+        "coocs": [
+          "Node_A_0",
+          "Node_A_2",
+          "Node_A_3",
+          "Node_A_4",
+          "Node_A_5"
+        ],
+        "neighborNodes": {
+          "before": [
+            "Node_A_0"
+          ],
+          "after": [
+            "Node_B"
+          ]
+        }
+      },
+      "Node_A_2": {
+        "length": 111,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 11
+          },
+          "Leonidas": {
+            "chrom1": 10
+          }
+        },
+        "coocs": [
+          "Node_A_0",
+          "Node_A_1",
+          "Node_A_3",
+          "Node_A_4",
+          "Node_A_5"
+        ],
+        "neighborNodes": {
+          "before": [
+            "Node_J",
+            "Node_L"
+          ],
+          "after": [
+            "Node_A_3",
+            "Node_N"
+          ]
+        }
+      },
+      "Node_A_3": {
+        "length": 111,
+        "traversals": {
+          "Leonidas": {
+            "chrom1": 11
+          }
+        },
+        "coocs": [
+          "Node_A_0",
+          "Node_A_1",
+          "Node_A_2",
+          "Node_A_4",
+          "Node_A_5"
+        ],
+        "neighborNodes": {
+          "before": [
+            "Node_A_2"
+          ],
+          "after": [
+            "Node_M"
+          ]
+        }
+      },
+      "Node_A_4": {
+        "length": 111,
+        "traversals": {
+          "Ganymede": {
+            "chrom1": 15
+          },
+          "Leonidas": {
+            "chrom1": 18
+          }
+        },
+        "coocs": [
+          "Node_A_0",
+          "Node_A_1",
+          "Node_A_2",
+          "Node_A_3",
+          "Node_A_5"
+        ],
+        "neighborNodes": {
+          "before": [
+            "Node_U"
+          ],
+          "after": [
+            "Node_A_5"
+          ]
+        }
+      },
+      "Node_A_5": {
+        "length": 111,
+        "traversals": {
+          "Ganymede": {
+            "chrom1": 16
+          }
+        },
+        "coocs": [
+          "Node_A_0",
+          "Node_A_1",
+          "Node_A_2",
+          "Node_A_3",
+          "Node_A_4"
+        ],
+        "neighborNodes": {
+          "before": [
+            "Node_A_4"
+          ],
+          "after": []
+        }
+      },
+      "Node_B": {
+        "length": 456,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 2
+          },
+          "Ganymede": {
+            "chrom1": 0
+          },
+          "Leonidas": {
+            "chrom1": 0
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_A_1"
+          ],
+          "after": [
+            "Node_C",
+            "Node_D",
+            "Node_G"
+          ]
+        }
+      },
+      "Node_C": {
+        "length": 404,
+        "traversals": {
+          "Ganymede": {
+            "chrom1": 1
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_B"
+          ],
+          "after": [
+            "Node_D"
+          ]
+        }
+      },
+      "Node_D": {
+        "length": 87,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 3
+          },
+          "Ganymede": {
+            "chrom1": 2
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_B",
+            "Node_C"
+          ],
+          "after": [
+            "Node_E"
+          ]
+        }
+      },
+      "Node_E": {
+        "length": 255,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 4
+          },
+          "Ganymede": {
+            "chrom1": 3
+          },
+          "Leonidas": {
+            "chrom1": 3
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_D",
+            "Node_F"
+          ],
+          "after": [
+            "Node_F",
+            "Node_H"
+          ]
+        }
+      },
+      "Node_F": {
+        "length": 569,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 5
+          },
+          "Ganymede": {
+            "chrom1": 4
+          },
+          "Leonidas": {
+            "chrom1": 2
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_E",
+            "Node_G"
+          ],
+          "after": [
+            "Node_E",
+            "Node_G"
+          ]
+        }
+      },
+      "Node_G": {
+        "length": 455,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 6
+          },
+          "Ganymede": {
+            "chrom1": 5
+          },
+          "Leonidas": {
+            "chrom1": 1
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_B",
+            "Node_F"
+          ],
+          "after": [
+            "Node_F",
+            "Node_H"
+          ]
+        }
+      },
+      "Node_H_0": {
+        "length": 222,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 7
+          },
+          "Ganymede": {
+            "chrom1": 6
+          },
+          "Leonidas": {
+            "chrom1": 4
+          }
+        },
+        "coocs": [
+          "Node_H_1"
+        ],
+        "neighborNodes": {
+          "before": [
+            "Node_E",
+            "Node_G"
+          ],
+          "after": [
+            "Node_H_1",
+            "Node_L"
+          ]
+        }
+      },
+      "Node_H_1": {
+        "length": 222,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 8
+          },
+          "Leonidas": {
+            "chrom1": 5
+          }
+        },
+        "coocs": [
+          "Node_H_0"
+        ],
+        "neighborNodes": {
+          "before": [
+            "Node_H_0"
+          ],
+          "after": [
+            "Node_I"
+          ]
+        }
+      },
+      "Node_I": {
+        "length": 58,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 9
+          },
+          "Leonidas": {
+            "chrom1": 6
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_H_1"
+          ],
+          "after": [
+            "Node_H_J"
+          ]
+        }
+      },
+      "Node_J": {
+        "length": 276,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 10
+          },
+          "Leonidas": {
+            "chrom1": 7
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_I"
+          ],
+          "after": [
+            "Node_A_2",
+            "Node_K"
+          ]
+        }
+      },
+      "Node_K": {
+        "length": 320,
+        "traversals": {
+          "Leonidas": {
+            "chrom1": 8
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_J"
+          ],
+          "after": [
+            "Node_L"
+          ]
+        }
+      },
+      "Node_L": {
+        "length": 466,
+        "traversals": {
+          "Ganymede": {
+            "chrom1": 7
+          },
+          "Leonidas": {
+            "chrom1": 9
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_H",
+            "Node_K"
+          ],
+          "after": [
+            "Node_A_2",
+            "Node_N"
+          ]
+        }
+      },
+      "Node_M": {
+        "length": 168,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 13
+          },
+          "Ganymede": {
+            "chrom1": 9
+          },
+          "Leonidas": {
+            "chrom1": 12
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_A_3",
+            "Node_N"
+          ],
+          "after": [
+            "Node_N",
+            "Node_O"
+          ]
+        }
+      },
+      "Node_N": {
+        "length": 545,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 12
+          },
+          "Ganymede": {
+            "chrom1": 8
+          },
+          "Leonidas": {
+            "chrom1": 13
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_A_2",
+            "Node_L",
+            "Node_M"
+          ],
+          "after": [
+            "Node_M",
+            "Node_O"
+          ]
+        }
+      },
+      "Node_O": {
+        "length": 740,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 14
+          },
+          "Ganymede": {
+            "chrom1": 10
+          },
+          "Leonidas": {
+            "chrom1": 14
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_M",
+            "Node_N"
+          ],
+          "after": [
+            "Node_P",
+            "Node_S"
+          ]
+        }
+      },
+      "Node_P": {
+        "length": 487,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 15
+          },
+          "Ganymede": {
+            "chrom1": 11
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [],
+          "after": []
+        }
+      },
+      "Node_Q": {
+        "length": 255,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 16
+          },
+          "Ganymede": {
+            "chrom1": 12
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_P"
+          ],
+          "after": [
+            "Node_Q"
+          ]
+        }
+      },
+      "Node_R": {
+        "length": 121,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 17
+          },
+          "Ganymede": {
+            "chrom1": 13
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_Q"
+          ],
+          "after": [
+            "Node_U"
+          ]
+        }
+      },
+      "Node_S": {
+        "length": 354,
+        "traversals": {
+          "Leonidas": {
+            "chrom1": 15
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_O"
+          ],
+          "after": [
+            "Node_T"
+          ]
+        }
+      },
+      "Node_T": {
+        "length": 452,
+        "traversals": {
+          "Leonidas": {
+            "chrom1": 16
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_S"
+          ],
+          "after": [
+            "Node_U"
+          ]
+        }
+      },
+      "Node_U": {
+        "length": 648,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 18
+          },
+          "Ganymede": {
+            "chrom1": 14
+          },
+          "Leonidas": {
+            "chrom1": 17
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_R",
+            "Node_T"
+          ],
+          "after": [
+            "Node_V"
+          ]
+        }
+      },
+      "Node_V": {
+        "length": 345,
+        "traversals": {
+          "Aphrodite": {
+            "chrom1": 19
+          }
+        },
+        "coocs": [],
+        "neighborNodes": {
+          "before": [
+            "Node_U"
+          ],
+          "after": []
+        }
+      }
+    },
+    "paths": {
+      "Aphrodite": {
+        "chrom1": [
+          {
+            "panBlock": "Node_A_0",
+            "startPosition": 0,
+            "endPosition": 111,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_A_1",
+            "startPosition": 111,
+            "endPosition": 222,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_B",
+            "startPosition": 222,
+            "endPosition": 678,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_D",
+            "startPosition": 678,
+            "endPosition": 765,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_E",
+            "startPosition": 765,
+            "endPosition": 1020,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_F",
+            "startPosition": 1020,
+            "endPosition": 1589,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_G",
+            "startPosition": 1589,
+            "endPosition": 2044,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_H_0",
+            "startPosition": 2044,
+            "endPosition": 2266,
+            "strand": -1
+          },
+          {
+            "panBlock": "Node_H_1",
+            "startPosition": 2266,
+            "endPosition": 2488,
+            "strand": -1
+          },
+          {
+            "panBlock": "Node_I",
+            "startPosition": 2488,
+            "endPosition": 2546,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_J",
+            "startPosition": 2546,
+            "endPosition": 2822,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_A_2",
+            "startPosition": 2822,
+            "endPosition": 2933,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_N",
+            "startPosition": 2933,
+            "endPosition": 3478,
+            "strand": -1
+          },
+          {
+            "panBlock": "Node_M",
+            "startPosition": 3478,
+            "endPosition": 3646,
+            "strand": -1
+          },
+          {
+            "panBlock": "Node_O",
+            "startPosition": 3646,
+            "endPosition": 4386,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_P",
+            "startPosition": 4386,
+            "endPosition": 4873,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_Q",
+            "startPosition": 4873,
+            "endPosition": 5128,
+            "strand": -1
+          },
+          {
+            "panBlock": "Node_R",
+            "startPosition": 5128,
+            "endPosition": 5249,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_U",
+            "startPosition": 5249,
+            "endPosition": 5897,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_V",
+            "startPosition": 5897,
+            "endPosition": 6242,
+            "strand": 1
+          }
+        ]
+      },
+      "Ganymede": {
+        "chrom1": [
+          {
+            "panBlock": "Node_B",
+            "startPosition": 0,
+            "endPosition": 456,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_C",
+            "startPosition": 456,
+            "endPosition": 860,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_D",
+            "startPosition": 860,
+            "endPosition": 947,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_E",
+            "startPosition": 947,
+            "endPosition": 1202,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_F",
+            "startPosition": 1202,
+            "endPosition": 1771,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_G",
+            "startPosition": 1771,
+            "endPosition": 2226,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_H_0",
+            "startPosition": 2226,
+            "endPosition": 2448,
+            "strand": -1
+          },
+          {
+            "panBlock": "Node_L",
+            "startPosition": 2448,
+            "endPosition": 2914,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_N",
+            "startPosition": 2914,
+            "endPosition": 3459,
+            "strand": -1
+          },
+          {
+            "panBlock": "Node_M",
+            "startPosition": 3459,
+            "endPosition": 3627,
+            "strand": -1
+          },
+          {
+            "panBlock": "Node_O",
+            "startPosition": 3627,
+            "endPosition": 4367,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_P",
+            "startPosition": 4367,
+            "endPosition": 4854,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_Q",
+            "startPosition": 4854,
+            "endPosition": 5109,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_R",
+            "startPosition": 5109,
+            "endPosition": 5230,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_U",
+            "startPosition": 5230,
+            "endPosition": 5878,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_A_4",
+            "startPosition": 5878,
+            "endPosition": 5989,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_A_5",
+            "startPosition": 5989,
+            "endPosition": 6100,
+            "strand": 1
+          }
+        ]
+      },
+      "Leonidas": {
+        "chrom1": [
+          {
+            "panBlock": "Node_B",
+            "startPosition": 0,
+            "endPosition": 456,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_G",
+            "startPosition": 456,
+            "endPosition": 911,
+            "strand": -1
+          },
+          {
+            "panBlock": "Node_F",
+            "startPosition": 911,
+            "endPosition": 1480,
+            "strand": -1
+          },
+          {
+            "panBlock": "Node_E",
+            "startPosition": 1480,
+            "endPosition": 1735,
+            "strand": -1
+          },
+          {
+            "panBlock": "Node_H_0",
+            "startPosition": 1735,
+            "endPosition": 1957,
+            "strand": -1
+          },
+          {
+            "panBlock": "Node_H_1",
+            "startPosition": 1957,
+            "endPosition": 2179,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_I",
+            "startPosition": 2179,
+            "endPosition": 2237,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_J",
+            "startPosition": 2237,
+            "endPosition": 2513,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_K",
+            "startPosition": 2513,
+            "endPosition": 2833,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_L",
+            "startPosition": 2833,
+            "endPosition": 3299,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_A_2",
+            "startPosition": 3299,
+            "endPosition": 3410,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_A_3",
+            "startPosition": 3410,
+            "endPosition": 3521,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_M",
+            "startPosition": 3521,
+            "endPosition": 3689,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_N",
+            "startPosition": 3689,
+            "endPosition": 4234,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_O",
+            "startPosition": 4234,
+            "endPosition": 4974,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_S",
+            "startPosition": 4974,
+            "endPosition": 5328,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_T",
+            "startPosition": 5328,
+            "endPosition": 5780,
+            "strand": -1
+          },
+          {
+            "panBlock": "Node_U",
+            "startPosition": 5780,
+            "endPosition": 6428,
+            "strand": 1
+          },
+          {
+            "panBlock": "Node_A_4",
+            "startPosition": 6428,
+            "endPosition": 6539,
+            "strand": 1
+          }
+        ]
+      }
+    }
+  },
+  "pivots": {
+    "chrom1": {
+      "Aphrodite": {
+        "Ganymede": {
+          "array": [
+            {
+              "panBlock": "Node_A_0",
+              "pivotStepIndex": 0,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_A_5"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_A_1",
+              "pivotStepIndex": 1,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_A_5"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_B",
+              "pivotStepIndex": 2,
+              "present": true,
+              "comparedPathStepIndex": 0
+            },
+            {
+              "panBlock": "Node_D",
+              "pivotStepIndex": 3,
+              "present": true,
+              "comparedPathStepIndex": 2,
+              "insertion": true,
+              "insertionNodes": [
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_D",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_C"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_E",
+              "pivotStepIndex": 4,
+              "present": true,
+              "comparedPathStepIndex": 3
+            },
+            {
+              "panBlock": "Node_F",
+              "pivotStepIndex": 5,
+              "present": true,
+              "comparedPathStepIndex": 4
+            },
+            {
+              "panBlock": "Node_G",
+              "pivotStepIndex": 6,
+              "present": true,
+              "comparedPathStepIndex": 5
+            },
+            {
+              "panBlock": "Node_H_0",
+              "pivotStepIndex": 7,
+              "present": true,
+              "comparedPathStepIndex": 6
+            },
+            {
+              "panBlock": "Node_H_1",
+              "pivotStepIndex": 8,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_H_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 6,
+                  "comparedPathStepPanBlock": "Node_H_0"
+                }
+              ],
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_H_1"
+                },
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_I"
+                },
+                {
+                  "pivotStepIndex": 10,
+                  "pivotStepPanBlock": "Node_J"
+                },
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_2"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 7,
+                  "comparedPathStepPanBlock": "Node_L"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_I",
+              "pivotStepIndex": 9,
+              "swap": true,
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_H_1"
+                },
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_I"
+                },
+                {
+                  "pivotStepIndex": 10,
+                  "pivotStepPanBlock": "Node_J"
+                },
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_2"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 7,
+                  "comparedPathStepPanBlock": "Node_L"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_J",
+              "pivotStepIndex": 10,
+              "swap": true,
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_H_1"
+                },
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_I"
+                },
+                {
+                  "pivotStepIndex": 10,
+                  "pivotStepPanBlock": "Node_J"
+                },
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_2"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 7,
+                  "comparedPathStepPanBlock": "Node_L"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_A_2",
+              "pivotStepIndex": 11,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_A_5"
+                }
+              ],
+              "swap": "end",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_H_1"
+                },
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_I"
+                },
+                {
+                  "pivotStepIndex": 10,
+                  "pivotStepPanBlock": "Node_J"
+                },
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_2"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 7,
+                  "comparedPathStepPanBlock": "Node_L"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_N",
+              "pivotStepIndex": 12,
+              "present": true,
+              "comparedPathStepIndex": 8
+            },
+            {
+              "panBlock": "Node_M",
+              "pivotStepIndex": 13,
+              "present": true,
+              "comparedPathStepIndex": 9
+            },
+            {
+              "panBlock": "Node_O",
+              "pivotStepIndex": 14,
+              "present": true,
+              "comparedPathStepIndex": 10
+            },
+            {
+              "panBlock": "Node_P",
+              "pivotStepIndex": 15,
+              "present": true,
+              "comparedPathStepIndex": 11
+            },
+            {
+              "panBlock": "Node_Q",
+              "pivotStepIndex": 16,
+              "present": true,
+              "comparedPathStepIndex": 12,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_Q",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_Q"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_R",
+              "pivotStepIndex": 17,
+              "present": true,
+              "comparedPathStepIndex": 13
+            },
+            {
+              "panBlock": "Node_U",
+              "pivotStepIndex": 18,
+              "present": true,
+              "comparedPathStepIndex": 14
+            },
+            {
+              "panBlock": "Node_V",
+              "pivotStepIndex": 19,
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 19,
+                  "pivotStepPanBlock": "Node_V"
+                }
+              ],
+              "swapComparedNodes": []
+            }
+          ],
+          "blocks": {
+            "Node_A_0": {
+              "panBlock": "Node_A_0",
+              "pivotStepIndex": 0,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_A_5"
+                }
+              ]
+            },
+            "Node_A_1": {
+              "panBlock": "Node_A_1",
+              "pivotStepIndex": 1,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_A_5"
+                }
+              ]
+            },
+            "Node_B": {
+              "panBlock": "Node_B",
+              "pivotStepIndex": 2,
+              "present": true,
+              "comparedPathStepIndex": 0
+            },
+            "Node_D": {
+              "panBlock": "Node_D",
+              "pivotStepIndex": 3,
+              "present": true,
+              "comparedPathStepIndex": 2,
+              "insertion": true,
+              "insertionNodes": [
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_D",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_C"
+                }
+              ]
+            },
+            "Node_E": {
+              "panBlock": "Node_E",
+              "pivotStepIndex": 4,
+              "present": true,
+              "comparedPathStepIndex": 3
+            },
+            "Node_F": {
+              "panBlock": "Node_F",
+              "pivotStepIndex": 5,
+              "present": true,
+              "comparedPathStepIndex": 4
+            },
+            "Node_G": {
+              "panBlock": "Node_G",
+              "pivotStepIndex": 6,
+              "present": true,
+              "comparedPathStepIndex": 5
+            },
+            "Node_H_0": {
+              "panBlock": "Node_H_0",
+              "pivotStepIndex": 7,
+              "present": true,
+              "comparedPathStepIndex": 6
+            },
+            "Node_H_1": {
+              "panBlock": "Node_H_1",
+              "pivotStepIndex": 8,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_H_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 6,
+                  "comparedPathStepPanBlock": "Node_H_0"
+                }
+              ],
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_H_1"
+                },
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_I"
+                },
+                {
+                  "pivotStepIndex": 10,
+                  "pivotStepPanBlock": "Node_J"
+                },
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_2"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 7,
+                  "comparedPathStepPanBlock": "Node_L"
+                }
+              ]
+            },
+            "Node_I": {
+              "panBlock": "Node_I",
+              "pivotStepIndex": 9,
+              "swap": true,
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_H_1"
+                },
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_I"
+                },
+                {
+                  "pivotStepIndex": 10,
+                  "pivotStepPanBlock": "Node_J"
+                },
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_2"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 7,
+                  "comparedPathStepPanBlock": "Node_L"
+                }
+              ]
+            },
+            "Node_J": {
+              "panBlock": "Node_J",
+              "pivotStepIndex": 10,
+              "swap": true,
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_H_1"
+                },
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_I"
+                },
+                {
+                  "pivotStepIndex": 10,
+                  "pivotStepPanBlock": "Node_J"
+                },
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_2"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 7,
+                  "comparedPathStepPanBlock": "Node_L"
+                }
+              ]
+            },
+            "Node_A_2": {
+              "panBlock": "Node_A_2",
+              "pivotStepIndex": 11,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_A_5"
+                }
+              ],
+              "swap": "end",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_H_1"
+                },
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_I"
+                },
+                {
+                  "pivotStepIndex": 10,
+                  "pivotStepPanBlock": "Node_J"
+                },
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_2"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 7,
+                  "comparedPathStepPanBlock": "Node_L"
+                }
+              ]
+            },
+            "Node_N": {
+              "panBlock": "Node_N",
+              "pivotStepIndex": 12,
+              "present": true,
+              "comparedPathStepIndex": 8
+            },
+            "Node_M": {
+              "panBlock": "Node_M",
+              "pivotStepIndex": 13,
+              "present": true,
+              "comparedPathStepIndex": 9
+            },
+            "Node_O": {
+              "panBlock": "Node_O",
+              "pivotStepIndex": 14,
+              "present": true,
+              "comparedPathStepIndex": 10
+            },
+            "Node_P": {
+              "panBlock": "Node_P",
+              "pivotStepIndex": 15,
+              "present": true,
+              "comparedPathStepIndex": 11
+            },
+            "Node_Q": {
+              "panBlock": "Node_Q",
+              "pivotStepIndex": 16,
+              "present": true,
+              "comparedPathStepIndex": 12,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_Q",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_Q"
+                }
+              ]
+            },
+            "Node_R": {
+              "panBlock": "Node_R",
+              "pivotStepIndex": 17,
+              "present": true,
+              "comparedPathStepIndex": 13
+            },
+            "Node_U": {
+              "panBlock": "Node_U",
+              "pivotStepIndex": 18,
+              "present": true,
+              "comparedPathStepIndex": 14
+            },
+            "Node_V": {
+              "panBlock": "Node_V",
+              "pivotStepIndex": 19,
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 19,
+                  "pivotStepPanBlock": "Node_V"
+                }
+              ],
+              "swapComparedNodes": []
+            }
+          }
+        },
+        "Leonidas": {
+          "array": [
+            {
+              "panBlock": "Node_A_0",
+              "pivotStepIndex": 0,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 10,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_3"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 18,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_A_1",
+              "pivotStepIndex": 1,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 10,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_3"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 18,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_B",
+              "pivotStepIndex": 2,
+              "present": true,
+              "comparedPathStepIndex": 0
+            },
+            {
+              "panBlock": "Node_D",
+              "pivotStepIndex": 3,
+              "deleted": "solo",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_D"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_E",
+              "pivotStepIndex": 4,
+              "present": true,
+              "comparedPathStepIndex": 3,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 4,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 4,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "highestComparedStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                },
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 6,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChain": "start"
+            },
+            {
+              "panBlock": "Node_F",
+              "pivotStepIndex": 5,
+              "present": true,
+              "comparedPathStepIndex": 2,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_F"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 4,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "highestComparedStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                },
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 6,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChain": true
+            },
+            {
+              "panBlock": "Node_G",
+              "pivotStepIndex": 6,
+              "present": true,
+              "comparedPathStepIndex": 1,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 6,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 4,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "highestComparedStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                },
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 6,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChain": "end"
+            },
+            {
+              "panBlock": "Node_H_0",
+              "pivotStepIndex": 7,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_H_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_H_1"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 4
+            },
+            {
+              "panBlock": "Node_H_1",
+              "pivotStepIndex": 8,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_H_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_H_0"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 5,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_H_1",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_H_1"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_I",
+              "pivotStepIndex": 9,
+              "present": true,
+              "comparedPathStepIndex": 6
+            },
+            {
+              "panBlock": "Node_J",
+              "pivotStepIndex": 10,
+              "present": true,
+              "comparedPathStepIndex": 7
+            },
+            {
+              "panBlock": "Node_A_2",
+              "pivotStepIndex": 11,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_3"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 18,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 10,
+              "insertion": true,
+              "insertionNodes": [
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_K"
+                },
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathStepIndex": 9,
+                  "comparedPathStepPanBlock": "Node_L"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_N",
+              "pivotStepIndex": 12,
+              "present": true,
+              "comparedPathStepIndex": 13,
+              "insertion": true,
+              "insertionNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_3"
+                },
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_N"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 13,
+                  "highestComparedStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_N"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversionChain": "start"
+            },
+            {
+              "panBlock": "Node_M",
+              "pivotStepIndex": 13,
+              "present": true,
+              "comparedPathStepIndex": 12,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 13,
+                  "highestComparedStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_N"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversionChain": "end"
+            },
+            {
+              "panBlock": "Node_O",
+              "pivotStepIndex": 14,
+              "present": true,
+              "comparedPathStepIndex": 14
+            },
+            {
+              "panBlock": "Node_P",
+              "pivotStepIndex": 15,
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_P"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_Q"
+                },
+                {
+                  "pivotStepIndex": 17,
+                  "pivotStepPanBlock": "Node_R"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_S"
+                },
+                {
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_T"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_Q",
+              "pivotStepIndex": 16,
+              "swap": true,
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_P"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_Q"
+                },
+                {
+                  "pivotStepIndex": 17,
+                  "pivotStepPanBlock": "Node_R"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_S"
+                },
+                {
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_T"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_R",
+              "pivotStepIndex": 17,
+              "swap": "end",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_P"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_Q"
+                },
+                {
+                  "pivotStepIndex": 17,
+                  "pivotStepPanBlock": "Node_R"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_S"
+                },
+                {
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_T"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_U",
+              "pivotStepIndex": 18,
+              "present": true,
+              "comparedPathStepIndex": 17
+            },
+            {
+              "panBlock": "Node_V",
+              "pivotStepIndex": 19,
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 19,
+                  "pivotStepPanBlock": "Node_V"
+                }
+              ],
+              "swapComparedNodes": []
+            }
+          ],
+          "blocks": {
+            "Node_A_0": {
+              "panBlock": "Node_A_0",
+              "pivotStepIndex": 0,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 10,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_3"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 18,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                }
+              ]
+            },
+            "Node_A_1": {
+              "panBlock": "Node_A_1",
+              "pivotStepIndex": 1,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 10,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_3"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 18,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                }
+              ]
+            },
+            "Node_B": {
+              "panBlock": "Node_B",
+              "pivotStepIndex": 2,
+              "present": true,
+              "comparedPathStepIndex": 0
+            },
+            "Node_D": {
+              "panBlock": "Node_D",
+              "pivotStepIndex": 3,
+              "deleted": "solo",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_D"
+                }
+              ]
+            },
+            "Node_E": {
+              "panBlock": "Node_E",
+              "pivotStepIndex": 4,
+              "present": true,
+              "comparedPathStepIndex": 3,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 4,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 4,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "highestComparedStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                },
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 6,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChain": "start"
+            },
+            "Node_F": {
+              "panBlock": "Node_F",
+              "pivotStepIndex": 5,
+              "present": true,
+              "comparedPathStepIndex": 2,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_F"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 4,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "highestComparedStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                },
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 6,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChain": true
+            },
+            "Node_G": {
+              "panBlock": "Node_G",
+              "pivotStepIndex": 6,
+              "present": true,
+              "comparedPathStepIndex": 1,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 6,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 4,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "highestComparedStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                },
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 6,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChain": "end"
+            },
+            "Node_H_0": {
+              "panBlock": "Node_H_0",
+              "pivotStepIndex": 7,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_H_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_H_1"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 4
+            },
+            "Node_H_1": {
+              "panBlock": "Node_H_1",
+              "pivotStepIndex": 8,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_H_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_H_0"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 5,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_H_1",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_H_1"
+                }
+              ]
+            },
+            "Node_I": {
+              "panBlock": "Node_I",
+              "pivotStepIndex": 9,
+              "present": true,
+              "comparedPathStepIndex": 6
+            },
+            "Node_J": {
+              "panBlock": "Node_J",
+              "pivotStepIndex": 10,
+              "present": true,
+              "comparedPathStepIndex": 7
+            },
+            "Node_A_2": {
+              "panBlock": "Node_A_2",
+              "pivotStepIndex": 11,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_3"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 18,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 10,
+              "insertion": true,
+              "insertionNodes": [
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_K"
+                },
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathStepIndex": 9,
+                  "comparedPathStepPanBlock": "Node_L"
+                }
+              ]
+            },
+            "Node_N": {
+              "panBlock": "Node_N",
+              "pivotStepIndex": 12,
+              "present": true,
+              "comparedPathStepIndex": 13,
+              "insertion": true,
+              "insertionNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_3"
+                },
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_N"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 13,
+                  "highestComparedStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_N"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversionChain": "start"
+            },
+            "Node_M": {
+              "panBlock": "Node_M",
+              "pivotStepIndex": 13,
+              "present": true,
+              "comparedPathStepIndex": 12,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 13,
+                  "highestComparedStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_N"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversionChain": "end"
+            },
+            "Node_O": {
+              "panBlock": "Node_O",
+              "pivotStepIndex": 14,
+              "present": true,
+              "comparedPathStepIndex": 14
+            },
+            "Node_P": {
+              "panBlock": "Node_P",
+              "pivotStepIndex": 15,
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_P"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_Q"
+                },
+                {
+                  "pivotStepIndex": 17,
+                  "pivotStepPanBlock": "Node_R"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_S"
+                },
+                {
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_T"
+                }
+              ]
+            },
+            "Node_Q": {
+              "panBlock": "Node_Q",
+              "pivotStepIndex": 16,
+              "swap": true,
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_P"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_Q"
+                },
+                {
+                  "pivotStepIndex": 17,
+                  "pivotStepPanBlock": "Node_R"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_S"
+                },
+                {
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_T"
+                }
+              ]
+            },
+            "Node_R": {
+              "panBlock": "Node_R",
+              "pivotStepIndex": 17,
+              "swap": "end",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_P"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_Q"
+                },
+                {
+                  "pivotStepIndex": 17,
+                  "pivotStepPanBlock": "Node_R"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_S"
+                },
+                {
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_T"
+                }
+              ]
+            },
+            "Node_U": {
+              "panBlock": "Node_U",
+              "pivotStepIndex": 18,
+              "present": true,
+              "comparedPathStepIndex": 17
+            },
+            "Node_V": {
+              "panBlock": "Node_V",
+              "pivotStepIndex": 19,
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 19,
+                  "pivotStepPanBlock": "Node_V"
+                }
+              ],
+              "swapComparedNodes": []
+            }
+          }
+        }
+      },
+      "Ganymede": {
+        "Aphrodite": {
+          "array": [
+            {
+              "panBlock": "Node_B",
+              "pivotStepIndex": 0,
+              "present": true,
+              "comparedPathStepIndex": 2
+            },
+            {
+              "panBlock": "Node_C",
+              "pivotStepIndex": 1,
+              "deleted": "solo",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_C"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_D",
+              "pivotStepIndex": 2,
+              "present": true,
+              "comparedPathStepIndex": 3
+            },
+            {
+              "panBlock": "Node_E",
+              "pivotStepIndex": 3,
+              "present": true,
+              "comparedPathStepIndex": 4
+            },
+            {
+              "panBlock": "Node_F",
+              "pivotStepIndex": 4,
+              "present": true,
+              "comparedPathStepIndex": 5
+            },
+            {
+              "panBlock": "Node_G",
+              "pivotStepIndex": 5,
+              "present": true,
+              "comparedPathStepIndex": 6
+            },
+            {
+              "panBlock": "Node_H_0",
+              "pivotStepIndex": 6,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_H_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_H_1"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 7
+            },
+            {
+              "panBlock": "Node_L",
+              "pivotStepIndex": 7,
+              "swap": "solo",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 7,
+                  "pivotStepPanBlock": "Node_L"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_H_1"
+                },
+                {
+                  "comparedPathStepIndex": 9,
+                  "comparedPathStepPanBlock": "Node_I"
+                },
+                {
+                  "comparedPathStepIndex": 10,
+                  "comparedPathStepPanBlock": "Node_J"
+                },
+                {
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_N",
+              "pivotStepIndex": 8,
+              "present": true,
+              "comparedPathStepIndex": 12
+            },
+            {
+              "panBlock": "Node_M",
+              "pivotStepIndex": 9,
+              "present": true,
+              "comparedPathStepIndex": 13
+            },
+            {
+              "panBlock": "Node_O",
+              "pivotStepIndex": 10,
+              "present": true,
+              "comparedPathStepIndex": 14
+            },
+            {
+              "panBlock": "Node_P",
+              "pivotStepIndex": 11,
+              "present": true,
+              "comparedPathStepIndex": 15
+            },
+            {
+              "panBlock": "Node_Q",
+              "pivotStepIndex": 12,
+              "present": true,
+              "comparedPathStepIndex": 16,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_Q",
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_Q"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_R",
+              "pivotStepIndex": 13,
+              "present": true,
+              "comparedPathStepIndex": 17
+            },
+            {
+              "panBlock": "Node_U",
+              "pivotStepIndex": 14,
+              "present": true,
+              "comparedPathStepIndex": 18
+            },
+            {
+              "panBlock": "Node_A_4",
+              "pivotStepIndex": 15,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 0,
+                  "comparedPathStepPanBlock": "Node_A_0"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_A_1"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                }
+              ],
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_A_4"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_A_5"
+                }
+              ],
+              "swapComparedNodes": []
+            },
+            {
+              "panBlock": "Node_A_5",
+              "pivotStepIndex": 16,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_5",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 0,
+                  "comparedPathStepPanBlock": "Node_A_0"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_5",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_A_1"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_5",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                }
+              ],
+              "swap": true,
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_A_4"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_A_5"
+                }
+              ],
+              "swapComparedNodes": []
+            }
+          ],
+          "blocks": {
+            "Node_B": {
+              "panBlock": "Node_B",
+              "pivotStepIndex": 0,
+              "present": true,
+              "comparedPathStepIndex": 2
+            },
+            "Node_C": {
+              "panBlock": "Node_C",
+              "pivotStepIndex": 1,
+              "deleted": "solo",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_C"
+                }
+              ]
+            },
+            "Node_D": {
+              "panBlock": "Node_D",
+              "pivotStepIndex": 2,
+              "present": true,
+              "comparedPathStepIndex": 3
+            },
+            "Node_E": {
+              "panBlock": "Node_E",
+              "pivotStepIndex": 3,
+              "present": true,
+              "comparedPathStepIndex": 4
+            },
+            "Node_F": {
+              "panBlock": "Node_F",
+              "pivotStepIndex": 4,
+              "present": true,
+              "comparedPathStepIndex": 5
+            },
+            "Node_G": {
+              "panBlock": "Node_G",
+              "pivotStepIndex": 5,
+              "present": true,
+              "comparedPathStepIndex": 6
+            },
+            "Node_H_0": {
+              "panBlock": "Node_H_0",
+              "pivotStepIndex": 6,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_H_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_H_1"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 7
+            },
+            "Node_L": {
+              "panBlock": "Node_L",
+              "pivotStepIndex": 7,
+              "swap": "solo",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 7,
+                  "pivotStepPanBlock": "Node_L"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_H_1"
+                },
+                {
+                  "comparedPathStepIndex": 9,
+                  "comparedPathStepPanBlock": "Node_I"
+                },
+                {
+                  "comparedPathStepIndex": 10,
+                  "comparedPathStepPanBlock": "Node_J"
+                },
+                {
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                }
+              ]
+            },
+            "Node_N": {
+              "panBlock": "Node_N",
+              "pivotStepIndex": 8,
+              "present": true,
+              "comparedPathStepIndex": 12
+            },
+            "Node_M": {
+              "panBlock": "Node_M",
+              "pivotStepIndex": 9,
+              "present": true,
+              "comparedPathStepIndex": 13
+            },
+            "Node_O": {
+              "panBlock": "Node_O",
+              "pivotStepIndex": 10,
+              "present": true,
+              "comparedPathStepIndex": 14
+            },
+            "Node_P": {
+              "panBlock": "Node_P",
+              "pivotStepIndex": 11,
+              "present": true,
+              "comparedPathStepIndex": 15
+            },
+            "Node_Q": {
+              "panBlock": "Node_Q",
+              "pivotStepIndex": 12,
+              "present": true,
+              "comparedPathStepIndex": 16,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_Q",
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_Q"
+                }
+              ]
+            },
+            "Node_R": {
+              "panBlock": "Node_R",
+              "pivotStepIndex": 13,
+              "present": true,
+              "comparedPathStepIndex": 17
+            },
+            "Node_U": {
+              "panBlock": "Node_U",
+              "pivotStepIndex": 14,
+              "present": true,
+              "comparedPathStepIndex": 18
+            },
+            "Node_A_4": {
+              "panBlock": "Node_A_4",
+              "pivotStepIndex": 15,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 0,
+                  "comparedPathStepPanBlock": "Node_A_0"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_A_1"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                }
+              ],
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_A_4"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_A_5"
+                }
+              ],
+              "swapComparedNodes": []
+            },
+            "Node_A_5": {
+              "panBlock": "Node_A_5",
+              "pivotStepIndex": 16,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_5",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 0,
+                  "comparedPathStepPanBlock": "Node_A_0"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_5",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_A_1"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_5",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                }
+              ],
+              "swap": true,
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_A_4"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_A_5"
+                }
+              ],
+              "swapComparedNodes": []
+            }
+          }
+        },
+        "Leonidas": {
+          "array": [
+            {
+              "panBlock": "Node_B",
+              "pivotStepIndex": 0,
+              "present": true,
+              "comparedPathStepIndex": 0
+            },
+            {
+              "panBlock": "Node_C",
+              "pivotStepIndex": 1,
+              "deleted": "start",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_C"
+                },
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_D"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_D",
+              "pivotStepIndex": 2,
+              "deleted": "end",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_C"
+                },
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_D"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_E",
+              "pivotStepIndex": 3,
+              "present": true,
+              "comparedPathStepIndex": 3,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "highestComparedStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                },
+                {
+                  "pivotStepIndex": 4,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChain": "start"
+            },
+            {
+              "panBlock": "Node_F",
+              "pivotStepIndex": 4,
+              "present": true,
+              "comparedPathStepIndex": 2,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 4,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_F"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "highestComparedStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                },
+                {
+                  "pivotStepIndex": 4,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChain": true
+            },
+            {
+              "panBlock": "Node_G",
+              "pivotStepIndex": 5,
+              "present": true,
+              "comparedPathStepIndex": 1,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "highestComparedStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                },
+                {
+                  "pivotStepIndex": 4,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChain": "end"
+            },
+            {
+              "panBlock": "Node_H_0",
+              "pivotStepIndex": 6,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_H_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_H_1"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 4
+            },
+            {
+              "panBlock": "Node_L",
+              "pivotStepIndex": 7,
+              "present": true,
+              "comparedPathStepIndex": 9,
+              "insertion": true,
+              "insertionNodes": [
+                {
+                  "pivotStepIndex": 7,
+                  "pivotStepPanBlock": "Node_L",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_H_1"
+                },
+                {
+                  "pivotStepIndex": 7,
+                  "pivotStepPanBlock": "Node_L",
+                  "comparedPathStepIndex": 6,
+                  "comparedPathStepPanBlock": "Node_I"
+                },
+                {
+                  "pivotStepIndex": 7,
+                  "pivotStepPanBlock": "Node_L",
+                  "comparedPathStepIndex": 7,
+                  "comparedPathStepPanBlock": "Node_J"
+                },
+                {
+                  "pivotStepIndex": 7,
+                  "pivotStepPanBlock": "Node_L",
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_K"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_N",
+              "pivotStepIndex": 8,
+              "present": true,
+              "comparedPathStepIndex": 13,
+              "insertion": true,
+              "insertionNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 10,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                },
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_3"
+                },
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_N"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 13,
+                  "highestComparedStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_N"
+                },
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversionChain": "start"
+            },
+            {
+              "panBlock": "Node_M",
+              "pivotStepIndex": 9,
+              "present": true,
+              "comparedPathStepIndex": 12,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 13,
+                  "highestComparedStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_N"
+                },
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversionChain": "end"
+            },
+            {
+              "panBlock": "Node_O",
+              "pivotStepIndex": 10,
+              "present": true,
+              "comparedPathStepIndex": 14
+            },
+            {
+              "panBlock": "Node_P",
+              "pivotStepIndex": 11,
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_P"
+                },
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_Q"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_R"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_S"
+                },
+                {
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_T"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_Q",
+              "pivotStepIndex": 12,
+              "swap": true,
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_P"
+                },
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_Q"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_R"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_S"
+                },
+                {
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_T"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_R",
+              "pivotStepIndex": 13,
+              "swap": "end",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_P"
+                },
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_Q"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_R"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_S"
+                },
+                {
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_T"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_U",
+              "pivotStepIndex": 14,
+              "present": true,
+              "comparedPathStepIndex": 17
+            },
+            {
+              "panBlock": "Node_A_4",
+              "pivotStepIndex": 15,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 10,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_3"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 18
+            },
+            {
+              "panBlock": "Node_A_5",
+              "pivotStepIndex": 16,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_5",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 10,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_5",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_3"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_5",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 18,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                }
+              ],
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_A_5"
+                }
+              ],
+              "swapComparedNodes": []
+            }
+          ],
+          "blocks": {
+            "Node_B": {
+              "panBlock": "Node_B",
+              "pivotStepIndex": 0,
+              "present": true,
+              "comparedPathStepIndex": 0
+            },
+            "Node_C": {
+              "panBlock": "Node_C",
+              "pivotStepIndex": 1,
+              "deleted": "start",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_C"
+                },
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_D"
+                }
+              ]
+            },
+            "Node_D": {
+              "panBlock": "Node_D",
+              "pivotStepIndex": 2,
+              "deleted": "end",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_C"
+                },
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_D"
+                }
+              ]
+            },
+            "Node_E": {
+              "panBlock": "Node_E",
+              "pivotStepIndex": 3,
+              "present": true,
+              "comparedPathStepIndex": 3,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "highestComparedStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                },
+                {
+                  "pivotStepIndex": 4,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChain": "start"
+            },
+            "Node_F": {
+              "panBlock": "Node_F",
+              "pivotStepIndex": 4,
+              "present": true,
+              "comparedPathStepIndex": 2,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 4,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_F"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "highestComparedStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                },
+                {
+                  "pivotStepIndex": 4,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChain": true
+            },
+            "Node_G": {
+              "panBlock": "Node_G",
+              "pivotStepIndex": 5,
+              "present": true,
+              "comparedPathStepIndex": 1,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "highestComparedStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                },
+                {
+                  "pivotStepIndex": 4,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChain": "end"
+            },
+            "Node_H_0": {
+              "panBlock": "Node_H_0",
+              "pivotStepIndex": 6,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_H_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_H_1"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 4
+            },
+            "Node_L": {
+              "panBlock": "Node_L",
+              "pivotStepIndex": 7,
+              "present": true,
+              "comparedPathStepIndex": 9,
+              "insertion": true,
+              "insertionNodes": [
+                {
+                  "pivotStepIndex": 7,
+                  "pivotStepPanBlock": "Node_L",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_H_1"
+                },
+                {
+                  "pivotStepIndex": 7,
+                  "pivotStepPanBlock": "Node_L",
+                  "comparedPathStepIndex": 6,
+                  "comparedPathStepPanBlock": "Node_I"
+                },
+                {
+                  "pivotStepIndex": 7,
+                  "pivotStepPanBlock": "Node_L",
+                  "comparedPathStepIndex": 7,
+                  "comparedPathStepPanBlock": "Node_J"
+                },
+                {
+                  "pivotStepIndex": 7,
+                  "pivotStepPanBlock": "Node_L",
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_K"
+                }
+              ]
+            },
+            "Node_N": {
+              "panBlock": "Node_N",
+              "pivotStepIndex": 8,
+              "present": true,
+              "comparedPathStepIndex": 13,
+              "insertion": true,
+              "insertionNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 10,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                },
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_3"
+                },
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_N"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 13,
+                  "highestComparedStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_N"
+                },
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversionChain": "start"
+            },
+            "Node_M": {
+              "panBlock": "Node_M",
+              "pivotStepIndex": 9,
+              "present": true,
+              "comparedPathStepIndex": 12,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 13,
+                  "highestComparedStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_N"
+                },
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversionChain": "end"
+            },
+            "Node_O": {
+              "panBlock": "Node_O",
+              "pivotStepIndex": 10,
+              "present": true,
+              "comparedPathStepIndex": 14
+            },
+            "Node_P": {
+              "panBlock": "Node_P",
+              "pivotStepIndex": 11,
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_P"
+                },
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_Q"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_R"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_S"
+                },
+                {
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_T"
+                }
+              ]
+            },
+            "Node_Q": {
+              "panBlock": "Node_Q",
+              "pivotStepIndex": 12,
+              "swap": true,
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_P"
+                },
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_Q"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_R"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_S"
+                },
+                {
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_T"
+                }
+              ]
+            },
+            "Node_R": {
+              "panBlock": "Node_R",
+              "pivotStepIndex": 13,
+              "swap": "end",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_P"
+                },
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_Q"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_R"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_S"
+                },
+                {
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_T"
+                }
+              ]
+            },
+            "Node_U": {
+              "panBlock": "Node_U",
+              "pivotStepIndex": 14,
+              "present": true,
+              "comparedPathStepIndex": 17
+            },
+            "Node_A_4": {
+              "panBlock": "Node_A_4",
+              "pivotStepIndex": 15,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 10,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_3"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 18
+            },
+            "Node_A_5": {
+              "panBlock": "Node_A_5",
+              "pivotStepIndex": 16,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_5",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 10,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_5",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_3"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_5",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 18,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                }
+              ],
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_A_5"
+                }
+              ],
+              "swapComparedNodes": []
+            }
+          }
+        }
+      },
+      "Leonidas": {
+        "Aphrodite": {
+          "array": [
+            {
+              "panBlock": "Node_B",
+              "pivotStepIndex": 0,
+              "present": true,
+              "comparedPathStepIndex": 2
+            },
+            {
+              "panBlock": "Node_G",
+              "pivotStepIndex": 1,
+              "present": true,
+              "comparedPathStepIndex": 6,
+              "insertion": true,
+              "insertionNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_D"
+                },
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_E"
+                },
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_F"
+                }
+              ],
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 6,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 6,
+                  "highestComparedStepIndex": 6,
+                  "comparedPathStepPanBlock": "Node_G"
+                },
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChain": "start"
+            },
+            {
+              "panBlock": "Node_F",
+              "pivotStepIndex": 2,
+              "present": true,
+              "comparedPathStepIndex": 5,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_F"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 6,
+                  "highestComparedStepIndex": 6,
+                  "comparedPathStepPanBlock": "Node_G"
+                },
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChain": true
+            },
+            {
+              "panBlock": "Node_E",
+              "pivotStepIndex": 3,
+              "present": true,
+              "comparedPathStepIndex": 4,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 6,
+                  "highestComparedStepIndex": 6,
+                  "comparedPathStepPanBlock": "Node_G"
+                },
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChain": "end"
+            },
+            {
+              "panBlock": "Node_H_0",
+              "pivotStepIndex": 4,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_H_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_H_1"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 7
+            },
+            {
+              "panBlock": "Node_H_1",
+              "pivotStepIndex": 5,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_H_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 7,
+                  "comparedPathStepPanBlock": "Node_H_0"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 8,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_H_1",
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_H_1"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_I",
+              "pivotStepIndex": 6,
+              "present": true,
+              "comparedPathStepIndex": 9
+            },
+            {
+              "panBlock": "Node_J",
+              "pivotStepIndex": 7,
+              "present": true,
+              "comparedPathStepIndex": 10
+            },
+            {
+              "panBlock": "Node_K",
+              "pivotStepIndex": 8,
+              "deleted": "start",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_K"
+                },
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_L"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_L",
+              "pivotStepIndex": 9,
+              "deleted": "end",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_K"
+                },
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_L"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_A_2",
+              "pivotStepIndex": 10,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 0,
+                  "comparedPathStepPanBlock": "Node_A_0"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_A_1"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 11
+            },
+            {
+              "panBlock": "Node_A_3",
+              "pivotStepIndex": 11,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_3",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 0,
+                  "comparedPathStepPanBlock": "Node_A_0"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_3",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_A_1"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_3",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                }
+              ],
+              "deleted": "solo",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_3"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_M",
+              "pivotStepIndex": 12,
+              "present": true,
+              "comparedPathStepIndex": 13,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 13,
+                  "highestComparedStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_M"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_N"
+                }
+              ],
+              "inversionChain": "start"
+            },
+            {
+              "panBlock": "Node_N",
+              "pivotStepIndex": 13,
+              "present": true,
+              "comparedPathStepIndex": 12,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_N"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 13,
+                  "highestComparedStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_M"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_N"
+                }
+              ],
+              "inversionChain": "end"
+            },
+            {
+              "panBlock": "Node_O",
+              "pivotStepIndex": 14,
+              "present": true,
+              "comparedPathStepIndex": 14
+            },
+            {
+              "panBlock": "Node_S",
+              "pivotStepIndex": 15,
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_S"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_T"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_P"
+                },
+                {
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_Q"
+                },
+                {
+                  "comparedPathStepIndex": 17,
+                  "comparedPathStepPanBlock": "Node_R"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_T",
+              "pivotStepIndex": 16,
+              "swap": "end",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_S"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_T"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_P"
+                },
+                {
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_Q"
+                },
+                {
+                  "comparedPathStepIndex": 17,
+                  "comparedPathStepPanBlock": "Node_R"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_U",
+              "pivotStepIndex": 17,
+              "present": true,
+              "comparedPathStepIndex": 18
+            },
+            {
+              "panBlock": "Node_A_4",
+              "pivotStepIndex": 18,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 0,
+                  "comparedPathStepPanBlock": "Node_A_0"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_A_1"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                }
+              ],
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 18,
+                  "pivotStepPanBlock": "Node_A_4"
+                }
+              ],
+              "swapComparedNodes": []
+            }
+          ],
+          "blocks": {
+            "Node_B": {
+              "panBlock": "Node_B",
+              "pivotStepIndex": 0,
+              "present": true,
+              "comparedPathStepIndex": 2
+            },
+            "Node_G": {
+              "panBlock": "Node_G",
+              "pivotStepIndex": 1,
+              "present": true,
+              "comparedPathStepIndex": 6,
+              "insertion": true,
+              "insertionNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_D"
+                },
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_E"
+                },
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_F"
+                }
+              ],
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 6,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 6,
+                  "highestComparedStepIndex": 6,
+                  "comparedPathStepPanBlock": "Node_G"
+                },
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChain": "start"
+            },
+            "Node_F": {
+              "panBlock": "Node_F",
+              "pivotStepIndex": 2,
+              "present": true,
+              "comparedPathStepIndex": 5,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_F"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 6,
+                  "highestComparedStepIndex": 6,
+                  "comparedPathStepPanBlock": "Node_G"
+                },
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChain": true
+            },
+            "Node_E": {
+              "panBlock": "Node_E",
+              "pivotStepIndex": 3,
+              "present": true,
+              "comparedPathStepIndex": 4,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 6,
+                  "highestComparedStepIndex": 6,
+                  "comparedPathStepPanBlock": "Node_G"
+                },
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChain": "end"
+            },
+            "Node_H_0": {
+              "panBlock": "Node_H_0",
+              "pivotStepIndex": 4,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_H_0",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_H_1"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 7
+            },
+            "Node_H_1": {
+              "panBlock": "Node_H_1",
+              "pivotStepIndex": 5,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_H_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 7,
+                  "comparedPathStepPanBlock": "Node_H_0"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 8,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_H_1",
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_H_1"
+                }
+              ]
+            },
+            "Node_I": {
+              "panBlock": "Node_I",
+              "pivotStepIndex": 6,
+              "present": true,
+              "comparedPathStepIndex": 9
+            },
+            "Node_J": {
+              "panBlock": "Node_J",
+              "pivotStepIndex": 7,
+              "present": true,
+              "comparedPathStepIndex": 10
+            },
+            "Node_K": {
+              "panBlock": "Node_K",
+              "pivotStepIndex": 8,
+              "deleted": "start",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_K"
+                },
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_L"
+                }
+              ]
+            },
+            "Node_L": {
+              "panBlock": "Node_L",
+              "pivotStepIndex": 9,
+              "deleted": "end",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_K"
+                },
+                {
+                  "pivotStepIndex": 9,
+                  "pivotStepPanBlock": "Node_L"
+                }
+              ]
+            },
+            "Node_A_2": {
+              "panBlock": "Node_A_2",
+              "pivotStepIndex": 10,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 0,
+                  "comparedPathStepPanBlock": "Node_A_0"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_A_1"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 11
+            },
+            "Node_A_3": {
+              "panBlock": "Node_A_3",
+              "pivotStepIndex": 11,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_3",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 0,
+                  "comparedPathStepPanBlock": "Node_A_0"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_3",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_A_1"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_3",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                }
+              ],
+              "deleted": "solo",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_3"
+                }
+              ]
+            },
+            "Node_M": {
+              "panBlock": "Node_M",
+              "pivotStepIndex": 12,
+              "present": true,
+              "comparedPathStepIndex": 13,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 13,
+                  "highestComparedStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_M"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_N"
+                }
+              ],
+              "inversionChain": "start"
+            },
+            "Node_N": {
+              "panBlock": "Node_N",
+              "pivotStepIndex": 13,
+              "present": true,
+              "comparedPathStepIndex": 12,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_N"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 13,
+                  "highestComparedStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_M"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_N"
+                }
+              ],
+              "inversionChain": "end"
+            },
+            "Node_O": {
+              "panBlock": "Node_O",
+              "pivotStepIndex": 14,
+              "present": true,
+              "comparedPathStepIndex": 14
+            },
+            "Node_S": {
+              "panBlock": "Node_S",
+              "pivotStepIndex": 15,
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_S"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_T"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_P"
+                },
+                {
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_Q"
+                },
+                {
+                  "comparedPathStepIndex": 17,
+                  "comparedPathStepPanBlock": "Node_R"
+                }
+              ]
+            },
+            "Node_T": {
+              "panBlock": "Node_T",
+              "pivotStepIndex": 16,
+              "swap": "end",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_S"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_T"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_P"
+                },
+                {
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_Q"
+                },
+                {
+                  "comparedPathStepIndex": 17,
+                  "comparedPathStepPanBlock": "Node_R"
+                }
+              ]
+            },
+            "Node_U": {
+              "panBlock": "Node_U",
+              "pivotStepIndex": 17,
+              "present": true,
+              "comparedPathStepIndex": 18
+            },
+            "Node_A_4": {
+              "panBlock": "Node_A_4",
+              "pivotStepIndex": 18,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 0,
+                  "comparedPathStepPanBlock": "Node_A_0"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_A_1"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_A_2"
+                }
+              ],
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 18,
+                  "pivotStepPanBlock": "Node_A_4"
+                }
+              ],
+              "swapComparedNodes": []
+            }
+          }
+        },
+        "Ganymede": {
+          "array": [
+            {
+              "panBlock": "Node_B",
+              "pivotStepIndex": 0,
+              "present": true,
+              "comparedPathStepIndex": 0
+            },
+            {
+              "panBlock": "Node_G",
+              "pivotStepIndex": 1,
+              "present": true,
+              "comparedPathStepIndex": 5,
+              "insertion": true,
+              "insertionNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_C"
+                },
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_D"
+                },
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                },
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_F"
+                }
+              ],
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 5,
+                  "highestComparedStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_G"
+                },
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChain": "start"
+            },
+            {
+              "panBlock": "Node_F",
+              "pivotStepIndex": 2,
+              "present": true,
+              "comparedPathStepIndex": 4,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_F"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 5,
+                  "highestComparedStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_G"
+                },
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChain": true
+            },
+            {
+              "panBlock": "Node_E",
+              "pivotStepIndex": 3,
+              "present": true,
+              "comparedPathStepIndex": 3,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 5,
+                  "highestComparedStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_G"
+                },
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChain": "end"
+            },
+            {
+              "panBlock": "Node_H_0",
+              "pivotStepIndex": 4,
+              "present": true,
+              "comparedPathStepIndex": 6
+            },
+            {
+              "panBlock": "Node_H_1",
+              "pivotStepIndex": 5,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_H_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 6,
+                  "comparedPathStepPanBlock": "Node_H_0"
+                }
+              ],
+              "deleted": "start",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_H_1"
+                },
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_K"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_I",
+              "pivotStepIndex": 6
+            },
+            {
+              "panBlock": "Node_J",
+              "pivotStepIndex": 7
+            },
+            {
+              "panBlock": "Node_K",
+              "pivotStepIndex": 8,
+              "deleted": "end",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_H_1"
+                },
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_K"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_L",
+              "pivotStepIndex": 9,
+              "present": true,
+              "comparedPathStepIndex": 7
+            },
+            {
+              "panBlock": "Node_A_2",
+              "pivotStepIndex": 10,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_A_5"
+                }
+              ],
+              "deleted": "start",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 10,
+                  "pivotStepPanBlock": "Node_A_2"
+                },
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_3"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_A_3",
+              "pivotStepIndex": 11,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_3",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_3",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_A_5"
+                }
+              ],
+              "deleted": "end",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 10,
+                  "pivotStepPanBlock": "Node_A_2"
+                },
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_3"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_M",
+              "pivotStepIndex": 12,
+              "present": true,
+              "comparedPathStepIndex": 9,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 9,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 9,
+                  "highestComparedStepIndex": 9,
+                  "comparedPathStepPanBlock": "Node_M"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_N"
+                }
+              ],
+              "inversionChain": "start"
+            },
+            {
+              "panBlock": "Node_N",
+              "pivotStepIndex": 13,
+              "present": true,
+              "comparedPathStepIndex": 8,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_N"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 9,
+                  "highestComparedStepIndex": 9,
+                  "comparedPathStepPanBlock": "Node_M"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_N"
+                }
+              ],
+              "inversionChain": "end"
+            },
+            {
+              "panBlock": "Node_O",
+              "pivotStepIndex": 14,
+              "present": true,
+              "comparedPathStepIndex": 10
+            },
+            {
+              "panBlock": "Node_S",
+              "pivotStepIndex": 15,
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_S"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_T"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_P"
+                },
+                {
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_Q"
+                },
+                {
+                  "comparedPathStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_R"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_T",
+              "pivotStepIndex": 16,
+              "swap": "end",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_S"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_T"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_P"
+                },
+                {
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_Q"
+                },
+                {
+                  "comparedPathStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_R"
+                }
+              ]
+            },
+            {
+              "panBlock": "Node_U",
+              "pivotStepIndex": 17,
+              "present": true,
+              "comparedPathStepIndex": 14
+            },
+            {
+              "panBlock": "Node_A_4",
+              "pivotStepIndex": 18,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_A_5"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 15
+            }
+          ],
+          "blocks": {
+            "Node_B": {
+              "panBlock": "Node_B",
+              "pivotStepIndex": 0,
+              "present": true,
+              "comparedPathStepIndex": 0
+            },
+            "Node_G": {
+              "panBlock": "Node_G",
+              "pivotStepIndex": 1,
+              "present": true,
+              "comparedPathStepIndex": 5,
+              "insertion": true,
+              "insertionNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 1,
+                  "comparedPathStepPanBlock": "Node_C"
+                },
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 2,
+                  "comparedPathStepPanBlock": "Node_D"
+                },
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                },
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_F"
+                }
+              ],
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_G"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 5,
+                  "highestComparedStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_G"
+                },
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChain": "start"
+            },
+            "Node_F": {
+              "panBlock": "Node_F",
+              "pivotStepIndex": 2,
+              "present": true,
+              "comparedPathStepIndex": 4,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_F"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 5,
+                  "highestComparedStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_G"
+                },
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChain": true
+            },
+            "Node_E": {
+              "panBlock": "Node_E",
+              "pivotStepIndex": 3,
+              "present": true,
+              "comparedPathStepIndex": 3,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 1,
+                  "pivotStepPanBlock": "Node_G",
+                  "comparedPathStepIndex": 5,
+                  "highestComparedStepIndex": 5,
+                  "comparedPathStepPanBlock": "Node_G"
+                },
+                {
+                  "pivotStepIndex": 2,
+                  "pivotStepPanBlock": "Node_F",
+                  "comparedPathStepIndex": 4,
+                  "comparedPathStepPanBlock": "Node_F"
+                },
+                {
+                  "pivotStepIndex": 3,
+                  "pivotStepPanBlock": "Node_E",
+                  "comparedPathStepIndex": 3,
+                  "comparedPathStepPanBlock": "Node_E"
+                }
+              ],
+              "inversionChain": "end"
+            },
+            "Node_H_0": {
+              "panBlock": "Node_H_0",
+              "pivotStepIndex": 4,
+              "present": true,
+              "comparedPathStepIndex": 6
+            },
+            "Node_H_1": {
+              "panBlock": "Node_H_1",
+              "pivotStepIndex": 5,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_H_1",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 6,
+                  "comparedPathStepPanBlock": "Node_H_0"
+                }
+              ],
+              "deleted": "start",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_H_1"
+                },
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_K"
+                }
+              ]
+            },
+            "Node_I": {
+              "panBlock": "Node_I",
+              "pivotStepIndex": 6
+            },
+            "Node_J": {
+              "panBlock": "Node_J",
+              "pivotStepIndex": 7
+            },
+            "Node_K": {
+              "panBlock": "Node_K",
+              "pivotStepIndex": 8,
+              "deleted": "end",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 5,
+                  "pivotStepPanBlock": "Node_H_1"
+                },
+                {
+                  "pivotStepIndex": 8,
+                  "pivotStepPanBlock": "Node_K"
+                }
+              ]
+            },
+            "Node_L": {
+              "panBlock": "Node_L",
+              "pivotStepIndex": 9,
+              "present": true,
+              "comparedPathStepIndex": 7
+            },
+            "Node_A_2": {
+              "panBlock": "Node_A_2",
+              "pivotStepIndex": 10,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_2",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_A_5"
+                }
+              ],
+              "deleted": "start",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 10,
+                  "pivotStepPanBlock": "Node_A_2"
+                },
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_3"
+                }
+              ]
+            },
+            "Node_A_3": {
+              "panBlock": "Node_A_3",
+              "pivotStepIndex": 11,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_3",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 15,
+                  "comparedPathStepPanBlock": "Node_A_4"
+                },
+                {
+                  "pivotStepPanBlock": "Node_A_3",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_A_5"
+                }
+              ],
+              "deleted": "end",
+              "deletedNodes": [
+                {
+                  "pivotStepIndex": 10,
+                  "pivotStepPanBlock": "Node_A_2"
+                },
+                {
+                  "pivotStepIndex": 11,
+                  "pivotStepPanBlock": "Node_A_3"
+                }
+              ]
+            },
+            "Node_M": {
+              "panBlock": "Node_M",
+              "pivotStepIndex": 12,
+              "present": true,
+              "comparedPathStepIndex": 9,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 9,
+                  "comparedPathStepPanBlock": "Node_M"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 9,
+                  "highestComparedStepIndex": 9,
+                  "comparedPathStepPanBlock": "Node_M"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_N"
+                }
+              ],
+              "inversionChain": "start"
+            },
+            "Node_N": {
+              "panBlock": "Node_N",
+              "pivotStepIndex": 13,
+              "present": true,
+              "comparedPathStepIndex": 8,
+              "inversion": true,
+              "inversionNodes": [
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_N"
+                }
+              ],
+              "inversionChainNodes": [
+                {
+                  "pivotStepIndex": 12,
+                  "pivotStepPanBlock": "Node_M",
+                  "comparedPathStepIndex": 9,
+                  "highestComparedStepIndex": 9,
+                  "comparedPathStepPanBlock": "Node_M"
+                },
+                {
+                  "pivotStepIndex": 13,
+                  "pivotStepPanBlock": "Node_N",
+                  "comparedPathStepIndex": 8,
+                  "comparedPathStepPanBlock": "Node_N"
+                }
+              ],
+              "inversionChain": "end"
+            },
+            "Node_O": {
+              "panBlock": "Node_O",
+              "pivotStepIndex": 14,
+              "present": true,
+              "comparedPathStepIndex": 10
+            },
+            "Node_S": {
+              "panBlock": "Node_S",
+              "pivotStepIndex": 15,
+              "swap": "start",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_S"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_T"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_P"
+                },
+                {
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_Q"
+                },
+                {
+                  "comparedPathStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_R"
+                }
+              ]
+            },
+            "Node_T": {
+              "panBlock": "Node_T",
+              "pivotStepIndex": 16,
+              "swap": "end",
+              "swapPivotNodes": [
+                {
+                  "pivotStepIndex": 15,
+                  "pivotStepPanBlock": "Node_S"
+                },
+                {
+                  "pivotStepIndex": 16,
+                  "pivotStepPanBlock": "Node_T"
+                }
+              ],
+              "swapComparedNodes": [
+                {
+                  "comparedPathStepIndex": 11,
+                  "comparedPathStepPanBlock": "Node_P"
+                },
+                {
+                  "comparedPathStepIndex": 12,
+                  "comparedPathStepPanBlock": "Node_Q"
+                },
+                {
+                  "comparedPathStepIndex": 13,
+                  "comparedPathStepPanBlock": "Node_R"
+                }
+              ]
+            },
+            "Node_U": {
+              "panBlock": "Node_U",
+              "pivotStepIndex": 17,
+              "present": true,
+              "comparedPathStepIndex": 14
+            },
+            "Node_A_4": {
+              "panBlock": "Node_A_4",
+              "pivotStepIndex": 18,
+              "cooc": true,
+              "coocNodes": [
+                {
+                  "pivotStepPanBlock": "Node_A_4",
+                  "comparedPathChromName": "chrom1",
+                  "comparedPathStepIndex": 16,
+                  "comparedPathStepPanBlock": "Node_A_5"
+                }
+              ],
+              "present": true,
+              "comparedPathStepIndex": 15
+            }
+          }
+        }
+      }
+    }
+  },
+  "chromNamesPerPath": {
+    "Aphrodite": [
+      "chrom1"
+    ],
+    "Ganymede": [
+      "chrom1"
+    ],
+    "Leonidas": [
+      "chrom1"
+    ]
+  }
+}

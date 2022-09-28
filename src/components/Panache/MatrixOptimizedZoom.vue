@@ -1,7 +1,8 @@
 <template>
   <div>
     <b-input-group append="+" class="mb-2 noBorder" prepend="–" size="sm">
-      <b-form-input :id="id" v-model="ntWidthInPixel" :max="largestNtWidthInPx" :min="smallestNtWidthInPx" :step="stepBetweenNtWidthInPx"
+      <b-form-input :id="id" v-model="ntWidthInPixel" :max="largestNtWidthInPx" :min="smallestNtWidthInPx"
+                    :step="stepBetweenNtWidthInPx"
                     class="noBorder" type="range"></b-form-input>
     </b-input-group>
   </div>

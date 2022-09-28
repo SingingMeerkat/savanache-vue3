@@ -1,15 +1,21 @@
 <template>
   <div class="structural-variations-details">
+    <va-popover v-model="showBlockInfo" :anchor-selector="blockInfoSelector" :auto-hide="false" color="light">
+      <template #body>
+        <div v-html="blockInfoMessage"></div>
+      </template>
+    </va-popover>
+
     <v-slider
-      label="Scale"
       v-model="scaleExp"
-      :ticks="scaleTicksLabels"
-      :min="scaleMinExp"
-      :max="scaleMaxExp"
-      step="1"
-      show-ticks="always"
-      tick-size="4"
       :disabled="!(selectedBlock.pivotName && selectedBlock.comparisonName && selectedBlock.blockName)"
+      :max="scaleMaxExp"
+      :min="scaleMinExp"
+      :ticks="scaleTicksLabels"
+      label="Scale"
+      show-ticks="always"
+      step="1"
+      tick-size="4"
     ></v-slider>
 
     <div v-if="selectedBlock.pivotName && selectedBlock.comparisonName && selectedBlock.blockName"
@@ -36,9 +42,12 @@
         <div class="data-block-row data-comparison-row d-flex flex-row">
           <div :style="{ left: comparisonOffset / Math.pow(scaleBase, scaleExp) + 'px' }" class="block-wrapper">
             <div v-for="(comparisonStep, index) in selectedComparisonSteps"
+                 :id="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlockName}`"
                  :key="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlockName}`"
                  :class="['data-block-column', `block-${index % 2}`, ...comparisonStep.nodeTypeClasses.map(cls => `block-${cls}`)]"
                  :style="{width: comparisonStep.displayLength / Math.pow(scaleBase, scaleExp) + 'px'}"
+                 @mouseleave="selectBlockInfo()"
+                 @mouseover="selectBlockInfo(`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlockName}`, comparisonStep)"
             >
               <div class="block-label">{{ comparisonStep.panBlockName }}</div>
               <!--              <div v-for="nodeTypeClass in comparisonStep.nodeTypeClasses" :key="`comparison-row-${selectedBlock.comparisonName}-step-${comparisonStep.panBlockName}-${nodeTypeClass}`" :class="['block-type', `block-${nodeTypeClass}`]"></div>-->
@@ -59,9 +68,12 @@
         <div class="data-block-row data-pivot-row d-flex flex-row">
           <div :style="{ left: pivotOffset / Math.pow(scaleBase, scaleExp) + 'px' }" class="block-wrapper">
             <div v-for="(pivotStep, index) in selectedPivotSteps"
+                 :id="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlockName}`"
                  :key="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlockName}`"
                  :class="['data-block-column', `block-${index % 2}`, ...pivotStep.nodeTypeClasses.map(cls => `block-${cls}`)]"
                  :style="{width: pivotStep.displayLength / Math.pow(scaleBase, scaleExp) + 'px'}"
+                 @mouseleave="selectBlockInfo()"
+                 @mouseover="selectBlockInfo(`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlockName}`, pivotStep)"
             >
               <div class="block-label">{{ pivotStep.panBlockName }}</div>
               <!--              <div v-for="nodeTypeClass in pivotStep.nodeTypeClasses" :key="`pivot-row-${selectedBlock.pivotName}-step-${pivotStep.panBlockName}-${nodeTypeClass}`" :class="['block-type', `block-${nodeTypeClass}`]"></div>-->
@@ -107,13 +119,13 @@ export default defineComponent({
     const scaleMaxExp = 10;
     const scaleTicksLabels = {};
     for (let i = scaleMinExp; i <= scaleMaxExp; i++) {
-      scaleTicksLabels[i] = `1/${Math.pow(scaleBase, i)}x`
+      scaleTicksLabels[i] = `1/${Math.pow(scaleBase, i)}x`;
     }
     const scaleExp = ref(0);
 
     let comparisonStepKeys = {};
 
-    const makeComparisonNode = ({currentPivotStep, block, comparisonPath, pivotBlock, type}) => {
+    const makeComparisonNode = ({ currentPivotStep, block, comparisonPath, pivotBlock, type }) => {
       if (currentPivotStep && currentPivotStep.nodeTypeClasses && !currentPivotStep.nodeTypeClasses.includes(type)) {
         currentPivotStep.nodeTypeClasses.push(type);
       }
@@ -121,7 +133,7 @@ export default defineComponent({
 
       if (compareNode) {
         const comparisonStep = comparisonStepKeys[compareNode.panBlock] || {
-        // const comparisonStep = {
+          // const comparisonStep = {
           comparedPathStepIndex: block.comparedPathStepIndex,
           panBlockName: compareNode.panBlock,
           comparisonName: selectedBlock.value.comparisonName,
@@ -133,7 +145,7 @@ export default defineComponent({
           displayEnd: compareNode.endPosition,
           displayLength: compareNode.endPosition - compareNode.startPosition,
 
-          nodeTypeClasses: [type],
+          nodeTypeClasses: [type]
         };
         comparisonStepKeys[compareNode.panBlock] = comparisonStep;
         if (!selectedComparisonSteps.value.includes(comparisonStep)) {
@@ -145,23 +157,23 @@ export default defineComponent({
         if (pivotBlock) {
           comparisonStep.pivotStepIndex = pivotBlock.pivotStepIndex;
           comparisonStep.pivotPanBlockName = pivotBlock.panBlock;
-          if (pivotBlock.panBlock === selectedBlock.value.blockName && !comparisonStep.nodeTypeClasses.includes('selected')) {
-            comparisonStep.nodeTypeClasses.push('selected');
+          if (pivotBlock.panBlock === selectedBlock.value.blockName && !comparisonStep.nodeTypeClasses.includes("selected")) {
+            comparisonStep.nodeTypeClasses.push("selected");
           }
-          if (pivotBlock.panBlock === selectedBlock.value.blockName && !comparisonStep.nodeTypeClasses.includes('selected-' + type)) {
-            comparisonStep.nodeTypeClasses.push('selected-' + type);
+          if (pivotBlock.panBlock === selectedBlock.value.blockName && !comparisonStep.nodeTypeClasses.includes("selected-" + type)) {
+            comparisonStep.nodeTypeClasses.push("selected-" + type);
           }
         }
         comparisonStep.nodeTypeClasses = comparisonStep.nodeTypeClasses.sort((a, b) => a > b ? 1 : a < b ? -1 : 0);
-        if (comparisonStep.nodeTypeClasses.includes('inversion') && comparisonStep.nodeTypeClasses.includes('inversion-chain')) {
-          comparisonStep.nodeTypeClasses = comparisonStep.nodeTypeClasses.filter(c => c !== 'inversion');
+        if (comparisonStep.nodeTypeClasses.includes("inversion") && comparisonStep.nodeTypeClasses.includes("inversion-chain")) {
+          comparisonStep.nodeTypeClasses = comparisonStep.nodeTypeClasses.filter(c => c !== "inversion");
         }
       }
     };
 
-    const makeComparisonNodeList = ({currentPivotStep, blocks, comparisonPath, pivotBlock, type}) => {
+    const makeComparisonNodeList = ({ currentPivotStep, blocks, comparisonPath, pivotBlock, type }) => {
       blocks.forEach(block => {
-        makeComparisonNode({currentPivotStep, block, comparisonPath, pivotBlock, type});
+        makeComparisonNode({ currentPivotStep, block, comparisonPath, pivotBlock, type });
       });
     };
 
@@ -297,16 +309,22 @@ export default defineComponent({
           displayEnd: pivotNode.endPosition,
           displayLength: pivotNode.endPosition - pivotNode.startPosition,
 
-          nodeTypeClasses: [],
+          nodeTypeClasses: []
         };
         selectedPivotSteps.value.push(currentPivotStep);
         if (pivotBlock.panBlock === selectedBlock.value.blockName) {
-          currentPivotStep.nodeTypeClasses.push('selected');
+          currentPivotStep.nodeTypeClasses.push("selected");
         }
 
         // Deleted
         if (pivotBlock.deletedNodes && pivotBlock.deletedNodes.length) {
-          makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.deletedNodes, comparisonPath, pivotBlock, type: 'deleted'});
+          makeComparisonNodeList({
+            currentPivotStep,
+            blocks: pivotBlock.deletedNodes,
+            comparisonPath,
+            pivotBlock,
+            type: "deleted"
+          });
           pivotBlock.deletedNodes.forEach(node => {
             // const linkedPivotBlock = pivotDefinition.blocks[node.pivotStepPanBlock];
             const linkedPivotStepNode = pivotPath[node.pivotStepIndex];
@@ -320,7 +338,13 @@ export default defineComponent({
 
         // Inversion
         if (pivotBlock.inversionNodes && pivotBlock.inversionNodes.length) {
-          makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.inversionNodes, comparisonPath, pivotBlock, type: 'inversion'});
+          makeComparisonNodeList({
+            currentPivotStep,
+            blocks: pivotBlock.inversionNodes,
+            comparisonPath,
+            pivotBlock,
+            type: "inversion"
+          });
           pivotBlock.inversionNodes.forEach(node => {
             // const linkedPivotBlock = pivotDefinition.blocks[node.pivotStepPanBlock];
             const linkedPivotStepNode = pivotPath[node.pivotStepIndex];
@@ -334,7 +358,13 @@ export default defineComponent({
 
         // InversionChain
         if (pivotBlock.inversionChainNodes && pivotBlock.inversionChainNodes.length) {
-          makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.inversionChainNodes, comparisonPath, pivotBlock, type: 'inversion-chain'});
+          makeComparisonNodeList({
+            currentPivotStep,
+            blocks: pivotBlock.inversionChainNodes,
+            comparisonPath,
+            pivotBlock,
+            type: "inversion-chain"
+          });
           pivotBlock.inversionChainNodes.forEach(node => {
             // const linkedPivotBlock = pivotDefinition.blocks[node.pivotStepPanBlock];
             const linkedPivotStepNode = pivotPath[node.pivotStepIndex];
@@ -348,7 +378,13 @@ export default defineComponent({
 
         // Swap (Compared nodes)
         if (pivotBlock.swapComparedNodes && pivotBlock.swapComparedNodes.length) {
-          makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.swapComparedNodes, comparisonPath, pivotBlock, type: 'swap'});
+          makeComparisonNodeList({
+            currentPivotStep,
+            blocks: pivotBlock.swapComparedNodes,
+            comparisonPath,
+            pivotBlock,
+            type: "swap"
+          });
           pivotBlock.swapComparedNodes.forEach(node => {
             // const linkedPivotBlock = pivotDefinition.blocks[node.pivotStepPanBlock];
             const linkedPivotStepNode = pivotPath[node.pivotStepIndex];
@@ -375,7 +411,13 @@ export default defineComponent({
 
         // Insertion
         if (pivotBlock.insertionNodes && pivotBlock.insertionNodes.length) {
-          makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.insertionNodes, comparisonPath, pivotBlock, type: 'insertion'});
+          makeComparisonNodeList({
+            currentPivotStep,
+            blocks: pivotBlock.insertionNodes,
+            comparisonPath,
+            pivotBlock,
+            type: "insertion"
+          });
           pivotBlock.insertionNodes.forEach(node => {
             // const linkedPivotBlock = pivotDefinition.blocks[node.pivotStepPanBlock];
             const linkedPivotStepNode = pivotPath[node.pivotStepIndex];
@@ -389,7 +431,13 @@ export default defineComponent({
 
         // Cooc
         if (pivotBlock.coocNodes && pivotBlock.coocNodes.length) {
-          makeComparisonNodeList({currentPivotStep, blocks: pivotBlock.coocNodes, comparisonPath, pivotBlock, type: 'cooc'});
+          makeComparisonNodeList({
+            currentPivotStep,
+            blocks: pivotBlock.coocNodes,
+            comparisonPath,
+            pivotBlock,
+            type: "cooc"
+          });
           pivotBlock.coocNodes.forEach(node => {
             // const linkedPivotBlock = pivotDefinition.blocks[node.pivotStepPanBlock];
             const linkedPivotStepNode = pivotPath[node.pivotStepIndex];
@@ -403,7 +451,7 @@ export default defineComponent({
 
         // Present
         if (pivotBlock.comparedPathStepIndex !== undefined) {
-          makeComparisonNode({currentPivotStep, block: pivotBlock, comparisonPath, pivotBlock, type: 'present'});
+          makeComparisonNode({ currentPivotStep, block: pivotBlock, comparisonPath, pivotBlock, type: "present" });
         }
 
         // currentPivotStep.nodeTypeClasses = currentPivotStep.nodeTypeClasses.sort((a, b) => a > b ? 1 : a < b ? -1 : 0);
@@ -430,9 +478,9 @@ export default defineComponent({
           step.vizStart = lastStepEnd;
           step.vizEnd = step.vizStart + step.displayLength;
           lastStepEnd = step.vizEnd;
-          if (selectedComparisonStepsStart === null && step.nodeTypeClasses.includes('selected')) {
+          if (selectedComparisonStepsStart === null && step.nodeTypeClasses.includes("selected")) {
             selectedComparisonStepsStart = step.vizStart;
-          } else if (step.nodeTypeClasses.includes('selected') && step.panBlockName === selectedBlock.value.blockName) {
+          } else if (step.nodeTypeClasses.includes("selected") && step.panBlockName === selectedBlock.value.blockName) {
             selectedComparisonStepsStart = step.vizStart;
           }
         }
@@ -445,9 +493,9 @@ export default defineComponent({
           step.vizStart = lastStepEnd;
           step.vizEnd = step.vizStart + step.displayLength;
           lastStepEnd = step.vizEnd;
-          if (selectedPivotStepsStart === null && step.nodeTypeClasses.includes('selected')) {
+          if (selectedPivotStepsStart === null && step.nodeTypeClasses.includes("selected")) {
             selectedPivotStepsStart = step.vizStart;
-          } else if (step.nodeTypeClasses.includes('selected') && step.panBlockName === selectedBlock.value.blockName) {
+          } else if (step.nodeTypeClasses.includes("selected") && step.panBlockName === selectedBlock.value.blockName) {
             selectedPivotStepsStart = step.vizStart;
           }
         }
@@ -472,7 +520,7 @@ export default defineComponent({
         if (dataBlockRowsRef.value) {
           dataBlockRowsRef.value.scrollLeft = (pivotOffset.value + selectedPivotStepsStart) / Math.pow(scaleBase, scaleExp.value);
         }
-      }, 1000/3);
+      }, 1000 / 3);
     };
 
     watch(chromName, () => {
@@ -490,6 +538,85 @@ export default defineComponent({
     const comparisonOffset = ref(0);
     const pivotOffset = ref(0);
 
+    const showBlockInfo = ref(false);
+    const blockInfoSelector = ref("");
+    const blockInfoMessage = ref("");
+    const selectBlockInfo = (id, step) => {
+      console.log("");
+      console.log("selectBlockInfo", "id", id, "step", step);
+      if (!id || !step) {
+        showBlockInfo.value = false;
+      } else {
+        blockInfoMessage.value += `Info!`;
+        blockInfoSelector.value = "#" + id;
+        showBlockInfo.value = true;
+
+        // // Use the pivotBlockName if it exists because the comparison panBlockName may not exist if it's an insert or swap
+        // const block = pivots.value[selectedBlock.value.pivotName][step.comparisonName].blocks[step.pivotPanBlockName || step.panBlockName];
+        // console.log('block', block);
+        //
+        // const pivotStep = block.pivotStepIndex !== undefined ? pangenome.value.paths[selectedBlock.value.pivotName][chromName.value][block.pivotStepIndex] : undefined;
+        // const pivotStart = pivotStep ? pivotStep.startPosition : undefined;
+        // const pivotEnd = pivotStep ? pivotStep.endPosition : undefined;
+        // const pivotLength = pivotStep ? pivotStep.endPosition - pivotStep.startPosition : undefined;
+        // console.log('pivotStep', pivotStep, 'pivotStart', pivotStart, 'pivotEnd', pivotEnd, 'pivotLength', pivotLength);
+        //
+        // const comparisonStep = block.comparedPathStepIndex !== undefined ? pangenome.value.paths[selectedBlock.value.pivotName][chromName.value][block.comparedPathStepIndex] : undefined;
+        // const comparisonStart = comparisonStep ? comparisonStep.startPosition : undefined;
+        // const comparisonEnd = comparisonStep ? comparisonStep.endPosition : undefined;
+        // const comparisonLength = comparisonStep ? comparisonStep.endPosition - comparisonStep.startPosition : undefined;
+        // console.log('comparisonStep', comparisonStep, 'comparisonStart', comparisonStart, 'comparisonEnd', comparisonEnd, 'comparisonLength', comparisonLength);
+        //
+        // const blockLength = pangenome.value.panSkeleton[panBlock].length;
+        // console.log('blockLength', blockLength);
+        //
+        // blockInfoMessage.value = `${step.panBlockName}`;
+        //
+        // if (block.present) {
+        //   blockInfoMessage.value += `<br>Present`;
+        // } else {
+        //   blockInfoMessage.value += `<br>Absent`;
+        // }
+        //
+        // if (block.inversion && !block.inversionChain) {
+        //   blockInfoMessage.value += `<br>Inversion`;
+        // } else if (block.inversionChain) {
+        //   blockInfoMessage.value += `<br>Inversion chain: ${block.inversionChainNodes.map(n => n.comparedPathStepPanBlock).join(', ')}`;
+        // }
+        //
+        // if (block.insertion) {
+        //   blockInfoMessage.value += `<br>Insertion${block.insertionNodes.length > 1 ? 's' : ''}: ${block.insertionNodes.map(n => n.comparedPathStepPanBlock).join(', ')}`;
+        // }
+        //
+        // if (block.swap) {
+        //   blockInfoMessage.value += `<br>${selectedBlock.value.pivotName} swap: ${block.swapPivotNodes.map(n => n.pivotStepPanBlock).join(', ')}`;
+        //   blockInfoMessage.value += `<br>${assemblyName} swap: ${block.swapComparedNodes.map(n => n.comparedPathStepPanBlock).join(', ')}`;
+        // }
+        //
+        // if (block.cooc) {
+        //   blockInfoMessage.value += `<br>Co-occurrence${block.coocNodes.length > 1 ? 's' : ''}: ${block.coocNodes.map(n => n.comparedPathStepPanBlock).join(', ')}`;
+        // }
+        //
+        // if (pivotStart !== undefined) {
+        //   blockInfoMessage.value += `<br>${selectedBlock.value.pivotName} start: ${pivotStart.toLocaleString()}`;
+        //   blockInfoMessage.value += `<br>${selectedBlock.value.pivotName} end: ${pivotEnd.toLocaleString()}`;
+        //   blockInfoMessage.value += `<br>${selectedBlock.value.pivotName} length: ${pivotLength.toLocaleString()}`;
+        // }
+        //
+        // if (comparisonStart !== undefined) {
+        //   blockInfoMessage.value += `<br>${assemblyName} start: ${comparisonStart.toLocaleString()}`;
+        //   blockInfoMessage.value += `<br>${assemblyName} end: ${comparisonEnd.toLocaleString()}`;
+        //   blockInfoMessage.value += `<br>${assemblyName} length: ${comparisonLength.toLocaleString()}`;
+        // }
+        //
+        // blockInfoMessage.value += `<br>${panBlock} Length: ${blockLength.toLocaleString()}`;
+        // blockInfoSelector.value = '#' + id;
+        // showBlockInfo.value = true;
+        //
+        // console.log('blockInfoMessage', blockInfoMessage.value, 'blockInfoSelector', blockInfoSelector.value, 'showBlockInfo', showBlockInfo.value);
+      }
+    };
+
     return {
       selectedPivotSteps,
       selectedComparisonSteps,
@@ -506,6 +633,11 @@ export default defineComponent({
       scaleExp,
       scaleMinExp,
       scaleMaxExp,
+
+      showBlockInfo,
+      blockInfoSelector,
+      blockInfoMessage,
+      selectBlockInfo
     };
   }
 });
@@ -524,6 +656,7 @@ export default defineComponent({
         text-overflow: ellipsis;
       }
     }
+
     .data-block-rows {
       position: relative;
       overflow: auto;
@@ -538,9 +671,11 @@ export default defineComponent({
         &:first-of-type {
           margin-bottom: 1rem;
         }
+
         &:last-of-type {
           margin-top: 1rem;
         }
+
         .block-wrapper {
           position: relative;
           transition: all 500ms;
@@ -608,7 +743,7 @@ export default defineComponent({
               position: absolute;
               top: 0;
               left: 0;
-              width: 100%;
+              max-width: 100%;
               height: 100%;
               padding: 0 0.5rem;
               font-size: 0.75rem;

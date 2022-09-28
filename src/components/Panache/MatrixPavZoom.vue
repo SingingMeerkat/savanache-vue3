@@ -16,7 +16,8 @@
                 x="-90"
                 y="0"
               />
-              <text dominant-baseline="hanging" fill="rgb(255, 158, 0)" font-family="sans-serif" font-size="18px" x="-90"
+              <text dominant-baseline="hanging" fill="rgb(255, 158, 0)" font-family="sans-serif" font-size="18px"
+                    x="-90"
                     y="-3">*
               </text>
               <line
@@ -27,7 +28,8 @@
                 y1="0"
                 y2="22"
               />
-              <line :ref="`${id}_overlay`" class="overlay" cursor="ew-resize" stroke="transparent" stroke-width="24" x1="-110" x2="110"
+              <line :ref="`${id}_overlay`" class="overlay" cursor="ew-resize" stroke="transparent" stroke-width="24"
+                    x1="-110" x2="110"
                     y1="11" y2="11" />
             </g>
             <!--            <text transform='translate(0,50)' font-family='sans-serif' font-size='10px' text-anchor="middle" dominant-baseline="hanging" fill='rgb(255, 158, 0)'>-->

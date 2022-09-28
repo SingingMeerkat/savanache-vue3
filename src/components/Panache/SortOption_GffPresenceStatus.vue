@@ -74,7 +74,8 @@
 
           <!-- LIST OF THE ANNOT TAGS THAT ARE SELECTED AS FILTER(S) -->
           <div :key="componentKey">
-            <b-input-group v-for="tag in tags" v-show="mapOfPresenceStatus.has(tag)" :key="tag" :prepend="mapOfPresenceStatus.get(tag) ? 'Presence' : 'Absence'"
+            <b-input-group v-for="tag in tags" v-show="mapOfPresenceStatus.has(tag)" :key="tag"
+                           :prepend="mapOfPresenceStatus.get(tag) ? 'Presence' : 'Absence'"
                            class="mb-2 tagCustomCSS" size="sm">
               <b-input-group-prepend is-text>
                 <!-- CHECKBOX TO CHANGE THE DESIRED PRESENCE STATUS OF THE ANNOT -->

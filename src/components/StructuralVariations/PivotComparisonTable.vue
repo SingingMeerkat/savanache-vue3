@@ -1,6 +1,6 @@
 <template>
   <div class="structural-variations-table">
-    <va-popover :anchor-selector="blockInfoSelector" v-model="showBlockInfo" :auto-hide="false" color="light">
+    <va-popover v-model="showBlockInfo" :anchor-selector="blockInfoSelector" :auto-hide="false" color="light">
       <template #body>
         <div v-html="blockInfoMessage"></div>
       </template>
@@ -71,8 +71,8 @@
                      // isNotInSVSelection(pivotStep.panBlock, assembly.name),
                    }]"
                    @click="selectBlock(assembly.name, pivotStep.panBlock)"
-                   @mouseover="selectBlockInfo(`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`, assembly.name, pivotStep.panBlock)"
                    @mouseleave="selectBlockInfo()"
+                   @mouseover="selectBlockInfo(`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`, assembly.name, pivotStep.panBlock)"
               >
                 <!--                <div class="block-count-label">{{ // getVariationLength(pivotStep.panBlock, assembly.name) }}</div>-->
                 <div v-for="blockClass in blockClasses(pivotStep.panBlock, assembly.name)"
@@ -125,8 +125,8 @@
                      // isNotInSVSelection(pivotStep.panBlock, assembly.name),
                    }]"
                    @click="selectBlock(assembly.name, pivotStep.panBlock)"
-                   @mouseover="selectBlockInfo(`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`, assembly.name, pivotStep.panBlock)"
                    @mouseleave="selectBlockInfo()"
+                   @mouseover="selectBlockInfo(`assembly-row-${assembly.name}-step-${pivotStep.panBlock}`, assembly.name, pivotStep.panBlock)"
 
               >
                 <!--                <div class="block-count-label">{{ // getVariationLength(pivotStep.panBlock, assembly.name) }}</div>-->
@@ -175,8 +175,8 @@ export default defineComponent({
     });
 
     const showBlockInfo = ref(false);
-    const blockInfoSelector = ref('');
-    const blockInfoMessage = ref('');
+    const blockInfoSelector = ref("");
+    const blockInfoMessage = ref("");
     const selectBlockInfo = (id, assemblyName, panBlock) => {
       if (!id || !assemblyName || !panBlock) {
         showBlockInfo.value = false;
@@ -205,20 +205,20 @@ export default defineComponent({
         if (block.inversion && !block.inversionChain) {
           blockInfoMessage.value += `<br>Inversion`;
         } else if (block.inversionChain) {
-          blockInfoMessage.value += `<br>Inversion chain: ${block.inversionChainNodes.map(n => n.comparedPathStepPanBlock).join(', ')}`;
+          blockInfoMessage.value += `<br>Inversion chain: ${block.inversionChainNodes.map(n => n.comparedPathStepPanBlock).join(", ")}`;
         }
 
         if (block.insertion) {
-          blockInfoMessage.value += `<br>Insertion${block.insertionNodes.length > 1 ? 's' : ''}: ${block.insertionNodes.map(n => n.comparedPathStepPanBlock).join(', ')}`;
+          blockInfoMessage.value += `<br>Insertion${block.insertionNodes.length > 1 ? "s" : ""}: ${block.insertionNodes.map(n => n.comparedPathStepPanBlock).join(", ")}`;
         }
 
         if (block.swap) {
-          blockInfoMessage.value += `<br>${selectedPivotName.value} swap: ${block.swapPivotNodes.map(n => n.pivotStepPanBlock).join(', ')}`;
-          blockInfoMessage.value += `<br>${assemblyName} swap: ${block.swapComparedNodes.map(n => n.comparedPathStepPanBlock).join(', ')}`;
+          blockInfoMessage.value += `<br>${selectedPivotName.value} swap: ${block.swapPivotNodes.map(n => n.pivotStepPanBlock).join(", ")}`;
+          blockInfoMessage.value += `<br>${assemblyName} swap: ${block.swapComparedNodes.map(n => n.comparedPathStepPanBlock).join(", ")}`;
         }
 
         if (block.cooc) {
-          blockInfoMessage.value += `<br>Co-occurrence${block.coocNodes.length > 1 ? 's' : ''}: ${block.coocNodes.map(n => n.comparedPathStepPanBlock).join(', ')}`;
+          blockInfoMessage.value += `<br>Co-occurrence${block.coocNodes.length > 1 ? "s" : ""}: ${block.coocNodes.map(n => n.comparedPathStepPanBlock).join(", ")}`;
         }
 
         if (pivotStart !== undefined) {
@@ -234,10 +234,10 @@ export default defineComponent({
         }
 
         blockInfoMessage.value += `<br>${panBlock} Length: ${blockLength.toLocaleString()}`;
-        blockInfoSelector.value = '#' + id;
+        blockInfoSelector.value = "#" + id;
         showBlockInfo.value = true;
       }
-    }
+    };
 
     const pangenome = ref();
     const pivots = ref();
@@ -342,35 +342,35 @@ export default defineComponent({
         if (pathBlock.present) {
           cssClasses.push(`block-present`);
         }
-        if (pathBlock.cooc && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes('cooc'))) {
+        if (pathBlock.cooc && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes("cooc"))) {
           cssClasses.push(`block-cooc`);
           hasMatchingSV = true;
         }
-        if (pathBlock.swap && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes('swap'))) {
-          if (typeof pathBlock.swap === 'string') {
+        if (pathBlock.swap && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes("swap"))) {
+          if (typeof pathBlock.swap === "string") {
             cssClasses.push(`block-swap-${pathBlock.swap}`);
           } else {
             cssClasses.push(`block-swap`);
           }
           hasMatchingSV = true;
         }
-        if (pathBlock.insertion && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes('insertion'))) {
+        if (pathBlock.insertion && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes("insertion"))) {
           cssClasses.push(`block-insertion`);
           hasMatchingSV = true;
         }
-        if (pathBlock.inversion && !pathBlock.inversionChain && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes('inversion'))) {
+        if (pathBlock.inversion && !pathBlock.inversionChain && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes("inversion"))) {
           cssClasses.push(`block-inversion`);
           hasMatchingSV = true;
         }
-        if (pathBlock.inversionChain && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes('inversionChain'))) {
-          if (typeof pathBlock.inversionChain === 'string') {
+        if (pathBlock.inversionChain && (selectedSVTypeNames.value.length === 0 || selectedSVTypeNames.value.includes("inversionChain"))) {
+          if (typeof pathBlock.inversionChain === "string") {
             cssClasses.push(`block-inversionChain-${pathBlock.inversionChain}`);
           } else {
             cssClasses.push(`block-inversionChain`);
           }
           hasMatchingSV = true;
         }
-        if (selectedSVTypeNames.value.length > 0 && !hasMatchingSV){
+        if (selectedSVTypeNames.value.length > 0 && !hasMatchingSV) {
           cssClasses.push(`block-nomatch`);
         }
       }
@@ -415,7 +415,7 @@ export default defineComponent({
       showBlockInfo,
       blockInfoSelector,
       blockInfoMessage,
-      selectBlockInfo,
+      selectBlockInfo
     };
   }
 });
