@@ -2,9 +2,9 @@
 
 // export default function () {
 //     function addSeries(newAssemblies, store) {
-//         let assembliesByMetadata = [];
-//         let metadatas = [];
-//         let chart = store.state.chart.chart;
+//         const assembliesByMetadata = [];
+//         const metadatas = [];
+//         const chart = store.state.chart.chart;
 //         if (newAssemblies !== undefined) {
 //             newAssemblies.forEach(assembly => {
 //                 metadatas.push(...assembly[assembly.metadata]);
@@ -12,13 +12,13 @@
 //             metadatas = [...new Set(metadatas)];
 //             metadatas.forEach(metadata => assembliesByMetadata.push({ metadataName: metadata, assemblies: newAssemblies.filter(assembly => assembly[assembly.metadata].includes(metadata)) }));
 
-//             let series = [];
+//             const series = [];
 //             assembliesByMetadata.forEach(metadata => {
-//                 let pointsAdded = [];
+//                 const pointsAdded = [];
 //                 metadata.assemblies.forEach(assembly => {
-//                     let markerType = 'circle';
-//                     let pointLabel = '';
-//                     let defaultColor = 'black';
+//                     const markerType = 'circle';
+//                     const pointLabel = '';
+//                     const defaultColor = 'black';
 //                     if (assembly.selected) {
 //                         defaultColor = 'gray';
 //                     }
@@ -26,8 +26,8 @@
 //                         markerType = 'square';
 //                         pointLabel = assembly.assembly_name;
 //                     }
-//                     let assemblyTreated = series.map(serie => {
-//                         let currentSerie = serie.points.map(point => {
+//                     const assemblyTreated = series.map(serie => {
+//                         const currentSerie = serie.points.map(point => {
 //                             if (point !== undefined) {
 //                                 return point.name;
 //                             }
@@ -36,7 +36,7 @@
 //                             return currentSerie;
 //                         }
 //                     });
-//                     let PointObj = {
+//                     const PointObj = {
 //                         x: assembly.x,
 //                         y: assembly.y,
 //                         name: assembly.assembly_name,

@@ -462,8 +462,8 @@ export default defineComponent({
         // });
       }
 
-      // let selectedPivotStepsOffset = 0;
-      // let selectedComparisonStepsOffset = 0;
+      // const selectedPivotStepsOffset = 0;
+      // const selectedComparisonStepsOffset = 0;
 
       let selectedPivotStepsStart = null;
       let selectedComparisonStepsStart = null;

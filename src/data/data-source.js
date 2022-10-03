@@ -1,10 +1,10 @@
 //const dataCache = { pivots: {} };
-//let dataCache = { pivots: {} };
+//const dataCache = { pivots: {} };
 let dataCache;
 let chromNamesPerPath;
 let promise;
 let pivots;
-let chromsRanAlready = [];
+const chromsRanAlready = [];
 
 export const getData = (chromToDisplay) => {
   //Run promise only when needed : ie not promise yet, or not for the chossen chrom
@@ -349,7 +349,7 @@ const annotatePivotStep = ({
 
   //FORMER VERSION
   /*
-  let previousComparedPathStep;
+  const previousComparedPathStep;
   comparedPathData[chromName].forEach((comparedPathStep, comparedPathStepIndex) => {
 
     const comparedPathStepResult = annotateComparisonOfTwoSteps({
@@ -494,8 +494,8 @@ const annotatePresenceInsertionAndInversion = ({
   let highestComparedStepIndex = undefined;
 
   // PRESENCE ------------------------------------------------------------------
-  let comparedPathStepIndex = targetNodeOfPivotStep.traversals[comparedPathName]?.[chromName];
-  let nodeIsPresent = (comparedPathStepIndex !== undefined);
+  const comparedPathStepIndex = targetNodeOfPivotStep.traversals[comparedPathName]?.[chromName];
+  const nodeIsPresent = (comparedPathStepIndex !== undefined);
   // ---------------------------------------------------------------------------
 
   if (nodeIsPresent) {
@@ -504,7 +504,7 @@ const annotatePresenceInsertionAndInversion = ({
     annotPivotStep.present = true;
     annotPivotStep.comparedPathStepIndex = comparedPathStepIndex;
 
-    let comparedPathStep = pangenomeImport.paths[comparedPathName][chromName][comparedPathStepIndex];
+    const comparedPathStep = pangenomeImport.paths[comparedPathName][chromName][comparedPathStepIndex];
 
     // Check for SVs: INSERTION, INVERSION, INVERSION CHAIN --------------------
     let hasInsertion;
@@ -622,7 +622,7 @@ const annotatePresenceInsertionAndInversion = ({
     // QUESTION: What if the final step is within an inv Chain?, no 'end' attributed? Done within buildThenExpandAnnotations()?
     // END OF INVERSION CHAIN
     // Current step is after (outside) an inversion chain, previous step was the last one within the inversion chain
-    let isInversionChainNoMore = (previousPivotStep?.inversionChain && !annotPivotStep.inversionChain);
+    const isInversionChainNoMore = (previousPivotStep?.inversionChain && !annotPivotStep.inversionChain);
     if (isInversionChainNoMore) {
       previousPivotStep.inversionChain = "end";
     }
@@ -647,8 +647,8 @@ const annotateCoocs = ({
   targetNodeOfPivotStep.coocs.forEach(panBlockID => {
 
     // Check for COOCCURRENCES -------------------------------------------------
-    let targetNodeOfCooc = pangenomeImport.panSkeleton[panBlockID];
-    let comparedPathHasCooc = (comparedPathName in targetNodeOfCooc.traversals);
+    const targetNodeOfCooc = pangenomeImport.panSkeleton[panBlockID];
+    const comparedPathHasCooc = (comparedPathName in targetNodeOfCooc.traversals);
     // -------------------------------------------------------------------------
 
     if (comparedPathHasCooc) {
@@ -658,10 +658,10 @@ const annotateCoocs = ({
       if (!annotPivotStep.coocNodes) {
         annotPivotStep.coocNodes = [];
       }
-      for (let coocChromName in targetNodeOfCooc.traversals[comparedPathName]) {
+      for (const coocChromName in targetNodeOfCooc.traversals[comparedPathName]) {
         //targetNodeOfCooc.traversals[comparedPathName].forEach( (coocIndex, coocChromName) => {
         // Stores found cooc
-        let coocIndex = targetNodeOfCooc.traversals[comparedPathName][coocChromName];
+        const coocIndex = targetNodeOfCooc.traversals[comparedPathName][coocChromName];
         const coocNode = {
           // REMARK: pivotStepIndex and pivotStepPanBlock are already written on creation of annotPivotStep
           // -> TODO: simplify objects by keeping only the first pivotStepIndex without rewriting it for every SV
@@ -699,7 +699,7 @@ const annotateComparisonOfTwoSteps = ({
                                           }) => {
 
   // Index of previous pivot Step/Node in the compared path, or highest for Inv. Chains
-  let highestComparedStepIndex = previousPivotStep ? previousPivotStep.comparedPathStepIndex : undefined;
+  const highestComparedStepIndex = previousPivotStep ? previousPivotStep.comparedPathStepIndex : undefined;
   if (previousPivotStep && previousPivotStep.inversionChain) {
     // REMARK: highestComparedStepIndex is supposed to be the same through all Steps of an invChain, why check this?
     // It is even non-existent in all Steps but the starting one, so the max would always be the same!
@@ -768,7 +768,7 @@ const annotateComparisonOfTwoSteps = ({
         annotPivotStep.insertion = true;
         annotPivotStep.insertionNodes = [];
 
-        for (let insertionPathStepsIndex = highestComparedStepIndex + 1;
+        for (const insertionPathStepsIndex = highestComparedStepIndex + 1;
           insertionPathStepsIndex < annotPivotStep.comparedPathStepIndex;
           insertionPathStepsIndex++) {
           const insertionPathStep = comparedPathData[chromName][insertionPathStepsIndex];
@@ -860,8 +860,8 @@ const getDataInternal = async (chromToDisplay) => {
     return dataCache;
   }
 
-  //let startMark = "Beginning";
-  //let stopMark = "End";
+  //const startMark = "Beginning";
+  //const stopMark = "End";
 
   //performance.mark(startMark);
 
@@ -877,9 +877,9 @@ const getDataInternal = async (chromToDisplay) => {
     });
     console.log("chromNamesPerPath", chromNamesPerPath);
   }
-  let firstAssembly = Object.keys(chromNamesPerPath)[0];
-  let firstChromOfFirstAssembly = chromNamesPerPath[firstAssembly][0];
-  let chromName = (chromToDisplay ? chromToDisplay : firstChromOfFirstAssembly);
+  const firstAssembly = Object.keys(chromNamesPerPath)[0];
+  const firstChromOfFirstAssembly = chromNamesPerPath[firstAssembly][0];
+  const chromName = (chromToDisplay ? chromToDisplay : firstChromOfFirstAssembly);
 
   //const chromName = 'Gm01' // TODO: adapt it depending on user's choice within the app
 

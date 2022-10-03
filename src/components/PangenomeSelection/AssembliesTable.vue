@@ -29,8 +29,8 @@
 
       <!-- Checkboxes -->
       <template #cell(selected)="data">
-        <va-checkbox v-model="selectedItems" :array-value="data.cells[2].value"
-                     @click="selectAction(data.cells[2].value)" />
+        <va-checkbox v-model="selectedItems" :array-value="data.rowData.assemblyName"
+                     @click="selectAction(data.rowData.assemblyName)" />
       </template>
 
       <!-- ID -->
@@ -50,7 +50,7 @@
       <!-- Assembly name with sort and filtering -->
       <template #header(assemblyName)="data">
         <div class="row">
-                    <span id="header-title" class="mr-1" @click="sortCol(data.label)"
+                    <span class="mr-1 header-title" @click="sortCol(data.label)"
                     >{{ data.label }} <v-icon large>{{ chevrons.assemblyName }}</v-icon></span
                     >
           <va-input v-model="assemblyNameFilter" placeholder="Filter..." />
@@ -63,7 +63,7 @@
       <!-- Phenotype with sort and filtering-->
       <template #header(phenotype)="data">
         <div class="row">
-                    <span id="header-title" class="mr-1" @click="sortCol(data.label)"
+                    <span class="mr-1 header-title" @click="sortCol(data.label)"
                     >{{ data.label }} <v-icon large>{{ chevrons.phenotype }}</v-icon></span
                     >
 
@@ -77,7 +77,7 @@
       <!-- Pangenome with sort and filtering -->
       <template #header(pangenome)="data">
         <div class="row align-items-center">
-                    <span id="header-title" class="mr-1" @click="sortCol(data.label)"
+                    <span class="mr-1 header-title" @click="sortCol(data.label)"
                     >{{ data.label }} <v-icon large>{{ chevrons.pangenome }}</v-icon></span
                     >
           <va-input v-model="pangenomeFilter" placeholder="Filter..." />
@@ -108,7 +108,7 @@ export default {
     const store = useStore();
 
     // Vars Selection
-    let selectedItems = ref([]);
+    const selectedItems = ref([]);
     const selected = ref([]);
 
     // Vars Filtering
@@ -118,8 +118,8 @@ export default {
     const showModal = ref(false);
 
     // Vars Sorting
-    let directionLastSorted = ref("");
-    let sortBy = ref("");
+    const directionLastSorted = ref("");
+    const sortBy = ref("");
     const chevrons = ref({
       assemblyName: "mdi-chevron-down",
       selected: "mdi-chevron-down",
@@ -421,8 +421,8 @@ export default {
 };
 </script>
 
-<style scoped>
-#header-title {
+<style lang="scss" scoped>
+.header-title {
   flex-grow: 0;
   display: inline-flex;
   align-items: center;

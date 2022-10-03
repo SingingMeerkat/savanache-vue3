@@ -27,9 +27,9 @@ import { computed } from "@vue/runtime-core";
 import { useStore } from "vuex";
 
 // Components
-import PangenomePanel from "../components/PangenomePanel.vue";
-import AssembliesTable from "../components/AssembliesTable.vue";
-import PcaCharts from "../components/PcaCharts.vue";
+import PangenomePanel from "../components/PangenomeSelection/PangenomePanel.vue";
+import AssembliesTable from "../components/PangenomeSelection/AssembliesTable.vue";
+import PcaCharts from "../components/PangenomeSelection/PcaCharts.vue";
 
 export default defineComponent({
   name: "PangenomeSelection",
@@ -39,22 +39,22 @@ export default defineComponent({
     const store = useStore();
     // File value
     const assembliesFile = ref([]);
-    let fileinput = ref("");
+    const fileinput = ref("");
 
     // Assemblies File upload
     const onFileChange = e => {
       // Get file by events
-      var files = e.target.files || e.dataTransfer.files;
+      const files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       createInput(files[0]);
     };
 
     const createInput = file => {
       // Input reading
-      let promise = new Promise(resolve => {
-        var reader = new FileReader();
+      const promise = new Promise(resolve => {
+        const reader = new FileReader();
         reader.onload = () => {
-          resolve((fileinput = reader.result));
+          resolve((fileinput.value = reader.result));
         };
         reader.readAsText(file);
       });
@@ -62,11 +62,11 @@ export default defineComponent({
       promise.then(
         () => {
           // Input Parsing
-          let lines = fileinput.split("\n");
-          let assemblies = lines.map(line => {
+          const lines = fileinput.value.split("\n");
+          const assemblies = lines.map(line => {
             if (!line.startsWith("id") && line.length !== 0) {
-              let cols = line.split("\t");
-              let assembly = {
+              const cols = line.split("\t");
+              const assembly = {
                 id: parseInt(cols[0]),
                 x: parseFloat(cols[1]),
                 y: parseFloat(cols[2]), // Float to include values between 0 to 1
@@ -78,11 +78,11 @@ export default defineComponent({
               };
               return assembly;
             }
-          });
-          // Filter assemblies badly loaded
-          assemblies = assemblies.filter(assembly => assembly !== undefined);
-          let colors = [];
-          let assembliesObjects = assemblies.map(assembly => {
+          })
+            // Filter assemblies badly loaded
+            .filter(assembly => assembly !== undefined);
+          const colors = [];
+          const assembliesObjects = assemblies.map(assembly => {
             // Add metadata
             assembly["color"] = "black";
             assembly["metadata"] = "heterotic_group";
@@ -100,7 +100,7 @@ export default defineComponent({
             return assembly;
           });
           // Get all heterotic group
-          let heterotic_group = [...new Set(assembliesObjects.map(assembly => String(...assembly.heterotic_group)))];
+          const heterotic_group = [...new Set(assembliesObjects.map(assembly => String(...assembly.heterotic_group)))];
 
           // Get color by hetoric group
           new Set(heterotic_group.map(() => colors.push(generateColor())));
@@ -116,7 +116,7 @@ export default defineComponent({
 
           // add Assemblies to chart
           // Serie creation
-          let series = addSeries(assembliesStored.value);
+          const series = addSeries(assembliesStored.value);
           // Add serie into instance
           series.forEach(serie => store.state.chart.chart.instance.series.add(serie));
         },
@@ -133,7 +133,7 @@ export default defineComponent({
 
     // Color Generator
     const generateColor = () => {
-      let newColor = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
+      const newColor = "#" + ((Math.random() * 0xffffff) << 0).toString(16);
       return newColor;
     };
 
@@ -141,11 +141,11 @@ export default defineComponent({
     const addSeries = newAssemblies => {
       // Serie is an object with a list of points
       let lastOvered = undefined;
-      let assembliesByMetadata = [];
+      const assembliesByMetadata = [];
       let metadatas = [];
 
       // Chart stored and initiated in PcaChart component
-      let chart = store.state.chart.chart;
+      const chart = store.state.chart.chart;
 
       if (newAssemblies !== undefined) {
         newAssemblies.forEach(assembly => {
@@ -167,10 +167,10 @@ export default defineComponent({
           assemblies: newAssemblies.filter(assembly => assembly[assembly.metadata].includes(metadata))
         }));
 
-        let series = [];
+        const series = [];
         assembliesByMetadata.forEach(metadata => {
           // Each metadata (each serie)
-          let pointsAdded = [];
+          const pointsAdded = [];
           metadata.assemblies.forEach(assembly => {
             // Points setting
 
@@ -185,8 +185,8 @@ export default defineComponent({
               pointLabel = assembly.assembly_name;
             }
             // Get point if the current assembly is already set in another serie
-            let assemblyTreated = series.map(serie => {
-              let currentSerie = serie.points.map(point => {
+            const assemblyTreated = series.map(serie => {
+              const currentSerie = serie.points.map(point => {
                 if (point !== undefined) {
                   return point.name;
                 }
@@ -196,7 +196,7 @@ export default defineComponent({
               }
             });
 
-            let PointObj = {
+            const PointObj = {
               // Point himself
               // Point arguments
               x: assembly.x,
@@ -498,7 +498,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style lang="scss" scoped>
 div.va-file-upload__field__text {
   visibility: hidden;
 }

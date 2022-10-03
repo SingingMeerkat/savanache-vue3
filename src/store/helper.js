@@ -10,8 +10,8 @@ import { computed, ref, unref, watch } from "vue";
 //
 //   const selectedLocal = ref(unref(selectedState));
 //
-//   let stopStateWatch: WatchStopHandle = () => undefined;
-//   let stopLocalWatch: WatchStopHandle = () => undefined;
+//   const stopStateWatch: WatchStopHandle = () => undefined;
+//   const stopLocalWatch: WatchStopHandle = () => undefined;
 //
 //   const startWatch = () => {
 //     stopStateWatch();
