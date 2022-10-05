@@ -87,7 +87,7 @@ const buildThenExpandAnnotations = ({
             // Without any gap opening...
             if (!lastPresentStepBeforeMissing) {
               // Do nothing, this is dangling at the front of the path
-              // debugger;
+              debugger;
               lastPresentStepBeforeMissing = annotPivotStep;
               firstPresentStepAfterMissing = null;
               trackAbsentPivotSteps = [];
@@ -178,22 +178,22 @@ const buildThenExpandAnnotations = ({
                         };
                         missingStep.swapPivotNodes.push(swapNode);
                         missingStep.swapPivotNodes.sort((a, b) => a.pivotStepIndex - b.pivotStepIndex);
-                        // debugger;
+                        debugger;
                       }
 
                       delete missingStep.swapOrDelete;
                       delete missingStep.swapOrDeleteNodes;
-                      // debugger;
+                      debugger;
 
                     });
-                    // debugger;
+                    debugger;
                     lastPresentStepBeforeMissing = annotPivotStep;
                     firstPresentStepAfterMissing = null;
                     trackAbsentPivotSteps = [];
 
                   } else {
                     // Swap detected on initial pass
-                    // debugger;
+                    debugger;
                     annotPivotStep.swapComparedNodes = swapComparedNodes;
                     lastPresentStepBeforeMissing = annotPivotStep;
                     firstPresentStepAfterMissing = null;
@@ -208,12 +208,13 @@ const buildThenExpandAnnotations = ({
         }
       });
     }
-    // console.log('innerLoopResult', innerLoopResult);
-    // debugger;
+    console.log('innerLoopResult', innerLoopResult);
+    debugger;
   });
 
-  // console.log('pivotPathName', pivotPathName);
-  // console.log('pivots', pivots);
+  console.log('pivotPathName', pivotPathName);
+  console.log('pivots', pivots);
+  debugger;
 
   return { pivots };
 };
@@ -289,9 +290,262 @@ const parsePivotSteps = ({
     pivot.blocks[annotPivotStep.panBlock] = annotPivotStep;
   });
 
-  // console.log('pivotPathName', pivotPathName, 'comparedPathName', comparedPathName);
-  // console.log('pivot', pivot);
-  // debugger;
+  console.log('pivotPathName', pivotPathName, 'comparedPathName', comparedPathName);
+  console.log('pivot', pivot);
+
+  // Calculate the SV lengths (a bit inefficient to do it here, but easier than figuring out where to add it above)
+  // This relies on the objects in the array being the same as the objects in the blocks (by ref)
+
+  pivot.array.forEach((pivotStep) => {
+    const pivotPanSkeletonNode = pangenomeImport.panSkeleton[pivotStep.panBlock];
+    pivotStep.pivotStepLength = pivotPanSkeletonNode.length;
+
+    // This is assuming there are no other variations other than this step being absent.
+    if (!pivotStep.present) {
+      pivotStep.absenceLength = pivotPanSkeletonNode.length;
+    }
+
+    // INSERTION VARIATION LENGTH
+    if (pivotStep.insertion) {
+
+      pivotStep.insertionComparisonLength = 0;
+      pivotStep.insertionPivotLength = 0;
+
+      const insertionComparisonNodes = {};
+      const insertionPivotNodes = {};
+
+      pivotStep.insertionNodes.forEach(insertionNode => {
+        const comparedPathStepPanBlockName = insertionNode.comparedPathStepPanBlock;
+        if (comparedPathStepPanBlockName) {
+          const comparedPathStepPanBlock = pangenomeImport.panSkeleton[comparedPathStepPanBlockName];
+          if (!insertionComparisonNodes[comparedPathStepPanBlockName]) {
+            insertionComparisonNodes[comparedPathStepPanBlockName] = true;
+            pivotStep.insertionComparisonLength += comparedPathStepPanBlock.length;
+          }
+        }
+
+        const pivotStepPanBlockName = insertionNode.pivotStepPanBlock;
+        if (pivotStepPanBlockName) {
+          const pivotStepPanBlock = pangenomeImport.panSkeleton[pivotStepPanBlockName];
+          if (!insertionPivotNodes[pivotStepPanBlockName]) {
+            insertionPivotNodes[pivotStepPanBlockName] = true;
+            pivotStep.insertionPivotLength += pivotStepPanBlock.length;
+          }
+        }
+      });
+    }
+
+
+    // DELETION VARIATION LENGTH
+    if (pivotStep.deletion) {
+
+      pivotStep.deletionComparisonLength = 0;
+      pivotStep.deletionPivotLength = 0;
+
+      const deletionComparisonNodes = {};
+      const deletionPivotNodes = {};
+
+      pivotStep.deletionNodes.forEach(deletionNode => {
+        const comparedPathStepPanBlockName = deletionNode.comparedPathStepPanBlock;
+        if (comparedPathStepPanBlockName) {
+          const comparedPathStepPanBlock = pangenomeImport.panSkeleton[comparedPathStepPanBlockName];
+          if (!deletionComparisonNodes[comparedPathStepPanBlockName]) {
+            deletionComparisonNodes[comparedPathStepPanBlockName] = true;
+            pivotStep.deletionComparisonLength += comparedPathStepPanBlock.length;
+          }
+        }
+
+        const pivotStepPanBlockName = deletionNode.pivotStepPanBlock;
+        if (pivotStepPanBlockName) {
+          const pivotStepPanBlock = pangenomeImport.panSkeleton[pivotStepPanBlockName];
+          if (!deletionPivotNodes[pivotStepPanBlockName]) {
+            deletionPivotNodes[pivotStepPanBlockName] = true;
+            pivotStep.deletionPivotLength += pivotStepPanBlock.length;
+          }
+        }
+      });
+    }
+
+
+    // COOC VARIATION LENGTH
+    if (pivotStep.cooc) {
+
+      pivotStep.coocComparisonLength = 0;
+      pivotStep.coocPivotLength = 0;
+
+      const coocComparisonNodes = {};
+      const coocPivotNodes = {};
+
+      pivotStep.coocNodes.forEach(coocNode => {
+        const comparedPathStepPanBlockName = coocNode.comparedPathStepPanBlock;
+        if (comparedPathStepPanBlockName) {
+          const comparedPathStepPanBlock = pangenomeImport.panSkeleton[comparedPathStepPanBlockName];
+          if (!coocComparisonNodes[comparedPathStepPanBlockName]) {
+            coocComparisonNodes[comparedPathStepPanBlockName] = true;
+            pivotStep.coocComparisonLength += comparedPathStepPanBlock.length;
+          }
+        }
+
+        const pivotStepPanBlockName = coocNode.pivotStepPanBlock;
+        if (pivotStepPanBlockName) {
+          const pivotStepPanBlock = pangenomeImport.panSkeleton[pivotStepPanBlockName];
+          if (!coocPivotNodes[pivotStepPanBlockName]) {
+            coocPivotNodes[pivotStepPanBlockName] = true;
+            pivotStep.coocPivotLength += pivotStepPanBlock.length;
+          }
+        }
+      });
+    }
+
+
+    // SWAP VARIATION LENGTH
+    if (pivotStep.swap) {
+
+      pivotStep.swapComparisonLength = 0;
+      pivotStep.swapPivotLength = 0;
+
+      const swapComparisonNodes = {};
+      const swapPivotNodes = {};
+
+      pivotStep.swapPivotNodes.forEach(swapNode => {
+        const comparedPathStepPanBlockName = swapNode.comparedPathStepPanBlock;
+        if (comparedPathStepPanBlockName) {
+          const comparedPathStepPanBlock = pangenomeImport.panSkeleton[comparedPathStepPanBlockName];
+          if (!swapComparisonNodes[comparedPathStepPanBlockName]) {
+            swapComparisonNodes[comparedPathStepPanBlockName] = true;
+            pivotStep.swapComparisonLength += comparedPathStepPanBlock.length;
+          }
+        }
+
+        const pivotStepPanBlockName = swapNode.pivotStepPanBlock;
+        if (pivotStepPanBlockName) {
+          const pivotStepPanBlock = pangenomeImport.panSkeleton[pivotStepPanBlockName];
+          if (!swapPivotNodes[pivotStepPanBlockName]) {
+            swapPivotNodes[pivotStepPanBlockName] = true;
+            pivotStep.swapPivotLength += pivotStepPanBlock.length;
+          }
+        }
+      });
+
+      pivotStep.swapComparedNodes.forEach(swapNode => {
+        const comparedPathStepPanBlockName = swapNode.comparedPathStepPanBlock;
+        if (comparedPathStepPanBlockName) {
+          const comparedPathStepPanBlock = pangenomeImport.panSkeleton[comparedPathStepPanBlockName];
+          if (!swapComparisonNodes[comparedPathStepPanBlockName]) {
+            swapComparisonNodes[comparedPathStepPanBlockName] = true;
+            pivotStep.swapComparisonLength += comparedPathStepPanBlock.length;
+          }
+        }
+
+        const pivotStepPanBlockName = swapNode.pivotStepPanBlock;
+        if (pivotStepPanBlockName) {
+          const pivotStepPanBlock = pangenomeImport.panSkeleton[pivotStepPanBlockName];
+          if (!swapPivotNodes[pivotStepPanBlockName]) {
+            swapPivotNodes[pivotStepPanBlockName] = true;
+            pivotStep.swapPivotLength += pivotStepPanBlock.length;
+          }
+        }
+      });
+
+
+    }
+
+
+    // SwapOrDelete VARIATION LENGTH
+    if (pivotStep.swapOrDelete) {
+
+      pivotStep.swapOrDeleteComparisonLength = 0;
+      pivotStep.swapOrDeletePivotLength = 0;
+
+      const swapOrDeleteComparisonNodes = {};
+      const swapOrDeletePivotNodes = {};
+
+      pivotStep.swapOrDeleteNodes.forEach(swapOrDeleteNode => {
+        const comparedPathStepPanBlockName = swapOrDeleteNode.comparedPathStepPanBlock;
+        if (comparedPathStepPanBlockName) {
+          const comparedPathStepPanBlock = pangenomeImport.panSkeleton[comparedPathStepPanBlockName];
+          if (!swapOrDeleteComparisonNodes[comparedPathStepPanBlockName]) {
+            swapOrDeleteComparisonNodes[comparedPathStepPanBlockName] = true;
+            pivotStep.swapOrDeleteComparisonLength += comparedPathStepPanBlock.length;
+          }
+        }
+
+        const pivotStepPanBlockName = swapOrDeleteNode.pivotStepPanBlock;
+        if (pivotStepPanBlockName) {
+          const pivotStepPanBlock = pangenomeImport.panSkeleton[pivotStepPanBlockName];
+          if (!swapOrDeletePivotNodes[pivotStepPanBlockName]) {
+            swapOrDeletePivotNodes[pivotStepPanBlockName] = true;
+            pivotStep.swapOrDeletePivotLength += pivotStepPanBlock.length;
+          }
+        }
+      });
+    }
+
+
+    // INVERSION VARIATION LENGTH
+    if (pivotStep.inversion) {
+
+      pivotStep.inversionComparisonLength = 0;
+      pivotStep.inversionPivotLength = 0;
+
+      const inversionComparisonNodes = {};
+      const inversionPivotNodes = {};
+
+      pivotStep.inversionNodes.forEach(inversionNode => {
+        const comparedPathStepPanBlockName = inversionNode.comparedPathStepPanBlock;
+        if (comparedPathStepPanBlockName) {
+          const comparedPathStepPanBlock = pangenomeImport.panSkeleton[comparedPathStepPanBlockName];
+          if (!inversionComparisonNodes[comparedPathStepPanBlockName]) {
+            inversionComparisonNodes[comparedPathStepPanBlockName] = true;
+            pivotStep.inversionComparisonLength += comparedPathStepPanBlock.length;
+          }
+        }
+
+        const pivotStepPanBlockName = inversionNode.pivotStepPanBlock;
+        if (pivotStepPanBlockName) {
+          const pivotStepPanBlock = pangenomeImport.panSkeleton[pivotStepPanBlockName];
+          if (!inversionPivotNodes[pivotStepPanBlockName]) {
+            inversionPivotNodes[pivotStepPanBlockName] = true;
+            pivotStep.inversionPivotLength += pivotStepPanBlock.length;
+          }
+        }
+      });
+    }
+
+
+    // InversionChain VARIATION LENGTH
+    if (pivotStep.inversionChain) {
+
+      pivotStep.inversionChainComparisonLength = 0;
+      pivotStep.inversionChainPivotLength = 0;
+
+      const inversionChainComparisonNodes = {};
+      const inversionChainPivotNodes = {};
+
+      pivotStep.inversionChainNodes.forEach(inversionChainNode => {
+        const comparedPathStepPanBlockName = inversionChainNode.comparedPathStepPanBlock;
+        if (comparedPathStepPanBlockName) {
+          const comparedPathStepPanBlock = pangenomeImport.panSkeleton[comparedPathStepPanBlockName];
+          if (!inversionChainComparisonNodes[comparedPathStepPanBlockName]) {
+            inversionChainComparisonNodes[comparedPathStepPanBlockName] = true;
+            pivotStep.inversionChainComparisonLength += comparedPathStepPanBlock.length;
+          }
+        }
+
+        const pivotStepPanBlockName = inversionChainNode.pivotStepPanBlock;
+        if (pivotStepPanBlockName) {
+          const pivotStepPanBlock = pangenomeImport.panSkeleton[pivotStepPanBlockName];
+          if (!inversionChainPivotNodes[pivotStepPanBlockName]) {
+            inversionChainPivotNodes[pivotStepPanBlockName] = true;
+            pivotStep.inversionChainPivotLength += pivotStepPanBlock.length;
+          }
+        }
+      });
+    }
+
+  });
+
+  debugger;
 
   return { pivot };
 
@@ -370,7 +624,7 @@ const annotatePivotStep = ({
   });
   */
 
-  // console.log("PRE", "\n\tpivotStep\t", annotPivotStep && annotPivotStep.panBlock, "\n\tpreviousPivotStep\t", previousPivotStep && previousPivotStep.panBlock, "\n\tlastPresentPivotStep\t", lastPresentPivotStep && lastPresentPivotStep.panBlock, "\n\tlastAbsentPivotStep\t", lastAbsentPivotStep && lastAbsentPivotStep.panBlock, "\n\tfirstSwappedPivotStep\t", firstSwappedPivotStep && firstSwappedPivotStep.panBlock, "\n\tlastSwappedPivotStep\t", lastSwappedPivotStep && lastSwappedPivotStep.panBlock);
+  console.log("PRE", "\n\tpivotStep\t", annotPivotStep && annotPivotStep.panBlock, "\n\tpreviousPivotStep\t", previousPivotStep && previousPivotStep.panBlock, "\n\tlastPresentPivotStep\t", lastPresentPivotStep && lastPresentPivotStep.panBlock, "\n\tlastAbsentPivotStep\t", lastAbsentPivotStep && lastAbsentPivotStep.panBlock, "\n\tfirstSwappedPivotStep\t", firstSwappedPivotStep && firstSwappedPivotStep.panBlock, "\n\tlastSwappedPivotStep\t", lastSwappedPivotStep && lastSwappedPivotStep.panBlock);
 
   // Checks for the start or end of SWAPS and DELETIONS
 
@@ -419,7 +673,7 @@ const annotatePivotStep = ({
           lastSwappedPivotStep.swapOrDelete = "solo";
         }
 
-        // console.log('lastPresentPivotStep', lastPresentPivotStep && lastPresentPivotStep.comparedPathStepIndex, 'annotPivotStep', annotPivotStep.comparedPathStepIndex);
+        console.log('lastPresentPivotStep', lastPresentPivotStep && lastPresentPivotStep.comparedPathStepIndex, 'annotPivotStep', annotPivotStep.comparedPathStepIndex);
 
         // There was no gap in the compared path, so it was merely a deletion (not a swap)
         // DELETION, overwrites swapOrDelete
@@ -455,7 +709,7 @@ const annotatePivotStep = ({
 
   previousPivotStep = annotPivotStep;
 
-  // console.log("POST", "\n\tpivotStep\t", annotPivotStep && annotPivotStep.panBlock, "\n\tpreviousPivotStep\t", previousPivotStep && previousPivotStep.panBlock, "\n\tlastPresentPivotStep\t", lastPresentPivotStep && lastPresentPivotStep.panBlock, "\n\tlastAbsentPivotStep\t", lastAbsentPivotStep && lastAbsentPivotStep.panBlock, "\n\tfirstSwappedPivotStep\t", firstSwappedPivotStep && firstSwappedPivotStep.panBlock, "\n\tlastSwappedPivotStep\t", lastSwappedPivotStep && lastSwappedPivotStep.panBlock);
+  console.log("POST", "\n\tpivotStep\t", annotPivotStep && annotPivotStep.panBlock, "\n\tpreviousPivotStep\t", previousPivotStep && previousPivotStep.panBlock, "\n\tlastPresentPivotStep\t", lastPresentPivotStep && lastPresentPivotStep.panBlock, "\n\tlastAbsentPivotStep\t", lastAbsentPivotStep && lastAbsentPivotStep.panBlock, "\n\tfirstSwappedPivotStep\t", firstSwappedPivotStep && firstSwappedPivotStep.panBlock, "\n\tlastSwappedPivotStep\t", lastSwappedPivotStep && lastSwappedPivotStep.panBlock);
 
   return {
     annotPivotStep,
